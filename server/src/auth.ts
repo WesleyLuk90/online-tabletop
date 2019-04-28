@@ -34,7 +34,7 @@ export async function initializeAuth(app: express.Express) {
     app.get(
         "/auth/google/callback",
         passport.authenticate("google", {
-            failureRedirect: "/login",
+            failureRedirect: "/#/login?failed",
             successRedirect: "/"
         })
     );

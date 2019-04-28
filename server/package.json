@@ -10,6 +10,7 @@
     "typescript": "^3.4.5"
   },
   "dependencies": {
+    "@types/bluebird": "^3.5.26",
     "@types/express-session": "^1.15.12",
     "@types/passport-google-oauth2": "^0.1.2",
     "dotenv": "^7.0.0",
@@ -17,6 +18,7 @@
     "express-session": "^1.16.1",
     "passport": "^0.4.0",
     "passport-google-oauth2": "^0.2.0",
-    "sequelize": "^5.7.6"
+    "sequelize": "^5.7.6",
+    "sqlite3": "^4.0.6"
   }
 }

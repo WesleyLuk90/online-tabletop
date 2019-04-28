@@ -1,7 +1,7 @@
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "normalize.css/normalize.css";
 import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { HashRouter as Router, Route } from "react-router-dom";
 import { LoginPage } from "./LoginPage";
 import { Navigation } from "./Navigation";
 
