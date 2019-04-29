@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { initializeAuth } from "./auth";
 import { createDatabase } from "./database";
-import { initializeGames } from "./games";
+import { initializeGames } from "./games/games";
 import { RequestData } from "./route";
 import { initializeSession } from "./session";
 

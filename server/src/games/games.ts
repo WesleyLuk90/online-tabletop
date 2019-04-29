@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
-import { Route } from "./route";
+import { Route } from "../route";
+import { validateGame } from "./validator";
 
 export enum Permission {
     player = "player",
@@ -72,6 +73,21 @@ export async function initializeGames(sequelize: Sequelize): Promise<Route[]> {
                     ]
                 });
                 return { games: games };
+            }
+        },
+        {
+            method: "post",
+            path: "/api/games/create",
+            handle: async (d, context) => {
+                const data = JSON.stringify(validateGame(d.body));
+                const game = await Game.create({
+                    value: data
+                });
+                await GamePermission.create({
+                    game_id: game.id,
+                    user_id: context.user_id,
+                    permission: Permission.game_master
+                });
             }
         }
     ];
