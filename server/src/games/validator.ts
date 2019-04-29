@@ -1,4 +1,4 @@
-interface GameData {
+export interface GameData {
     id: number;
     name: string;
 }
@@ -14,7 +14,7 @@ function validateString(string: any, defaultValue: string = ""): string {
     if (typeof string !== "string") {
         return defaultValue;
     }
-    return validateString(string);
+    return string;
 }
 
 export function validateGame(data: any): GameData {

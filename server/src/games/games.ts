@@ -1,6 +1,7 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
-import { Route } from "../route";
-import { validateGame } from "./validator";
+import { NotFoundError } from "../errors";
+import { RequestData, Route } from "../route";
+import { GameData, validateGame } from "./validator";
 
 export enum Permission {
     player = "player",
@@ -9,7 +10,7 @@ export enum Permission {
 
 class Game extends Model {
     public id: number;
-    public value: string;
+    public data: string;
 }
 
 class GamePermission extends Model {
@@ -56,6 +57,13 @@ async function updateSchema(sequelize: Sequelize) {
     await GamePermission.sync();
 }
 
+function formatGame(game: Game): GameData {
+    return {
+        ...validateGame(JSON.parse(game.data)),
+        id: game.id
+    };
+}
+
 export async function initializeGames(sequelize: Sequelize): Promise<Route[]> {
     await updateSchema(sequelize);
 
@@ -67,12 +75,12 @@ export async function initializeGames(sequelize: Sequelize): Promise<Route[]> {
                 const games = await Game.findAll({
                     include: [
                         {
-                            model: GamePermission,
-                            where: { user_id: context.user_id }
+                            model: GamePermission
+                            // where: { user_id: context.user_id }
                         }
                     ]
                 });
-                return { games: games };
+                return { games: games.map(formatGame) };
             }
         },
         {
@@ -81,13 +89,32 @@ export async function initializeGames(sequelize: Sequelize): Promise<Route[]> {
             handle: async (d, context) => {
                 const data = JSON.stringify(validateGame(d.body));
                 const game = await Game.create({
-                    value: data
+                    data: data
                 });
                 await GamePermission.create({
                     game_id: game.id,
                     user_id: context.user_id,
                     permission: Permission.game_master
                 });
+                return formatGame(game);
+            }
+        },
+        {
+            method: "get",
+            path: "/api/games/get",
+            handle: async (d: RequestData<{}, { id: string }>, context) => {
+                const game = await Game.findByPk(d.query.id, {
+                    include: [
+                        {
+                            model: GamePermission,
+                            where: { user_id: context.user_id }
+                        }
+                    ]
+                });
+                if (game === null) {
+                    throw new NotFoundError("Game", d.query.id);
+                }
+                return formatGame(game);
             }
         }
     ];

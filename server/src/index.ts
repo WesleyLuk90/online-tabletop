@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { initializeAuth } from "./auth";
 import { createDatabase } from "./database";
+import { UserFacingError } from "./errors";
 import { initializeGames } from "./games/games";
 import { RequestData } from "./route";
 import { initializeSession } from "./session";
@@ -40,8 +41,12 @@ async function main() {
                 });
                 res.json(response);
             } catch (e) {
-                console.error(e);
-                res.sendStatus(500);
+                if (e instanceof UserFacingError) {
+                    res.status(e.code()).send(e.message);
+                } else {
+                    console.error(e);
+                    res.sendStatus(500);
+                }
             }
         });
     });
