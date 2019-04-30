@@ -5,7 +5,8 @@
     "license": "MIT",
     "scripts": {
         "start": "ts-node src/index.ts",
-        "test": "jest"
+        "test": "jest",
+        "test:watch": "jest --watch"
     },
     "devDependencies": {
         "@types/bluebird": "^3.5.26",

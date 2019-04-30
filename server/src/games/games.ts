@@ -1,4 +1,9 @@
-import { DataTypes, Model, Sequelize } from "sequelize";
+import {
+    DataTypes,
+    HasManyAddAssociationMixin,
+    Model,
+    Sequelize
+} from "sequelize";
 import { NotFoundError } from "../errors";
 import { RequestData, Route } from "../route";
 import { GameData, validateGame } from "./validator";
@@ -11,6 +16,11 @@ export enum Permission {
 class Game extends Model {
     public id: number;
     public data: string;
+
+    public addGamePermission!: HasManyAddAssociationMixin<
+        GamePermission,
+        number
+    >;
 }
 
 class GamePermission extends Model {
@@ -73,10 +83,10 @@ export async function initializeGames(sequelize: Sequelize): Promise<Route[]> {
             path: "/api/games",
             handle: async (d, context) => {
                 const games = await Game.findAll({
+                    where: { "$GamePermissions.user_id$": context.user_id },
                     include: [
                         {
                             model: GamePermission
-                            // where: { user_id: context.user_id }
                         }
                     ]
                 });
@@ -89,32 +99,42 @@ export async function initializeGames(sequelize: Sequelize): Promise<Route[]> {
             handle: async (d, context) => {
                 const data = JSON.stringify(validateGame(d.body));
                 const game = await Game.create({
-                    data: data
+                    data: data,
+                    GamePermissions: [
+                        {
+                            user_id: context.user_id,
+                            permission: Permission.game_master
+                        }
+                    ]
                 });
-                await GamePermission.create({
-                    game_id: game.id,
-                    user_id: context.user_id,
-                    permission: Permission.game_master
-                });
-                return formatGame(game);
+                game.addGamePermission(
+                    await GamePermission.create({
+                        user_id: context.user_id,
+                        permission: Permission.game_master
+                    })
+                );
+                return { game: formatGame(game) };
             }
         },
         {
             method: "get",
             path: "/api/games/get",
             handle: async (d: RequestData<{}, { id: string }>, context) => {
-                const game = await Game.findByPk(d.query.id, {
+                const game = await Game.findOne({
+                    where: {
+                        id: d.query.id,
+                        "$GamePermissions.user_id$": context.user_id
+                    },
                     include: [
                         {
-                            model: GamePermission,
-                            where: { user_id: context.user_id }
+                            model: GamePermission
                         }
                     ]
                 });
                 if (game === null) {
                     throw new NotFoundError("Game", d.query.id);
                 }
-                return formatGame(game);
+                return { game: formatGame(game) };
             }
         }
     ];
