@@ -23,6 +23,7 @@ function getRequestData(req: Request): RequestData<{}, {}> {
 async function main() {
     require("dotenv").config();
     const app = express();
+    app.use(express.json());
     const port = 3001;
 
     const db = await createDatabase();
