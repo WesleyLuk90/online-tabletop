@@ -1,0 +1,15 @@
+.play-page {
+    min-height: calc(100vh - 50px);
+    overflow: hidden;
+    width: 100vw;
+    display: flex;
+    justify-items: stretch;
+}
+
+.play-area {
+    flex-grow: 1;
+}
+
+.side-bar {
+    width: 300px;
+}
