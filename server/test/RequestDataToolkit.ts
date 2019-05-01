@@ -1,15 +1,15 @@
-import { RequestData } from "../src/route";
+import { Context, RequestData } from "../src/route";
 
-export function withBody<T>(data: T): RequestData<T, {}> {
+export function createContext<B, Q>(
+    user_id: string,
+    data: Partial<RequestData<B, Q>> = {}
+): Context<B, Q> {
     return {
-        body: data,
-        query: {}
-    };
-}
-
-export function withQuery<T>(data: T): RequestData<{}, T> {
-    return {
-        body: {},
-        query: data
+        user_id,
+        data: {
+            body: {} as B,
+            query: {} as Q,
+            ...data
+        }
     };
 }

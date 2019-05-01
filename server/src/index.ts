@@ -29,26 +29,31 @@ async function main() {
     await initializeSession(app);
     await initializeAuth(app);
     const routes = await initializeGames(db);
-    routes.forEach(r => {
-        (app as any)[r.method](r.path, async (req: Request, res: Response) => {
-            try {
-                const id = getUserId(req);
-                if (id == null) {
-                    return res.sendStatus(401);
-                }
-                const response = await r.handle(getRequestData(req), {
-                    user_id: id
-                });
-                res.json(response);
-            } catch (e) {
-                if (e instanceof UserFacingError) {
-                    res.status(e.code()).send(e.message);
-                } else {
-                    console.error(e);
-                    res.sendStatus(500);
+    Object.keys(routes).forEach(path => {
+        const route = routes[path];
+        (app as any)[route.method](
+            path,
+            async (req: Request, res: Response) => {
+                try {
+                    const id = getUserId(req);
+                    if (id == null) {
+                        return res.sendStatus(401);
+                    }
+                    const response = await route.handle({
+                        user_id: id,
+                        data: getRequestData(req)
+                    });
+                    res.json(response);
+                } catch (e) {
+                    if (e instanceof UserFacingError) {
+                        res.status(e.code()).send(e.message);
+                    } else {
+                        console.error(e);
+                        res.sendStatus(500);
+                    }
                 }
             }
-        });
+        );
     });
 
     app.get("/", (req, res) =>

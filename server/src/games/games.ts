@@ -5,7 +5,7 @@ import {
     Sequelize
 } from "sequelize";
 import { NotFoundError } from "../errors";
-import { RequestData, Route } from "../route";
+import { Context, Routes } from "../route";
 import { GameData, validateGame } from "./validator";
 
 export enum Permission {
@@ -74,14 +74,13 @@ function formatGame(game: Game): GameData {
     };
 }
 
-export async function initializeGames(sequelize: Sequelize): Promise<Route[]> {
+export async function initializeGames(sequelize: Sequelize): Promise<Routes> {
     await updateSchema(sequelize);
 
-    return [
-        {
+    return {
+        "/api/games": {
             method: "get",
-            path: "/api/games",
-            handle: async (d, context) => {
+            handle: async context => {
                 const games = await Game.findAll({
                     where: { "$GamePermissions.user_id$": context.user_id },
                     include: [
@@ -93,11 +92,10 @@ export async function initializeGames(sequelize: Sequelize): Promise<Route[]> {
                 return { games: games.map(formatGame) };
             }
         },
-        {
+        "/api/games/create": {
             method: "post",
-            path: "/api/games/create",
-            handle: async (d, context) => {
-                const data = JSON.stringify(validateGame(d.body));
+            handle: async (context: Context<GameData>) => {
+                const data = JSON.stringify(validateGame(context.data.body));
                 const game = await Game.create({
                     data: data,
                     GamePermissions: [
@@ -116,13 +114,12 @@ export async function initializeGames(sequelize: Sequelize): Promise<Route[]> {
                 return { game: formatGame(game) };
             }
         },
-        {
+        "/api/games/get": {
             method: "get",
-            path: "/api/games/get",
-            handle: async (d: RequestData<{}, { id: string }>, context) => {
+            handle: async (context: Context<{}, { id: string }>) => {
                 const game = await Game.findOne({
                     where: {
-                        id: d.query.id,
+                        id: context.data.query.id,
                         "$GamePermissions.user_id$": context.user_id
                     },
                     include: [
@@ -132,10 +129,10 @@ export async function initializeGames(sequelize: Sequelize): Promise<Route[]> {
                     ]
                 });
                 if (game === null) {
-                    throw new NotFoundError("Game", d.query.id);
+                    throw new NotFoundError("Game", context.data.query.id);
                 }
                 return { game: formatGame(game) };
             }
         }
-    ];
+    };
 }
