@@ -1,12 +1,6 @@
 import * as React from "react";
+import { PlayArea, Viewport } from "./PlayArea";
 import "./PlayPage.css";
-
-interface Viewport {
-    readonly x: number;
-    readonly y: number;
-    readonly width: number;
-    readonly height: number;
-}
 
 interface State {
     viewport: Viewport;
@@ -22,43 +16,28 @@ export class PlayPage extends React.Component<{}, State> {
         }
     };
 
-    svgRef = React.createRef<SVGSVGElement>();
-
-    componentDidMount() {
-        const svg = this.svgRef.current;
-        if (svg) {
-            this.setState({
-                viewport: {
-                    ...this.state.viewport,
-                    width: svg.clientWidth,
-                    height: svg.clientHeight
-                }
-            });
-        }
-    }
-
-    onMouseDown = (e: React.MouseEvent<SVGSVGElement>) => {
-        if (e.button === 2) {
-            e.preventDefault();
-        }
+    onPan = (dx: number, dy: number) => {
+        const { x, y } = this.state.viewport;
+        this.setState({
+            viewport: {
+                ...this.state.viewport,
+                x: x - dx,
+                y: y - dy
+            }
+        });
     };
-
-    computeViewBox() {
-        const { x, y, width, height } = this.state.viewport;
-        return `${x - width / 2} ${y - height / 2} ${width} ${height}`;
-    }
+    onSize = (width: number, height: number) => {
+        this.setState({ viewport: { ...this.state.viewport, width, height } });
+    };
 
     render() {
         return (
             <div className="play-page">
-                <svg
-                    ref={this.svgRef}
-                    viewBox={this.computeViewBox()}
-                    onMouseDown={this.onMouseDown}
-                    className="play-area"
-                >
-                    <rect width={50} height={50} />
-                </svg>
+                <PlayArea
+                    viewport={this.state.viewport}
+                    onPan={this.onPan}
+                    onSize={this.onSize}
+                />
                 <div className="side-bar">Side</div>
             </div>
         );
