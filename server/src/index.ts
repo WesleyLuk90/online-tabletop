@@ -13,9 +13,10 @@ function getUserId(req: Request): string | null {
     return req.session.passport.user;
 }
 
-function getRequestData(req: Request): RequestData<{}> {
+function getRequestData(req: Request): RequestData<{}, {}> {
     return {
-        body: req.body
+        body: req.body || {},
+        query: req.query || {}
     };
 }
 
