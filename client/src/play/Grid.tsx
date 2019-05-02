@@ -13,7 +13,7 @@ export class Grid extends React.Component<Props> {
         const y1 = top(this.props.viewport);
         const y2 = bottom(this.props.viewport);
         const start = Math.floor((x - width / 2) / GRID_SIZE) * GRID_SIZE;
-        return new Array(Math.floor(width / GRID_SIZE))
+        return new Array(Math.floor(width / GRID_SIZE) + 1)
             .fill(0)
             .map((a, i) => i)
             .map(i => (
@@ -28,7 +28,32 @@ export class Grid extends React.Component<Props> {
             ));
     }
 
+    renderHorizontal() {
+        const { y, height } = this.props.viewport;
+        const x1 = top(this.props.viewport);
+        const x2 = bottom(this.props.viewport);
+        const start = Math.floor((y - height / 2) / GRID_SIZE) * GRID_SIZE;
+        return new Array(Math.floor(height / GRID_SIZE) + 1)
+            .fill(0)
+            .map((a, i) => i)
+            .map(i => (
+                <line
+                    y1={start + GRID_SIZE * i}
+                    y2={start + GRID_SIZE * i}
+                    x1={x1}
+                    x2={x2}
+                    stroke="black"
+                    key={i}
+                />
+            ));
+    }
+
     render() {
-        return <g>{this.renderVertical()}</g>;
+        return (
+            <g>
+                {this.renderVertical()}
+                {this.renderHorizontal()}
+            </g>
+        );
     }
 }
