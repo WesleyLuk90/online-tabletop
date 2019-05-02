@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Grid } from "./Grid";
+import { Tokens } from "./Tokens";
 import { Viewport } from "./Viewport";
 
 interface Position {
@@ -61,6 +62,10 @@ export class PlayArea extends React.Component<Props> {
         this.lastMouse = null;
     };
 
+    getTokens() {
+        return [{ id: "1", x: 0, y: 0, width: 100, height: 100 }];
+    }
+
     render() {
         return (
             <svg
@@ -74,6 +79,7 @@ export class PlayArea extends React.Component<Props> {
                 className="play-area"
             >
                 <Grid viewport={this.props.viewport} />
+                <Tokens tokens={this.getTokens()} />
             </svg>
         );
     }
