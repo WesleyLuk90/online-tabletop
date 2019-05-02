@@ -1,6 +1,7 @@
 import * as React from "react";
-import { PlayArea, Viewport } from "./PlayArea";
+import { PlayArea } from "./PlayArea";
 import "./PlayPage.css";
+import { Viewport } from "./Viewport";
 
 interface State {
     viewport: Viewport;

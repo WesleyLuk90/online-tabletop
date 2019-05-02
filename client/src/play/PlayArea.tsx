@@ -1,11 +1,6 @@
 import * as React from "react";
-
-export interface Viewport {
-    readonly x: number;
-    readonly y: number;
-    readonly width: number;
-    readonly height: number;
-}
+import { Grid } from "./Grid";
+import { Viewport } from "./Viewport";
 
 interface Position {
     x: number;
@@ -73,7 +68,7 @@ export class PlayArea extends React.Component<Props> {
                 onContextMenu={e => e.preventDefault()}
                 className="play-area"
             >
-                <rect width={50} height={50} />
+                <Grid viewport={this.props.viewport} />
             </svg>
         );
     }
