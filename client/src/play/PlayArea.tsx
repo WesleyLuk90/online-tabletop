@@ -24,7 +24,8 @@ export class PlayArea extends React.Component<Props> {
     componentDidMount() {
         const svg = this.svgRef.current;
         if (svg) {
-            this.props.onSize(svg.clientWidth, svg.clientHeight);
+            const rect = svg.getBoundingClientRect();
+            this.props.onSize(rect.width, rect.height);
         }
     }
 
