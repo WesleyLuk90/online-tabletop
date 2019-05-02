@@ -37,14 +37,19 @@ export class PlayArea extends React.Component<Props> {
     };
 
     onMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
-        if (this.lastMouse != null) {
-            this.props.onPan(
-                e.screenX - this.lastMouse.x,
-                e.screenY - this.lastMouse.y
-            );
-            this.lastMouse = { x: e.screenX, y: e.screenY };
-        }
+        this.dispatchMouseMove(e.screenX, e.screenY);
     };
+
+    animationFrame: number = 0;
+    dispatchMouseMove(x: number, y: number) {
+        cancelAnimationFrame(this.animationFrame);
+        this.animationFrame = requestAnimationFrame(() => {
+            if (this.lastMouse != null) {
+                this.props.onPan(x - this.lastMouse.x, y - this.lastMouse.y);
+                this.lastMouse = { x: x, y };
+            }
+        });
+    }
 
     onMouseUp = (e: React.MouseEvent<SVGSVGElement>) => {
         if (e.button === 2) {
