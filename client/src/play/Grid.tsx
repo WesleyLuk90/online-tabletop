@@ -1,5 +1,5 @@
 import React from "react";
-import { bottom, left, right, top, Viewport } from "./Viewport";
+import { Viewport } from "./Viewport";
 
 const GRID_SIZE = 70;
 
@@ -15,11 +15,13 @@ function range(to: number): number[] {
 
 export class Grid extends React.Component<Props> {
     renderVertical() {
-        const { x, width } = this.props.viewport;
-        const y1 = top(this.props.viewport);
-        const y2 = bottom(this.props.viewport);
-        const start = Math.floor((x - width / 2) / GRID_SIZE) * GRID_SIZE;
-        return range(Math.floor(width / GRID_SIZE) + 1).map(i => (
+        const viewport = this.props.viewport;
+        const y1 = viewport.top();
+        const y2 = viewport.bottom();
+        const start =
+            Math.floor((viewport.x - viewport.width / 2) / GRID_SIZE) *
+            GRID_SIZE;
+        return range(Math.floor(viewport.width / GRID_SIZE) + 1).map(i => (
             <line
                 y1={y1}
                 y2={y2}
@@ -32,11 +34,13 @@ export class Grid extends React.Component<Props> {
     }
 
     renderHorizontal() {
-        const { y, height } = this.props.viewport;
-        const x1 = left(this.props.viewport);
-        const x2 = right(this.props.viewport);
-        const start = Math.floor((y - height / 2) / GRID_SIZE) * GRID_SIZE;
-        return range(Math.floor(height / GRID_SIZE) + 1).map(i => (
+        const viewport = this.props.viewport;
+        const x1 = viewport.left();
+        const x2 = viewport.right();
+        const start =
+            Math.floor((viewport.y - viewport.height / 2) / GRID_SIZE) *
+            GRID_SIZE;
+        return range(Math.floor(viewport.height / GRID_SIZE) + 1).map(i => (
             <line
                 x1={x1}
                 x2={x2}

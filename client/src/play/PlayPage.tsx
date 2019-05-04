@@ -1,7 +1,7 @@
 import * as React from "react";
 import { PlayArea } from "./PlayArea";
 import "./PlayPage.css";
-import { defaultViewport, pan, Position, Viewport } from "./Viewport";
+import { Vector, Viewport } from "./Viewport";
 
 interface State {
     viewport: Viewport;
@@ -10,7 +10,7 @@ interface State {
 
 export class PlayPage extends React.Component<{}, State> {
     state: State = {
-        viewport: defaultViewport(),
+        viewport: Viewport.defaultViewport(),
         selected: []
     };
 
@@ -21,18 +21,20 @@ export class PlayPage extends React.Component<{}, State> {
         ];
     }
 
-    onPan = (dx: number, dy: number) => {
+    onPan = (vector: Vector) => {
         this.setState({
-            viewport: pan(this.state.viewport, dx, dy)
+            viewport: this.state.viewport.pan(vector)
         });
     };
 
-    onDrag = (pos: Position) => {
+    onDrag = (pos: Vector) => {
         // console.log(pos);
     };
 
     onSize = (width: number, height: number) => {
-        this.setState({ viewport: { ...this.state.viewport, width, height } });
+        this.setState({
+            viewport: this.state.viewport.updateSize(width, height)
+        });
     };
 
     onSelect = (tokens: string[]) => {

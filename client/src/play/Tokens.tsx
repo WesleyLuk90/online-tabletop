@@ -1,15 +1,28 @@
 import React from "react";
+import { MouseState } from "./MouseState";
+import { PositionTransformation } from "./PlayArea";
 import { Token } from "./Token";
+import { Vector, Viewport } from "./Viewport";
 
 interface Props {
+    viewport: Viewport;
     tokens: Token[];
     selected: string[];
-    onClick: (t: Token) => void;
+    onStartMouse: (m: MouseState) => void;
+    positionTransform: PositionTransformation;
 }
 
 const SELECTION_COLOR = "rgb(45, 116, 229)";
 
 export class Tokens extends React.Component<Props> {
+    onMouseDown(token: Token, e: React.MouseEvent) {
+        this.props.positionTransform(Vector.fromMouseEvent(e), position =>
+            this.props.onStartMouse(
+                new MouseState(token.id, e.button, position)
+            )
+        );
+    }
+
     renderToken(token: Token) {
         const render = [
             <rect
@@ -18,10 +31,9 @@ export class Tokens extends React.Component<Props> {
                 y={token.y}
                 width={token.width}
                 height={token.height}
-                onClick={() => this.props.onClick(token)}
+                onMouseDown={e => this.onMouseDown(token, e)}
             />
         ];
-        console.log(this.props.selected);
         if (this.props.selected.includes(token.id)) {
             render.push(
                 <path

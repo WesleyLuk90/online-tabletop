@@ -1,34 +1,35 @@
 import * as React from "react";
 import { Grid } from "./Grid";
+import { Buttons, MouseState, Position } from "./MouseState";
+import { ResizeHandler } from "./ResizeHandler";
 import { Token } from "./Token";
 import { Tokens } from "./Tokens";
-import { Position, toWorldCoordinates, Viewport } from "./Viewport";
-
-interface MouseState {
-    button: number;
-    position: Position;
-}
+import { Vector, Viewport } from "./Viewport";
 
 interface Props {
     viewport: Viewport;
     tokens: Token[];
     selected: string[];
     onSize: (width: number, height: number) => void;
-    onPan: (dx: number, dy: number) => void;
+    onPan: (vector: Vector) => void;
     onSelect: (tokens: string[]) => void;
-    onDrag: (position: Position) => void;
+    onDrag: (position: Vector) => void;
+}
+
+export interface PositionTransformation {
+    (screen: Vector, action: (position: Position) => void): void;
 }
 
 export class PlayArea extends React.Component<Props> {
     svgRef = React.createRef<SVGSVGElement>();
 
-    componentDidMount() {
+    onResize = () => {
         const svg = this.svgRef.current;
         if (svg) {
             const rect = svg.getBoundingClientRect();
             this.props.onSize(rect.width, rect.height);
         }
-    }
+    };
 
     computeViewBox() {
         const { x, y, width, height } = this.props.viewport;
@@ -37,34 +38,30 @@ export class PlayArea extends React.Component<Props> {
 
     mouseState: MouseState | null = null;
     onMouseDown = (e: React.MouseEvent<SVGSVGElement>) => {
-        this.mouseState = {
-            button: e.button,
-            position: { x: e.screenX, y: e.screenY }
-        };
+        this.positionTransform(Vector.fromMouseEvent(e), position => {
+            this.mouseState = new MouseState(null, e.button, position);
+        });
     };
 
     onMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
-        this.dispatchMouseMove(e.screenX, e.screenY);
+        this.positionTransform(Vector.fromMouseEvent(e), position => {
+            if (this.mouseState != null) {
+                this.mouseState.updatePosition(position);
+                this.updateMouse();
+            }
+        });
     };
 
     animationFrame: number = 0;
-    dispatchMouseMove(x: number, y: number) {
+    updateMouse() {
         cancelAnimationFrame(this.animationFrame);
         this.animationFrame = requestAnimationFrame(() => {
-            if (this.mouseState != null) {
-                const { button, position } = this.mouseState;
-                if (button === 2) {
-                    this.props.onPan(position.x - x, position.y - y);
-                } else if (button === 0 && this.svgRef.current !== null) {
-                    const box = this.svgRef.current.getBoundingClientRect();
-                    this.props.onDrag(
-                        toWorldCoordinates(this.props.viewport, {
-                            x: box.left - x,
-                            y: box.right - y
-                        })
-                    );
+            if (this.mouseState != null && this.mouseState.isDrag()) {
+                const button = this.mouseState.getButton();
+                if (button === Buttons.RIGHT) {
+                    this.props.onPan(this.mouseState.screenDelta().negative());
+                } else if (button === Buttons.LEFT) {
                 }
-                this.mouseState = { button, position: { x, y } };
             }
         });
     }
@@ -77,29 +74,48 @@ export class PlayArea extends React.Component<Props> {
         this.mouseState = null;
     };
 
-    onClick = (token: Token) => {
-        this.props.onSelect([token.id]);
+    onStartMouse = (mouseState: MouseState) => {
+        this.mouseState = mouseState;
+    };
+
+    positionTransform: PositionTransformation = (screen, action) => {
+        if (this.svgRef.current == null) {
+            return;
+        }
+        const box = this.svgRef.current.getBoundingClientRect();
+        action(
+            new Position(
+                screen,
+                this.props.viewport.toWorldCoordinates(
+                    new Vector(box.left - screen.x, box.top - screen.y)
+                )
+            )
+        );
     };
 
     render() {
         return (
-            <svg
-                ref={this.svgRef}
-                viewBox={this.computeViewBox()}
-                onMouseDown={this.onMouseDown}
-                onMouseUp={this.onMouseUp}
-                onMouseLeave={this.onMouseLeave}
-                onMouseMove={this.onMouseMove}
-                onContextMenu={e => e.preventDefault()}
-                className="play-area"
-            >
-                <Grid viewport={this.props.viewport} />
-                <Tokens
-                    tokens={this.props.tokens}
-                    selected={this.props.selected}
-                    onClick={this.onClick}
-                />
-            </svg>
+            <ResizeHandler onResize={this.onResize}>
+                <svg
+                    ref={this.svgRef}
+                    viewBox={this.computeViewBox()}
+                    onMouseDown={this.onMouseDown}
+                    onMouseUp={this.onMouseUp}
+                    onMouseLeave={this.onMouseLeave}
+                    onMouseMove={this.onMouseMove}
+                    onContextMenu={e => e.preventDefault()}
+                    className="play-area"
+                >
+                    <Grid viewport={this.props.viewport} />
+                    <Tokens
+                        viewport={this.props.viewport}
+                        tokens={this.props.tokens}
+                        selected={this.props.selected}
+                        onStartMouse={this.onStartMouse}
+                        positionTransform={this.positionTransform}
+                    />
+                </svg>
+            </ResizeHandler>
         );
     }
 }

@@ -1,49 +1,72 @@
-export interface Viewport {
-    readonly x: number;
-    readonly y: number;
-    readonly width: number;
-    readonly height: number;
-    readonly scale: number;
+export class Viewport {
+    static defaultViewport(): Viewport {
+        return new Viewport(0, 0, 1000, 1000, 1);
+    }
+
+    constructor(
+        readonly x: number,
+        readonly y: number,
+        readonly width: number,
+        readonly height: number,
+        readonly scale: number
+    ) {}
+
+    copy(values: Partial<Viewport>): Viewport {
+        return Object.assign(
+            new Viewport(this.x, this.y, this.width, this.height, this.scale),
+            values
+        );
+    }
+
+    left(): number {
+        return this.x - this.width / 2;
+    }
+
+    right(): number {
+        return this.x + this.width / 2;
+    }
+
+    top(): number {
+        return this.y - this.height / 2;
+    }
+
+    bottom(): number {
+        return this.y + this.height / 2;
+    }
+
+    pan(vector: Vector): Viewport {
+        return this.copy({ x: this.x + vector.x, y: this.y + vector.y });
+    }
+
+    updateSize(width: number, height: number): Viewport {
+        return this.copy({ width, height });
+    }
+
+    toWorldCoordinates(position: Vector): Vector {
+        return new Vector(
+            this.left() + position.x * this.scale,
+            this.top() + position.y * this.scale
+        );
+    }
 }
 
-export interface Position {
-    x: number;
-    y: number;
-}
+export class Vector {
+    static fromMouseEvent(e: React.MouseEvent): Vector {
+        return new Vector(e.screenX, e.screenY);
+    }
 
-export function left(viewport: Viewport): number {
-    return viewport.x - viewport.width / 2;
-}
-export function right(viewport: Viewport): number {
-    return viewport.x + viewport.width / 2;
-}
-export function top(viewport: Viewport): number {
-    return viewport.y - viewport.height / 2;
-}
-export function bottom(viewport: Viewport): number {
-    return viewport.y + viewport.height / 2;
-}
+    constructor(readonly x: number, readonly y: number) {}
 
-export function pan(viewport: Viewport, dx: number, dy: number): Viewport {
-    return { ...viewport, x: viewport.x + dx, y: viewport.y + dy };
-}
+    distance(other: Vector): number {
+        const d = this.subtract(other);
+        return Math.sqrt(d.x * d.x + d.y * d.y);
+    }
 
-export function defaultViewport(): Viewport {
-    return {
-        x: 0,
-        y: 0,
-        width: 1000,
-        height: 1000,
-        scale: 1
-    };
-}
+    subtract(other: Vector): Vector {
+        return new Vector(this.x - other.x, this.y - other.y);
+    }
 
-export function toWorldCoordinates(
-    viewport: Viewport,
-    position: Position
-): Position {
-    return {
-        x: left(viewport) + position.x * viewport.scale,
-        y: top(viewport) + position.y * viewport.scale
-    };
+    negative(): Vector {
+        return new Vector(-this.x, -this.y);
+    }
 }
