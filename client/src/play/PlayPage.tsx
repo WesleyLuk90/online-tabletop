@@ -4,6 +4,7 @@ import io from "socket.io-client";
 import { PlayArea } from "./PlayArea";
 import "./PlayPage.css";
 import { Token } from "./Token";
+import { TokenService } from "./TokenService";
 import { Vector, Viewport } from "./Viewport";
 
 interface State {
@@ -27,12 +28,18 @@ export class PlayPage extends React.Component<
         ]
     };
 
-    componentDidMount() {
+    async componentDidMount() {
         const id = this.props.match.params.id;
+        const token = await TokenService.get(id);
+        console.log(token);
         const socket = io({
             path: "/socket/play"
         });
-        socket.on("message", (m: {}, k: {}) => console.log(m, k));
+        socket.on("connect", () => {
+            console.log("connected");
+            socket.emit("game.handshake", token);
+        });
+        socket.on("disconnect", () => console.error("disconnected"));
     }
 
     onPan = (vector: Vector) => {

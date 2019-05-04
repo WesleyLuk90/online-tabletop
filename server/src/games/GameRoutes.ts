@@ -1,4 +1,3 @@
-import { Sequelize } from "sequelize";
 import { NotFoundError, PermissionError } from "../errors";
 import { Context, Routes } from "../route";
 import { Game, GameService } from "./GameService";
@@ -11,9 +10,7 @@ function formatGame(game: Game): GameData {
     };
 }
 
-export async function initializeGames(sequelize: Sequelize): Promise<Routes> {
-    const gameService = await GameService.create(sequelize);
-
+export function gameRoutes(gameService: GameService): Routes {
     return {
         "/api/games": {
             method: "get",
@@ -32,17 +29,18 @@ export async function initializeGames(sequelize: Sequelize): Promise<Routes> {
         },
         "/api/games/get": {
             method: "get",
-            handle: async (context: Context<{}, { id: string }>) => {
+            handle: async (context: Context<{}, { gameId: string }>) => {
+                const gameId = context.data.query.gameId || "";
                 const permission = await gameService.getPermission(
-                    context.data.query.id,
+                    gameId,
                     context.user_id
                 );
                 if (permission == null) {
                     throw new PermissionError();
                 }
-                const game = await gameService.get(context.data.query.id);
+                const game = await gameService.get(gameId);
                 if (game === null) {
-                    throw new NotFoundError("Game", context.data.query.id);
+                    throw new NotFoundError("Game", gameId);
                 }
                 return { game: formatGame(game) };
             }

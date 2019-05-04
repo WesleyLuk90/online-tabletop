@@ -2,7 +2,8 @@ import express from "express";
 import { Server } from "http";
 import { initializeAuth } from "./auth";
 import { createDatabase } from "./database";
-import { initializeGames } from "./games/games";
+import { gameRoutes } from "./games/GameRoutes";
+import { GameService } from "./games/GameService";
 import { initializePlay } from "./play";
 import { connectRoutes } from "./requests";
 import { initializeSession } from "./session";
@@ -19,9 +20,9 @@ async function main() {
 
     await initializeSession(app);
     await initializeAuth(app);
-    const routes = await initializeGames(db);
-    connectRoutes(routes, app);
-    initializePlay(http);
+    const gamesService = await GameService.create(db);
+    connectRoutes(gameRoutes(gamesService), app);
+    connectRoutes(initializePlay(http, gamesService), app);
 
     http.listen(port, () =>
         console.log(`Example app listening on port ${port}!`)
