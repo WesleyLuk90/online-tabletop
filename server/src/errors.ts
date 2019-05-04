@@ -18,3 +18,13 @@ export class NotFoundError extends UserFacingError {
         return 404;
     }
 }
+
+export class PermissionError extends UserFacingError {
+    constructor() {
+        super("You do not have permissions");
+    }
+
+    code() {
+        return 403;
+    }
+}

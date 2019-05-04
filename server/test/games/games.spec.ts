@@ -1,5 +1,5 @@
 import { Sequelize } from "sequelize";
-import { NotFoundError } from "../../src/errors";
+import { PermissionError } from "../../src/errors";
 import { initializeGames } from "../../src/games/games";
 import { createContext } from "../RequestDataToolkit";
 
@@ -42,6 +42,6 @@ describe("games", () => {
                     }
                 })
             )
-        ).rejects.toThrowError(NotFoundError);
+        ).rejects.toThrowError(PermissionError);
     });
 });
