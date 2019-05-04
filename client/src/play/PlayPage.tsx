@@ -1,4 +1,6 @@
 import * as React from "react";
+import { match } from "react-router";
+import io from "socket.io-client";
 import { PlayArea } from "./PlayArea";
 import "./PlayPage.css";
 import { Token } from "./Token";
@@ -10,7 +12,12 @@ interface State {
     tokens: Token[];
 }
 
-export class PlayPage extends React.Component<{}, State> {
+export class PlayPage extends React.Component<
+    {
+        match: match<{ id: string }>;
+    },
+    State
+> {
     state: State = {
         viewport: Viewport.defaultViewport(),
         selected: [],
@@ -19,6 +26,14 @@ export class PlayPage extends React.Component<{}, State> {
             { id: "2", x: -200, y: -200, width: 100, height: 100 }
         ]
     };
+
+    componentDidMount() {
+        const id = this.props.match.params.id;
+        const socket = io({
+            path: "/socket/play"
+        });
+        socket.on("message", (m: {}, k: {}) => console.log(m, k));
+    }
 
     onPan = (vector: Vector) => {
         this.setState({
