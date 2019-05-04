@@ -9,7 +9,9 @@ export class Viewport {
         readonly width: number,
         readonly height: number,
         readonly scale: number
-    ) {}
+    ) {
+        void 0;
+    }
 
     copy(values: Partial<Viewport>): Viewport {
         return Object.assign(
@@ -61,7 +63,9 @@ export class Vector {
         return new Vector(e.clientX, e.clientY);
     }
 
-    constructor(readonly x: number, readonly y: number) {}
+    constructor(readonly x: number, readonly y: number) {
+        void 0;
+    }
 
     distance(other: Vector): number {
         const d = this.subtract(other);

@@ -8,7 +8,9 @@ export interface MouseHandler {
 }
 
 export class TokenSelectionHandler implements MouseHandler {
-    constructor(readonly playArea: PlayArea) {}
+    constructor(readonly playArea: PlayArea) {
+        void 0;
+    }
 
     canHandle(mouseState: MouseState) {
         return !mouseState.isDrag() && mouseState.button === Buttons.LEFT;
@@ -22,7 +24,9 @@ export class TokenSelectionHandler implements MouseHandler {
 }
 
 export class TokenDragHandler implements MouseHandler {
-    constructor(readonly playArea: PlayArea) {}
+    constructor(readonly playArea: PlayArea) {
+        void 0;
+    }
 
     canHandle(mouseState: MouseState) {
         return (
@@ -46,7 +50,9 @@ export class TokenDragHandler implements MouseHandler {
 }
 
 export class PanHandler implements MouseHandler {
-    constructor(readonly playArea: PlayArea) {}
+    constructor(readonly playArea: PlayArea) {
+        void 0;
+    }
 
     canHandle(mouseState: MouseState) {
         return mouseState.isDrag() && mouseState.button === Buttons.RIGHT;

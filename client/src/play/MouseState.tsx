@@ -9,7 +9,9 @@ const MIN_DRAG_DISTANCE = 20;
 const DRAG_START_DURATION = 1000;
 
 export class Position {
-    constructor(readonly screen: Vector, readonly world: Vector) {}
+    constructor(readonly screen: Vector, readonly world: Vector) {
+        void 0;
+    }
 }
 
 export class MouseState {
