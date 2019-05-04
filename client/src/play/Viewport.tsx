@@ -48,6 +48,12 @@ export class Viewport {
             this.top() + position.y * this.scale
         );
     }
+
+    formatViewport() {
+        return `${this.x - this.width / 2} ${this.y - this.height / 2} ${
+            this.width
+        } ${this.height}`;
+    }
 }
 
 export class Vector {

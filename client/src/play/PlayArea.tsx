@@ -51,11 +51,6 @@ export class PlayArea extends React.Component<Props, State> {
         }
     };
 
-    computeViewBox() {
-        const { x, y, width, height } = this.props.viewport;
-        return `${x - width / 2} ${y - height / 2} ${width} ${height}`;
-    }
-
     mouseState: MouseState | null = null;
     onMouseDown = (e: React.MouseEvent<SVGSVGElement>) => {
         this.positionTransform(Vector.fromMouseEvent(e), position => {
@@ -135,7 +130,7 @@ export class PlayArea extends React.Component<Props, State> {
             <ResizeHandler onResize={this.onResize}>
                 <svg
                     ref={this.svgRef}
-                    viewBox={this.computeViewBox()}
+                    viewBox={this.props.viewport.formatViewport()}
                     onMouseDown={this.onMouseDown}
                     onMouseUp={this.onMouseUp}
                     onMouseLeave={this.onMouseLeave}
