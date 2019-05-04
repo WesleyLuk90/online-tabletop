@@ -57,7 +57,7 @@ export class PlayArea extends React.Component<Props> {
         cancelAnimationFrame(this.animationFrame);
         this.animationFrame = requestAnimationFrame(() => {
             if (this.mouseState != null && this.mouseState.isDrag()) {
-                const button = this.mouseState.getButton();
+                const button = this.mouseState.button;
                 if (button === Buttons.RIGHT) {
                     this.props.onPan(this.mouseState.screenDelta().negative());
                 } else if (button === Buttons.LEFT) {
@@ -67,12 +67,35 @@ export class PlayArea extends React.Component<Props> {
     }
 
     onMouseUp = (e: React.MouseEvent<SVGSVGElement>) => {
-        this.mouseState = null;
+        this.positionTransform(Vector.fromMouseEvent(e), p => {
+            if (this.mouseState != null) {
+                this.mouseState.end(p);
+                this.handleFinalMouseState(this.mouseState);
+                this.mouseState = null;
+            }
+        });
     };
 
     onMouseLeave = (e: React.MouseEvent) => {
-        this.mouseState = null;
+        this.positionTransform(Vector.fromMouseEvent(e), p => {
+            if (this.mouseState != null) {
+                this.mouseState.cancel(p);
+                this.handleFinalMouseState(this.mouseState);
+                this.mouseState = null;
+            }
+        });
     };
+
+    handleFinalMouseState(mouseState: MouseState) {
+        if (!mouseState.isDrag()) {
+            if (
+                mouseState.button === Buttons.LEFT &&
+                mouseState.tokenId != null
+            ) {
+                this.props.onSelect([mouseState.tokenId]);
+            }
+        }
+    }
 
     onStartMouse = (mouseState: MouseState) => {
         this.mouseState = mouseState;

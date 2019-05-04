@@ -16,11 +16,12 @@ const SELECTION_COLOR = "rgb(45, 116, 229)";
 
 export class Tokens extends React.Component<Props> {
     onMouseDown(token: Token, e: React.MouseEvent) {
-        this.props.positionTransform(Vector.fromMouseEvent(e), position =>
+        this.props.positionTransform(Vector.fromMouseEvent(e), position => {
+            e.stopPropagation();
             this.props.onStartMouse(
                 new MouseState(token.id, e.button, position)
-            )
-        );
+            );
+        });
     }
 
     renderToken(token: Token) {

@@ -6,6 +6,7 @@ export enum Buttons {
 }
 
 const MIN_DRAG_DISTANCE = 20;
+const DRAG_START_DURATION = 1000;
 
 export class Position {
     constructor(readonly screen: Vector, readonly world: Vector) {}
@@ -15,7 +16,9 @@ export class MouseState {
     current: Position;
     lastDelta: Vector;
     startTime: number;
+    endTime: number | null = null;
     dragDistance: number = 0;
+    canceled: boolean = false;
 
     constructor(
         readonly tokenId: string | null,
@@ -25,10 +28,6 @@ export class MouseState {
         this.current = initial;
         this.lastDelta = this.current.screen;
         this.startTime = new Date().getTime();
-    }
-
-    getButton(): Buttons {
-        return this.button;
     }
 
     updatePosition(current: Position) {
@@ -42,7 +41,22 @@ export class MouseState {
         return delta;
     }
 
+    end(final: Position) {
+        this.updatePosition(final);
+        this.endTime = new Date().getTime();
+    }
+
+    cancel(final: Position) {
+        this.updatePosition(final);
+        this.endTime = new Date().getTime();
+        this.canceled = true;
+    }
+
     isDrag() {
-        return this.dragDistance > MIN_DRAG_DISTANCE;
+        const endTime = this.endTime || new Date().getTime();
+        return (
+            this.dragDistance > MIN_DRAG_DISTANCE ||
+            endTime - this.startTime > DRAG_START_DURATION
+        );
     }
 }
