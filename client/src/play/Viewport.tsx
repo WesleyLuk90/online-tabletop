@@ -52,7 +52,7 @@ export class Viewport {
 
 export class Vector {
     static fromMouseEvent(e: React.MouseEvent): Vector {
-        return new Vector(e.screenX, e.screenY);
+        return new Vector(e.clientX, e.clientY);
     }
 
     constructor(readonly x: number, readonly y: number) {}

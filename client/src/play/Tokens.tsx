@@ -8,6 +8,7 @@ interface Props {
     viewport: Viewport;
     tokens: Token[];
     selected: string[];
+    dragSelection: Vector | null;
     onStartMouse: (m: MouseState) => void;
     positionTransform: PositionTransformation;
 }
@@ -25,29 +26,37 @@ export class Tokens extends React.Component<Props> {
     }
 
     renderToken(token: Token) {
+        const isSelected = this.props.selected.includes(token.id);
+        let x = token.x;
+        let y = token.y;
+        if (isSelected && this.props.dragSelection) {
+            x += this.props.dragSelection.x;
+            y += this.props.dragSelection.y;
+        }
         const render = [
-            <rect
-                key={token.id}
-                x={token.x}
-                y={token.y}
-                width={token.width}
-                height={token.height}
-                onMouseDown={e => this.onMouseDown(token, e)}
-            />
+            <rect key={token.id} width={token.width} height={token.height} />
         ];
-        if (this.props.selected.includes(token.id)) {
+        if (isSelected) {
             render.push(
                 <path
                     key={token.id + "selection-line"}
                     stroke={SELECTION_COLOR}
                     strokeWidth="3"
-                    d={`M ${token.x},${token.y} v ${token.height} h ${
+                    d={`M 0,0 v ${token.height} h ${
                         token.width
                     } v ${-token.height} h ${-token.width}`}
                 />
             );
         }
-        return render;
+        return (
+            <g
+                key={token.id}
+                onMouseDown={e => this.onMouseDown(token, e)}
+                transform={`translate(${x}, ${y})`}
+            >
+                {render}
+            </g>
+        );
     }
 
     render() {

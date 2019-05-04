@@ -1,6 +1,12 @@
 import * as React from "react";
 import { Grid } from "./Grid";
-import { Buttons, MouseState, Position } from "./MouseState";
+import {
+    MouseHandler,
+    PanHandler,
+    TokenDragHandler,
+    TokenSelectionHandler
+} from "./MouseHandler";
+import { MouseState, Position } from "./MouseState";
 import { ResizeHandler } from "./ResizeHandler";
 import { Token } from "./Token";
 import { Tokens } from "./Tokens";
@@ -16,11 +22,25 @@ interface Props {
     onDrag: (position: Vector) => void;
 }
 
+interface State {
+    dragSelection: Vector | null;
+}
+
 export interface PositionTransformation {
     (screen: Vector, action: (position: Position) => void): void;
 }
 
-export class PlayArea extends React.Component<Props> {
+export class PlayArea extends React.Component<Props, State> {
+    handlers: MouseHandler[] = [
+        new TokenSelectionHandler(this),
+        new PanHandler(this),
+        new TokenDragHandler(this)
+    ];
+
+    state: State = {
+        dragSelection: null
+    };
+
     svgRef = React.createRef<SVGSVGElement>();
 
     onResize = () => {
@@ -56,12 +76,11 @@ export class PlayArea extends React.Component<Props> {
     updateMouse() {
         cancelAnimationFrame(this.animationFrame);
         this.animationFrame = requestAnimationFrame(() => {
-            if (this.mouseState != null && this.mouseState.isDrag()) {
-                const button = this.mouseState.button;
-                if (button === Buttons.RIGHT) {
-                    this.props.onPan(this.mouseState.screenDelta().negative());
-                } else if (button === Buttons.LEFT) {
-                }
+            const mouseState = this.mouseState;
+            if (mouseState != null) {
+                this.handlers
+                    .filter(h => h.canHandle(mouseState))
+                    .forEach(h => h.onUpdate(mouseState));
             }
         });
     }
@@ -87,14 +106,9 @@ export class PlayArea extends React.Component<Props> {
     };
 
     handleFinalMouseState(mouseState: MouseState) {
-        if (!mouseState.isDrag()) {
-            if (
-                mouseState.button === Buttons.LEFT &&
-                mouseState.tokenId != null
-            ) {
-                this.props.onSelect([mouseState.tokenId]);
-            }
-        }
+        this.handlers
+            .filter(h => h.canHandle(mouseState))
+            .forEach(h => h.onFinish(mouseState));
     }
 
     onStartMouse = (mouseState: MouseState) => {
@@ -110,7 +124,7 @@ export class PlayArea extends React.Component<Props> {
             new Position(
                 screen,
                 this.props.viewport.toWorldCoordinates(
-                    new Vector(box.left - screen.x, box.top - screen.y)
+                    new Vector(screen.x - box.left, screen.y - box.top)
                 )
             )
         );
@@ -134,6 +148,7 @@ export class PlayArea extends React.Component<Props> {
                         viewport={this.props.viewport}
                         tokens={this.props.tokens}
                         selected={this.props.selected}
+                        dragSelection={this.state.dragSelection}
                         onStartMouse={this.onStartMouse}
                         positionTransform={this.positionTransform}
                     />

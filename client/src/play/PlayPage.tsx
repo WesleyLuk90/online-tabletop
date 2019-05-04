@@ -1,25 +1,24 @@
 import * as React from "react";
 import { PlayArea } from "./PlayArea";
 import "./PlayPage.css";
+import { Token } from "./Token";
 import { Vector, Viewport } from "./Viewport";
 
 interface State {
     viewport: Viewport;
     selected: string[];
+    tokens: Token[];
 }
 
 export class PlayPage extends React.Component<{}, State> {
     state: State = {
         viewport: Viewport.defaultViewport(),
-        selected: []
-    };
-
-    getTokens() {
-        return [
+        selected: [],
+        tokens: [
             { id: "1", x: 0, y: 0, width: 100, height: 100 },
             { id: "2", x: -200, y: -200, width: 100, height: 100 }
-        ];
-    }
+        ]
+    };
 
     onPan = (vector: Vector) => {
         this.setState({
@@ -28,7 +27,14 @@ export class PlayPage extends React.Component<{}, State> {
     };
 
     onDrag = (pos: Vector) => {
-        // console.log(pos);
+        const tokens = this.state.tokens.map(t => {
+            if (this.state.selected.includes(t.id)) {
+                return { ...t, x: t.x + pos.x, y: t.y + pos.y };
+            } else {
+                return t;
+            }
+        });
+        this.setState({ tokens });
     };
 
     onSize = (width: number, height: number) => {
@@ -46,11 +52,11 @@ export class PlayPage extends React.Component<{}, State> {
             <div className="play-page">
                 <PlayArea
                     viewport={this.state.viewport}
+                    tokens={this.state.tokens}
+                    selected={this.state.selected}
                     onPan={this.onPan}
                     onSize={this.onSize}
                     onDrag={this.onDrag}
-                    tokens={this.getTokens()}
-                    selected={this.state.selected}
                     onSelect={this.onSelect}
                 />
                 <div className="side-bar">Side</div>

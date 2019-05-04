@@ -41,6 +41,10 @@ export class MouseState {
         return delta;
     }
 
+    worldChange(): Vector {
+        return this.current.world.subtract(this.initial.world);
+    }
+
     end(final: Position) {
         this.updatePosition(final);
         this.endTime = new Date().getTime();
