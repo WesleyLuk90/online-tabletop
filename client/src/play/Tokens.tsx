@@ -1,7 +1,7 @@
 import React from "react";
 import { MouseState } from "./MouseState";
 import { PositionTransformation } from "./PlayArea";
-import { Token } from "./Token";
+import { Token } from "./protocol/Token";
 import { Vector, Viewport } from "./Viewport";
 
 interface Props {

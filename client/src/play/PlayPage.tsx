@@ -3,7 +3,11 @@ import { fromNullable } from "fp-ts/lib/Option";
 import * as React from "react";
 import { match } from "react-router";
 import { GameService } from "./GameService";
-import { MessageHandler, UpdateCampaignHandler } from "./MessageHandlers";
+import {
+    MessageHandler,
+    UpdateCampaignHandler,
+    UpdateTokenHandler
+} from "./MessageHandlers";
 import { PlayArea } from "./PlayArea";
 import "./PlayPage.css";
 import { Campaign } from "./protocol/Campaign";
@@ -31,12 +35,12 @@ export class PlayPage extends React.Component<
     toaster = React.createRef<Toaster>();
 
     handlers: { [type in Message["type"]]: MessageHandler<any> } = {
-        "update-campaign": new UpdateCampaignHandler(this),
-        "update-token": new UpdateCampaignHandler(this)
+        "update-campaign": UpdateCampaignHandler,
+        "update-token": UpdateTokenHandler
     };
 
     onMessage = (message: Message) => {
-        this.handlers[message.type].handle(message);
+        this.handlers[message.type](this, message);
     };
 
     onDisconnect = () => {

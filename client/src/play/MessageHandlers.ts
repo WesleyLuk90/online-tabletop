@@ -1,14 +1,18 @@
 import { PlayPage } from "./PlayPage";
-import { UpdateCampaign } from "./protocol/Messages";
+import { UpdateCampaign, UpdateToken } from "./protocol/Messages";
 
 export interface MessageHandler<T> {
-    handle(message: T): void;
+    (playPage: PlayPage, message: T): void;
 }
 
-export class UpdateCampaignHandler implements MessageHandler<UpdateCampaign> {
-    constructor(readonly playPage: PlayPage) {
-        void 0;
-    }
+export const UpdateCampaignHandler: MessageHandler<UpdateCampaign> = (
+    playPage,
+    updateCampaign
+) => {
+    playPage.setState({ campaign: updateCampaign.campaign });
+};
 
-    handle(updateCampaign: UpdateCampaign) {}
-}
+export const UpdateTokenHandler: MessageHandler<UpdateToken> = (
+    playPage,
+    updateToken
+) => {};

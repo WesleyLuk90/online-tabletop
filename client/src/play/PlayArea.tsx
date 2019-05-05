@@ -7,8 +7,8 @@ import {
     TokenSelectionHandler
 } from "./MouseHandler";
 import { MouseState, Position } from "./MouseState";
+import { Token } from "./protocol/Token";
 import { ResizeHandler } from "./ResizeHandler";
-import { Token } from "./Token";
 import { Tokens } from "./Tokens";
 import { Vector, Viewport } from "./Viewport";
 
