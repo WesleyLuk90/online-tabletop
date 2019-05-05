@@ -1,17 +1,19 @@
 import { Toaster } from "@blueprintjs/core";
+import { fromNullable } from "fp-ts/lib/Option";
 import * as React from "react";
 import { match } from "react-router";
 import { GameService } from "./GameService";
+import { MessageHandler, UpdateCampaignHandler } from "./MessageHandlers";
 import { PlayArea } from "./PlayArea";
 import "./PlayPage.css";
+import { Campaign } from "./protocol/Campaign";
 import { Message } from "./protocol/Messages";
-import { Token } from "./Token";
 import { Vector, Viewport } from "./Viewport";
 
 interface State {
     viewport: Viewport;
     selected: string[];
-    tokens: Token[];
+    campaign: Campaign | null;
 }
 
 export class PlayPage extends React.Component<
@@ -23,16 +25,18 @@ export class PlayPage extends React.Component<
     state: State = {
         viewport: Viewport.defaultViewport(),
         selected: [],
-        tokens: [
-            { id: "1", x: 0, y: 0, width: 100, height: 100 },
-            { id: "2", x: -200, y: -200, width: 100, height: 100 }
-        ]
+        campaign: null
     };
 
     toaster = React.createRef<Toaster>();
 
+    handlers: { [type in Message["type"]]: MessageHandler<any> } = {
+        "update-campaign": new UpdateCampaignHandler(this),
+        "update-token": new UpdateCampaignHandler(this)
+    };
+
     onMessage = (message: Message) => {
-        console.log(message);
+        this.handlers[message.type].handle(message);
     };
 
     onDisconnect = () => {
@@ -58,14 +62,14 @@ export class PlayPage extends React.Component<
     };
 
     onDrag = (pos: Vector) => {
-        const tokens = this.state.tokens.map(t => {
-            if (this.state.selected.includes(t.id)) {
-                return { ...t, x: t.x + pos.x, y: t.y + pos.y };
-            } else {
-                return t;
-            }
-        });
-        this.setState({ tokens });
+        // const tokens = this.state.tokens.map(t => {
+        //     if (this.state.selected.includes(t.id)) {
+        //         return { ...t, x: t.x + pos.x, y: t.y + pos.y };
+        //     } else {
+        //         return t;
+        //     }
+        // });
+        // this.setState({ tokens });
     };
 
     onSize = (width: number, height: number) => {
@@ -78,13 +82,20 @@ export class PlayPage extends React.Component<
         this.setState({ selected: tokens });
     };
 
+    getTokens() {
+        return fromNullable(this.state.campaign)
+            .mapNullable(c => c.scenes[0])
+            .map(s => s.tokens)
+            .getOrElse([]);
+    }
+
     render() {
         return (
             <div className="play-page">
                 <Toaster ref={this.toaster} />
                 <PlayArea
                     viewport={this.state.viewport}
-                    tokens={this.state.tokens}
+                    tokens={this.getTokens()}
                     selected={this.state.selected}
                     onPan={this.onPan}
                     onSize={this.onSize}
