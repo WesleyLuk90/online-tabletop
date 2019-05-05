@@ -9,6 +9,8 @@
         "@types/react": "16.8.14",
         "@types/react-dom": "16.8.4",
         "axios": "^0.18.0",
+        "fp-ts": "^1.17.3",
+        "io-ts": "^1.8.5",
         "normalize.css": "^8.0.1",
         "react": "^16.8.6",
         "react-dom": "^16.8.6",

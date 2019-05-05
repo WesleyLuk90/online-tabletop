@@ -1,10 +1,11 @@
+import { Toaster } from "@blueprintjs/core";
 import * as React from "react";
 import { match } from "react-router";
-import io from "socket.io-client";
+import { GameService } from "./GameService";
 import { PlayArea } from "./PlayArea";
 import "./PlayPage.css";
+import { Message } from "./protocol/Messages";
 import { Token } from "./Token";
-import { TokenService } from "./TokenService";
 import { Vector, Viewport } from "./Viewport";
 
 interface State {
@@ -28,19 +29,27 @@ export class PlayPage extends React.Component<
         ]
     };
 
-    async componentDidMount() {
-        const id = this.props.match.params.id;
-        const token = await TokenService.get(id);
-        console.log(token);
-        const socket = io({
-            path: "/socket/play"
-        });
-        socket.on("connect", () => {
-            console.log("connected");
-            socket.emit("game.handshake", token);
-        });
-        socket.on("disconnect", () => console.error("disconnected"));
-    }
+    toaster = React.createRef<Toaster>();
+
+    onMessage = (message: Message) => {
+        console.log(message);
+    };
+
+    onDisconnect = () => {
+        if (this.toaster.current) {
+            this.toaster.current.show({
+                message: "Connection Lost",
+                intent: "danger",
+                timeout: 0
+            });
+        }
+    };
+
+    gameService = new GameService(
+        this.props.match.params.id,
+        this.onMessage,
+        this.onDisconnect
+    );
 
     onPan = (vector: Vector) => {
         this.setState({
@@ -72,6 +81,7 @@ export class PlayPage extends React.Component<
     render() {
         return (
             <div className="play-page">
+                <Toaster ref={this.toaster} />
                 <PlayArea
                     viewport={this.state.viewport}
                     tokens={this.state.tokens}
