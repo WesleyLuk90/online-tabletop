@@ -94,25 +94,6 @@ export class SceneService {
         return new SceneService();
     }
 
-    async updateScene(gameId: string, scene: SceneData) {
-        await Scene.upsert({
-            game_id: gameId,
-            uuid: scene.id,
-            data: JSON.stringify({
-                id: scene.id,
-                name: scene.name
-            })
-        });
-        if (scene.tokens.length > 0) {
-            const createdScene = await Scene.findOne({
-                where: { game_id: gameId, uuid: scene.id }
-            });
-            for (let token of scene.tokens) {
-                await this.createToken(createdScene.id.toString(), token);
-            }
-        }
-    }
-
     async list(gameId: string): Promise<SceneData[]> {
         const scenes = await Scene.findAll({
             where: { game_id: gameId }
@@ -131,9 +112,27 @@ export class SceneService {
         });
     }
 
-    async createToken(sceneId: string, token: TokenData) {
+    async updateScene(gameId: string, scene: SceneData) {
+        await Scene.upsert({
+            game_id: gameId,
+            uuid: scene.id,
+            data: JSON.stringify({
+                id: scene.id,
+                name: scene.name
+            })
+        });
+    }
+
+    async updateToken(gameId: string, sceneId: string, token: TokenData) {
+        const scene = await Scene.findOne({
+            where: { game_id: gameId, uuid: sceneId }
+        });
+        if (scene == null) {
+            console.error(`No scene found gameId=${gameId} sceneId=${sceneId}`);
+            return;
+        }
         return Token.upsert({
-            scene_id: sceneId,
+            scene_id: scene.id,
             uuid: token.id,
             data: JSON.stringify(token)
         });
