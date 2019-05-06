@@ -19,7 +19,7 @@ export class Grid extends React.Component<Props> {
         const y1 = viewport.top();
         const y2 = viewport.bottom();
         const start =
-            Math.floor((viewport.x - viewport.width / 2) / GRID_SIZE) *
+            Math.ceil((viewport.x - viewport.width / 2) / GRID_SIZE) *
             GRID_SIZE;
         return range(Math.floor(viewport.width / GRID_SIZE) + 1).map(i => (
             <line
@@ -38,7 +38,7 @@ export class Grid extends React.Component<Props> {
         const x1 = viewport.left();
         const x2 = viewport.right();
         const start =
-            Math.floor((viewport.y - viewport.height / 2) / GRID_SIZE) *
+            Math.ceil((viewport.y - viewport.height / 2) / GRID_SIZE) *
             GRID_SIZE;
         return range(Math.floor(viewport.height / GRID_SIZE) + 1).map(i => (
             <line

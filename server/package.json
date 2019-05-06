@@ -27,6 +27,7 @@
         "dotenv": "^7.0.0",
         "express": "^4.16.4",
         "express-session": "^1.16.1",
+        "io-ts": "^1.8.5",
         "lodash": "^4.17.11",
         "passport": "^0.4.0",
         "passport-google-oauth2": "^0.2.0",
