@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Debouncer } from "./Debouncer";
 import { Grid } from "./Grid";
 import {
     MouseHandler,
@@ -67,10 +68,9 @@ export class PlayArea extends React.Component<Props, State> {
         });
     };
 
-    animationFrame: number = 0;
+    debouncer = new Debouncer();
     updateMouse() {
-        cancelAnimationFrame(this.animationFrame);
-        this.animationFrame = requestAnimationFrame(() => {
+        this.debouncer.debounce(() => {
             const mouseState = this.mouseState;
             if (mouseState != null) {
                 this.handlers

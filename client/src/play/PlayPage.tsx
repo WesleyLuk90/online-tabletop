@@ -12,11 +12,14 @@ import { PlayArea } from "./PlayArea";
 import "./PlayPage.css";
 import { Campaign } from "./protocol/Campaign";
 import { Message } from "./protocol/Messages";
+import { Updaters } from "./protocol/Updaters";
+import { SideBar } from "./SideBar";
 import { Vector, Viewport } from "./Viewport";
 
 interface State {
     viewport: Viewport;
     selected: string[];
+    sceneId: string;
     campaign: Campaign | null;
 }
 
@@ -28,6 +31,7 @@ export class PlayPage extends React.Component<
 > {
     state: State = {
         viewport: Viewport.defaultViewport(),
+        sceneId: "foo",
         selected: [],
         campaign: null
     };
@@ -93,6 +97,16 @@ export class PlayPage extends React.Component<
             .getOrElse([]);
     }
 
+    sendMessage = (message: Message) => {
+        this.gameService.sendMessage(message);
+        if (message.type === "update-token" && this.state.campaign != null) {
+            console.log(message);
+            this.setState({
+                campaign: Updaters.createToken(this.state.campaign, message)
+            });
+        }
+    };
+
     render() {
         return (
             <div className="play-page">
@@ -106,7 +120,12 @@ export class PlayPage extends React.Component<
                     onDrag={this.onDrag}
                     onSelect={this.onSelect}
                 />
-                <div className="side-bar">Side</div>
+                <div className="side-bar">
+                    <SideBar
+                        onMessage={this.sendMessage}
+                        sceneId={this.state.sceneId}
+                    />
+                </div>
             </div>
         );
     }

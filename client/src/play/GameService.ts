@@ -28,4 +28,8 @@ export class GameService {
         const token = await TokenService.get(this.gameId);
         this.socket.emit("game.handshake", token);
     }
+
+    sendMessage(message: Message) {
+        this.socket.emit("game.message", message);
+    }
 }
