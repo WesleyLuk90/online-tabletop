@@ -1,9 +1,9 @@
-import { Socket } from "socket.io";
+import { Connection } from "./ConnectionManager";
 
 export class Player {
     constructor(
         readonly name: string,
         readonly id: string,
-        readonly socket: Socket
+        readonly connection: Connection
     ) {}
 }

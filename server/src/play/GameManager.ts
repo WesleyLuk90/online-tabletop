@@ -1,7 +1,7 @@
 import { Game } from "./Game";
 
 export class GameManager {
-    games: Game[];
+    games: Game[] = [];
 
     async getGame(id: string): Promise<Game> {
         const game = this.games.find(game => game.id === id);

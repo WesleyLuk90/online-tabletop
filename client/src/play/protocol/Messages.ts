@@ -18,9 +18,18 @@ const UpdateTokenValidator = t.type({
 
 export type UpdateToken = t.TypeOf<typeof UpdateTokenValidator>;
 
+export const UpdatePlayersValidator = t.type({
+    type: t.literal("update-players"),
+    id: t.string,
+    players: t.array(t.string)
+});
+
+export type UpdatePlayers = t.TypeOf<typeof UpdatePlayersValidator>;
+
 export const MessageValidator = t.taggedUnion("type", [
     UpdateCampaignValidator,
-    UpdateTokenValidator
+    UpdateTokenValidator,
+    UpdatePlayersValidator
 ]);
 
 export type Message = t.TypeOf<typeof MessageValidator>;

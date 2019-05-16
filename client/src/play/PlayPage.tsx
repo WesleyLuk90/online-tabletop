@@ -40,7 +40,8 @@ export class PlayPage extends React.Component<
 
     handlers: { [type in Message["type"]]: MessageHandler<any> } = {
         "update-campaign": UpdateCampaignHandler,
-        "update-token": UpdateTokenHandler
+        "update-token": UpdateTokenHandler,
+        "update-players": () => {}
     };
 
     onMessage = (message: Message) => {

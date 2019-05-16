@@ -14,7 +14,7 @@ export class GameService {
         this.socket.on("disconnect", onDisconnect);
         this.socket.on("connect", () => this.sendHandshake());
         this.socket.on("game.message", (message: any) => {
-            MessageValidator.decode(message).bimap(
+            MessageValidator.decode(message).fold(
                 err => {
                     console.error("Failed to decode message", err);
                 },

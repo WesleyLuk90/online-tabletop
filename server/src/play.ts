@@ -1,30 +1,60 @@
 import { Server } from "http";
 import lodash from "lodash";
 import SocketIO from "socket.io";
+import { MessageValidator } from "../../client/src/play/protocol/Messages";
 import { PermissionError } from "./errors";
 import { GameService } from "./games/GameService";
+import { ConnectionManager } from "./play/ConnectionManager";
+import { GameManager } from "./play/GameManager";
 import { TokenManager } from "./play/TokenManager";
 import { Context, Routes } from "./route";
 
-export function initializePlay(
+export async function initializePlay(
     httpServer: Server,
     gameService: GameService
-): Routes {
+): Promise<Routes> {
     const io = SocketIO(httpServer, {
         path: "/socket/play",
         serveClient: false
     });
 
     const tokenManager = new TokenManager();
+    const gameManager = new GameManager();
+    const connectionManager = await ConnectionManager.create(
+        tokenManager,
+        gameManager
+    );
 
     io.on("connection", socket => {
-        socket.on("game.handshake", (message: string) => {
-            console.log(message);
-            const token = tokenManager.get(lodash.get(message, ["token"], ""));
-            if (!token) {
-                return socket.disconnect(true);
+        const handler = connectionManager.newConnection({
+            remoteAddress: socket.conn.remoteAddress,
+            close() {
+                socket.disconnect(true);
+            },
+            send(message) {
+                socket.emit("game.message", message);
             }
-            console.log("new connection from", token);
+        });
+        socket.on("game.handshake", (handshake: any) => {
+            let token = lodash.get(handshake, ["token"], "");
+            if (typeof token !== "string") {
+                token = "";
+            }
+            handler.onHandshake({ token });
+        });
+        socket.on("game.message", (message: any) => {
+            const parsed = MessageValidator.decode(message);
+            parsed.fold(
+                e => {
+                    handler.onError(e.toString());
+                },
+                mes => {
+                    handler.onMessage(mes);
+                }
+            );
+        });
+        socket.on("disconnect", () => {
+            handler.onDisconnected();
         });
     });
     return {
