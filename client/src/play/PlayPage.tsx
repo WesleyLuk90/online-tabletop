@@ -6,14 +6,16 @@ import { GameService } from "./GameService";
 import {
     MessageHandler,
     UpdateCampaignHandler,
-    UpdateTokenHandler
+    UpdatePlayersHandler
 } from "./MessageHandlers";
 import { PlayArea } from "./PlayArea";
 import "./PlayPage.css";
 import { Campaign } from "./protocol/Campaign";
+import { newId } from "./protocol/Id";
 import { Message } from "./protocol/Messages";
 import { Updaters } from "./protocol/Updaters";
 import { SideBar } from "./SideBar";
+import { TokenUpdater } from "./TokenUpdater";
 import { Vector, Viewport } from "./Viewport";
 
 interface State {
@@ -38,14 +40,21 @@ export class PlayPage extends React.Component<
 
     toaster = React.createRef<Toaster>();
 
-    handlers: { [type in Message["type"]]: MessageHandler<any> } = {
+    handlers: { [type in Message["type"]]?: MessageHandler<any> } = {
         "update-campaign": UpdateCampaignHandler,
-        "update-token": UpdateTokenHandler,
-        "update-players": () => {}
+        "update-players": UpdatePlayersHandler
     };
 
     onMessage = (message: Message) => {
-        this.handlers[message.type](this, message);
+        const handler = this.handlers[message.type];
+        if (handler != null) {
+            handler(this, message);
+        } else if (this.state.campaign != null) {
+            const updated = Updaters.update(this.state.campaign, message);
+            if (updated != null) {
+                this.setState({ campaign: updated });
+            }
+        }
     };
 
     onDisconnect = () => {
@@ -71,14 +80,21 @@ export class PlayPage extends React.Component<
     };
 
     onDrag = (pos: Vector) => {
-        // const tokens = this.state.tokens.map(t => {
-        //     if (this.state.selected.includes(t.id)) {
-        //         return { ...t, x: t.x + pos.x, y: t.y + pos.y };
-        //     } else {
-        //         return t;
-        //     }
-        // });
-        // this.setState({ tokens });
+        fromNullable(this.state.campaign)
+            .mapNullable(c => c.scenes[0])
+            .map(scene =>
+                scene.tokens
+                    .filter(t => this.state.selected.includes(t.id))
+                    .map(
+                        (token): Message => ({
+                            type: "update-token",
+                            id: newId(),
+                            sceneId: scene.id,
+                            token: TokenUpdater.translate(token, pos)
+                        })
+                    )
+                    .forEach(update => this.sendMessage(update))
+            );
     };
 
     onSize = (width: number, height: number) => {
@@ -100,11 +116,11 @@ export class PlayPage extends React.Component<
 
     sendMessage = (message: Message) => {
         this.gameService.sendMessage(message);
-        if (message.type === "update-token" && this.state.campaign != null) {
-            console.log(message);
-            this.setState({
-                campaign: Updaters.createToken(this.state.campaign, message)
-            });
+        if (this.state.campaign != null) {
+            const updated = Updaters.update(this.state.campaign, message);
+            if (updated != null) {
+                this.setState({ campaign: updated });
+            }
         }
     };
 

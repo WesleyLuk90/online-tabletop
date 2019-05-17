@@ -1,8 +1,10 @@
 import { Campaign } from "../../../client/src/play/protocol/Campaign";
 import { newId } from "../../../client/src/play/protocol/Id";
 import { Message } from "../../../client/src/play/protocol/Messages";
+import { Updaters } from "../../../client/src/play/protocol/Updaters";
 import { Connection } from "./ConnectionManager";
 import { Player } from "./Player";
+
 export class Game {
     players: Player[] = [];
     campaign: Campaign = {
@@ -31,6 +33,14 @@ export class Game {
     leave(connection: Connection) {
         this.players = this.players.filter(p => p.connection !== connection);
         this.broadcastUpdatePlayers();
+    }
+
+    applyUpdate(message: Message) {
+        const nextCampaign = Updaters.update(this.campaign, message);
+        if (nextCampaign != null) {
+            this.campaign = nextCampaign;
+            this.broadcast(message);
+        }
     }
 
     private broadcast(message: Message) {

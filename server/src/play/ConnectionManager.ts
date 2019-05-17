@@ -75,7 +75,7 @@ export class ConnectionManager {
                 if (state === States.CLOSED) {
                     return close();
                 }
-                console.log("message from client");
+                state.game.applyUpdate(message);
             },
             onError: error => {
                 console.error(`Got error from client ${error}`);

@@ -1,5 +1,5 @@
 import { Campaign } from "./Campaign";
-import { UpdateToken } from "./Messages";
+import { Message, UpdateToken } from "./Messages";
 import { Scene } from "./Scene";
 
 function updateList<T>(
@@ -40,6 +40,17 @@ function upsertList<T>(
 }
 
 export class Updaters {
+    static update(campaign: Campaign, message: Message): Campaign | null {
+        switch (message.type) {
+            case "update-campaign":
+                return message.campaign;
+            case "update-token":
+                return Updaters.updateToken(campaign, message);
+            default:
+                return null;
+        }
+    }
+
     static updateScene(
         campaign: Campaign,
         sceneId: string,
@@ -51,7 +62,7 @@ export class Updaters {
         };
     }
 
-    static createToken(campaign: Campaign, updateToken: UpdateToken): Campaign {
+    static updateToken(campaign: Campaign, updateToken: UpdateToken): Campaign {
         return Updaters.updateScene(campaign, updateToken.sceneId, scene => ({
             ...scene,
             tokens: upsertList(
