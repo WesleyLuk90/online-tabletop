@@ -1,7 +1,7 @@
 import { Button } from "@blueprintjs/core";
+import { Message } from "protocol/lib/Messages";
 import React from "react";
 import { Factory } from "./Factory";
-import { Message } from "./protocol/Messages";
 
 interface Props {
     sceneId: string;

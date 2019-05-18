@@ -1,5 +1,9 @@
 import { Toaster } from "@blueprintjs/core";
 import { fromNullable } from "fp-ts/lib/Option";
+import { Campaign } from "protocol/lib/Campaign";
+import { newId } from "protocol/lib/Id";
+import { Message } from "protocol/lib/Messages";
+import { Updaters } from "protocol/lib/Updaters";
 import * as React from "react";
 import { match } from "react-router";
 import { GameService } from "./GameService";
@@ -10,10 +14,6 @@ import {
 } from "./MessageHandlers";
 import { PlayArea } from "./PlayArea";
 import "./PlayPage.css";
-import { Campaign } from "./protocol/Campaign";
-import { newId } from "./protocol/Id";
-import { Message } from "./protocol/Messages";
-import { Updaters } from "./protocol/Updaters";
 import { SideBar } from "./SideBar";
 import { TokenUpdater } from "./TokenUpdater";
 import { Vector, Viewport } from "./Viewport";

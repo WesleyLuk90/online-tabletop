@@ -1,7 +1,7 @@
 import { Server } from "http";
 import lodash from "lodash";
+import { MessageValidator } from "protocol/lib/Messages";
 import SocketIO from "socket.io";
-import { MessageValidator } from "../../client/src/play/protocol/Messages";
 import { PermissionError } from "./errors";
 import { GameService } from "./games/GameService";
 import { ConnectionManager } from "./play/ConnectionManager";

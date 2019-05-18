@@ -1,3 +1,4 @@
+import { Token } from "protocol/lib/Token";
 import * as React from "react";
 import { Debouncer } from "./Debouncer";
 import { Grid } from "./Grid";
@@ -8,7 +9,6 @@ import {
     TokenSelectionHandler
 } from "./MouseHandler";
 import { MouseState, Position } from "./MouseState";
-import { Token } from "./protocol/Token";
 import { ResizeHandler } from "./ResizeHandler";
 import { Tokens } from "./Tokens";
 import { Vector, Viewport } from "./Viewport";

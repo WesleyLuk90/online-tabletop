@@ -1,9 +1,6 @@
+import { Scene as SceneData, SceneValidator } from "protocol/lib/Scene";
+import { Token as TokenData } from "protocol/lib/Token";
 import { DataTypes, Model, Op, Sequelize } from "sequelize";
-import {
-    Scene as SceneData,
-    SceneValidator
-} from "../../../client/src/play/protocol/Scene";
-import { Token as TokenData } from "../../../client/src/play/protocol/Token";
 
 class Scene extends Model {
     public id: number;

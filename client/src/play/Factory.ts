@@ -1,5 +1,5 @@
-import { newId } from "./protocol/Id";
-import { Message } from "./protocol/Messages";
+import { newId } from "protocol/lib/Id";
+import { Message } from "protocol/lib/Messages";
 
 export class Factory {
     static createToken(sceneId: string): Message {

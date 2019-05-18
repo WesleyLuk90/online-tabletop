@@ -1,7 +1,7 @@
-import { Campaign } from "../../../client/src/play/protocol/Campaign";
-import { newId } from "../../../client/src/play/protocol/Id";
-import { Message } from "../../../client/src/play/protocol/Messages";
-import { Updaters } from "../../../client/src/play/protocol/Updaters";
+import { Campaign } from "protocol/lib/Campaign";
+import { newId } from "protocol/lib/Id";
+import { Message } from "protocol/lib/Messages";
+import { Updaters } from "protocol/lib/Updaters";
 import { Connection } from "./ConnectionManager";
 import { Player } from "./Player";
 

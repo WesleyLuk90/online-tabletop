@@ -1,5 +1,5 @@
+import { Message, MessageValidator } from "protocol/lib/Messages";
 import io from "socket.io-client";
-import { Message, MessageValidator } from "./protocol/Messages";
 import { TokenService } from "./TokenService";
 
 export class GameService {

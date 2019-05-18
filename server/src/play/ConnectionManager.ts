@@ -1,4 +1,4 @@
-import { Message } from "../../../client/src/play/protocol/Messages";
+import { Message } from "protocol/lib/Messages";
 import { Game } from "./Game";
 import { GameManager } from "./GameManager";
 import { TokenManager } from "./TokenManager";

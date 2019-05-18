@@ -1,6 +1,6 @@
+import { Campaign as CampaignData } from "protocol/lib/Campaign";
+import { newId } from "protocol/lib/Id";
 import { DataTypes, Model, Sequelize } from "sequelize";
-import { Campaign as CampaignData } from "../../../client/src/play/protocol/Campaign";
-import { newId } from "../../../client/src/play/protocol/Id";
 
 class Campaign extends Model {
     public id: number;
@@ -48,5 +48,6 @@ export class SceneService {
             scenes: []
         };
         new Campaign({});
+        throw new Error();
     }
 }

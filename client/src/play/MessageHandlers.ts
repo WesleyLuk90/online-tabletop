@@ -1,9 +1,9 @@
-import { PlayPage } from "./PlayPage";
 import {
     UpdateCampaign,
     UpdatePlayers,
     UpdateToken
-} from "./protocol/Messages";
+} from "protocol/lib/Messages";
+import { PlayPage } from "./PlayPage";
 
 export interface MessageHandler<T> {
     (playPage: PlayPage, message: T): void;

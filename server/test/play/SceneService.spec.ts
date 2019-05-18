@@ -1,5 +1,5 @@
+import { Scene } from "protocol/lib/Scene";
 import { Sequelize } from "sequelize";
-import { Scene } from "../../../client/src/play/protocol/Scene";
 import { SceneService } from "../../src/play/SceneService";
 
 describe("SceneService", () => {

@@ -1,7 +1,7 @@
 import lodash from "lodash";
-import { Campaign } from "../../../client/src/play/protocol/Campaign";
-import { Scene } from "../../../client/src/play/protocol/Scene";
-import { Token } from "../../../client/src/play/protocol/Token";
+import { Campaign } from "protocol/lib/Campaign";
+import { Scene } from "protocol/lib/Scene";
+import { Token } from "protocol/lib/Token";
 
 function comparableScene(scene: Scene): Partial<Scene> {
     return {
