@@ -4,11 +4,11 @@ import { Message } from "protocol/lib/Messages";
 import { Updaters } from "protocol/lib/Updaters";
 import { Connection } from "./ConnectionManager";
 import { Player } from "./Player";
-
 export class Game {
     players: Player[] = [];
     campaign: Campaign = {
         id: "c1",
+        scene: "s1",
         scenes: [
             {
                 id: "s1",

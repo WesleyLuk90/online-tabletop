@@ -3,14 +3,13 @@ node_js:
     - "8"
 
 script:
+    - yarn install --frozen-lockfile
     - cd protocol
-    - yarn install --frozen-lockfile
     - yarn build
+    - yarn test
     - cd ../server
-    - yarn install --frozen-lockfile
     - yarn build
     - yarn test
     - cd ../client
-    - yarn install --frozen-lockfile
     - yarn build
     - yarn test
