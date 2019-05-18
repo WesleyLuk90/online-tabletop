@@ -6,7 +6,8 @@
     "scripts": {
         "start": "ts-node src/index.ts",
         "test": "jest",
-        "test:watch": "jest --watch"
+        "test:watch": "jest --watch",
+        "build": "yarn tsc"
     },
     "devDependencies": {
         "@types/bluebird": "^3.5.26",

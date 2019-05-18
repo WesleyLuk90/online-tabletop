@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+    - "8"
+
+script:
+    - cd protocol
+    - yarn install --frozen-lockfile
+    - yarn build
+    - cd ../server
+    - yarn install --frozen-lockfile
+    - yarn build
+    - yarn test
+    - cd ../client
+    - yarn install --frozen-lockfile
+    - yarn build
+    - yarn test
