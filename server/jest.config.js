@@ -1,5 +1,8 @@
 module.exports = {
     preset: "ts-jest",
     testEnvironment: "node",
-    rootDir: "test"
+    rootDir: "test",
+    transformIgnorePatterns: [
+        "node_modules/(?!(protocol)/)"
+    ]
 };
