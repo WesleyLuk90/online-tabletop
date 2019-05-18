@@ -12,6 +12,12 @@ class Scene extends Model {
     public data: string;
 }
 
+class Campaign extends Model {
+    public id: number;
+    public game_id: number;
+    public data: string;
+}
+
 class Token extends Model {
     public id: number;
     public uuid: string;
@@ -20,6 +26,31 @@ class Token extends Model {
 }
 
 async function updateSchema(sequelize: Sequelize) {
+    Campaign.init(
+        {
+            id: {
+                type: new DataTypes.INTEGER(),
+                autoIncrement: true,
+                primaryKey: true
+            },
+            game_id: {
+                type: new DataTypes.INTEGER(),
+                unique: true
+            },
+            data: new DataTypes.TEXT()
+        },
+        {
+            tableName: "scene",
+            underscored: true,
+            indexes: [
+                {
+                    fields: ["game_id", "uuid"],
+                    unique: true
+                }
+            ],
+            sequelize
+        }
+    );
     Scene.init(
         {
             id: {
@@ -94,7 +125,7 @@ export class SceneService {
         return new SceneService();
     }
 
-    async list(gameId: string): Promise<SceneData[]> {
+    async listScenes(gameId: string): Promise<SceneData[]> {
         const scenes = await Scene.findAll({
             where: { game_id: gameId }
         });

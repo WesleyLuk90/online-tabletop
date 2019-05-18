@@ -11,6 +11,7 @@
         "axios": "^0.18.0",
         "fp-ts": "^1.17.3",
         "io-ts": "^1.8.5",
+        "lodash": "^4.17.11",
         "normalize.css": "^8.0.1",
         "react": "^16.8.6",
         "react-dom": "^16.8.6",
@@ -43,6 +44,7 @@
         ]
     },
     "devDependencies": {
+        "@types/lodash": "^4.14.129",
         "@types/react-router-dom": "^4.3.2",
         "@types/socket.io-client": "^1.4.32",
         "http-proxy-middleware": "^0.19.1"

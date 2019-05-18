@@ -14,7 +14,7 @@ describe("SceneService", () => {
         };
         await sceneService.updateScene("1", scene);
 
-        expect(await sceneService.list("1")).toEqual([scene]);
+        expect(await sceneService.listScenes("1")).toEqual([scene]);
 
         await sceneService.updateScene("1", {
             id: "scene-1",
@@ -29,7 +29,7 @@ describe("SceneService", () => {
             id: "token-1"
         });
 
-        expect(await sceneService.list("1")).toEqual([
+        expect(await sceneService.listScenes("1")).toEqual([
             {
                 id: "scene-1",
                 name: "My Scene 2",
