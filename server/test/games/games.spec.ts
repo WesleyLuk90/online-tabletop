@@ -1,14 +1,12 @@
-import { Sequelize } from "sequelize";
 import { PermissionError } from "../../src/errors";
 import { gameRoutes } from "../../src/games/GameRoutes";
 import { GameService } from "../../src/games/GameService";
+import { testDatabase } from "../DatabaseToolkit";
 import { createContext } from "../RequestDataToolkit";
 
 describe("games", () => {
     it("should create", async () => {
-        const games = await GameService.create(
-            new Sequelize("sqlite://:memory:", { logging: () => {} })
-        );
+        const games = await GameService.create(testDatabase());
         const routes = gameRoutes(games);
 
         const { game: createdGame } = await routes["/api/games/create"].handle(
@@ -29,9 +27,7 @@ describe("games", () => {
     });
 
     it("should return games with permission", async () => {
-        const games = await GameService.create(
-            new Sequelize("sqlite://:memory:", { logging: () => {} })
-        );
+        const games = await GameService.create(testDatabase());
         const routes = gameRoutes(games);
 
         const { game: createdGame } = await routes["/api/games/create"].handle(

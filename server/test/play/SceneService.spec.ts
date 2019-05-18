@@ -1,12 +1,10 @@
 import { Scene } from "protocol/lib/Scene";
-import { Sequelize } from "sequelize";
 import { SceneService } from "../../src/play/SceneService";
+import { testDatabase } from "../DatabaseToolkit";
 
 describe("SceneService", () => {
     it("should create scenes", async () => {
-        const sceneService = await SceneService.create(
-            new Sequelize("sqlite://:memory:", { logging: () => {} })
-        );
+        const sceneService = await SceneService.create(testDatabase());
         const scene: Scene = {
             id: "scene-1",
             name: "My Scene",

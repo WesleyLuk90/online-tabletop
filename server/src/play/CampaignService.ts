@@ -1,4 +1,7 @@
-import { Campaign as CampaignData } from "protocol/lib/Campaign";
+import {
+    Campaign as CampaignData,
+    CampaignValidator
+} from "protocol/lib/Campaign";
 import { newId } from "protocol/lib/Id";
 import { DataTypes, Model, Sequelize } from "sequelize";
 
@@ -23,31 +26,54 @@ async function updateSchema(sequelize: Sequelize) {
             data: new DataTypes.TEXT()
         },
         {
-            tableName: "scene",
+            tableName: "campaign",
             underscored: true,
-            indexes: [
-                {
-                    fields: ["game_id", "uuid"],
-                    unique: true
-                }
-            ],
             sequelize
         }
     );
     await Campaign.sync();
 }
-export class SceneService {
-    static async create(sequelize: Sequelize): Promise<SceneService> {
+
+function serialize(data: CampaignData): string {
+    return JSON.stringify({
+        ...data,
+        scenes: []
+    });
+}
+
+export class CampaignService {
+    static async create(sequelize: Sequelize): Promise<CampaignService> {
         await updateSchema(sequelize);
-        return new SceneService();
+        return new CampaignService();
     }
 
-    async getCampaign(gameId: string): Promise<CampaignData> {
-        const newCampaign: CampaignData = {
+    async getCampaign(gameId: number): Promise<CampaignData> {
+        const data: CampaignData = {
             id: newId(),
+            scene: "",
             scenes: []
         };
-        new Campaign({});
-        throw new Error();
+        const [campaign, _] = await Campaign.findOrCreate({
+            where: { game_id: gameId },
+            defaults: {
+                game_id: gameId,
+                data: serialize(data)
+            }
+        });
+        return CampaignValidator.decode(JSON.parse(campaign.data)).fold(
+            e => {
+                throw e;
+            },
+            c => c
+        );
+    }
+
+    async update(gameId: number, campaign: CampaignData): Promise<void> {
+        await Campaign.update(
+            { data: serialize(campaign) },
+            {
+                where: { game_id: gameId }
+            }
+        );
     }
 }

@@ -5,6 +5,7 @@ describe("Campaign", () => {
     it("should validate", () => {
         const campaign: Campaign = {
             id: "foo",
+            scene: "bar",
             scenes: [
                 {
                     id: "bar",
