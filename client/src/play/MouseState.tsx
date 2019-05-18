@@ -25,11 +25,12 @@ export class MouseState {
     constructor(
         readonly tokenId: string | null,
         readonly button: number,
-        readonly initial: Position
+        readonly initial: Position,
+        private now: () => number = () => new Date().getTime()
     ) {
         this.current = initial;
         this.lastDelta = this.current.screen;
-        this.startTime = new Date().getTime();
+        this.startTime = this.now();
     }
 
     updatePosition(current: Position) {
@@ -49,17 +50,17 @@ export class MouseState {
 
     end(final: Position) {
         this.updatePosition(final);
-        this.endTime = new Date().getTime();
+        this.endTime = this.now();
     }
 
     cancel(final: Position) {
         this.updatePosition(final);
-        this.endTime = new Date().getTime();
+        this.endTime = this.now();
         this.canceled = true;
     }
 
     isDrag() {
-        const endTime = this.endTime || new Date().getTime();
+        const endTime = this.endTime || this.now();
         return (
             this.dragDistance > MIN_DRAG_DISTANCE ||
             endTime - this.startTime > DRAG_START_DURATION
