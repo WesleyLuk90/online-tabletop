@@ -15,13 +15,15 @@ describe("games", () => {
             createContext("user1", { body: { name: "my game" } })
         );
         expect(createdGame.name).toEqual("my game");
-        expect(createdGame.id).toBeGreaterThan(0);
+        expect(createdGame.id).toBeTruthy();
 
         const list = await routes["/api/games"].handle(createContext("user1"));
         expect(list.games).toContainEqual(createdGame);
 
         const found = await routes["/api/games/get"].handle(
-            createContext("user1", { query: { id: createdGame.id.toString() } })
+            createContext("user1", {
+                query: { gameId: createdGame.id.toString() }
+            })
         );
         expect(found.game).toEqual(createdGame);
     });
@@ -43,7 +45,7 @@ describe("games", () => {
             routes["/api/games/get"].handle(
                 createContext("user2", {
                     query: {
-                        id: createdGame.id.toString()
+                        gameId: createdGame.id.toString()
                     }
                 })
             )

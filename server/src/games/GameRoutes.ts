@@ -31,6 +31,9 @@ export function gameRoutes(gameService: GameService): Routes {
             method: "get",
             handle: async (context: Context<{}, { gameId: string }>) => {
                 const gameId = context.data.query.gameId || "";
+                if (!gameId) {
+                    throw new Error("Game id is required");
+                }
                 const permission = await gameService.getPermission(
                     gameId,
                     context.user_id
