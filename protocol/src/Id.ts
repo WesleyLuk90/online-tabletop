@@ -1,6 +1,6 @@
 import { randomBytes } from "crypto";
 
-const HEX_LOOKUP: string[] = [];
+const HEX_LOOKUP: Array<string> = [];
 
 for (var i = 0; i < 256; i++) {
     HEX_LOOKUP[i] = (i < 16 ? "0" : "") + i.toString(16);
