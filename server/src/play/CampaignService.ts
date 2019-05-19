@@ -47,7 +47,7 @@ export class CampaignService {
         return new CampaignService();
     }
 
-    async getCampaign(gameId: number): Promise<CampaignData> {
+    async getCampaign(gameId: string): Promise<CampaignData> {
         const data: CampaignData = {
             id: newId(),
             scene: "",
@@ -68,7 +68,7 @@ export class CampaignService {
         );
     }
 
-    async update(gameId: number, campaign: CampaignData): Promise<void> {
+    async update(gameId: string, campaign: CampaignData): Promise<void> {
         await Campaign.update(
             { data: serialize(campaign) },
             {

@@ -6,13 +6,13 @@ describe("CampaignService", () => {
         const db = await testDatabase();
         const service = await CampaignService.create(db);
 
-        const campaign = await service.getCampaign(1);
+        const campaign = await service.getCampaign("1");
         expect(campaign.id).toBeTruthy();
 
         campaign.scene = "10";
-        await service.update(1, campaign);
+        await service.update("1", campaign);
 
-        const updated = await service.getCampaign(1);
+        const updated = await service.getCampaign("1");
         expect(updated.id).toEqual(campaign.id);
         expect(updated.scene).toBe("10");
     });
