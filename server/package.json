@@ -4,7 +4,7 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "start": "ts-node src/index.ts",
+        "start": "yarn ts-node -I \"node_modules/(?!(protocol)/)\" src/index.ts",
         "test": "jest",
         "test:watch": "jest --watch",
         "build": "yarn tsc"
