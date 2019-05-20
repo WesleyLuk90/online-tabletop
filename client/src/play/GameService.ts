@@ -1,3 +1,4 @@
+import { PathReporter } from "io-ts/lib/PathReporter";
 import { Message, MessageValidator } from "protocol/lib/Messages";
 import io from "socket.io-client";
 import { TokenService } from "./TokenService";
@@ -14,12 +15,14 @@ export class GameService {
         this.socket.on("disconnect", onDisconnect);
         this.socket.on("connect", () => this.sendHandshake());
         this.socket.on("game.message", (message: any) => {
-            MessageValidator.decode(message).fold(
-                err => {
-                    console.error("Failed to decode message", err);
-                },
-                mes => this.onMessage(mes)
-            );
+            const maybeMessage = MessageValidator.decode(message);
+            if (maybeMessage.isLeft()) {
+                console.error(
+                    "Failed to parse message",
+                    PathReporter.report(maybeMessage)
+                );
+            }
+            maybeMessage.map(mes => this.onMessage(mes));
         });
     }
 

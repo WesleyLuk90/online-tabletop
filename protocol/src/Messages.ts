@@ -1,5 +1,6 @@
 import * as t from "io-ts";
 import { CampaignValidator } from "./Campaign";
+import { SceneValidator } from "./Scene";
 import { TokenValidator } from "./Token";
 
 const UpdateCampaignValidator = t.type({
@@ -26,10 +27,19 @@ export const UpdatePlayersValidator = t.type({
 
 export type UpdatePlayers = t.TypeOf<typeof UpdatePlayersValidator>;
 
+export const UpdateSceneValidator = t.type({
+    type: t.literal("update-scene"),
+    id: t.string,
+    scene: SceneValidator
+});
+
+export type UpdateScene = t.TypeOf<typeof UpdateSceneValidator>;
+
 export const MessageValidator = t.taggedUnion("type", [
     UpdateCampaignValidator,
     UpdateTokenValidator,
-    UpdatePlayersValidator
+    UpdatePlayersValidator,
+    UpdateSceneValidator
 ]);
 
 export type Message = t.TypeOf<typeof MessageValidator>;

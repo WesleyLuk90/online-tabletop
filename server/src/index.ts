@@ -22,7 +22,7 @@ async function main() {
     await initializeAuth(app);
     const gamesService = await GameService.create(db);
     connectRoutes(gameRoutes(gamesService), app);
-    connectRoutes(await initializePlay(http, gamesService), app);
+    connectRoutes(await initializePlay(http, gamesService, db), app);
 
     http.listen(port, () =>
         console.log(`Example app listening on port ${port}!`)

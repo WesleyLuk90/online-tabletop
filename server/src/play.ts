@@ -1,17 +1,22 @@
 import { Server } from "http";
+import { PathReporter } from "io-ts/lib/PathReporter";
 import lodash from "lodash";
 import { MessageValidator } from "protocol/lib/Messages";
+import { Sequelize } from "sequelize/types";
 import SocketIO from "socket.io";
 import { PermissionError } from "./errors";
 import { GameService } from "./games/GameService";
+import { CampaignService } from "./play/CampaignService";
 import { ConnectionManager } from "./play/ConnectionManager";
 import { GameManager } from "./play/GameManager";
+import { GameStorage } from "./play/GameStorage";
 import { TokenManager } from "./play/TokenManager";
 import { Context, Routes } from "./route";
 
 export async function initializePlay(
     httpServer: Server,
-    gameService: GameService
+    gameService: GameService,
+    db: Sequelize
 ): Promise<Routes> {
     const io = SocketIO(httpServer, {
         path: "/socket/play",
@@ -19,11 +24,21 @@ export async function initializePlay(
     });
 
     const tokenManager = new TokenManager();
-    const gameManager = new GameManager();
+    const campaignService = await CampaignService.create(db);
+    const gameStorage = new GameStorage(campaignService);
+    const gameManager = new GameManager(gameStorage);
     const connectionManager = await ConnectionManager.create(
         tokenManager,
         gameManager
     );
+
+    async function withErrorReporting(callable: () => Promise<void>) {
+        try {
+            await callable();
+        } catch (e) {
+            console.error("Unexpected error", e);
+        }
+    }
 
     io.on("connection", socket => {
         const handler = connectionManager.newConnection({
@@ -40,21 +55,22 @@ export async function initializePlay(
             if (typeof token !== "string") {
                 token = "";
             }
-            handler.onHandshake({ token });
+            withErrorReporting(() => handler.onHandshake({ token }));
         });
         socket.on("game.message", (message: any) => {
             const parsed = MessageValidator.decode(message);
-            parsed.fold(
-                e => {
-                    handler.onError(e.toString());
-                },
-                mes => {
-                    handler.onMessage(mes);
-                }
-            );
+            if (parsed.isLeft()) {
+                const errors = JSON.stringify(PathReporter.report(parsed));
+                withErrorReporting(() =>
+                    handler.onError(`Error parsing client message ${errors}`)
+                );
+            }
+            parsed.map(mes => {
+                withErrorReporting(() => handler.onMessage(mes));
+            });
         });
         socket.on("disconnect", () => {
-            handler.onDisconnected();
+            withErrorReporting(() => handler.onDisconnected());
         });
     });
     return {

@@ -24,7 +24,8 @@ function updateList<T>(
 function upsertList<T>(
     objects: T[],
     newObject: T,
-    condition: (matching: T) => boolean
+    condition: (matching: T) => boolean,
+    update: (match: T) => T = () => newObject
 ) {
     const match = objects.find(condition);
     if (match == null) {
@@ -32,7 +33,7 @@ function upsertList<T>(
     }
     return objects.map(object => {
         if (condition(object)) {
-            return newObject;
+            return update(object);
         } else {
             return object;
         }
@@ -46,6 +47,19 @@ export class Updaters {
                 return message.campaign;
             case "update-token":
                 return Updaters.updateToken(campaign, message);
+            case "update-scene":
+                return {
+                    ...campaign,
+                    scenes: upsertList(
+                        campaign.scenes,
+                        message.scene,
+                        s => s.id === message.scene.id,
+                        s => ({
+                            ...message.scene,
+                            tokens: s.tokens
+                        })
+                    )
+                };
             default:
                 return null;
         }

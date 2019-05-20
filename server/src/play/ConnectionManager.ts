@@ -14,10 +14,10 @@ export interface Connection {
 }
 
 interface ConnectionMessageHandler {
-    onHandshake(handshake: Handshake): void;
-    onMessage(message: Message): void;
-    onError(reason: string): void;
-    onDisconnected(): void;
+    onHandshake(handshake: Handshake): Promise<void>;
+    onMessage(message: Message): Promise<void>;
+    onError(reason: string): Promise<void>;
+    onDisconnected(): Promise<void>;
 }
 
 enum States {
@@ -67,7 +67,7 @@ export class ConnectionManager {
                     game
                 };
             },
-            onMessage: message => {
+            onMessage: async message => {
                 if (state === States.NEW) {
                     console.error(`Got game message but state was '${state}'`);
                     return close();
@@ -77,11 +77,11 @@ export class ConnectionManager {
                 }
                 state.game.applyUpdate(message);
             },
-            onError: error => {
-                console.error(`Got error from client ${error}`);
+            onError: async error => {
+                console.error("Got error from client", error);
                 connection.close();
             },
-            onDisconnected: () => {
+            onDisconnected: async () => {
                 if (state !== States.NEW && state !== States.CLOSED) {
                     state.game.leave(connection);
                 }

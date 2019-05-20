@@ -41,6 +41,14 @@ function serialize(data: CampaignData): string {
     });
 }
 
+function defaultCampaign(): CampaignData {
+    return {
+        id: newId(),
+        scene: "",
+        scenes: []
+    };
+}
+
 export class CampaignService {
     static async create(sequelize: Sequelize): Promise<CampaignService> {
         await updateSchema(sequelize);
@@ -48,16 +56,10 @@ export class CampaignService {
     }
 
     async getCampaign(gameId: string): Promise<CampaignData> {
-        const data: CampaignData = {
-            id: newId(),
-            scene: "",
-            scenes: []
-        };
         const [campaign, _] = await Campaign.findOrCreate({
             where: { game_id: gameId },
             defaults: {
-                game_id: gameId,
-                data: serialize(data)
+                data: serialize(defaultCampaign())
             }
         });
         return CampaignValidator.decode(JSON.parse(campaign.data)).fold(

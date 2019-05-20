@@ -1,4 +1,4 @@
-import { Toaster } from "@blueprintjs/core";
+import { Spinner, Toaster } from "@blueprintjs/core";
 import { fromNullable } from "fp-ts/lib/Option";
 import { Campaign } from "protocol/lib/Campaign";
 import { newId } from "protocol/lib/Id";
@@ -16,6 +16,7 @@ import { PlayArea } from "./PlayArea";
 import "./PlayPage.css";
 import { SideBar } from "./SideBar";
 import { TokenUpdater } from "./TokenUpdater";
+import { TopMenu } from "./TopMenu";
 import { Vector, Viewport } from "./Viewport";
 
 interface State {
@@ -125,6 +126,9 @@ export class PlayPage extends React.Component<
     };
 
     render() {
+        if (this.state.campaign == null) {
+            return <Spinner />;
+        }
         return (
             <div className="play-page">
                 <Toaster ref={this.toaster} />
@@ -137,10 +141,16 @@ export class PlayPage extends React.Component<
                     onDrag={this.onDrag}
                     onSelect={this.onSelect}
                 />
-                <div className="side-bar">
+                <div className="play-page__side-bar">
                     <SideBar
                         onMessage={this.sendMessage}
                         sceneId={this.state.sceneId}
+                    />
+                </div>
+                <div className="play-page__top-menu">
+                    <TopMenu
+                        campaign={this.state.campaign}
+                        onMessage={this.sendMessage}
                     />
                 </div>
             </div>

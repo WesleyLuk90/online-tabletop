@@ -4,12 +4,35 @@
     width: 100vw;
     display: flex;
     justify-items: stretch;
+    position: relative;
 }
 
 .play-area {
     flex-grow: 1;
 }
 
-.side-bar {
+.play-page__side-bar {
     width: 300px;
+    border-left: solid 1px #ccc;
+}
+
+.play-page__top-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background-color: white;
+    border-bottom: solid 1px #ccc;
+}
+
+.top-menu {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.scene-menu {
+    padding: 10px 7px;
 }

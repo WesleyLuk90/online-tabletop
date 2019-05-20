@@ -7243,14 +7243,6 @@ property-information@^5.0.0, property-information@^5.0.1:
   dependencies:
     xtend "^4.0.1"
 
-"protocol@file:protocol":
-  version "1.0.0"
-  dependencies:
-    fp-ts "^1.18.1"
-    io-ts "^1.8.6"
-    lodash "^4.17.11"
-    typescript "^3.4.5"
-
 proxy-addr@~2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/proxy-addr/-/proxy-addr-2.0.5.tgz#34cbd64a2d81f4b1fd21e76f9f06c8a45299ee34"
