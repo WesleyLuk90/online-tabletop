@@ -10,6 +10,13 @@ const UpdateCampaignValidator = t.type({
 });
 export type UpdateCampaign = t.TypeOf<typeof UpdateCampaignValidator>;
 
+const FullUpdateCampaignValidator = t.type({
+    type: t.literal("full-update-campaign"),
+    id: t.string,
+    campaign: CampaignValidator
+});
+export type FullUpdateCampaign = t.TypeOf<typeof FullUpdateCampaignValidator>;
+
 const UpdateTokenValidator = t.type({
     type: t.literal("update-token"),
     id: t.string,
@@ -35,11 +42,21 @@ export const UpdateSceneValidator = t.type({
 
 export type UpdateScene = t.TypeOf<typeof UpdateSceneValidator>;
 
+export const FullUpdateSceneValidator = t.type({
+    type: t.literal("full-update-scene"),
+    id: t.string,
+    scene: SceneValidator
+});
+
+export type FullUpdateScene = t.TypeOf<typeof UpdateSceneValidator>;
+
 export const MessageValidator = t.taggedUnion("type", [
     UpdateCampaignValidator,
+    FullUpdateCampaignValidator,
     UpdateTokenValidator,
     UpdatePlayersValidator,
-    UpdateSceneValidator
+    UpdateSceneValidator,
+    FullUpdateSceneValidator
 ]);
 
 export type Message = t.TypeOf<typeof MessageValidator>;

@@ -1,5 +1,5 @@
 import {
-    UpdateCampaign,
+    FullUpdateCampaign,
     UpdatePlayers,
     UpdateToken
 } from "protocol/lib/Messages";
@@ -9,7 +9,7 @@ export interface MessageHandler<T> {
     (playPage: PlayPage, message: T): void;
 }
 
-export const UpdateCampaignHandler: MessageHandler<UpdateCampaign> = (
+export const FullUpdateCampaignHandler: MessageHandler<FullUpdateCampaign> = (
     playPage,
     updateCampaign
 ) => {

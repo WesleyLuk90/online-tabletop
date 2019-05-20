@@ -43,10 +43,24 @@ function upsertList<T>(
 export class Updaters {
     static update(campaign: Campaign, message: Message): Campaign | null {
         switch (message.type) {
-            case "update-campaign":
+            case "full-update-campaign":
                 return message.campaign;
+            case "update-campaign":
+                return {
+                    ...message.campaign,
+                    scenes: campaign.scenes
+                };
             case "update-token":
                 return Updaters.updateToken(campaign, message);
+            case "full-update-scene":
+                return {
+                    ...campaign,
+                    scenes: upsertList(
+                        campaign.scenes,
+                        message.scene,
+                        s => s.id === message.scene.id
+                    )
+                };
             case "update-scene":
                 return {
                     ...campaign,

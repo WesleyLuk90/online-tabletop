@@ -8,8 +8,8 @@ import * as React from "react";
 import { match } from "react-router";
 import { GameService } from "./GameService";
 import {
+    FullUpdateCampaignHandler,
     MessageHandler,
-    UpdateCampaignHandler,
     UpdatePlayersHandler
 } from "./MessageHandlers";
 import { PlayArea } from "./PlayArea";
@@ -42,7 +42,7 @@ export class PlayPage extends React.Component<
     toaster = React.createRef<Toaster>();
 
     handlers: { [type in Message["type"]]?: MessageHandler<any> } = {
-        "update-campaign": UpdateCampaignHandler,
+        "full-update-campaign": FullUpdateCampaignHandler,
         "update-players": UpdatePlayersHandler
     };
 

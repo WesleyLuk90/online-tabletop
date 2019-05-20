@@ -35,10 +35,7 @@ async function updateSchema(sequelize: Sequelize) {
 }
 
 function serialize(data: CampaignData): string {
-    return JSON.stringify({
-        ...data,
-        scenes: []
-    });
+    return JSON.stringify(data);
 }
 
 function defaultCampaign(): CampaignData {

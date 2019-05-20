@@ -14,11 +14,15 @@ export class Game {
         private gameStorage: GameStorage
     ) {}
 
+    getCampaign(): Readonly<Campaign> {
+        return this.campaign;
+    }
+
     join(userId: string, connection: Connection) {
         this.players.push(new Player(userId, newId(), connection));
         this.broadcastUpdatePlayers();
         connection.send({
-            type: "update-campaign",
+            type: "full-update-campaign",
             id: newId(),
             campaign: this.campaign
         });
@@ -34,6 +38,7 @@ export class Game {
         if (nextCampaign != null) {
             this.campaign = nextCampaign;
             this.broadcast(message);
+            this.gameStorage.saveGame(this);
         }
     }
 
