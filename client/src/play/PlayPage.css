@@ -36,3 +36,13 @@
 .scene-menu {
     padding: 10px 7px;
 }
+
+.scene-menu__scene-option {
+    display: flex;
+    align-items: center;
+}
+
+.scene-menu__scene-name {
+    padding: 0px 10px;
+    width: 100px;
+}
