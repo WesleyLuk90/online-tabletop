@@ -1,10 +1,18 @@
 import * as t from "io-ts";
-import { SceneValidator } from "./Scene";
+import { RoleSchema } from "./Role";
 
-export const CampaignValidator = t.type({
-    id: t.string,
-    scene: t.string,
-    scenes: t.array(SceneValidator)
+export const PlayerSchema = t.type({
+    userID: t.string,
+    sceneID: t.string,
+    role: RoleSchema
 });
 
-export type Campaign = t.TypeOf<typeof CampaignValidator>;
+export type Player = t.TypeOf<typeof PlayerSchema>;
+
+export const CampaignSchema = t.type({
+    _id: t.string,
+    ownerID: t.string,
+    players: t.array(PlayerSchema)
+});
+
+export type Campaign = t.TypeOf<typeof CampaignSchema>;

@@ -5,7 +5,7 @@ const HEX_LOOKUP: Array<string> = [];
 for (var i = 0; i < 256; i++) {
     HEX_LOOKUP[i] = (i < 16 ? "0" : "") + i.toString(16);
 }
-export function newId() {
+export function newUUID() {
     var r = randomBytes(16);
 
     r[6] = (r[6] & 0x0f) | 0x40;

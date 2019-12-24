@@ -1,10 +1,9 @@
 import * as t from "io-ts";
-import { TokenValidator } from "./Token";
 
 export const SceneValidator = t.type({
-    id: t.string,
-    name: t.string,
-    tokens: t.array(TokenValidator)
+    _id: t.string,
+    gameID: t.string,
+    name: t.string
 });
 
 export type Scene = t.TypeOf<typeof SceneValidator>;
