@@ -10,7 +10,7 @@ export const PlayerSchema = t.type({
 export type Player = t.TypeOf<typeof PlayerSchema>;
 
 export const CampaignSchema = t.type({
-    _id: t.string,
+    id: t.string,
     ownerID: t.string,
     players: t.array(PlayerSchema)
 });
