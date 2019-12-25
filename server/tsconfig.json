@@ -10,5 +10,5 @@
         "types": ["jest"],
         "strictNullChecks": true
     },
-    "include": ["src/**/*", "test/**/*", "../protocol"]
+    "include": ["src/**/*", "test/**/*", "../protocol/src"]
 }

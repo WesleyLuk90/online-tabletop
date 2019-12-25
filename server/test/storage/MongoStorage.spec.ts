@@ -1,16 +1,17 @@
 import { config } from "dotenv";
-import { MongoClient } from "mongodb";
-import { MongoStorage } from "../../src/storage/MongoStrorage";
+import { DatabaseProvider } from "../../src/storage/DatabaseProvider";
+import { MongoStorage } from "../../src/storage/MongoStorage";
+import { checkNotNull } from "../../src/util/Nullable";
 
 describe("MongoStorage", () => {
     class Data {
         constructor(readonly id: string, readonly other: string) {}
     }
 
-    let client: MongoClient | null = null;
+    let provider: DatabaseProvider | null;
     afterEach(async () => {
-        if (client) {
-            await client.close();
+        if (provider) {
+            await provider.close();
         }
     });
 
@@ -19,10 +20,12 @@ describe("MongoStorage", () => {
         if (conf.error) {
             throw conf.error;
         }
-        client = await MongoClient.connect(process.env.MONGO_HOST!!);
-        const db = await client.db(process.env.MONGO_DATABASE);
+        provider = new DatabaseProvider(
+            checkNotNull(process.env.MONGO_HOST),
+            checkNotNull(process.env.MONGO_DATABASE)
+        );
         const storage = new MongoStorage(
-            db,
+            provider,
             "mongo_storage",
             (d: any) => new Data(d._id, d.other),
             d => d.id

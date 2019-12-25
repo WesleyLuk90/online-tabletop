@@ -1,4 +1,5 @@
-import { Collection, Db } from "mongodb";
+import { Collection } from "mongodb";
+import { DatabaseProvider } from "./DatabaseProvider";
 
 interface Document {
     _id: string;
@@ -11,14 +12,15 @@ interface Filter<T> {
 
 export class MongoStorage<T> {
     constructor(
-        private database: Db,
+        private dbProvider: DatabaseProvider,
         private collectionName: string,
         private parse: (data: Document) => T,
         private id: (t: T) => string
     ) {}
 
     async collection(): Promise<Collection<Document>> {
-        return this.database.collection(this.collectionName);
+        const db = await this.dbProvider.get();
+        return db.collection(this.collectionName);
     }
 
     async get(id: string): Promise<T | null> {
