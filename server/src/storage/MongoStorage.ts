@@ -10,12 +10,12 @@ interface Filter<T> {
     value: string;
 }
 
-export class MongoStorage<T, K> {
+export class MongoStorage<T, K = keyof T> {
     constructor(
         private dbProvider: DatabaseProvider,
         private collectionName: string,
         private parse: (data: Document) => T,
-        private id: (t: T) => string
+        readonly id: (t: T) => string
     ) {}
 
     async collection(): Promise<Collection<Document>> {
