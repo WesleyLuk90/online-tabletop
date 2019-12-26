@@ -1,31 +1,16 @@
-import { config } from "dotenv";
-import { DatabaseProvider } from "../../src/storage/DatabaseProvider";
 import { MongoStorage } from "../../src/storage/MongoStorage";
-import { checkNotNull } from "../../src/util/Nullable";
+import { DbFixture } from "../fixtures/DbFixture";
 
 describe("MongoStorage", () => {
     class Data {
         constructor(readonly id: string, readonly other: string) {}
     }
 
-    let provider: DatabaseProvider | null;
-    afterEach(async () => {
-        if (provider) {
-            await provider.close();
-        }
-    });
+    const db = new DbFixture("mongo_storage");
 
     async function storage() {
-        const conf = config({ path: ".env.test" });
-        if (conf.error) {
-            throw conf.error;
-        }
-        provider = new DatabaseProvider(
-            checkNotNull(process.env.MONGO_HOST),
-            checkNotNull(process.env.MONGO_DATABASE)
-        );
         const storage = new MongoStorage(
-            provider,
+            db.get(),
             "mongo_storage",
             (d: any) => new Data(d._id, d.other),
             d => d.id
