@@ -16,7 +16,7 @@ export class DbFixture {
                 checkNotNull(process.env.MONGO_DATABASE)
             );
         });
-        afterEach(async () => {
+        afterAll(async () => {
             if (this.provider) {
                 const db = await this.provider.get();
                 await db.dropCollection(dropCollection);
