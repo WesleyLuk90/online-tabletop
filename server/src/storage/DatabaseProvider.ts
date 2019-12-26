@@ -5,7 +5,9 @@ export class DatabaseProvider {
     dbPromise: Promise<Db>;
 
     constructor(readonly host: string, readonly database: string) {
-        this.clientPromise = MongoClient.connect(host);
+        this.clientPromise = MongoClient.connect(host, {
+            useUnifiedTopology: true
+        });
         this.dbPromise = this.clientPromise.then(client => client.db(database));
     }
 
