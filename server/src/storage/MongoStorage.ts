@@ -6,11 +6,11 @@ interface Document {
 }
 
 interface Filter<T> {
-    key: keyof T;
+    key: T;
     value: string;
 }
 
-export class MongoStorage<T> {
+export class MongoStorage<T, K> {
     constructor(
         private dbProvider: DatabaseProvider,
         private collectionName: string,
@@ -39,8 +39,8 @@ export class MongoStorage<T> {
         await col.insertOne(doc);
     }
 
-    async list(...filters: Filter<T>[]): Promise<T[]> {
-        const filter: { [k in keyof T]?: string } = {};
+    async list(...filters: Filter<K>[]): Promise<T[]> {
+        const filter: any = {};
         filters.forEach(f => (filter[f.key] = f.value));
         const collection = await this.collection();
         const results = await collection.find(filter);

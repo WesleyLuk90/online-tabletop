@@ -5,15 +5,29 @@ import { parse } from "protocol/src/Parse";
 import { DatabaseProvider } from "../storage/DatabaseProvider";
 import { MongoStorage } from "../storage/MongoStorage";
 
+type Indexes = keyof Campaign | "players.userID";
+
 export class CampaignStorage implements CampaignService {
-    storage: MongoStorage<Campaign>;
+    storage: MongoStorage<Campaign, Indexes>;
     constructor(readonly databaseProvider: DatabaseProvider) {
-        this.storage = new MongoStorage<Campaign>(
+        this.storage = new MongoStorage(
             databaseProvider,
             "campaigns",
             doc => parse(doc, CampaignSchema),
             c => c.id
         );
+    }
+
+    async list(userID: string): Promise<Campaign[]> {
+        return this.storage.list({ key: "players.userID", value: userID });
+    }
+
+    async get(id: string): Promise<Campaign> {
+        const campaign = await this.storage.get(id);
+        if (campaign == null) {
+            throw new Error(`Campaign with ID ${id} not found`);
+        }
+        return campaign;
     }
 
     async create(campaign: Campaign): Promise<Campaign> {
