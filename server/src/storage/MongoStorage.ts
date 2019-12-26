@@ -52,7 +52,7 @@ export class MongoStorage<T, K> {
         const doc: T & Partial<Document> = { ...data };
         delete doc._id;
         const collection = await this.collection();
-        await collection.update({ _id: this.id(data) }, doc);
+        await collection.updateOne({ _id: this.id(data) }, doc);
     }
 
     async delete(id: string): Promise<void> {
