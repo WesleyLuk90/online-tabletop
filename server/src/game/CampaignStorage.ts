@@ -2,6 +2,7 @@ import { Campaign, CampaignSchema } from "protocol/src/Campaign";
 import { CampaignService } from "protocol/src/CampaignService";
 import { newUUID } from "protocol/src/Id";
 import { parse } from "protocol/src/Parse";
+import { NotFoundError } from "../Errors";
 import { DatabaseProvider } from "../storage/DatabaseProvider";
 import { MongoStorage } from "../storage/MongoStorage";
 
@@ -25,7 +26,7 @@ export class CampaignStorage implements CampaignService {
     async get(id: string): Promise<Campaign> {
         const campaign = await this.storage.get(id);
         if (campaign == null) {
-            throw new Error(`Campaign with ID ${id} not found`);
+            throw new NotFoundError("Campaign", id);
         }
         return campaign;
     }

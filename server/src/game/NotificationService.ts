@@ -1,5 +1,6 @@
 import { Campaign } from "protocol/src/Campaign";
 import { Scene } from "protocol/src/Scene";
+import { Token } from "protocol/src/Token";
 import { BroadcastService } from "./BroadcastService";
 
 export class NotificationService {
@@ -15,7 +16,17 @@ export class NotificationService {
     sceneUpdated(scene: Scene) {
         this.broadcastService.broadcast({
             type: "scene",
-            campaignID: scene.gameID
+            campaignID: scene.campaignID,
+            sceneID: scene.id
+        });
+    }
+
+    tokenUpdated(token: Token) {
+        this.broadcastService.broadcast({
+            type: "token",
+            campaignID: token.campaignID,
+            sceneID: token.sceneID,
+            tokenID: token.id
         });
     }
 }

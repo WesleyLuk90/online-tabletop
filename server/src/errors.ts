@@ -19,6 +19,12 @@ export class NotFoundError extends UserFacingError {
     }
 }
 
+export function checkPermissions(check: boolean) {
+    if (!check) {
+        throw new PermissionError();
+    }
+}
+
 export class PermissionError extends UserFacingError {
     constructor() {
         super("You do not have permissions");
