@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
-import { UserFacingError } from "./errors";
-import { RequestData, Routes } from "./route";
+import { UserFacingError } from "./Errors";
+import { RequestData, Routes } from "./Route";
 
 function getUserId(req: Request): string | null {
     if (!req.session.passport || !req.session.passport.user) {
