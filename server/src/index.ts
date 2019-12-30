@@ -1,7 +1,7 @@
 import express from "express";
 import { Server } from "http";
 import { initializeAuth } from "./Auth";
-import { ConfigKeys, readConfig } from "./Config";
+import { ConfigKeys, readConfig, readConfigNumber } from "./Config";
 import { BroadcastService } from "./game/BroadcastService";
 import { CampaignManager } from "./game/CampaignManager";
 import { CampaignStorage } from "./game/CampaignStorage";
@@ -16,7 +16,7 @@ async function main() {
     const http = new Server(app);
 
     app.use(express.json());
-    const port = 3001;
+    const port = readConfigNumber(ConfigKeys.HTTP_PORT);
 
     const dbProvider = new DatabaseProvider(
         readConfig(ConfigKeys.MONGO_HOST),
@@ -25,17 +25,20 @@ async function main() {
 
     await initializeSession(readConfig(ConfigKeys.SESSION_SECRET), app);
     await initializeAuth(
-        readConfig(ConfigKeys.GOOGLE_CLIENT_ID),
-        readConfig(ConfigKeys.GOOGLE_CLIENT_SECRET),
-        readConfig(ConfigKeys.GOOGLE_CALLBACK_URL),
+        {
+            clientID: readConfig(ConfigKeys.AUTH0_CLIENT_ID),
+            clientSecret: readConfig(ConfigKeys.AUTH0_CLIENT_SECRET),
+            callbackURL: readConfig(ConfigKeys.AUTH0_CALLBACK_URL),
+            domain: readConfig(ConfigKeys.AUTH0_DOMAIN)
+        },
         app
     );
 
     const broadcastService = new BroadcastService(http);
     const notificationService = new NotificationService(broadcastService);
-    const camapignStorage = new CampaignStorage(dbProvider);
+    const campaignStorage = new CampaignStorage(dbProvider);
     const campaignManager = new CampaignManager(
-        camapignStorage,
+        campaignStorage,
         notificationService
     );
     connectRoutes(campaignManager.routes(), app);

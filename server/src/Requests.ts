@@ -3,14 +3,10 @@ import { UserFacingError } from "./Errors";
 import { RequestData, Route } from "./Route";
 
 function getUserId(req: Request): string | null {
-    if (
-        req.session == null ||
-        !req.session.passport ||
-        !req.session.passport.user
-    ) {
+    if (!req.user || !req.user.userID) {
         return null;
     }
-    return req.session.passport.user;
+    return req.user.userID;
 }
 
 function getRequestData(req: Request) {

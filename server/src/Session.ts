@@ -10,7 +10,10 @@ export async function initializeSession(secret: string, app: express.Express) {
             secret: secret,
             resave: false,
             saveUninitialized: false,
-            store: new Store({ ttl: 60 * 60 * 24 * 7 })
+            store: new Store({ ttl: 60 * 60 * 24 * 7 }),
+            cookie: {
+                secure: app.get("env") === "production"
+            }
         })
     );
 }
