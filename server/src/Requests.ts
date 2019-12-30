@@ -1,34 +1,28 @@
 import express, { Request, Response } from "express";
 import { UserFacingError } from "./Errors";
-import { RequestData, Routes } from "./Route";
+import { RequestData, Route } from "./Route";
 
 function getUserId(req: Request): string | null {
-    if (!req.session.passport || !req.session.passport.user) {
+    if (
+        req.session == null ||
+        !req.session.passport ||
+        !req.session.passport.user
+    ) {
         return null;
     }
     return req.session.passport.user;
 }
 
-function getRequestData(req: Request): RequestData<{}, {}> {
-    return {
-        body: req.body || {},
-        query: req.query || {}
-    };
+function getRequestData(req: Request) {
+    return new RequestData(req.body, req.query, req.params);
 }
 
-export function connectRoutes(routes: Routes, app: express.Application) {
-    Object.keys(routes).forEach(path => {
-        const route = routes[path];
-        app[route.method](path, async (req: Request, res: Response) => {
+export function connectRoutes(routes: Route[], app: express.Application) {
+    routes.forEach(route => {
+        app[route.method](route.path, async (req: Request, res: Response) => {
             try {
                 const id = getUserId(req);
-                if (id == null) {
-                    return res.sendStatus(401);
-                }
-                const response = await route.handle({
-                    user_id: id,
-                    data: getRequestData(req)
-                });
+                const response = await route.handle(id, getRequestData(req));
                 res.json(response);
             } catch (e) {
                 if (e instanceof UserFacingError) {

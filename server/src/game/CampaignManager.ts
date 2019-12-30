@@ -14,10 +14,8 @@ export class CampaignManager {
 
     routes(): Route[] {
         return [
-            new Route<{}, { id: string }>(
-                "get",
-                "/api/campaign/{:id}",
-                ({ data, userID }) => this.get(userID, data.query.id)
+            Route.create("get", "/api/campaign/{:id}", (userID, data) =>
+                this.get(userID, data.query("id"))
             )
         ];
     }

@@ -35,7 +35,24 @@ export class PermissionError extends UserFacingError {
     }
 }
 
+export class UnauthorizedError extends UserFacingError {
+    constructor() {
+        super("You must be logged in");
+    }
+
+    code() {
+        return 401;
+    }
+}
+
 export class BadRequestError extends UserFacingError {
+    static check(object: any, key: string) {
+        if (object == null || object[key] == null) {
+            throw new BadRequestError();
+        }
+        return object[key];
+    }
+
     constructor(message?: string) {
         super(message || "Bad request");
     }
