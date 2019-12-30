@@ -1,27 +1,21 @@
-import React from "react";
+import React, { ReactElement, useEffect, useState } from "react";
+import { Spinner } from "./Icon";
 
-interface Props<T> {
+export function DataLoader<T extends {}>({
+    load,
+    render
+}: {
     load: () => Promise<T>;
-    children: (data: T) => React.ReactNode;
-}
+    render: (t: T) => ReactElement | null;
+}) {
+    const [data, setData] = useState<T | null>(null);
 
-interface State<T> {
-    data: T | null;
-}
+    useEffect(() => {
+        load().then(setData);
+    }, []);
 
-export class DataLoader<T> extends React.Component<Props<T>, State<T>> {
-    state: State<T> = {
-        data: null
-    };
-
-    async componentDidMount() {
-        this.setState({ data: await this.props.load() });
+    if (data == null) {
+        return <Spinner />;
     }
-
-    render() {
-        if (this.state.data == null) {
-            return "<Spinner />";
-        }
-        return this.props.children(this.state.data);
-    }
+    return render(data);
 }

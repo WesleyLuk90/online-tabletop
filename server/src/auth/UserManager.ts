@@ -7,11 +7,16 @@ export class UserManager {
 
     routes(): Route[] {
         return [
-            Route.create("get", "/api/user/me", userID => this.profile(userID))
+            Route.createPublic("get", "/api/user/me", userID =>
+                this.profile(userID)
+            )
         ];
     }
 
-    profile(userID: string): Promise<User> {
+    async profile(userID: string | null): Promise<User | null> {
+        if (userID == null) {
+            return null;
+        }
         return this.userStorage.get(userID);
     }
 }

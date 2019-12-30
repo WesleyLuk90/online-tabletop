@@ -1,14 +1,27 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { Auth } from "./Auth";
 import "./Navigation.css";
 
 export function Navigation() {
     return (
         <div className="navigation">
-            <div>left</div>
             <div>
-                <a className="navigation-link" href="/login">
-                    Login
-                </a>
+                <Link className="navigation-link" to="/">
+                    Home
+                </Link>
+            </div>
+            <div>
+                <Auth
+                    loggedIn={user => (
+                        <a className="navigation-link">{user.displayName}</a>
+                    )}
+                    notLoggedIn={() => (
+                        <a className="navigation-link" href="/login">
+                            Login
+                        </a>
+                    )}
+                />
             </div>
         </div>
     );
