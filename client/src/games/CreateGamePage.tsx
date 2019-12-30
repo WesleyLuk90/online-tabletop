@@ -1,4 +1,3 @@
-import { Button, FormGroup, InputGroup } from "@blueprintjs/core";
 import React from "react";
 import { DefaultLayout } from "../common/DefaultLayout";
 import { GameRequests } from "./GameRequests";
@@ -24,19 +23,6 @@ export class CreateGamePage extends React.Component<{}, State> {
         return (
             <DefaultLayout>
                 <h1>Create Game</h1>
-                <FormGroup
-                    label="Game Name"
-                    labelFor="game-name"
-                    labelInfo="(required)"
-                >
-                    <InputGroup
-                        id="game-name"
-                        placeholder="My First Game"
-                        value={this.state.name}
-                        onChange={this.onChange}
-                    />
-                </FormGroup>
-                <Button onClick={this.onClick}>Create</Button>
             </DefaultLayout>
         );
     }

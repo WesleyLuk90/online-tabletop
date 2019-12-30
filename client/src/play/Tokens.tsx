@@ -1,4 +1,4 @@
-import { Token } from "protocol/lib/Token";
+import { Token } from "protocol/src/Token";
 import React from "react";
 import { MouseState } from "./MouseState";
 import { PositionTransformation } from "./PlayArea";
@@ -33,30 +33,31 @@ export class Tokens extends React.Component<Props> {
             x += this.props.dragSelection.x;
             y += this.props.dragSelection.y;
         }
-        const render = [
-            <rect key={token.id} width={token.width} height={token.height} />
-        ];
-        if (isSelected) {
-            render.push(
-                <path
-                    key={token.id + "selection-line"}
-                    stroke={SELECTION_COLOR}
-                    strokeWidth="3"
-                    d={`M 0,0 v ${token.height} h ${
-                        token.width
-                    } v ${-token.height} h ${-token.width}`}
-                />
-            );
-        }
-        return (
-            <g
-                key={token.id}
-                onMouseDown={e => this.onMouseDown(token, e)}
-                transform={`translate(${x}, ${y})`}
-            >
-                {render}
-            </g>
-        );
+        return "wip";
+        // const render = [
+        //     <rect key={token.id} width={token.width} height={token.height} />
+        // ];
+        // if (isSelected) {
+        //     render.push(
+        //         <path
+        //             key={token.id + "selection-line"}
+        //             stroke={SELECTION_COLOR}
+        //             strokeWidth="3"
+        //             d={`M 0,0 v ${token.height} h ${
+        //                 token.width
+        //             } v ${-token.height} h ${-token.width}`}
+        //         />
+        //     );
+        // }
+        // return (
+        //     <g
+        //         key={token.id}
+        //         onMouseDown={e => this.onMouseDown(token, e)}
+        //         transform={`translate(${x}, ${y})`}
+        //     >
+        //         {render}
+        //     </g>
+        // );
     }
 
     render() {

@@ -1,4 +1,3 @@
-import { Spinner } from "@blueprintjs/core";
 import React from "react";
 
 interface Props<T> {
@@ -21,7 +20,7 @@ export class DataLoader<T> extends React.Component<Props<T>, State<T>> {
 
     render() {
         if (this.state.data == null) {
-            return <Spinner />;
+            return "<Spinner />";
         }
         return this.props.children(this.state.data);
     }

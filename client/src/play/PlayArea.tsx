@@ -1,4 +1,4 @@
-import { Token } from "protocol/lib/Token";
+import { Token } from "protocol/src/Token";
 import * as React from "react";
 import { Debouncer } from "./Debouncer";
 import { Grid } from "./Grid";

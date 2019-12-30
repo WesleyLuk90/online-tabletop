@@ -1,4 +1,4 @@
-import { Token } from "protocol/lib/Token";
+import { Token } from "protocol/src/Token";
 import { Vector } from "./Viewport";
 
 export class TokenUpdater {
