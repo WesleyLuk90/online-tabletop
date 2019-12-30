@@ -1,6 +1,6 @@
 import express from "express";
 import passport from "passport";
-import { Strategy as GoogleStrategy } from "passport-google-oauth2";
+import { Strategy as Auth0Strategy } from "passport-auth0";
 
 export async function initializeAuth(
     clientID: string,
@@ -9,16 +9,9 @@ export async function initializeAuth(
     app: express.Express
 ) {
     passport.use(
-        new GoogleStrategy(
-            {
-                clientID,
-                clientSecret,
-                callbackURL
-            },
-            function(token, tokenSecret, profile, done) {
-                done(null, { email: profile.email });
-            }
-        )
+        new Auth0Strategy({}, function(token, tokenSecret, profile, done) {
+            done(null, { email: profile.email });
+        })
     );
 
     passport.serializeUser(function(user: { email: string }, done) {
