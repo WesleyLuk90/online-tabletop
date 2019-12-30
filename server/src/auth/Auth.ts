@@ -1,6 +1,7 @@
 import express from "express";
 import passport from "passport";
 import { Strategy as Auth0Strategy } from "passport-auth0";
+import { UserStorage } from "./UserStorage";
 
 export async function initializeAuth(
     config: {
@@ -9,7 +10,8 @@ export async function initializeAuth(
         callbackURL: string;
         domain: string;
     },
-    app: express.Express
+    app: express.Express,
+    userStorage: UserStorage
 ) {
     passport.use(
         new Auth0Strategy(config, function(
@@ -19,7 +21,12 @@ export async function initializeAuth(
             profile,
             done
         ) {
-            done(null, { userID: profile.id });
+            userStorage
+                .create({
+                    id: profile.id,
+                    displayName: profile.displayName
+                })
+                .then(() => done(null, { userID: profile.id }), done);
         })
     );
 

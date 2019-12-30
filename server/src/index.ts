@@ -1,6 +1,8 @@
 import express from "express";
 import { Server } from "http";
-import { initializeAuth } from "./Auth";
+import { initializeAuth } from "./auth/Auth";
+import { UserManager } from "./auth/UserManager";
+import { UserStorage } from "./auth/UserStorage";
 import { ConfigKeys, readConfig, readConfigNumber } from "./Config";
 import { BroadcastService } from "./game/BroadcastService";
 import { CampaignManager } from "./game/CampaignManager";
@@ -23,6 +25,9 @@ async function main() {
         readConfig(ConfigKeys.MONGO_DATABASE)
     );
 
+    const userStorage = new UserStorage(dbProvider);
+    const userManager = new UserManager(userStorage);
+
     await initializeSession(readConfig(ConfigKeys.SESSION_SECRET), app);
     await initializeAuth(
         {
@@ -31,7 +36,8 @@ async function main() {
             callbackURL: readConfig(ConfigKeys.AUTH0_CALLBACK_URL),
             domain: readConfig(ConfigKeys.AUTH0_DOMAIN)
         },
-        app
+        app,
+        userStorage
     );
 
     const broadcastService = new BroadcastService(http);
@@ -41,6 +47,8 @@ async function main() {
         campaignStorage,
         notificationService
     );
+
+    connectRoutes(userManager.routes(), app);
     connectRoutes(campaignManager.routes(), app);
 
     http.listen(port, () =>
