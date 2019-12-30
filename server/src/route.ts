@@ -1,16 +1,24 @@
-export interface RequestData<B, Q> {
-    body: B;
-    query: Q;
-}
+class RequestData {
+    constructor(
+        readonly bodyData: any,
+        readonly queryData: any,
+        readonly urlData: any
+    ) {}
 
-export interface Context<B, Q> {
-    userID: string;
-    data: RequestData<B, Q>;
+    query(key: string) {}
 }
 
 type Method = "get" | "post" | "delete";
 
 export class Route<B = {}, Q = {}> {
+    create(
+        method: Method,
+        path: string,
+        handle: (userID: string, data: Data) => Promise<any>
+    ) {
+        return new Route(method, path, handle);
+    }
+
     constructor(
         readonly method: Method,
         readonly path: string,

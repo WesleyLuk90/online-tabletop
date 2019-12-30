@@ -34,3 +34,13 @@ export class PermissionError extends UserFacingError {
         return 403;
     }
 }
+
+export class BadRequestError extends UserFacingError {
+    constructor(message?: string) {
+        super(message || "Bad request");
+    }
+
+    code() {
+        return 400;
+    }
+}
