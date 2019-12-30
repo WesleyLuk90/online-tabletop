@@ -5,9 +5,6 @@
         "protocol",
         "server"
     ],
-    "resolutions": {
-        "babel-jest": "24.7.1"
-    },
     "scripts": {
         "run-services": "docker-compose -f docker-compose.services.yml up -d"
     }
