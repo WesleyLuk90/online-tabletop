@@ -1,6 +1,7 @@
 import { Campaign } from "protocol/src/Campaign";
 import { Role } from "protocol/src/Role";
 import { checkPermissions } from "../Errors";
+import { Route } from "../Route";
 import { also } from "../util/Also";
 import { CampaignStorage } from "./CampaignStorage";
 import { NotificationService } from "./NotificationService";
@@ -10,6 +11,16 @@ export class CampaignManager {
         readonly storage: CampaignStorage,
         readonly notificationService: NotificationService
     ) {}
+
+    routes(): Route[] {
+        return [
+            new Route<{}, { id: string }>(
+                "get",
+                "/api/campaign/{:id}",
+                ({ data, userID }) => this.get(userID, data.query.id)
+            )
+        ];
+    }
 
     async list(userID: string): Promise<Campaign[]> {
         return this.storage.list(userID);

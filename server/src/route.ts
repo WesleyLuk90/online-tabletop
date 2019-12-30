@@ -3,14 +3,17 @@ export interface RequestData<B, Q> {
     query: Q;
 }
 
-export interface Context<B = {}, Q = {}> {
-    user_id: string;
+export interface Context<B, Q> {
+    userID: string;
     data: RequestData<B, Q>;
 }
 
-export interface Routes {
-    [path: string]: {
-        method: "get" | "post" | "delete";
-        handle: (context: Context<{}, {}>) => Promise<any>;
-    };
+type Method = "get" | "post" | "delete";
+
+export class Route<B = {}, Q = {}> {
+    constructor(
+        readonly method: Method,
+        readonly path: string,
+        readonly handle: (context: Context<B, Q>) => Promise<any>
+    ) {}
 }
