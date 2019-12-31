@@ -1,0 +1,11 @@
+.section-list {
+    border-bottom: solid 1px #ced4da;
+}
+
+.section-list__item {
+    border-top: solid 1px #ced4da;
+    padding: 10px 15px;
+    min-height: 75px;
+    display: flex;
+    justify-content: space-between;
+}

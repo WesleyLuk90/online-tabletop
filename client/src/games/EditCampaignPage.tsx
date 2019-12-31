@@ -12,6 +12,7 @@ export function EditCampaignPage() {
     const { id } = useParams();
 
     const [campaign, setCampaign] = useState<Campaign | null>(null);
+    const [error, setError] = useState<Error | null>(null);
     useEffect(() => {
         if (!id) {
             setCampaign({ id: "", ownerID: "", name: "", players: [] });
