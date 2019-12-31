@@ -1,6 +1,6 @@
+import { Campaign } from "protocol/src/Campaign";
 import * as React from "react";
 import { match } from "react-router";
-import { Campaign } from "../../../protocol/src/Campaign";
 import { PlayArea } from "./PlayArea";
 import "./PlayPage.css";
 import { SideBar } from "./SideBar";

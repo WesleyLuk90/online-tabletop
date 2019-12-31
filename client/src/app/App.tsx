@@ -2,7 +2,6 @@ import "normalize.css/normalize.css";
 import React from "react";
 import { HashRouter as Router, Route } from "react-router-dom";
 import { EditCampaignPage } from "../games/EditCampaignPage";
-import { PlayPage } from "../play/PlayPage";
 import "./App.css";
 import { Dashboard } from "./Dashboard";
 import { Navigation } from "./Navigation";
@@ -23,7 +22,6 @@ export class App extends React.Component {
                     exact
                     component={EditCampaignPage}
                 />
-                <Route path="/play/:id" exact component={PlayPage} />
             </Router>
         );
     }

@@ -1,8 +1,9 @@
 import Axios from "axios";
-import { User } from "protocol/src/User";
+import { parse } from "protocol/src/Parse";
+import { User, UserSchema } from "protocol/src/User";
 
 export class UserService {
     static current(): Promise<User | null> {
-        return Axios.get("/api/user/me").then(t => t.data);
+        return Axios.get("/api/user/me").then(t => parse(t.data, UserSchema));
     }
 }
