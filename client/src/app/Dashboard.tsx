@@ -6,8 +6,8 @@ export class Dashboard extends React.Component {
     render() {
         return (
             <DefaultLayout>
-                <h1>Games</h1>
-                <Link to="/games/create">Create</Link>
+                <h1>Campaigns</h1>
+                <Link to="/campaign/create">Create</Link>
             </DefaultLayout>
         );
     }

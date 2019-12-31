@@ -6,7 +6,7 @@ export function Input({
     label
 }: {
     value: string;
-    onChange: (newValue: string) => {};
+    onChange: (newValue: string) => void;
     label: ReactNode;
 }) {
     return (

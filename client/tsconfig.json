@@ -16,5 +16,10 @@
         "jsx": "preserve",
         "strictNullChecks": true
     },
-    "include": ["src/**/*.ts", "src/**/*.tsx", "../protocol/src"]
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "../protocol/src",
+        "protocol/src"
+    ]
 }

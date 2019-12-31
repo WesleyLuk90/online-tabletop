@@ -2,11 +2,16 @@ import express, { Request, Response } from "express";
 import { UserFacingError } from "./Errors";
 import { RequestData, Route } from "./Route";
 
+interface UserSession {
+    userID?: string;
+}
+
 function getUserId(req: Request): string | null {
-    if (!req.user || !req.user.userID) {
+    const session = req.user as UserSession | undefined;
+    if (!session || !session.userID) {
         return null;
     }
-    return req.user.userID;
+    return session.userID;
 }
 
 function getRequestData(req: Request) {

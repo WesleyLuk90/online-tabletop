@@ -1,13 +1,24 @@
 import Axios from "axios";
+import { Campaign, CampaignSchema } from "protocol/src/Campaign";
+import { parse } from "protocol/src/Parse";
+
+function toCampaign(data: any): Campaign {
+    return parse(data, CampaignSchema);
+}
 
 export class CampaignRequests {
-    static async create(name: string): Promise<Game> {
-        const response = await Axios.post("/api/games/create", { name });
-        return response.data.game;
+    static async create(campaign: Campaign): Promise<Campaign> {
+        const response = await Axios.post("/api/campaigns", campaign);
+        return toCampaign(response.data);
     }
 
-    static async list(): Promise<Game[]> {
-        const res = await Axios.get("/api/games");
-        return res.data.games;
+    static async get(id: string): Promise<Campaign> {
+        const response = await Axios.get(`/api/campaigns/${id}`);
+        return toCampaign(response.data);
+    }
+
+    static async list(): Promise<Campaign[]> {
+        const response = await Axios.get("/api/campaigns");
+        return response.data.games.map(toCampaign);
     }
 }
