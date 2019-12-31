@@ -19,6 +19,18 @@ export class CampaignRequests {
 
     static async list(): Promise<Campaign[]> {
         const response = await Axios.get("/api/campaigns");
-        return response.data.games.map(toCampaign);
+        return response.data.map(toCampaign);
+    }
+
+    static async update(campaign: Campaign): Promise<Campaign> {
+        const response = await Axios.post(
+            `/api/campaigns/${campaign.id}`,
+            campaign
+        );
+        return toCampaign(response.data);
+    }
+
+    static async delete(campaign: Campaign): Promise<void> {
+        await Axios.delete(`/api/campaigns/${campaign.id}`);
     }
 }

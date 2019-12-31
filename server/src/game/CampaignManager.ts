@@ -1,4 +1,5 @@
-import { Campaign } from "protocol/src/Campaign";
+import { Campaign, CampaignSchema } from "protocol/src/Campaign";
+import { parse } from "protocol/src/Parse";
 import { Role } from "protocol/src/Role";
 import { checkPermissions } from "../Errors";
 import { Route } from "../Route";
@@ -18,7 +19,16 @@ export class CampaignManager {
                 this.list(userID)
             ),
             Route.create("get", "/api/campaigns/{:id}", (userID, data) =>
-                this.get(userID, data.query("id"))
+                this.get(userID, data.urlData("id"))
+            ),
+            Route.create("post", "/api/campaigns", (userID, data) =>
+                this.create(userID, parse(data.body(), CampaignSchema))
+            ),
+            Route.create("post", "/api/campaigns/{:id}", (userID, data) =>
+                this.create(userID, parse(data.body(), CampaignSchema))
+            ),
+            Route.create("delete", "/api/campaigns/{:id}", (userID, data) =>
+                this.delete(userID, data.urlData("id")).then(() => ({}))
             )
         ];
     }
