@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import "./Input.css";
 
 export function Input({
     value,
@@ -10,9 +11,13 @@ export function Input({
     label: ReactNode;
 }) {
     return (
-        <div>
-            <label>{label}</label>
-            <input value={value} onChange={e => onChange(e.target.value)} />
+        <div className="input">
+            <label className="input__label">{label}</label>
+            <input
+                className="input__input"
+                value={value}
+                onChange={e => onChange(e.target.value)}
+            />
         </div>
     );
 }

@@ -14,7 +14,10 @@ export class CampaignManager {
 
     routes(): Route[] {
         return [
-            Route.create("get", "/api/campaign/{:id}", (userID, data) =>
+            Route.create("get", "/api/campaigns", (userID, data) =>
+                this.list(userID)
+            ),
+            Route.create("get", "/api/campaigns/{:id}", (userID, data) =>
                 this.get(userID, data.query("id"))
             )
         ];

@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import { Form } from "../common/Form";
 import { Spinner } from "../common/Icon";
 import { Input } from "../common/Input";
+import { Page } from "../common/Page";
+import { checkNotNull } from "../util/Nullable";
 import { CampaignRequests } from "./CampaignRequests";
 
 export function EditCampaignPage() {
@@ -22,10 +24,14 @@ export function EditCampaignPage() {
         return <Spinner />;
     }
 
-    async function onSave() {}
+    const isNew = campaign.id === "";
+
+    async function onSave() {
+        await CampaignRequests.create(checkNotNull(campaign));
+    }
 
     return (
-        <div>
+        <Page title={isNew ? "Create Campaign" : "Edit Campaign"}>
             <Form onSave={onSave}>
                 <Input
                     value={campaign.name}
@@ -33,6 +39,6 @@ export function EditCampaignPage() {
                     onChange={name => setCampaign({ ...campaign, name })}
                 />
             </Form>
-        </div>
+        </Page>
     );
 }

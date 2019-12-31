@@ -1,4 +1,5 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
@@ -7,5 +8,5 @@ export function Icon({ icon }: { icon: IconProp }) {
 }
 
 export function Spinner() {
-    return <FontAwesomeIcon icon="circle-notch" spin />;
+    return <FontAwesomeIcon icon={faCircleNotch} spin />;
 }

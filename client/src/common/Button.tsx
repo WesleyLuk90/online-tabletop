@@ -1,4 +1,5 @@
 import React from "react";
+import "./Button.css";
 
 export function Button({
     children,
@@ -7,5 +8,9 @@ export function Button({
     children: React.ReactNode;
     onClick: () => void;
 }) {
-    return <button onClick={onClick}>{children}</button>;
+    return (
+        <button className="button" onClick={onClick}>
+            {children}
+        </button>
+    );
 }
