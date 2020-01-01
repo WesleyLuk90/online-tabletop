@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Alert } from "./Alert";
 import { Button } from "./Button";
+import { Spinner } from "./Icon";
 
 export function Form({
     onSave,
@@ -10,17 +11,30 @@ export function Form({
     children: React.ReactNode;
 }) {
     const [error, setError] = useState<Error | null>(null);
+    const [saving, setSaving] = useState(false);
+
+    async function doSave() {
+        setSaving(true);
+        try {
+            await onSave();
+        } catch (e) {
+            setError(e);
+        } finally {
+            setSaving(false);
+        }
+    }
 
     return (
         <form
             onSubmit={e => {
                 e.preventDefault();
-                onSave().catch(setError);
+                doSave();
             }}
         >
             {children}
             {error && <Alert>{error.toString()}</Alert>}
-            <Button onClick={onSave}>Save</Button>
+            <Button onClick={doSave}>Save</Button>
+            {saving && <Spinner />}
         </form>
     );
 }

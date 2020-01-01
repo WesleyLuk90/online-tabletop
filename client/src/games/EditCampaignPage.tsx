@@ -1,6 +1,7 @@
 import { Campaign } from "protocol/src/Campaign";
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
+import { Routes } from "../app/Routes";
 import { Form } from "../common/Form";
 import { Input } from "../common/Input";
 import { Page } from "../common/Page";
@@ -17,17 +18,20 @@ export function EditCampaignPage() {
             return CampaignRequests.get(id);
         }
     });
-    const [editedCampaign, setCampaign] = useState<Campaign | null>(null);
+    const [edits, setEdits] = useState<Campaign | null>(null);
+    const history = useHistory();
 
     return data(originalCampaign => {
         const isNew = originalCampaign.id === "";
-        const campaign = editedCampaign || originalCampaign;
+        const campaign = edits || originalCampaign;
 
         async function onSave() {
             if (isNew) {
-                await CampaignRequests.create(campaign);
+                const created = await CampaignRequests.create(campaign);
+                history.push(Routes.editCampaign(created.id));
             } else {
                 await CampaignRequests.update(campaign);
+                setEdits(null);
             }
         }
 
@@ -37,7 +41,7 @@ export function EditCampaignPage() {
                     <Input
                         value={campaign.name}
                         label="Name"
-                        onChange={name => setCampaign({ ...campaign, name })}
+                        onChange={name => setEdits({ ...campaign, name })}
                     />
                 </Form>
             </Page>

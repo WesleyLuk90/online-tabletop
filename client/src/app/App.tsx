@@ -5,6 +5,7 @@ import { EditCampaignPage } from "../games/EditCampaignPage";
 import "./App.css";
 import { Dashboard } from "./Dashboard";
 import { Navigation } from "./Navigation";
+import { Routes } from "./Routes";
 
 export class App extends React.Component {
     render() {
@@ -13,12 +14,12 @@ export class App extends React.Component {
                 <Navigation />
                 <Route path="/" exact component={Dashboard} />
                 <Route
-                    path="/campaign/create"
+                    path={Routes.createCampaign()}
                     exact
                     component={EditCampaignPage}
                 />
                 <Route
-                    path="/campaign/edit/:id"
+                    path={Routes.editCampaign(":id")}
                     exact
                     component={EditCampaignPage}
                 />
