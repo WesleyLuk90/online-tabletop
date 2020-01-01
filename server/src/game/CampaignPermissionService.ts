@@ -1,6 +1,6 @@
-import { CampaignService } from "protocol/src/CampaignService";
 import { Role } from "protocol/src/Role";
 import { checkPermissions } from "../Errors";
+import { CampaignStorage } from "./CampaignStorage";
 
 interface PermissionQuery {
     userID: string;
@@ -8,7 +8,7 @@ interface PermissionQuery {
 }
 
 export class CampaignPermissionService {
-    constructor(private campaignStorage: CampaignService) {}
+    constructor(private campaignStorage: CampaignStorage) {}
 
     async requireManager<T>(
         { userID, campaignID }: PermissionQuery,

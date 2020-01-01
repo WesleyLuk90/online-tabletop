@@ -1,16 +1,20 @@
 import { newUUID } from "protocol/src/Id";
 import { parse } from "protocol/src/Parse";
 import { Scene, SceneSchema } from "protocol/src/Scene";
-import { SceneService } from "protocol/src/SceneService";
 import { NotFoundError } from "../Errors";
 import { DatabaseProvider } from "../storage/DatabaseProvider";
 import { MongoStorage } from "../storage/MongoStorage";
 
-function generateID({ campaignID, id }: { campaignID: string; id: string }) {
-    return `${campaignID}/${id}`;
+interface SceneReference {
+    campaignID: string;
+    sceneID: string;
 }
 
-export class SceneStorage implements SceneService {
+function generateID({ campaignID, sceneID }: SceneReference) {
+    return `${campaignID}/${sceneID}`;
+}
+
+export class SceneStorage {
     storage: MongoStorage<Scene>;
 
     constructor(readonly databaseProvider: DatabaseProvider) {
@@ -26,17 +30,9 @@ export class SceneStorage implements SceneService {
         return this.storage.list({ key: "campaignID", value: gameID });
     }
 
-    async get({
-        campaignID,
-        sceneID
-    }: {
-        campaignID: string;
-        sceneID: string;
-    }): Promise<Scene> {
-        const id = generateID({ campaignID, id: sceneID });
-        const scene = await this.storage.get(
-            generateID({ campaignID, id: sceneID })
-        );
+    async get(ref: SceneReference): Promise<Scene> {
+        const id = generateID(ref);
+        const scene = await this.storage.get(generateID(ref));
         return NotFoundError.checkNotNull(scene, "scene", id);
     }
 
@@ -51,7 +47,7 @@ export class SceneStorage implements SceneService {
         return scene;
     }
 
-    delete(scene: Scene): Promise<void> {
-        return this.storage.delete(this.storage.id(scene));
+    async delete(ref: SceneReference): Promise<void> {
+        return this.storage.delete(generateID(ref));
     }
 }

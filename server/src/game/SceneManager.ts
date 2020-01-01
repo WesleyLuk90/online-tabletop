@@ -1,7 +1,14 @@
-import { Scene } from "protocol/src/Scene";
+import { parse } from "protocol/src/Parse";
+import { Scene, SceneSchema } from "protocol/src/Scene";
 import { Route } from "../Route";
 import { CampaignPermissionService } from "./CampaignPermissionService";
 import { SceneStorage } from "./SceneStorage";
+
+function parseScene(data: any) {
+    return parse(data, SceneSchema);
+}
+
+const PATH = "/api/campaigns/:campaignID";
 
 export class SceneManager {
     constructor(
@@ -10,7 +17,27 @@ export class SceneManager {
     ) {}
 
     routes(): Route[] {
-        return [];
+        return [
+            Route.create("post", `${PATH}/scenes`, (userID, data) =>
+                this.create(userID, parseScene(data.body))
+            ),
+            Route.create("post", `${PATH}/scenes/:sceneID`, (userID, data) =>
+                this.update(userID, parseScene(data.body))
+            ),
+            Route.create("get", `${PATH}/scenes/:sceneID`, (userID, data) =>
+                this.get(userID, data.url("campaignID"), data.url("sceneID"))
+            ),
+            Route.create("get", `${PATH}/scenes`, (userID, data) =>
+                this.list(userID, data.url("campaignID"))
+            ),
+            Route.create("delete", `${PATH}/scenes/:sceneID`, (userID, data) =>
+                this.delete(
+                    userID,
+                    data.url("campaignID"),
+                    data.url("sceneID")
+                ).then(() => ({}))
+            )
+        ];
     }
 
     async create(userID: string, scene: Scene): Promise<Scene> {
@@ -26,7 +53,7 @@ export class SceneManager {
     }
 
     async update(userID: string, scene: Scene): Promise<Scene> {
-        await this.permissionService.requireManager(
+        return this.permissionService.requireManager(
             {
                 campaignID: scene.campaignID,
                 userID
@@ -40,26 +67,36 @@ export class SceneManager {
         campaignID: string,
         sceneID: string
     ): Promise<Scene> {
-        await this.permissionService.requirePlayer(
+        return this.permissionService.requirePlayer(
             {
                 campaignID,
                 userID
             },
-            () => this.sceneStorage.get(campaignID, sceneID)
+            () => this.sceneStorage.get({ campaignID, sceneID })
         );
     }
 
-    async list(gameID: string): Promise<Scene[]> {
-        await this.permissionService.requirePlayer({
-            campaignID: scene.campaignID,
-            userID
-        });
+    async list(userID: string, campaignID: string): Promise<Scene[]> {
+        return this.permissionService.requirePlayer(
+            {
+                campaignID,
+                userID
+            },
+            () => this.sceneStorage.list(campaignID)
+        );
     }
 
-    async delete(scene: Scene): Promise<void> {
-        await this.permissionService.requireManager({
-            campaignID: scene.campaignID,
-            userID
-        });
+    async delete(
+        userID: string,
+        campaignID: string,
+        sceneID: string
+    ): Promise<void> {
+        await this.permissionService.requireManager(
+            {
+                campaignID,
+                userID
+            },
+            () => this.sceneStorage.delete({ campaignID, sceneID })
+        );
     }
 }

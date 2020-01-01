@@ -18,7 +18,7 @@ export const EllipseSchema = t.strict({
 export const TokenDataSchema = t.union([SquareTokenSchema, EllipseSchema]);
 
 export const TokenSchema = t.strict({
-    id: t.string,
+    tokenID: t.string,
     sceneID: t.string,
     campaignID: t.string,
     layerID: t.string,

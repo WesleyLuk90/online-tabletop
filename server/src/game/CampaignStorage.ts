@@ -1,5 +1,4 @@
 import { Campaign, CampaignSchema } from "protocol/src/Campaign";
-import { CampaignService } from "protocol/src/CampaignService";
 import { newUUID } from "protocol/src/Id";
 import { parse } from "protocol/src/Parse";
 import { NotFoundError } from "../Errors";
@@ -8,7 +7,7 @@ import { MongoStorage } from "../storage/MongoStorage";
 
 type Indexes = keyof Campaign | "players.userID";
 
-export class CampaignStorage implements CampaignService {
+export class CampaignStorage {
     storage: MongoStorage<Campaign, Indexes>;
     constructor(readonly databaseProvider: DatabaseProvider) {
         this.storage = new MongoStorage(

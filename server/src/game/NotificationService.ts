@@ -17,7 +17,7 @@ export class NotificationService {
         this.broadcastService.broadcast({
             type: "scene",
             campaignID: scene.campaignID,
-            sceneID: scene.id
+            sceneID: scene.sceneID
         });
     }
 
@@ -26,7 +26,7 @@ export class NotificationService {
             type: "token",
             campaignID: token.campaignID,
             sceneID: token.sceneID,
-            tokenID: token.id
+            tokenID: token.tokenID
         });
     }
 }

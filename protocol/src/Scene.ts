@@ -10,7 +10,7 @@ export const LayerSchema = t.strict({
 });
 
 export const SceneSchema = t.strict({
-    id: t.string,
+    sceneID: t.string,
     campaignID: t.string,
     name: t.string,
     layers: t.array(LayerSchema)

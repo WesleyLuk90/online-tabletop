@@ -6,8 +6,11 @@ import { UserStorage } from "./auth/UserStorage";
 import { ConfigKeys, readConfig, readConfigNumber } from "./Config";
 import { BroadcastService } from "./game/BroadcastService";
 import { CampaignManager } from "./game/CampaignManager";
+import { CampaignPermissionService } from "./game/CampaignPermissionService";
 import { CampaignStorage } from "./game/CampaignStorage";
 import { NotificationService } from "./game/NotificationService";
+import { SceneManager } from "./game/SceneManager";
+import { SceneStorage } from "./game/SceneStorage";
 import { connectRoutes } from "./Requests";
 import { initializeSession } from "./Session";
 import { DatabaseProvider } from "./storage/DatabaseProvider";
@@ -47,9 +50,13 @@ async function main() {
         campaignStorage,
         notificationService
     );
+    const sceneStorage = new SceneStorage(dbProvider);
+    const permissionService = new CampaignPermissionService(campaignStorage);
+    const sceneManager = new SceneManager(sceneStorage, permissionService);
 
     connectRoutes(userManager.routes(), app);
     connectRoutes(campaignManager.routes(), app);
+    connectRoutes(sceneManager.routes(), app);
 
     http.listen(port, () =>
         console.log(`Example app listening on port ${port}!`)

@@ -6,7 +6,9 @@
     "license": "MIT",
     "scripts": {
         "test": "jest",
-        "build": "tsc"
+        "clean": "rm src/*.js && rm src/*.js.map && rm src/*.d.ts",
+        "build": "tsc",
+        "rebuild": "yarn run clean && yarn run build"
     },
     "dependencies": {
         "fp-ts": "^1.18.1",

@@ -7,14 +7,15 @@
             "label": "Build protocol",
             "type": "shell",
             "command": "yarn",
-            "args": ["build"],
+            "args": ["rebuild"],
             "options": {
                 "cwd": "protocol"
             },
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
+            },
+            "problemMatcher": []
         }
     ]
 }

@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-export const ColorSchema = t.type({
+export const ColorSchema = t.strict({
     red: t.number,
     green: t.number,
     blue: t.number,
