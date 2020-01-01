@@ -18,17 +18,17 @@ export class CampaignManager {
             Route.create("get", "/api/campaigns", (userID, data) =>
                 this.list(userID)
             ),
-            Route.create("get", "/api/campaigns/{:id}", (userID, data) =>
-                this.get(userID, data.urlData("id"))
+            Route.create("get", "/api/campaigns/:id", (userID, data) =>
+                this.get(userID, data.url("id"))
             ),
             Route.create("post", "/api/campaigns", (userID, data) =>
                 this.create(userID, parse(data.body(), CampaignSchema))
             ),
-            Route.create("post", "/api/campaigns/{:id}", (userID, data) =>
-                this.create(userID, parse(data.body(), CampaignSchema))
+            Route.create("post", "/api/campaigns/:id", (userID, data) =>
+                this.update(userID, parse(data.body(), CampaignSchema))
             ),
-            Route.create("delete", "/api/campaigns/{:id}", (userID, data) =>
-                this.delete(userID, data.urlData("id")).then(() => ({}))
+            Route.create("delete", "/api/campaigns/:id", (userID, data) =>
+                this.delete(userID, data.url("id")).then(() => ({}))
             )
         ];
     }

@@ -2,9 +2,9 @@ import { BadRequestError, UnauthorizedError } from "./Errors";
 
 export class RequestData {
     constructor(
-        readonly bodyData: any,
-        readonly queryData: any,
-        readonly urlData: any
+        private bodyData: any,
+        private queryData: any,
+        private urlData: any
     ) {}
 
     body(): any {
@@ -15,11 +15,19 @@ export class RequestData {
     }
 
     url(key: string): string {
-        return BadRequestError.check(this.queryData, key);
+        return BadRequestError.check(
+            this.urlData,
+            key,
+            `Required url part ${key}`
+        );
     }
 
     query(key: string): string {
-        return BadRequestError.check(this.queryData, key);
+        return BadRequestError.check(
+            this.queryData,
+            key,
+            `Required query parameter ${key}`
+        );
     }
 }
 

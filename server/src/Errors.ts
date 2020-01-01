@@ -46,9 +46,9 @@ export class UnauthorizedError extends UserFacingError {
 }
 
 export class BadRequestError extends UserFacingError {
-    static check(object: any, key: string) {
+    static check(object: any, key: string, message?: string) {
         if (object == null || object[key] == null) {
-            throw new BadRequestError();
+            throw new BadRequestError(message);
         }
         return object[key];
     }

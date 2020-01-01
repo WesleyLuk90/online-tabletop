@@ -1,45 +1,46 @@
 import { Campaign } from "protocol/src/Campaign";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Form } from "../common/Form";
-import { Spinner } from "../common/Icon";
 import { Input } from "../common/Input";
 import { Page } from "../common/Page";
-import { checkNotNull } from "../util/Nullable";
+import { useAsyncData } from "../util/AsyncData";
 import { CampaignRequests } from "./CampaignRequests";
 
 export function EditCampaignPage() {
     const { id } = useParams();
 
-    const [campaign, setCampaign] = useState<Campaign | null>(null);
-    const [error, setError] = useState<Error | null>(null);
-    useEffect(() => {
+    const data = useAsyncData(async () => {
         if (!id) {
-            setCampaign({ id: "", ownerID: "", name: "", players: [] });
+            return { id: "", ownerID: "", name: "", players: [] };
         } else {
-            CampaignRequests.get(id).then(setCampaign);
+            return CampaignRequests.get(id);
         }
-    }, [id]);
+    });
+    const [editedCampaign, setCampaign] = useState<Campaign | null>(null);
 
-    if (campaign == null) {
-        return <Spinner />;
-    }
+    return data(originalCampaign => {
+        const isNew = originalCampaign.id === "";
+        const campaign = editedCampaign || originalCampaign;
 
-    const isNew = campaign.id === "";
+        async function onSave() {
+            if (isNew) {
+                await CampaignRequests.create(campaign);
+            } else {
+                await CampaignRequests.update(campaign);
+            }
+        }
 
-    async function onSave() {
-        await CampaignRequests.create(checkNotNull(campaign));
-    }
-
-    return (
-        <Page title={isNew ? "Create Campaign" : "Edit Campaign"}>
-            <Form onSave={onSave}>
-                <Input
-                    value={campaign.name}
-                    label="Name"
-                    onChange={name => setCampaign({ ...campaign, name })}
-                />
-            </Form>
-        </Page>
-    );
+        return (
+            <Page title={isNew ? "Create Campaign" : "Edit Campaign"}>
+                <Form onSave={onSave}>
+                    <Input
+                        value={campaign.name}
+                        label="Name"
+                        onChange={name => setCampaign({ ...campaign, name })}
+                    />
+                </Form>
+            </Page>
+        );
+    });
 }

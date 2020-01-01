@@ -1,27 +1,26 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button } from "../common/Button";
-import { DataLoader } from "../common/DataLoader";
+import { Button, ButtonLink } from "../common/Button";
 import { SectionList } from "../common/SectionList";
 import { CampaignRequests } from "../games/CampaignRequests";
+import { useAsyncData } from "../util/AsyncData";
 
 export function CampaignList() {
+    const data = useAsyncData(CampaignRequests.list);
+
     return (
         <div>
-            <Link to="/campaign/create">Create</Link>
-            <DataLoader
-                load={() => CampaignRequests.list()}
-                render={c => (
-                    <SectionList
-                        data={c}
-                        id={c => c.id}
-                        left={c => (
-                            <Link to={`/campaign/edit/${c.id}`}>{c.name}</Link>
-                        )}
-                        right={c => <Button onClick={() => {}}>Launch</Button>}
-                    />
-                )}
-            />
+            <ButtonLink to="/campaign/create">Create</ButtonLink>
+            {data(c => (
+                <SectionList
+                    data={c}
+                    id={c => c.id}
+                    left={c => (
+                        <Link to={`/campaign/edit/${c.id}`}>{c.name}</Link>
+                    )}
+                    right={c => <Button onClick={() => {}}>Launch</Button>}
+                />
+            ))}
         </div>
     );
 }
