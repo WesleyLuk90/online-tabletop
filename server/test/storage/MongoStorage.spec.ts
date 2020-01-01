@@ -1,3 +1,4 @@
+import { NotFoundError } from "../../src/Errors";
 import { MongoStorage } from "../../src/storage/MongoStorage";
 import { DbFixture } from "../fixtures/DbFixture";
 
@@ -53,5 +54,13 @@ describe("MongoStorage", () => {
         await s.create(data);
         await s.update(new Data("a", "c"));
         expect(await s.get("a")).toEqual(new Data("a", "c"));
+    });
+
+    it("should fail to update", async () => {
+        const s = await storage();
+        const data = new Data("a", "b");
+        await expect(s.update(data)).rejects.toBeInstanceOf(NotFoundError);
+        await s.create(data);
+        await s.update(data);
     });
 });

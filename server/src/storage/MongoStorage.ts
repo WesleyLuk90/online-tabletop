@@ -1,4 +1,5 @@
 import { Collection } from "mongodb";
+import { NotFoundError } from "../Errors";
 import { DatabaseProvider } from "./DatabaseProvider";
 
 interface Document {
@@ -52,7 +53,15 @@ export class MongoStorage<T, K = keyof T> {
         const doc: T & Partial<Document> = { ...data };
         delete doc._id;
         const collection = await this.collection();
-        await collection.updateOne({ _id: this.id(data) }, { $set: doc });
+        const updateResult = await collection.updateOne(
+            { _id: this.id(data) },
+            { $set: doc }
+        );
+        NotFoundError.check(
+            updateResult.matchedCount === 1,
+            this.collectionName,
+            this.id(data)
+        );
     }
 
     async delete(id: string): Promise<void> {

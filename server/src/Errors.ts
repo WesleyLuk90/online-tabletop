@@ -10,6 +10,23 @@ export class UserFacingError extends Error {
 }
 
 export class NotFoundError extends UserFacingError {
+    static check(condition: boolean, object: string, id: string) {
+        if (!condition) {
+            throw new NotFoundError(object, id);
+        }
+    }
+
+    static checkNotNull<T extends {}>(
+        v: T | null | undefined,
+        object: string,
+        id: string
+    ): T {
+        if (v == null) {
+            throw new NotFoundError(object, id);
+        }
+        return v;
+    }
+
     constructor(object: string, id: string) {
         super(`No ${object} with id ${id} found`);
     }
