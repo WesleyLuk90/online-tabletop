@@ -14,7 +14,9 @@ export function Navigation() {
             <div>
                 <Auth
                     loggedIn={user => (
-                        <a className="navigation-link">{user.displayName}</a>
+                        <a className="navigation-link" href="/">
+                            {user.displayName}
+                        </a>
                     )}
                     notLoggedIn={() => (
                         <a className="navigation-link" href="/login">

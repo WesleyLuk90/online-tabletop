@@ -18,6 +18,7 @@ export function useAsyncData<T>(
         load()
             .then(setData)
             .catch(setError);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, dependencies);
     return (render: (t: T) => ReactElement) => {
         if (error != null) {
