@@ -29,3 +29,27 @@ export function ButtonLink({
         </Link>
     );
 }
+
+export function ConfirmButton({
+    children,
+    prompt,
+    onClick
+}: {
+    children: React.ReactNode;
+    prompt: string;
+    onClick: () => void;
+}) {
+    return (
+        <button
+            className="button"
+            onClick={() => {
+                // eslint-disable-next-line no-restricted-globals
+                if (confirm(prompt)) {
+                    onClick();
+                }
+            }}
+        >
+            {children}
+        </button>
+    );
+}
