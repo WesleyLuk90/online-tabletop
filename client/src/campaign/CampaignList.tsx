@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Routes } from "../app/Routes";
-import { Button, ButtonLink } from "../common/Button";
+import { ButtonLink } from "../common/Button";
 import { SectionList } from "../common/SectionList";
 import { CampaignRequests } from "../games/CampaignRequests";
 import { useAsyncData } from "../util/AsyncData";
@@ -19,7 +19,11 @@ export function CampaignList() {
                     left={c => (
                         <Link to={Routes.editCampaign(c.id)}>{c.name}</Link>
                     )}
-                    right={c => <Button onClick={() => {}}>Launch</Button>}
+                    right={c => (
+                        <ButtonLink to={Routes.playGame(c.id)}>
+                            Launch
+                        </ButtonLink>
+                    )}
                 />
             ))}
         </div>

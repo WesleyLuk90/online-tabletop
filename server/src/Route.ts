@@ -7,7 +7,7 @@ export class RequestData {
         private urlData: any
     ) {}
 
-    body(): any {
+    body(): {} {
         if (this.bodyData == null) {
             throw new BadRequestError();
         }

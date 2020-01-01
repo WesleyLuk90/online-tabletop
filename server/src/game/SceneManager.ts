@@ -4,7 +4,7 @@ import { Route } from "../Route";
 import { CampaignPermissionService } from "./CampaignPermissionService";
 import { SceneStorage } from "./SceneStorage";
 
-function parseScene(data: any) {
+function parseScene(data: {}) {
     return parse(data, SceneSchema);
 }
 
@@ -19,10 +19,10 @@ export class SceneManager {
     routes(): Route[] {
         return [
             Route.create("post", `${PATH}/scenes`, (userID, data) =>
-                this.create(userID, parseScene(data.body))
+                this.create(userID, parseScene(data.body()))
             ),
             Route.create("post", `${PATH}/scenes/:sceneID`, (userID, data) =>
-                this.update(userID, parseScene(data.body))
+                this.update(userID, parseScene(data.body()))
             ),
             Route.create("get", `${PATH}/scenes/:sceneID`, (userID, data) =>
                 this.get(userID, data.url("campaignID"), data.url("sceneID"))

@@ -1,4 +1,3 @@
-import { newUUID } from "protocol/src/Id";
 import { parse } from "protocol/src/Parse";
 import { Scene, SceneSchema } from "protocol/src/Scene";
 import { NotFoundError } from "../Errors";
@@ -37,9 +36,8 @@ export class SceneStorage {
     }
 
     async create(scene: Scene): Promise<Scene> {
-        const withID = { ...scene, id: newUUID() };
-        await this.storage.create(withID);
-        return withID;
+        await this.storage.create(scene);
+        return scene;
     }
 
     async update(scene: Scene): Promise<Scene> {

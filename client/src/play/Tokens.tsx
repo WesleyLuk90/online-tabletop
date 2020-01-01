@@ -20,13 +20,13 @@ export class Tokens extends React.Component<Props> {
         this.props.positionTransform(Vector.fromMouseEvent(e), position => {
             e.stopPropagation();
             this.props.onStartMouse(
-                new MouseState(token.id, e.button, position)
+                new MouseState(token.tokenID, e.button, position)
             );
         });
     }
 
     renderToken(token: Token) {
-        const isSelected = this.props.selected.includes(token.id);
+        const isSelected = this.props.selected.includes(token.tokenID);
         let x = token.x;
         let y = token.y;
         if (isSelected && this.props.dragSelection) {
