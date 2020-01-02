@@ -58,7 +58,8 @@ export class CampaignLoader {
                     playerVisible: true
                 }
             ],
-            name: "My First Scene"
+            name: "My First Scene",
+            gridSize: 70
         };
     }
 }

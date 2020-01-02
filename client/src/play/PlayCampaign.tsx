@@ -1,5 +1,8 @@
+import { Campaign } from "protocol/src/Campaign";
+import { Scene } from "protocol/src/Scene";
 import { User } from "protocol/src/User";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Spinner } from "../common/Icon";
 import { CampaignLoader } from "./CampaignLoader";
 import { GameMap } from "./GameMap";
 import { PlayLayout } from "./PlayLayout";
@@ -13,13 +16,42 @@ export function PlayCampaign({
     campaignID: string;
     user: User;
 }) {
+    const [campaign, setCampaign] = useState<Campaign | null>(null);
+    const [scenes, setScenes] = useState<Scene[]>([]);
+
     useEffect(() => {
-        CampaignLoader.loadCampaign(campaignID, user.id);
+        CampaignLoader.loadCampaign(campaignID, user.id).then(
+            ([campaign, scenes]) => {
+                setCampaign(campaign);
+                setScenes(scenes);
+            }
+        );
     }, [campaignID, user.id]);
+
+    if (campaign == null) {
+        return (
+            <div>
+                Loading <Spinner />
+            </div>
+        );
+    }
+
+    const player = campaign.players.find(p => p.userID === user.id);
+    const sceneID = player && player.sceneID;
+    const scene = scenes.find(s => s.sceneID === sceneID) || null;
 
     return (
         <PlayLayout
-            main={<GameMap view={new View(0.5, new Vector(100, 100))} />}
+            main={
+                scene != null ? (
+                    <GameMap
+                        view={new View(1, new Vector(100, 100))}
+                        scene={scene}
+                    />
+                ) : (
+                    "No scene yet"
+                )
+            }
             right="right"
             bottom="bottom"
         />

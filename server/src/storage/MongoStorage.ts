@@ -11,13 +11,23 @@ interface Filter<T> {
     value: string;
 }
 
+interface Migration {
+    (old: any): void;
+}
+
 export class MongoStorage<T, K = keyof T> {
     constructor(
         private dbProvider: DatabaseProvider,
         private collectionName: string,
         private parse: (data: Document) => T,
-        readonly id: (t: T) => string
+        readonly id: (t: T) => string,
+        private migrations: Migration[] = []
     ) {}
+
+    private migrateAndParse(data: any) {
+        this.migrations.forEach(migration => migration(data));
+        return this.parse(data);
+    }
 
     async collection(): Promise<Collection<Document>> {
         const db = await this.dbProvider.get();
@@ -30,7 +40,7 @@ export class MongoStorage<T, K = keyof T> {
         if (data == null) {
             return data;
         }
-        return this.parse(data);
+        return this.migrateAndParse(data);
     }
 
     async create(data: T): Promise<void> {
@@ -46,7 +56,7 @@ export class MongoStorage<T, K = keyof T> {
         const collection = await this.collection();
         const results = await collection.find(filter);
         const list = await results.toArray();
-        return list.map(this.parse);
+        return list.map(d => this.migrateAndParse(d));
     }
 
     async update(data: T): Promise<void> {

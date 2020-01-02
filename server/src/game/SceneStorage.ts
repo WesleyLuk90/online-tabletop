@@ -2,6 +2,7 @@ import { parse } from "protocol/src/Parse";
 import { Scene, SceneSchema } from "protocol/src/Scene";
 import { NotFoundError } from "../Errors";
 import { DatabaseProvider } from "../storage/DatabaseProvider";
+import { addProperty } from "../storage/Migrations";
 import { MongoStorage } from "../storage/MongoStorage";
 
 interface SceneReference {
@@ -21,7 +22,8 @@ export class SceneStorage {
             databaseProvider,
             "scenes",
             data => parse(data, SceneSchema),
-            generateID
+            generateID,
+            [scene => addProperty(scene, "gridSize", 70)]
         );
     }
 

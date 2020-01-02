@@ -13,7 +13,8 @@ export const SceneSchema = t.strict({
     sceneID: t.string,
     campaignID: t.string,
     name: t.string,
-    layers: t.array(LayerSchema)
+    layers: t.array(LayerSchema),
+    gridSize: t.number
 });
 
 export type Scene = t.TypeOf<typeof SceneSchema>;
