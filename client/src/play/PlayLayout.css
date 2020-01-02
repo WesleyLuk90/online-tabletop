@@ -1,0 +1,33 @@
+.play-layout {
+    position: fixed;
+    top: 32px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.play-layout__main {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 200px;
+    right: 350px;
+    background-color: #eee;
+}
+.play-layout__right {
+    position: absolute;
+    top: 0;
+    bottom: 200px;
+    right: 0;
+    width: 350px;
+    background-color: #fff;
+}
+.play-layout__bottom {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 200px;
+    bottom: 0;
+    background-color: #ddd;
+}
