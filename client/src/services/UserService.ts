@@ -4,6 +4,12 @@ import { User, UserSchema } from "protocol/src/User";
 
 export class UserService {
     static current(): Promise<User | null> {
-        return Axios.get("/api/user/me").then(t => parse(t.data, UserSchema));
+        return Axios.get("/api/user/me").then(t => {
+            if (t.data == null) {
+                return null;
+            } else {
+                return parse(t.data, UserSchema);
+            }
+        });
     }
 }
