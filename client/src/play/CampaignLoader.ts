@@ -22,9 +22,7 @@ export class CampaignLoader {
         if (scenes.length === 0 && isManager(campaign, userID)) {
             const defaultScene = this.defaultScene(campaignID);
             await SceneRequests.create(defaultScene);
-            campaign.players.forEach(p => {
-                p.sceneID = defaultScene.sceneID;
-            });
+            campaign.sceneID = defaultScene.sceneID;
             await CampaignRequests.update(campaign);
             return this.loadCampaign(campaignID, userID);
         }

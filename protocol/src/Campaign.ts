@@ -13,6 +13,7 @@ export const CampaignSchema = t.strict({
     id: t.string,
     ownerID: t.string,
     name: t.string,
+    sceneID: t.string,
     players: t.array(PlayerSchema)
 });
 

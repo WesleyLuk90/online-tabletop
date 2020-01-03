@@ -18,7 +18,13 @@ export function EditCampaignPage() {
 
     useEffect(() => {
         if (!id) {
-            setOriginal({ id: "", ownerID: "", name: "", players: [] });
+            setOriginal({
+                id: "",
+                ownerID: "",
+                name: "",
+                players: [],
+                sceneID: ""
+            });
         } else {
             CampaignRequests.get(id).then(setOriginal);
         }

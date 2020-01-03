@@ -23,7 +23,7 @@ export class SceneStorage {
             "scenes",
             data => parse(data, SceneSchema),
             generateID,
-            [scene => addProperty(scene, "gridSize", 70)]
+            [addProperty("gridSize", 70)]
         );
     }
 
