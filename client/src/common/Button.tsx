@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import "./Button.css";
 
@@ -6,7 +6,7 @@ export function Button({
     children,
     onClick
 }: {
-    children: React.ReactNode;
+    children: ReactNode;
     onClick: () => void;
 }) {
     return (
@@ -20,7 +20,7 @@ export function ButtonLink({
     children,
     to
 }: {
-    children: React.ReactNode;
+    children: ReactNode;
     to: string;
 }) {
     return (
@@ -35,7 +35,7 @@ export function ConfirmButton({
     prompt,
     onClick
 }: {
-    children: React.ReactNode;
+    children: ReactNode;
     prompt: string;
     onClick: () => void;
 }) {

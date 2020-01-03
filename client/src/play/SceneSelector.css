@@ -1,0 +1,10 @@
+.scene-selector {
+    display: flex;
+    align-items: center;
+}
+.scene-selector > * {
+    flex: 0 0 auto;
+}
+.scene-selector__dropdown {
+    flex: 1 0 0;
+}

@@ -55,7 +55,7 @@ export function PlayCampaign({
             }
             right={
                 <div>
-                    <SceneSelector />
+                    <SceneSelector scenes={scenes} campaign={campaign} />
                 </div>
             }
             bottom="bottom"
