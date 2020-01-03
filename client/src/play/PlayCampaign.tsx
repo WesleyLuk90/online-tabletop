@@ -6,6 +6,7 @@ import { Spinner } from "../common/Icon";
 import { CampaignLoader } from "./CampaignLoader";
 import { GameMap } from "./GameMap";
 import { PlayLayout } from "./PlayLayout";
+import { SceneSelector } from "./SceneSelector";
 import { Vector } from "./Vector";
 import { View } from "./View";
 
@@ -52,7 +53,11 @@ export function PlayCampaign({
                     "No scene yet"
                 )
             }
-            right="right"
+            right={
+                <div>
+                    <SceneSelector />
+                </div>
+            }
             bottom="bottom"
         />
     );
