@@ -20,7 +20,7 @@ export class UserStorage {
     }
 
     async create(user: User) {
-        if ((await this.get(user.id)) == null) {
+        if ((await this.storage.get(user.id)) == null) {
             await this.storage.create(user);
         }
     }
