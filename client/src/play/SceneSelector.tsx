@@ -1,26 +1,34 @@
-import { Campaign } from "protocol/src/Campaign";
 import { Scene } from "protocol/src/Scene";
 import React from "react";
 import { Dropdown } from "../common/Dropdown";
 import "./SceneSelector.css";
 
+function SceneOption({ scene }: { scene?: Scene }) {
+    if (scene == null) {
+        return <div>No Scene</div>;
+    }
+    return <div>{scene.name}</div>;
+}
+
 export function SceneSelector({
-    campaign,
-    scenes
+    sceneID,
+    scenes,
+    onSelect
 }: {
-    campaign: Campaign;
+    sceneID: string | null;
     scenes: Scene[];
+    onSelect: (sceneID: string) => void;
 }) {
     return (
         <div className="scene-selector">
             <div>Scene</div>
             <div className="scene-selector__dropdown">
                 <Dropdown
-                    value={scenes.find(s => false)}
+                    value={scenes.find(s => s.sceneID === sceneID)}
                     options={scenes}
                     id={s => (s && s.sceneID) || ""}
-                    format={s => (s && s.name) || "No Scene"}
-                    onChange={s => console.log(s)}
+                    format={s => <SceneOption scene={s} />}
+                    onChange={s => s != null && onSelect(s.sceneID)}
                 />
             </div>
         </div>

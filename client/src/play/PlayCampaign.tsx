@@ -4,6 +4,7 @@ import { User } from "protocol/src/User";
 import React, { useEffect, useState } from "react";
 import { Spinner } from "../common/Icon";
 import { CampaignLoader } from "./CampaignLoader";
+import { EventHandler } from "./EventHandlers";
 import { GameMap } from "./GameMap";
 import { PlayLayout } from "./PlayLayout";
 import { SceneSelector } from "./SceneSelector";
@@ -38,8 +39,10 @@ export function PlayCampaign({
     }
 
     const player = campaign.players.find(p => p.userID === user.id);
-    const sceneID = player && player.sceneID;
+    const sceneID = player != null ? player.sceneID : null;
     const scene = scenes.find(s => s.sceneID === sceneID) || null;
+
+    const eventHandler = new EventHandler(campaign, user);
 
     return (
         <PlayLayout
@@ -55,7 +58,11 @@ export function PlayCampaign({
             }
             right={
                 <div>
-                    <SceneSelector scenes={scenes} campaign={campaign} />
+                    <SceneSelector
+                        scenes={scenes}
+                        sceneID={sceneID}
+                        onSelect={s => eventHandler.changeMyScene(s)}
+                    />
                 </div>
             }
             bottom="bottom"
