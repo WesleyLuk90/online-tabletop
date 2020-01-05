@@ -13,11 +13,16 @@ export class GameState {
         return new GameState(campaign, this.user, this.scenes);
     }
 
-    getMyScene(): Scene | null {
+    getMySceneID(): string {
         const player = this.campaign.players.find(
             p => p.userID === this.user.id
         );
-        if (player == null) return null;
-        return this.scenes.find(s => s.sceneID === player.sceneID) || null;
+        if (player == null) return "";
+        return player.sceneID;
+    }
+
+    getMyScene(): Scene | null {
+        const id = this.getMySceneID() || this.campaign.sceneID;
+        return this.scenes.find(s => s.sceneID === id) || null;
     }
 }

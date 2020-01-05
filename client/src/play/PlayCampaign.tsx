@@ -1,12 +1,12 @@
 import { User } from "protocol/src/User";
 import React, { useEffect, useState } from "react";
 import { Spinner } from "../common/Icon";
+import { ScenePanel } from "../common/ScenePanel";
 import { CampaignLoader } from "./CampaignLoader";
 import { EventHandler } from "./EventHandlers";
 import { GameMap } from "./GameMap";
 import { GameState } from "./GameState";
 import { PlayLayout } from "./PlayLayout";
-import { SceneSelector } from "./SceneSelector";
 import { Vector } from "./Vector";
 import { View } from "./View";
 
@@ -35,7 +35,11 @@ export function PlayCampaign({
         );
     }
 
-    const eventHandler = new EventHandler(gameState);
+    const eventHandler = new EventHandler(updater => {
+        if (gameState != null) {
+            setGameState(updater(gameState));
+        }
+    });
     const scene = gameState.getMyScene();
 
     return (
@@ -52,11 +56,14 @@ export function PlayCampaign({
             }
             right={
                 <div>
-                    {gameState.campaign.name}
-                    <SceneSelector
+                    <ScenePanel
+                        myScene={gameState.getMySceneID()}
+                        defaultScene={gameState.campaign.sceneID}
                         scenes={gameState.scenes}
-                        scene={gameState.getMyScene()}
-                        onSelect={s => eventHandler.changeMyScene(s)}
+                        onChangeScene={s => eventHandler.changeMyScene(s)}
+                        onChangeDefaultScene={s =>
+                            eventHandler.changeDefaultScene(s)
+                        }
                     />
                 </div>
             }
