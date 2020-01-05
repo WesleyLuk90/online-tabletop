@@ -1,5 +1,5 @@
 import { Server } from "http";
-import { campaignUpdate, Update } from "protocol/src/Update";
+import { campaignTopic, Update } from "protocol/src/Update";
 import SocketIO from "socket.io";
 
 export class BroadcastService {
@@ -12,6 +12,6 @@ export class BroadcastService {
     }
 
     broadcast(update: Update) {
-        this.socket.emit(campaignUpdate(update.campaignID), update);
+        this.socket.emit(campaignTopic(update.campaignID), update);
     }
 }

@@ -10,7 +10,13 @@ export function Button({
     onClick: () => void;
 }) {
     return (
-        <button className="button" onClick={onClick}>
+        <button
+            className="button"
+            onClick={e => {
+                e.preventDefault();
+                onClick();
+            }}
+        >
             {children}
         </button>
     );

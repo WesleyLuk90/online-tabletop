@@ -5,11 +5,15 @@ const CampaignUpdateSchema = t.strict({
     campaignID: t.string
 });
 
+export type CampaignUpdate = t.TypeOf<typeof CampaignUpdateSchema>;
+
 const SceneUpdateSchema = t.strict({
     type: t.literal("scene"),
     campaignID: t.string,
     sceneID: t.string
 });
+
+export type SceneUpdate = t.TypeOf<typeof SceneUpdateSchema>;
 
 const TokenUpdateSchema = t.strict({
     type: t.literal("token"),
@@ -17,6 +21,8 @@ const TokenUpdateSchema = t.strict({
     sceneID: t.string,
     tokenID: t.string
 });
+
+export type TokenUpdate = t.TypeOf<typeof TokenUpdateSchema>;
 
 export const UpdateSchema = t.union([
     CampaignUpdateSchema,
@@ -26,6 +32,6 @@ export const UpdateSchema = t.union([
 
 export type Update = t.TypeOf<typeof UpdateSchema>;
 
-export function campaignUpdate(campaignID: string) {
+export function campaignTopic(campaignID: string) {
     return `campaign/${campaignID}`;
 }

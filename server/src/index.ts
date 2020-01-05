@@ -1,5 +1,6 @@
 import express from "express";
 import { Server } from "http";
+import { resolve } from "path";
 import { initializeAuth } from "./auth/Auth";
 import { UserManager } from "./auth/UserManager";
 import { UserStorage } from "./auth/UserStorage";
@@ -20,6 +21,9 @@ async function main() {
     const app = express();
     const http = new Server(app);
 
+    const staticPath = resolve(process.cwd(), "../client/build");
+    console.log(`Serving static files from ${staticPath}`);
+    app.use(express.static(staticPath));
     app.use(express.json());
     const port = readConfigNumber(ConfigKeys.HTTP_PORT);
 

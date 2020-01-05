@@ -3,7 +3,7 @@ import React from "react";
 import { Dropdown } from "../common/Dropdown";
 import "./SceneSelector.css";
 
-function SceneOption({ scene }: { scene?: Scene }) {
+function SceneOption({ scene }: { scene: Scene | null }) {
     if (scene == null) {
         return <div>No Scene</div>;
     }
@@ -11,11 +11,11 @@ function SceneOption({ scene }: { scene?: Scene }) {
 }
 
 export function SceneSelector({
-    sceneID,
+    scene,
     scenes,
     onSelect
 }: {
-    sceneID: string | null;
+    scene: Scene | null;
     scenes: Scene[];
     onSelect: (sceneID: string) => void;
 }) {
@@ -24,7 +24,7 @@ export function SceneSelector({
             <div>Scene</div>
             <div className="scene-selector__dropdown">
                 <Dropdown
-                    value={scenes.find(s => s.sceneID === sceneID)}
+                    value={scene}
                     options={scenes}
                     id={s => (s && s.sceneID) || ""}
                     format={s => <SceneOption scene={s} />}

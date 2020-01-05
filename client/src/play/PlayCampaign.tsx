@@ -1,11 +1,10 @@
-import { Campaign } from "protocol/src/Campaign";
-import { Scene } from "protocol/src/Scene";
 import { User } from "protocol/src/User";
 import React, { useEffect, useState } from "react";
 import { Spinner } from "../common/Icon";
 import { CampaignLoader } from "./CampaignLoader";
 import { EventHandler } from "./EventHandlers";
 import { GameMap } from "./GameMap";
+import { GameState } from "./GameState";
 import { PlayLayout } from "./PlayLayout";
 import { SceneSelector } from "./SceneSelector";
 import { Vector } from "./Vector";
@@ -18,19 +17,17 @@ export function PlayCampaign({
     campaignID: string;
     user: User;
 }) {
-    const [campaign, setCampaign] = useState<Campaign | null>(null);
-    const [scenes, setScenes] = useState<Scene[]>([]);
+    const [gameState, setGameState] = useState<GameState | null>(null);
 
     useEffect(() => {
-        CampaignLoader.loadCampaign(campaignID, user.id).then(
-            ([campaign, scenes]) => {
-                setCampaign(campaign);
-                setScenes(scenes);
-            }
+        const loader = new CampaignLoader(campaignID, user, updater =>
+            setGameState(updater)
         );
-    }, [campaignID, user.id]);
 
-    if (campaign == null) {
+        return () => loader.close();
+    }, [campaignID, user]);
+
+    if (gameState == null) {
         return (
             <div>
                 Loading <Spinner />
@@ -38,11 +35,8 @@ export function PlayCampaign({
         );
     }
 
-    const player = campaign.players.find(p => p.userID === user.id);
-    const sceneID = player != null ? player.sceneID : null;
-    const scene = scenes.find(s => s.sceneID === sceneID) || null;
-
-    const eventHandler = new EventHandler(campaign, user);
+    const eventHandler = new EventHandler(gameState);
+    const scene = gameState.getMyScene();
 
     return (
         <PlayLayout
@@ -58,9 +52,10 @@ export function PlayCampaign({
             }
             right={
                 <div>
+                    {gameState.campaign.name}
                     <SceneSelector
-                        scenes={scenes}
-                        sceneID={sceneID}
+                        scenes={gameState.scenes}
+                        scene={gameState.getMyScene()}
                         onSelect={s => eventHandler.changeMyScene(s)}
                     />
                 </div>
