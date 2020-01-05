@@ -12,6 +12,9 @@
 
 .side-panel__content {
     display: none;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-bottom: solid 1px #545b62;
+    padding-bottom: 7px;
 }
 .side-panel__content--expanded {
     display: block;
