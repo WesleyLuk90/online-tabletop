@@ -1,3 +1,4 @@
+import { CampaignRequests } from "../games/CampaignRequests";
 import { replaceValue } from "../util/List";
 import { GameState } from "./GameState";
 
@@ -18,6 +19,7 @@ export class EventHandler {
                     p => ({ ...p, sceneID: sceneID })
                 )
             };
+            CampaignRequests.update(updated);
             return gameState.updateCampaign(updated);
         });
     }
@@ -28,6 +30,7 @@ export class EventHandler {
                 ...gameState.campaign,
                 sceneID
             };
+            CampaignRequests.update(updated);
             return gameState.updateCampaign(updated);
         });
     }

@@ -1,0 +1,29 @@
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.15);
+    display: none;
+}
+
+.modal--visible {
+    display: block;
+}
+
+.modal__content {
+    position: absolute;
+    top: 200px;
+    left: 200px;
+    right: 200px;
+    bottom: 200px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.modal__header {
+    font-size: 1.5rem;
+    padding: 10px 15px;
+    border-bottom: solid 1px rgba(0, 0, 0, 0.15);
+}

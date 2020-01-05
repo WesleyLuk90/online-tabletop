@@ -4,10 +4,11 @@ import {
     faPencilAlt
 } from "@fortawesome/free-solid-svg-icons";
 import { Scene } from "protocol/src/Scene";
-import React from "react";
+import React, { useState } from "react";
 import { plural } from "../util/Plural";
 import { Button } from "./Button";
 import { IconButton } from "./IconButton";
+import { Modal } from "./Modal";
 import "./ScenePanel.css";
 import { SidePanel } from "./SidePanel";
 
@@ -24,8 +25,13 @@ export function ScenePanel({
     onChangeScene: (sceneID: string) => void;
     onChangeDefaultScene: (sceneID: string) => void;
 }) {
+    const [edit, setEdit] = useState<Scene | null>(null);
+
     return (
         <SidePanel header="Scenes">
+            <Modal visible title="Edit Scene">
+                Test
+            </Modal>
             {scenes.map(s => (
                 <div key={s.sceneID} className="scene-panel__scene-option">
                     <div className="scene-panel__name">{s.name}</div>
