@@ -8,7 +8,8 @@ import React, { useState } from "react";
 import { plural } from "../util/Plural";
 import { Button } from "./Button";
 import { IconButton } from "./IconButton";
-import { Modal } from "./Modal";
+import { ModalForm } from "./Modal";
+import { SceneForm } from "./SceneForm";
 import "./ScenePanel.css";
 import { SidePanel } from "./SidePanel";
 
@@ -29,9 +30,15 @@ export function ScenePanel({
 
     return (
         <SidePanel header="Scenes">
-            <Modal visible title="Edit Scene">
-                Test
-            </Modal>
+            {edit && (
+                <ModalForm
+                    title="Edit Scene"
+                    onCancel={() => setEdit(null)}
+                    onSave={async () => setEdit(null)}
+                >
+                    <SceneForm scene={edit} onChange={setEdit} />
+                </ModalForm>
+            )}
             {scenes.map(s => (
                 <div key={s.sceneID} className="scene-panel__scene-option">
                     <div className="scene-panel__name">{s.name}</div>
@@ -54,7 +61,7 @@ export function ScenePanel({
                     <div className="scene-panel__action">
                         <IconButton
                             icon={faPencilAlt}
-                            onClick={() => {}}
+                            onClick={() => setEdit(s)}
                             title="Editing Scene"
                         />
                     </div>

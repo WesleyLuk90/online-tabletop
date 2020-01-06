@@ -20,10 +20,35 @@
     bottom: 200px;
     background-color: white;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
 }
 
 .modal__header {
     font-size: 1.5rem;
     padding: 10px 15px;
     border-bottom: solid 1px rgba(0, 0, 0, 0.15);
+}
+
+.modal-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-form__content {
+    padding: 10px 15px;
+    flex: 1;
+}
+
+.modal-form__footer {
+    padding: 10px 15px;
+    border-top: solid 1px rgba(0, 0, 0, 0.15);
+    display: flex;
+    justify-content: flex-end;
+    flex: 0;
+}
+
+.modal-form__footer > * {
+    margin: 5px;
 }
