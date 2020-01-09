@@ -1,14 +1,12 @@
 import { Campaign } from "protocol/src/Campaign";
-import { Colors } from "protocol/src/Color";
-import { newUUID } from "protocol/src/Id";
 import { Role } from "protocol/src/Role";
-import { Scene } from "protocol/src/Scene";
 import { CampaignUpdate, Update } from "protocol/src/Update";
 import { User } from "protocol/src/User";
 import { CampaignRequests } from "../games/CampaignRequests";
 import { SceneRequests } from "../games/SceneRequests";
 import { assertExhaustive } from "../util/Exaustive";
 import { GameState } from "./GameState";
+import { SceneService } from "./SceneService";
 import { Socket } from "./Socket";
 
 function isManager(campaign: Campaign, userID: string) {
@@ -59,7 +57,9 @@ export class CampaignLoader {
         const campaign = await CampaignRequests.get(this.campaignID);
         const scenes = await SceneRequests.list(this.campaignID);
         if (scenes.length === 0 && isManager(campaign, this.user.id)) {
-            const defaultScene = this.defaultScene(this.campaignID);
+            const defaultScene = SceneService.createDefaultScene(
+                this.campaignID
+            );
             await SceneRequests.create(defaultScene);
             campaign.sceneID = defaultScene.sceneID;
             await CampaignRequests.update(campaign);
@@ -69,37 +69,5 @@ export class CampaignLoader {
                 () => new GameState(campaign, this.user, scenes)
             );
         }
-    }
-
-    defaultScene(campaignID: string): Scene {
-        return {
-            sceneID: newUUID(),
-            campaignID,
-            layers: [
-                {
-                    color: Colors[1],
-                    id: newUUID(),
-                    name: "Tokens",
-                    opacity: 1,
-                    playerVisible: true
-                },
-                {
-                    color: Colors[0],
-                    id: newUUID(),
-                    name: "Game Master",
-                    opacity: 1,
-                    playerVisible: false
-                },
-                {
-                    color: Colors[2],
-                    id: newUUID(),
-                    name: "Background",
-                    opacity: 1,
-                    playerVisible: true
-                }
-            ],
-            name: "My First Scene",
-            gridSize: 70
-        };
     }
 }

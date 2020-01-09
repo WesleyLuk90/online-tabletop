@@ -3,8 +3,10 @@ import {
     faLocationArrow,
     faPencilAlt
 } from "@fortawesome/free-solid-svg-icons";
+import { Campaign } from "protocol/src/Campaign";
 import { Scene } from "protocol/src/Scene";
 import React, { useState } from "react";
+import { SceneService } from "../play/SceneService";
 import { plural } from "../util/Plural";
 import { Button } from "./Button";
 import { IconButton } from "./IconButton";
@@ -14,21 +16,26 @@ import "./ScenePanel.css";
 import { SidePanel } from "./SidePanel";
 
 export function ScenePanel({
+    campaign,
     myScene,
     defaultScene,
     scenes,
     onChangeScene,
     onChangeDefaultScene,
-    onUpdateScene
+    onUpdateScene,
+    onCreateScene
 }: {
+    campaign: Campaign;
     myScene: string;
     defaultScene: string;
     scenes: Scene[];
     onChangeScene: (sceneID: string) => void;
     onChangeDefaultScene: (sceneID: string) => void;
     onUpdateScene: (sceneID: string, update: Partial<Scene>) => void;
+    onCreateScene: (scene: Scene) => void;
 }) {
     const [edit, setEdit] = useState<Scene | null>(null);
+    const [isNew, setIsNew] = useState(false);
 
     return (
         <SidePanel header="Scenes">
@@ -38,7 +45,11 @@ export function ScenePanel({
                     onCancel={() => setEdit(null)}
                     onSave={async () => {
                         if (edit != null) {
-                            onUpdateScene(edit.sceneID, edit);
+                            if (isNew) {
+                                onCreateScene(edit);
+                            } else {
+                                onUpdateScene(edit.sceneID, edit);
+                            }
                             setEdit(null);
                         }
                     }}
@@ -68,7 +79,10 @@ export function ScenePanel({
                     <div className="scene-panel__action">
                         <IconButton
                             icon={faPencilAlt}
-                            onClick={() => setEdit(s)}
+                            onClick={() => {
+                                setEdit(s);
+                                setIsNew(false);
+                            }}
                             title="Editing Scene"
                         />
                     </div>
@@ -78,7 +92,14 @@ export function ScenePanel({
                 <p>
                     {scenes.length} {plural(scenes.length, "scene")}
                 </p>
-                <Button onClick={() => {}}>New Scene</Button>
+                <Button
+                    onClick={() => {
+                        setEdit(SceneService.createDefaultScene(campaign.id));
+                        setIsNew(true);
+                    }}
+                >
+                    New Scene
+                </Button>
             </div>
         </SidePanel>
     );

@@ -1,6 +1,7 @@
 import { Campaign } from "protocol/src/Campaign";
 import { Scene } from "protocol/src/Scene";
 import { User } from "protocol/src/User";
+import { checkState } from "../util/CheckState";
 import { replaceValue } from "../util/List";
 
 export class GameState {
@@ -37,5 +38,11 @@ export class GameState {
                 s => scene
             )
         );
+    }
+
+    addScene(scene: Scene): GameState {
+        checkState(this.scenes.every(s => s.sceneID !== scene.sceneID));
+
+        return new GameState(this.campaign, this.user, [...this.scenes, scene]);
     }
 }

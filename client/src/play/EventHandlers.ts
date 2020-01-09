@@ -41,6 +41,7 @@ export class EventHandler {
         this.updateGameState(gameState => {
             const original = gameState.scenes.find(s => s.sceneID === sceneID);
             if (original == null) {
+                console.error(`Did not found scene with id ${sceneID}`);
                 return gameState;
             }
             const updated = {
@@ -50,6 +51,13 @@ export class EventHandler {
             };
             SceneRequests.update(updated);
             return gameState.updateScene(updated);
+        });
+    }
+
+    createScene(scene: Scene) {
+        this.updateGameState(gameState => {
+            SceneRequests.create(scene);
+            return gameState.addScene(scene);
         });
     }
 }

@@ -57,6 +57,7 @@ export function PlayCampaign({
             right={
                 <div>
                     <ScenePanel
+                        campaign={gameState.campaign}
                         myScene={gameState.getMySceneID()}
                         defaultScene={gameState.campaign.sceneID}
                         scenes={gameState.scenes}
@@ -67,6 +68,7 @@ export function PlayCampaign({
                         onUpdateScene={(id, updates) =>
                             eventHandler.updateSceneDetails(id, updates)
                         }
+                        onCreateScene={scene => eventHandler.createScene(scene)}
                     />
                 </div>
             }
