@@ -18,13 +18,15 @@ export function ScenePanel({
     defaultScene,
     scenes,
     onChangeScene,
-    onChangeDefaultScene
+    onChangeDefaultScene,
+    onUpdateScene
 }: {
     myScene: string;
     defaultScene: string;
     scenes: Scene[];
     onChangeScene: (sceneID: string) => void;
     onChangeDefaultScene: (sceneID: string) => void;
+    onUpdateScene: (sceneID: string, update: Partial<Scene>) => void;
 }) {
     const [edit, setEdit] = useState<Scene | null>(null);
 
@@ -34,7 +36,12 @@ export function ScenePanel({
                 <ModalForm
                     title="Edit Scene"
                     onCancel={() => setEdit(null)}
-                    onSave={async () => setEdit(null)}
+                    onSave={async () => {
+                        if (edit != null) {
+                            onUpdateScene(edit.sceneID, edit);
+                            setEdit(null);
+                        }
+                    }}
                 >
                     <SceneForm scene={edit} onChange={setEdit} />
                 </ModalForm>

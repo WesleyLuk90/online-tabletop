@@ -64,6 +64,9 @@ export function PlayCampaign({
                         onChangeDefaultScene={s =>
                             eventHandler.changeDefaultScene(s)
                         }
+                        onUpdateScene={(id, updates) =>
+                            eventHandler.updateSceneDetails(id, updates)
+                        }
                     />
                 </div>
             }

@@ -1,6 +1,7 @@
 import { Campaign } from "protocol/src/Campaign";
 import { Scene } from "protocol/src/Scene";
 import { User } from "protocol/src/User";
+import { replaceValue } from "../util/List";
 
 export class GameState {
     constructor(
@@ -24,5 +25,17 @@ export class GameState {
     getMyScene(): Scene | null {
         const id = this.getMySceneID() || this.campaign.sceneID;
         return this.scenes.find(s => s.sceneID === id) || null;
+    }
+
+    updateScene(scene: Scene): GameState {
+        return new GameState(
+            this.campaign,
+            this.user,
+            replaceValue(
+                this.scenes,
+                s => s.sceneID === scene.sceneID,
+                s => scene
+            )
+        );
     }
 }

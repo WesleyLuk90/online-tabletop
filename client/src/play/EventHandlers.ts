@@ -1,4 +1,6 @@
+import { Scene } from "protocol/src/Scene";
 import { CampaignRequests } from "../games/CampaignRequests";
+import { SceneRequests } from "../games/SceneRequests";
 import { replaceValue } from "../util/List";
 import { GameState } from "./GameState";
 
@@ -32,6 +34,22 @@ export class EventHandler {
             };
             CampaignRequests.update(updated);
             return gameState.updateCampaign(updated);
+        });
+    }
+
+    updateSceneDetails(sceneID: string, updates: Partial<Scene>) {
+        this.updateGameState(gameState => {
+            const original = gameState.scenes.find(s => s.sceneID === sceneID);
+            if (original == null) {
+                return gameState;
+            }
+            const updated = {
+                ...original,
+                ...updates,
+                sceneID
+            };
+            SceneRequests.update(updated);
+            return gameState.updateScene(updated);
         });
     }
 }
