@@ -10,8 +10,7 @@ import { SceneService } from "../play/SceneService";
 import { plural } from "../util/Plural";
 import { Button } from "./Button";
 import { IconButton } from "./IconButton";
-import { ModalForm } from "./Modal";
-import { SceneForm } from "./SceneForm";
+import { SceneModal } from "./SceneModal";
 import "./ScenePanel.css";
 import { SidePanel } from "./SidePanel";
 
@@ -23,7 +22,8 @@ export function ScenePanel({
     onChangeScene,
     onChangeDefaultScene,
     onUpdateScene,
-    onCreateScene
+    onCreateScene,
+    onDeleteScene
 }: {
     campaign: Campaign;
     myScene: string;
@@ -33,30 +33,31 @@ export function ScenePanel({
     onChangeDefaultScene: (sceneID: string) => void;
     onUpdateScene: (sceneID: string, update: Partial<Scene>) => void;
     onCreateScene: (scene: Scene) => void;
+    onDeleteScene: (scene: Scene) => void;
 }) {
     const [edit, setEdit] = useState<Scene | null>(null);
     const [isNew, setIsNew] = useState(false);
 
     return (
         <SidePanel header="Scenes">
-            {edit && (
-                <ModalForm
-                    title="Edit Scene"
-                    onCancel={() => setEdit(null)}
-                    onSave={async () => {
-                        if (edit != null) {
-                            if (isNew) {
-                                onCreateScene(edit);
-                            } else {
-                                onUpdateScene(edit.sceneID, edit);
-                            }
-                            setEdit(null);
-                        }
-                    }}
-                >
-                    <SceneForm scene={edit} onChange={setEdit} />
-                </ModalForm>
-            )}
+            <SceneModal
+                scene={edit}
+                onChange={setEdit}
+                onCancel={() => setEdit(null)}
+                onDelete={s => {
+                    onDeleteScene(s);
+                    setEdit(null);
+                }}
+                isNew={isNew}
+                onSave={async toSave => {
+                    if (isNew) {
+                        onCreateScene(toSave);
+                    } else {
+                        onUpdateScene(toSave.sceneID, toSave);
+                    }
+                    setEdit(null);
+                }}
+            />
             {scenes.map(s => (
                 <div key={s.sceneID} className="scene-panel__scene-option">
                     <div className="scene-panel__name">{s.name}</div>

@@ -50,13 +50,15 @@ export function ModalForm({
     children,
     title,
     onSave,
-    onCancel
+    onCancel,
+    footer
 }: {
     visible?: boolean;
     children: ReactNode;
     title: ReactNode;
     onSave: () => Promise<void>;
     onCancel: () => void;
+    footer?: ReactNode;
 }) {
     function handleSave(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -67,6 +69,7 @@ export function ModalForm({
             <form onSubmit={handleSave} className="modal-form">
                 <div className="modal-form__content">{children}</div>
                 <div className="modal-form__footer">
+                    {footer}
                     <Button onClick={onCancel}>Cancel</Button>
                     <Button onClick={onSave}>Save</Button>
                 </div>

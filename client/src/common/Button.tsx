@@ -11,6 +11,7 @@ export function Button({
 }) {
     return (
         <button
+            type="button"
             className="button"
             onClick={e => {
                 e.preventDefault();
@@ -47,6 +48,7 @@ export function ConfirmButton({
 }) {
     return (
         <button
+            type="button"
             className="button"
             onClick={() => {
                 // eslint-disable-next-line no-restricted-globals

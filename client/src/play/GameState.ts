@@ -4,15 +4,29 @@ import { User } from "protocol/src/User";
 import { checkState } from "../util/CheckState";
 import { replaceValue } from "../util/List";
 
-export class GameState {
+interface State {
+    readonly campaign: Campaign;
+    readonly user: User;
+    readonly scenes: Scene[];
+}
+
+export class GameState implements State {
     constructor(
         readonly campaign: Campaign,
         readonly user: User,
         readonly scenes: Scene[]
     ) {}
 
+    copy(updated: Partial<State>) {
+        return new GameState(
+            updated.campaign || this.campaign,
+            updated.user || this.user,
+            updated.scenes || this.scenes
+        );
+    }
+
     updateCampaign(campaign: Campaign): GameState {
-        return new GameState(campaign, this.user, this.scenes);
+        return this.copy({ campaign });
     }
 
     getMySceneID(): string {
@@ -29,20 +43,26 @@ export class GameState {
     }
 
     updateScene(scene: Scene): GameState {
-        return new GameState(
-            this.campaign,
-            this.user,
-            replaceValue(
+        return this.copy({
+            scenes: replaceValue(
                 this.scenes,
                 s => s.sceneID === scene.sceneID,
                 s => scene
             )
-        );
+        });
     }
 
     addScene(scene: Scene): GameState {
         checkState(this.scenes.every(s => s.sceneID !== scene.sceneID));
 
-        return new GameState(this.campaign, this.user, [...this.scenes, scene]);
+        return this.copy({
+            scenes: [...this.scenes, scene]
+        });
+    }
+
+    deleteScene(scene: Scene): GameState {
+        return this.copy({
+            scenes: this.scenes.filter(s => s.sceneID !== scene.sceneID)
+        });
     }
 }

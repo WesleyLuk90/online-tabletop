@@ -69,6 +69,7 @@ export function PlayCampaign({
                             eventHandler.updateSceneDetails(id, updates)
                         }
                         onCreateScene={scene => eventHandler.createScene(scene)}
+                        onDeleteScene={scene => eventHandler.deleteScene(scene)}
                     />
                 </div>
             }
