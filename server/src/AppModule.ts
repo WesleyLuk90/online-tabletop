@@ -65,10 +65,6 @@ export class AppModule extends Module {
         this.app().use(express.static(this.staticPath()));
         this.app().use(express.json());
 
-        connectRoutes(this.userManager().routes(), this.app());
-        connectRoutes(this.campaignManager().routes(), this.app());
-        connectRoutes(this.sceneManager().routes(), this.app());
-
         await initializeSession(
             readConfig(ConfigKeys.SESSION_SECRET),
             this.app()
@@ -83,6 +79,11 @@ export class AppModule extends Module {
             this.app(),
             this.userStorage()
         );
+
+        // Routes need to be connected after auth
+        connectRoutes(this.userManager().routes(), this.app());
+        connectRoutes(this.campaignManager().routes(), this.app());
+        connectRoutes(this.sceneManager().routes(), this.app());
 
         this.http().listen(this.port(), () =>
             console.log(`Example app listening on port ${this.port()}!`)
