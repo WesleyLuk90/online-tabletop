@@ -111,13 +111,14 @@ export class SceneManager {
                 userID
             },
             () =>
-                this.sceneStorage
-                    .delete({ campaignID, sceneID })
-                    .then(
-                        alsoNotify(() =>
-                            this.notificationService.sceneUpdated(scene)
-                        )
+                this.sceneStorage.delete({ campaignID, sceneID }).then(
+                    alsoNotify(() =>
+                        this.notificationService.sceneUpdated({
+                            campaignID,
+                            sceneID
+                        })
                     )
+                )
         );
     }
 }
