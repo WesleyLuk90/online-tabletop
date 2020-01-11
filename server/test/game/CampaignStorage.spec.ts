@@ -10,13 +10,15 @@ describe("CampaignStorage", () => {
             id: "",
             ownerID: "other",
             name: "bar",
-            players: []
+            players: [],
+            sceneID: ""
         });
         const created = await storage.create({
             id: "",
             ownerID: "user1",
             name: "bar",
-            players: [{ userID: "user1", role: Role.manager, sceneID: "" }]
+            players: [{ userID: "user1", role: Role.manager, sceneID: "" }],
+            sceneID: ""
         });
         expect(created.id).toBeTruthy();
         expect(await storage.get(created.id)).toEqual(created);
