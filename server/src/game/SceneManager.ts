@@ -2,6 +2,7 @@ import { parse } from "protocol/src/Parse";
 import { Scene, SceneSchema } from "protocol/src/Scene";
 import { Route } from "../Route";
 import { CampaignPermissionService } from "./CampaignPermissionService";
+import { alsoNotify, NotificationService } from "./NotificationService";
 import { SceneStorage } from "./SceneStorage";
 
 function parseScene(data: {}) {
@@ -13,7 +14,8 @@ const PATH = "/api/campaigns/:campaignID";
 export class SceneManager {
     constructor(
         private sceneStorage: SceneStorage,
-        private permissionService: CampaignPermissionService
+        private permissionService: CampaignPermissionService,
+        private notificationService: NotificationService
     ) {}
 
     routes(): Route[] {
@@ -46,9 +48,14 @@ export class SceneManager {
                 campaignID: scene.campaignID,
                 userID
             },
-            () => {
-                return this.sceneStorage.create(scene);
-            }
+            () =>
+                this.sceneStorage
+                    .create(scene)
+                    .then(
+                        alsoNotify(() =>
+                            this.notificationService.sceneUpdated(scene)
+                        )
+                    )
         );
     }
 
@@ -58,7 +65,14 @@ export class SceneManager {
                 campaignID: scene.campaignID,
                 userID
             },
-            () => this.sceneStorage.update(scene)
+            () =>
+                this.sceneStorage
+                    .update(scene)
+                    .then(
+                        alsoNotify(() =>
+                            this.notificationService.sceneUpdated(scene)
+                        )
+                    )
         );
     }
 
@@ -96,7 +110,14 @@ export class SceneManager {
                 campaignID,
                 userID
             },
-            () => this.sceneStorage.delete({ campaignID, sceneID })
+            () =>
+                this.sceneStorage
+                    .delete({ campaignID, sceneID })
+                    .then(
+                        alsoNotify(() =>
+                            this.notificationService.sceneUpdated(scene)
+                        )
+                    )
         );
     }
 }

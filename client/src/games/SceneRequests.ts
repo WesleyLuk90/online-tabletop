@@ -1,6 +1,7 @@
 import Axios from "axios";
 import { parse } from "protocol/src/Parse";
 import { Scene, SceneSchema } from "protocol/src/Scene";
+import { notFoundToNull } from "../util/Requests";
 
 function toScene(data: any) {
     return parse(data, SceneSchema);
@@ -18,11 +19,13 @@ export class SceneRequests {
         );
     }
 
-    static async get(campaignID: string, sceneID: string): Promise<Scene> {
-        const response = await Axios.get(
-            `/api/campaigns/${campaignID}/scenes/${sceneID}`
-        );
-        return toScene(response.data);
+    static async get(
+        campaignID: string,
+        sceneID: string
+    ): Promise<Scene | null> {
+        return Axios.get(`/api/campaigns/${campaignID}/scenes/${sceneID}`)
+            .then(res => toScene(res.data))
+            .catch(notFoundToNull);
     }
 
     static async list(campaignID: string): Promise<Scene[]> {

@@ -1,7 +1,14 @@
 import { Campaign } from "protocol/src/Campaign";
-import { Scene } from "protocol/src/Scene";
 import { Token } from "protocol/src/Token";
 import { BroadcastService } from "./BroadcastService";
+import { SceneReference } from "./SceneReference";
+
+export function alsoNotify<T>(f: () => void): (t: T) => T {
+    return t => {
+        f();
+        return t;
+    };
+}
 
 export class NotificationService {
     constructor(readonly broadcastService: BroadcastService) {}
@@ -13,7 +20,7 @@ export class NotificationService {
         });
     }
 
-    sceneUpdated(scene: Scene) {
+    sceneUpdated(scene: SceneReference) {
         this.broadcastService.broadcast({
             type: "scene",
             campaignID: scene.campaignID,

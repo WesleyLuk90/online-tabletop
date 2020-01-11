@@ -4,11 +4,7 @@ import { NotFoundError } from "../Errors";
 import { DatabaseProvider } from "../storage/DatabaseProvider";
 import { addProperty } from "../storage/Migrations";
 import { MongoStorage } from "../storage/MongoStorage";
-
-interface SceneReference {
-    campaignID: string;
-    sceneID: string;
-}
+import { SceneReference } from "./SceneReference";
 
 function generateID({ campaignID, sceneID }: SceneReference) {
     return `${campaignID}/${sceneID}`;

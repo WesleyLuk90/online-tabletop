@@ -56,7 +56,11 @@ async function main() {
     );
     const sceneStorage = new SceneStorage(dbProvider);
     const permissionService = new CampaignPermissionService(campaignStorage);
-    const sceneManager = new SceneManager(sceneStorage, permissionService);
+    const sceneManager = new SceneManager(
+        sceneStorage,
+        permissionService,
+        notificationService
+    );
 
     connectRoutes(userManager.routes(), app);
     connectRoutes(campaignManager.routes(), app);
