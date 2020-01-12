@@ -1,5 +1,6 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import "./Input.css";
+import { Label } from "./Label";
 
 export function Input({
     value,
@@ -11,14 +12,13 @@ export function Input({
     label: ReactNode;
 }) {
     return (
-        <div className="input">
-            <label className="input__label">{label}</label>
+        <Label label={label}>
             <input
                 className="input__input"
                 value={value}
                 onChange={e => onChange(e.target.value)}
             />
-        </div>
+        </Label>
     );
 }
 
@@ -47,8 +47,7 @@ export function NumberInput({
     }
 
     return (
-        <div className="input">
-            <label className="input__label">{label}</label>
+        <Label label={label}>
             <input
                 className="input__input"
                 type="number"
@@ -56,6 +55,6 @@ export function NumberInput({
                 onChange={e => setStringValue(e.target.value)}
                 onBlur={updateValue}
             />
-        </div>
+        </Label>
     );
 }

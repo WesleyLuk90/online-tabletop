@@ -2,6 +2,7 @@ import { faEye, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { Layer } from "protocol/src/Scene";
 import React, { useState } from "react";
 import { Button } from "../common/Button";
+import { ColorSquare } from "../common/ColorSquare";
 import { IconButton } from "../common/IconButton";
 import { ItemList } from "../common/ItemList";
 import { SidePanel } from "../common/SidePanel";
@@ -45,7 +46,12 @@ export function LayersPanel({
             />
             <ItemList
                 data={layers}
-                left={l => l.name}
+                left={l => (
+                    <div>
+                        <ColorSquare color={l.color} />
+                        {l.name}
+                    </div>
+                )}
                 id={l => l.id}
                 right={l => (
                     <div className="layers-panel__actions">

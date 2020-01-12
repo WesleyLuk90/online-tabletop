@@ -2,6 +2,7 @@ import { Layer } from "protocol/src/Scene";
 import React from "react";
 import { ConfirmButton } from "../common/Button";
 import { Input } from "../common/Input";
+import { Label } from "../common/Label";
 import { ModalForm } from "../common/Modal";
 
 export function LayerEditor({
@@ -30,6 +31,7 @@ export function LayerEditor({
                     value={layer.name}
                     onChange={name => onUpdate({ ...layer, name })}
                 />
+                <Label label="Color">aoeuaoe</Label>
             </div>
         );
     }
