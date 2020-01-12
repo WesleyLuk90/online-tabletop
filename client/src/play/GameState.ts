@@ -60,9 +60,16 @@ export class GameState implements State {
         });
     }
 
-    deleteScene(scene: Scene): GameState {
+    addOrUpdateScene(scene: Scene): GameState {
+        if (this.scenes.some(s => s.sceneID === scene.sceneID)) {
+            return this.updateScene(scene);
+        }
+        return this.addScene(scene);
+    }
+
+    deleteScene(sceneID: string): GameState {
         return this.copy({
-            scenes: this.scenes.filter(s => s.sceneID !== scene.sceneID)
+            scenes: this.scenes.filter(s => s.sceneID !== sceneID)
         });
     }
 }

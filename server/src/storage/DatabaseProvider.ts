@@ -1,22 +1,43 @@
 import { Db, MongoClient } from "mongodb";
 
-export class DatabaseProvider {
-    clientPromise: Promise<MongoClient>;
-    dbPromise: Promise<Db>;
+class RetryingPromise<T> {
+    promise: Promise<T> | null = null;
 
-    constructor(readonly host: string, readonly database: string) {
-        this.clientPromise = MongoClient.connect(host, {
-            useUnifiedTopology: true
-        });
-        this.dbPromise = this.clientPromise.then(client => client.db(database));
+    constructor(private f: () => Promise<T>) {}
+
+    get() {
+        if (this.promise == null) {
+            this.promise = this.f();
+            this.promise.catch(() => (this.promise = null));
+        }
+        return this.promise;
     }
 
+    getNullable() {
+        return this.promise;
+    }
+}
+
+export class DatabaseProvider {
+    client: RetryingPromise<MongoClient> = new RetryingPromise(() =>
+        MongoClient.connect(this.host, {
+            useUnifiedTopology: true
+        })
+    );
+    db: RetryingPromise<Db> = new RetryingPromise(() =>
+        this.client.get().then(client => client.db(this.database))
+    );
+
+    constructor(readonly host: string, readonly database: string) {}
+
     async get() {
-        return this.dbPromise;
+        return this.db.get();
     }
 
     async close() {
-        const client = await this.clientPromise;
-        await client.close();
+        const client = this.client.getNullable();
+        if (client != null) {
+            await (await client).close();
+        }
     }
 }

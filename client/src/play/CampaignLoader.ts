@@ -1,10 +1,11 @@
 import { Campaign } from "protocol/src/Campaign";
 import { Role } from "protocol/src/Role";
-import { CampaignUpdate, Update } from "protocol/src/Update";
+import { Update } from "protocol/src/Update";
 import { User } from "protocol/src/User";
 import { CampaignRequests } from "../games/CampaignRequests";
 import { SceneRequests } from "../games/SceneRequests";
 import { assertExhaustive } from "../util/Exaustive";
+import { CampaignEventHandler } from "./CampaignEventHandler";
 import { GameState } from "./GameState";
 import { SceneService } from "./SceneService";
 import { Socket } from "./Socket";
@@ -15,29 +16,47 @@ function isManager(campaign: Campaign, userID: string) {
     );
 }
 
+export interface GameStateUpdate {
+    (gameState: GameState): GameState;
+}
+export interface NullableGameStateUpdate {
+    (gameState: GameState | null): GameState | null;
+}
+
 export class CampaignLoader {
     socket: Socket;
+    eventHandler: CampaignEventHandler;
+
     constructor(
         private campaignID: string,
         private user: User,
-        private updateGameState: (
-            updater: (gameState: GameState | null) => GameState | null
-        ) => void
+        private updateNullableState: (updater: NullableGameStateUpdate) => void
     ) {
+        this.eventHandler = new CampaignEventHandler(this.updateState);
         this.socket = new Socket(
             () => this.loadCampaign(),
             u => this.handleUpdate(u),
-            () => updateGameState(() => null),
+            () => updateNullableState(() => null),
             campaignID
         );
     }
 
+    updateState = (updater: GameStateUpdate) => {
+        this.updateNullableState(state => {
+            if (state == null) {
+                return null;
+            }
+            return updater(state);
+        });
+    };
+
     handleUpdate(update: Update) {
         switch (update.type) {
             case "campaign":
-                this.updateCampaign(update);
+                this.eventHandler.handleCampaignUpdate(update);
                 break;
             case "scene":
+                this.eventHandler.updateScene(update);
                 break;
             case "token":
                 break;
@@ -46,12 +65,9 @@ export class CampaignLoader {
         }
     }
 
-    async updateCampaign(update: CampaignUpdate) {
-        const campaign = await CampaignRequests.get(this.campaignID);
-        this.updateGameState(state => state && state.updateCampaign(campaign));
+    close() {
+        this.socket.close();
     }
-
-    close() {}
 
     async loadCampaign() {
         const campaign = await CampaignRequests.get(this.campaignID);
@@ -65,7 +81,7 @@ export class CampaignLoader {
             await CampaignRequests.update(campaign);
             this.loadCampaign();
         } else {
-            this.updateGameState(
+            this.updateNullableState(
                 () => new GameState(campaign, this.user, scenes)
             );
         }

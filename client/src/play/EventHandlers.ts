@@ -64,7 +64,7 @@ export class EventHandler {
     deleteScene(scene: Scene) {
         this.updateGameState(gameState => {
             SceneRequests.delete(scene.campaignID, scene.sceneID);
-            return gameState.deleteScene(scene);
+            return gameState.deleteScene(scene.sceneID);
         });
     }
 }

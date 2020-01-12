@@ -28,4 +28,8 @@ export class Socket {
             this.onDisconnect();
         });
     }
+
+    close() {
+        this.socket.close();
+    }
 }
