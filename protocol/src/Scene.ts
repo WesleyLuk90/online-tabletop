@@ -9,6 +9,8 @@ export const LayerSchema = t.strict({
     playerVisible: t.boolean
 });
 
+export type Layer = t.TypeOf<typeof LayerSchema>;
+
 export const SceneSchema = t.strict({
     sceneID: t.string,
     campaignID: t.string,

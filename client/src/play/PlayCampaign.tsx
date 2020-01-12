@@ -6,6 +6,7 @@ import { CampaignLoader } from "./CampaignLoader";
 import { EventHandler } from "./EventHandlers";
 import { GameMap } from "./GameMap";
 import { GameState } from "./GameState";
+import { LayersPanel } from "./LayersPanel";
 import { PlayLayout } from "./PlayLayout";
 import { Vector } from "./Vector";
 import { View } from "./View";
@@ -71,6 +72,7 @@ export function PlayCampaign({
                         onCreateScene={scene => eventHandler.createScene(scene)}
                         onDeleteScene={scene => eventHandler.deleteScene(scene)}
                     />
+                    {scene && <LayersPanel layers={scene.layers} />}
                 </div>
             }
             bottom="bottom"

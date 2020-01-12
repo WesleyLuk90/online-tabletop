@@ -1,7 +1,7 @@
 import {
-    faEye,
     faLocationArrow,
-    faPencilAlt
+    faPencilAlt,
+    faUsers
 } from "@fortawesome/free-solid-svg-icons";
 import { Campaign } from "protocol/src/Campaign";
 import { Scene } from "protocol/src/Scene";
@@ -10,6 +10,7 @@ import { SceneService } from "../play/SceneService";
 import { plural } from "../util/Plural";
 import { Button } from "./Button";
 import { IconButton } from "./IconButton";
+import { ItemList } from "./ItemList";
 import { SceneModal } from "./SceneModal";
 import "./ScenePanel.css";
 import { SidePanel } from "./SidePanel";
@@ -58,26 +59,24 @@ export function ScenePanel({
                     setEdit(null);
                 }}
             />
-            {scenes.map(s => (
-                <div key={s.sceneID} className="scene-panel__scene-option">
-                    <div className="scene-panel__name">{s.name}</div>
-                    <div className="scene-panel__action">
+            <ItemList
+                data={scenes}
+                left={s => s.name}
+                id={s => s.sceneID}
+                right={s => (
+                    <div className="scene-panel__actions">
                         <IconButton
                             inactive={s.sceneID !== myScene}
                             icon={faLocationArrow}
                             onClick={() => onChangeScene(s.sceneID)}
                             title="Active Scene"
                         />
-                    </div>
-                    <div className="scene-panel__action">
                         <IconButton
                             inactive={s.sceneID !== defaultScene}
-                            icon={faEye}
+                            icon={faUsers}
                             onClick={() => onChangeDefaultScene(s.sceneID)}
                             title="Editing Scene"
                         />
-                    </div>
-                    <div className="scene-panel__action">
                         <IconButton
                             icon={faPencilAlt}
                             onClick={() => {
@@ -87,8 +86,8 @@ export function ScenePanel({
                             title="Editing Scene"
                         />
                     </div>
-                </div>
-            ))}
+                )}
+            />
             <div className="scene-panel__footer">
                 <p>
                     {scenes.length} {plural(scenes.length, "scene")}

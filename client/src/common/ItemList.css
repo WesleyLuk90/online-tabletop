@@ -1,0 +1,16 @@
+.item-list__item {
+    height: 32px;
+    border-bottom: solid 1px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.item-list__item-left {
+    flex: 1 0 0;
+}
+
+.item-list__item-right {
+    padding: 0 5px;
+    flex: 0 0 auto;
+}
