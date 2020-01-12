@@ -1,12 +1,21 @@
 import { Color } from "protocol/src/Color";
 import React from "react";
+import { BemBuilder } from "../util/BemBuilder";
 import { ColorService } from "./ColorService";
 import "./ColorSquare.css";
 
-export function ColorSquare({ color }: { color: Color }) {
+const BEM = new BemBuilder("color-square");
+
+export function ColorSquare({
+    color,
+    highlight
+}: {
+    color: Color;
+    highlight?: boolean;
+}) {
     return (
         <div
-            className="color-square"
+            className={BEM.block("highlight", highlight === true)}
             style={{ backgroundColor: ColorService.toRGBA(color) }}
         ></div>
     );

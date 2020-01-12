@@ -1,9 +1,13 @@
+import { Colors } from "protocol/src/Color";
 import { Layer } from "protocol/src/Scene";
 import React from "react";
 import { ConfirmButton } from "../common/Button";
+import { ColorService } from "../common/ColorService";
+import { ColorSquare } from "../common/ColorSquare";
 import { Input } from "../common/Input";
 import { Label } from "../common/Label";
 import { ModalForm } from "../common/Modal";
+import "./LayerEditor.css";
 
 export function LayerEditor({
     layer,
@@ -31,7 +35,25 @@ export function LayerEditor({
                     value={layer.name}
                     onChange={name => onUpdate({ ...layer, name })}
                 />
-                <Label label="Color">aoeuaoe</Label>
+                <Label label="Color">
+                    {Colors.map(c => (
+                        <div
+                            className="layer-editor__color"
+                            onClick={e => {
+                                e.preventDefault();
+                                onUpdate({ ...layer, color: c });
+                            }}
+                        >
+                            <ColorSquare
+                                color={c}
+                                highlight={
+                                    ColorService.toRGBA(c) ===
+                                    ColorService.toRGBA(layer.color)
+                                }
+                            />
+                        </div>
+                    ))}
+                </Label>
             </div>
         );
     }

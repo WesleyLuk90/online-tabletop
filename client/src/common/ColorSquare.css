@@ -6,3 +6,8 @@
     margin: 3px;
     border: solid 1px black;
 }
+
+.color-square--highlight {
+    border-width: 3px;
+    margin: 1px;
+}
