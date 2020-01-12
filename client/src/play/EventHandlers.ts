@@ -1,7 +1,6 @@
 import { Layer, Scene } from "protocol/src/Scene";
 import { CampaignRequests } from "../games/CampaignRequests";
 import { SceneRequests } from "../games/SceneRequests";
-import { replaceValue } from "../util/List";
 import { GameState } from "./GameState";
 
 export class EventHandler {
@@ -13,68 +12,59 @@ export class EventHandler {
 
     changeMyScene(sceneID: string) {
         this.updateGameState(gameState => {
-            const updated = {
-                ...gameState.campaign,
-                players: replaceValue(
-                    gameState.campaign.players,
-                    p => p.userID === gameState.user.id,
-                    p => ({ ...p, sceneID: sceneID })
-                )
-            };
-            CampaignRequests.update(updated);
-            return gameState.updateCampaign(updated);
+            const g = gameState.build(b => b.changeMyScene(sceneID));
+            CampaignRequests.update(g.campaign);
+            return g;
         });
     }
 
     changeDefaultScene(sceneID: string) {
         this.updateGameState(gameState => {
-            const updated = {
-                ...gameState.campaign,
-                sceneID
-            };
-            CampaignRequests.update(updated);
-            return gameState.updateCampaign(updated);
+            const g = gameState.build(b => b.changeDefaultScene(sceneID));
+            CampaignRequests.update(g.campaign);
+            return g;
         });
     }
 
     updateSceneDetails(sceneID: string, updates: Partial<Scene>) {
         this.updateGameState(gameState => {
-            const original = gameState.scenes.find(s => s.sceneID === sceneID);
-            if (original == null) {
-                console.error(`Did not found scene with id ${sceneID}`);
-                return gameState;
-            }
-            const updated = {
-                ...original,
-                ...updates,
-                sceneID
-            };
-            SceneRequests.update(updated);
-            return gameState.updateScene(updated);
+            const g = gameState.build(b => b.updateScene(sceneID, updates));
+            SceneRequests.update(g.getScene(sceneID));
+            return g;
         });
     }
 
     createScene(scene: Scene) {
         this.updateGameState(gameState => {
             SceneRequests.create(scene);
-            return gameState.addScene(scene);
+            return gameState.build(b => b.addScene(scene));
         });
     }
 
     deleteScene(scene: Scene) {
         this.updateGameState(gameState => {
             SceneRequests.delete(scene.campaignID, scene.sceneID);
-            return gameState.deleteScene(scene.sceneID);
+            return gameState.build(b => b.deleteScene(scene.sceneID));
         });
     }
 
+    createLayer(scene: Scene, layer: Layer) {
+        this.updateLayer(scene, layer);
+    }
+
     updateLayer(scene: Scene, layer: Layer) {
-        this.updateSceneDetails(scene.sceneID, {
-            layers: replaceValue(
-                scene.layers,
-                l => l.id === layer.id,
-                l => layer
-            )
+        this.updateGameState(gameState => {
+            const g = gameState.build(b => b.upsertLayer(scene.sceneID, layer));
+            SceneRequests.update(g.getScene(scene.sceneID));
+            return g;
+        });
+    }
+
+    deleteLayer(scene: Scene, layer: Layer) {
+        this.updateGameState(gameState => {
+            const g = gameState.build(b => b.deleteLayer(scene.sceneID, layer));
+            SceneRequests.update(g.getScene(scene.sceneID));
+            return g;
         });
     }
 }

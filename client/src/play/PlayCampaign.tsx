@@ -75,7 +75,9 @@ export function PlayCampaign({
                     {scene && (
                         <LayersPanel
                             layers={scene.layers}
+                            onCreate={l => eventHandler.createLayer(scene, l)}
                             onUpdate={l => eventHandler.updateLayer(scene, l)}
+                            onDelete={l => eventHandler.deleteLayer(scene, l)}
                         />
                     )}
                 </div>

@@ -1,6 +1,6 @@
 import { Colors } from "protocol/src/Color";
 import { newUUID } from "protocol/src/Id";
-import { Scene } from "protocol/src/Scene";
+import { Layer, Scene } from "protocol/src/Scene";
 
 export class SceneService {
     static createDefaultScene(campaignID: string): Scene {
@@ -32,6 +32,16 @@ export class SceneService {
             ],
             name: "My First Scene",
             gridSize: 70
+        };
+    }
+
+    static createDefaultLayer(): Layer {
+        return {
+            id: newUUID(),
+            name: "My Layer",
+            opacity: 1,
+            color: Colors[3],
+            playerVisible: false
         };
     }
 }

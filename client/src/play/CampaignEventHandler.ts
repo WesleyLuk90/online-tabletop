@@ -8,7 +8,7 @@ export class CampaignEventHandler {
 
     async handleCampaignUpdate(campaignUpdate: CampaignUpdate) {
         const campaign = await CampaignRequests.get(campaignUpdate.campaignID);
-        this.update(state => state.updateCampaign(campaign));
+        this.update(state => state.build(b => b.updateCampaign(campaign)));
     }
 
     async updateScene(update: SceneUpdate) {
@@ -18,9 +18,9 @@ export class CampaignEventHandler {
         );
         this.update(state => {
             if (scene == null) {
-                return state.deleteScene(update.sceneID);
+                return state.build(b => b.deleteScene(update.sceneID));
             } else {
-                return state.addOrUpdateScene(scene);
+                return state.build(b => b.upsertScene(scene));
             }
         });
     }

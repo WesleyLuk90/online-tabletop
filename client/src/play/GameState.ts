@@ -1,32 +1,22 @@
 import { Campaign } from "protocol/src/Campaign";
 import { Scene } from "protocol/src/Scene";
 import { User } from "protocol/src/User";
-import { checkState } from "../util/CheckState";
-import { replaceValue } from "../util/List";
+import { checkNotNull } from "../util/Nullable";
+import { GameStateBuilder } from "./GameStateBuilder";
 
-interface State {
-    readonly campaign: Campaign;
-    readonly user: User;
-    readonly scenes: Scene[];
-}
-
-export class GameState implements State {
+export class GameState {
     constructor(
         readonly campaign: Campaign,
         readonly user: User,
         readonly scenes: Scene[]
     ) {}
 
-    copy(updated: Partial<State>) {
-        return new GameState(
-            updated.campaign || this.campaign,
-            updated.user || this.user,
-            updated.scenes || this.scenes
-        );
+    builder() {
+        return new GameStateBuilder(this);
     }
 
-    updateCampaign(campaign: Campaign): GameState {
-        return this.copy({ campaign });
+    build(f: (b: GameStateBuilder) => GameStateBuilder): GameState {
+        return f(this.builder()).build();
     }
 
     getMySceneID(): string {
@@ -42,34 +32,7 @@ export class GameState implements State {
         return this.scenes.find(s => s.sceneID === id) || null;
     }
 
-    updateScene(scene: Scene): GameState {
-        return this.copy({
-            scenes: replaceValue(
-                this.scenes,
-                s => s.sceneID === scene.sceneID,
-                s => scene
-            )
-        });
-    }
-
-    addScene(scene: Scene): GameState {
-        checkState(this.scenes.every(s => s.sceneID !== scene.sceneID));
-
-        return this.copy({
-            scenes: [...this.scenes, scene]
-        });
-    }
-
-    addOrUpdateScene(scene: Scene): GameState {
-        if (this.scenes.some(s => s.sceneID === scene.sceneID)) {
-            return this.updateScene(scene);
-        }
-        return this.addScene(scene);
-    }
-
-    deleteScene(sceneID: string): GameState {
-        return this.copy({
-            scenes: this.scenes.filter(s => s.sceneID !== sceneID)
-        });
+    getScene(sceneID: string): Scene {
+        return checkNotNull(this.scenes.find(s => s.sceneID === sceneID));
     }
 }
