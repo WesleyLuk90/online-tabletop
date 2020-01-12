@@ -1,0 +1,6 @@
+.layers-panel__actions {
+    display: flex;
+}
+.layers-panel__actions > * {
+    padding: 0 5px;
+}

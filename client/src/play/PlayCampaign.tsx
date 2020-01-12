@@ -72,7 +72,12 @@ export function PlayCampaign({
                         onCreateScene={scene => eventHandler.createScene(scene)}
                         onDeleteScene={scene => eventHandler.deleteScene(scene)}
                     />
-                    {scene && <LayersPanel layers={scene.layers} />}
+                    {scene && (
+                        <LayersPanel
+                            layers={scene.layers}
+                            onUpdate={l => eventHandler.updateLayer(scene, l)}
+                        />
+                    )}
                 </div>
             }
             bottom="bottom"

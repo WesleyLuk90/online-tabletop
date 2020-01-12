@@ -1,4 +1,4 @@
-import { Scene } from "protocol/src/Scene";
+import { Layer, Scene } from "protocol/src/Scene";
 import { CampaignRequests } from "../games/CampaignRequests";
 import { SceneRequests } from "../games/SceneRequests";
 import { replaceValue } from "../util/List";
@@ -65,6 +65,16 @@ export class EventHandler {
         this.updateGameState(gameState => {
             SceneRequests.delete(scene.campaignID, scene.sceneID);
             return gameState.deleteScene(scene.sceneID);
+        });
+    }
+
+    updateLayer(scene: Scene, layer: Layer) {
+        this.updateSceneDetails(scene.sceneID, {
+            layers: replaceValue(
+                scene.layers,
+                l => l.id === layer.id,
+                l => layer
+            )
         });
     }
 }
