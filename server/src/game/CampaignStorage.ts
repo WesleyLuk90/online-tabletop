@@ -4,7 +4,7 @@ import { parse } from "protocol/src/Parse";
 import { NotFoundError } from "../Errors";
 import { DatabaseProvider } from "../storage/DatabaseProvider";
 import { addProperty } from "../storage/Migrations";
-import { MongoStorage } from "../storage/MongoStorage";
+import { Field, MongoStorage } from "../storage/MongoStorage";
 
 type Indexes = keyof Campaign | "players.userID";
 
@@ -16,6 +16,7 @@ export class CampaignStorage {
             "campaigns",
             doc => parse(doc, CampaignSchema),
             c => c.id,
+            [new Field("players.userID")],
             [addProperty("sceneID", "")]
         );
     }

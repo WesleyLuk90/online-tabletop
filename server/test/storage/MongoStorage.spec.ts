@@ -1,5 +1,5 @@
 import { NotFoundError } from "../../src/Errors";
-import { MongoStorage } from "../../src/storage/MongoStorage";
+import { Field, MongoStorage } from "../../src/storage/MongoStorage";
 import { DbFixture } from "../fixtures/DbFixture";
 
 describe("MongoStorage", () => {
@@ -14,7 +14,8 @@ describe("MongoStorage", () => {
             db.get(),
             "mongo_storage",
             (d: any) => new Data(d._id, d.other),
-            d => d.id
+            d => d.id,
+            [new Field("other")]
         );
         const collection = await storage.collection();
         await collection.deleteMany({});
