@@ -11,14 +11,15 @@ function generateID({ campaignID, sceneID }: SceneReference) {
 }
 
 export class SceneStorage {
-    storage: MongoStorage<Scene>;
+    storage: MongoStorage<Scene, keyof Scene>;
 
     constructor(readonly databaseProvider: DatabaseProvider) {
-        this.storage = new MongoStorage<Scene>(
+        this.storage = new MongoStorage<Scene, keyof Scene>(
             databaseProvider,
             "scenes",
             data => parse(data, SceneSchema),
             generateID,
+            [],
             [addProperty("gridSize", 70)]
         );
     }

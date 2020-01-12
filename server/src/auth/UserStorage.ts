@@ -5,13 +5,14 @@ import { MongoStorage } from "../storage/MongoStorage";
 import { checkNotNull } from "../util/Nullable";
 
 export class UserStorage {
-    storage: MongoStorage<User>;
+    storage: MongoStorage<User, keyof User>;
     constructor(readonly dbProvider: DatabaseProvider) {
         this.storage = new MongoStorage(
             dbProvider,
             "users",
             d => parse(d, UserSchema),
-            u => u.id
+            u => u.id,
+            []
         );
     }
 
