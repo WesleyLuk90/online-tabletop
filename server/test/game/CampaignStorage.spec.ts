@@ -4,6 +4,7 @@ import { DbFixture } from "../fixtures/DbFixture";
 
 describe("CampaignStorage", () => {
     const db = new DbFixture("campaigns");
+
     it("should store", async () => {
         const storage = new CampaignStorage(db.get());
         await storage.create({

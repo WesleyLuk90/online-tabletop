@@ -4,7 +4,7 @@ import { SceneStorage } from "../../src/game/SceneStorage";
 import { DbFixture } from "../fixtures/DbFixture";
 
 describe("SceneStorage", () => {
-    const db = new DbFixture("campaigns");
+    const db = new DbFixture("scenes");
     it("should store", async () => {
         const storage = new SceneStorage(db.get());
         const scene: Scene = {

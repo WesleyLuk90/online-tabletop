@@ -22,6 +22,7 @@ export const TokenSchema = t.strict({
     sceneID: t.string,
     campaignID: t.string,
     layerID: t.string,
+    revision: t.number,
     x: t.number,
     y: t.number,
     width: t.number,
