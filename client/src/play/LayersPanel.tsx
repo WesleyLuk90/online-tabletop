@@ -14,15 +14,24 @@ export function LayersPanel({
     layers,
     onUpdate,
     onCreate,
-    onDelete
+    onDelete,
+    onSort
 }: {
     layers: Layer[];
     onUpdate: (layer: Layer) => void;
     onCreate: (layer: Layer) => void;
     onDelete: (layer: Layer) => void;
+    onSort: (layers: Layer[]) => void;
 }) {
     const [edit, setEdit] = useState<Layer | null>(null);
     const [isNew, setIsNew] = useState(false);
+
+    function onMove(from: number, to: number) {
+        const copy = layers.slice();
+        const [removed] = copy.splice(from, 1);
+        copy.splice(to, 0, removed);
+        onSort(copy);
+    }
 
     return (
         <SidePanel header="Layers">
@@ -74,6 +83,7 @@ export function LayersPanel({
                         />
                     </div>
                 )}
+                onMove={onMove}
             />
             <Button
                 onClick={() => {

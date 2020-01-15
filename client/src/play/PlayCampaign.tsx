@@ -78,6 +78,11 @@ export function PlayCampaign({
                             onCreate={l => eventHandler.createLayer(scene, l)}
                             onUpdate={l => eventHandler.updateLayer(scene, l)}
                             onDelete={l => eventHandler.deleteLayer(scene, l)}
+                            onSort={layers =>
+                                eventHandler.updateSceneDetails(scene.sceneID, {
+                                    layers
+                                })
+                            }
                         />
                     )}
                 </div>

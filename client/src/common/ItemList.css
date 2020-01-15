@@ -6,6 +6,12 @@
     padding: 0 10px;
 }
 
+.item-list__drag-icon {
+    padding: 0 5px;
+    flex: 0 0 auto;
+    cursor: move;
+}
+
 .item-list__item-left {
     flex: 1 0 0;
 }
@@ -13,4 +19,9 @@
 .item-list__item-right {
     padding: 0 5px;
     flex: 0 0 auto;
+}
+
+.item-list__item--hover {
+    background-color: #f2f2f2;
+    opacity: 0.75;
 }

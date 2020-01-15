@@ -6,4 +6,17 @@ export class ColorService {
             color.blue
         }, ${color.alpha.toFixed(2)})`;
     }
+
+    static key(color: Color) {
+        return ColorService.toRGBA(color);
+    }
+
+    static isEqual(a: Color, b: Color) {
+        return (
+            a.red === b.red &&
+            a.green === b.green &&
+            a.blue === b.blue &&
+            a.alpha === b.alpha
+        );
+    }
 }

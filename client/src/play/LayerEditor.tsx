@@ -38,6 +38,7 @@ export function LayerEditor({
                 <Label label="Color">
                     {Colors.map(c => (
                         <div
+                            key={ColorService.key(c)}
                             className="layer-editor__color"
                             onClick={e => {
                                 e.preventDefault();
@@ -46,10 +47,7 @@ export function LayerEditor({
                         >
                             <ColorSquare
                                 color={c}
-                                highlight={
-                                    ColorService.toRGBA(c) ===
-                                    ColorService.toRGBA(layer.color)
-                                }
+                                highlight={ColorService.isEqual(c, layer.color)}
                             />
                         </div>
                     ))}
