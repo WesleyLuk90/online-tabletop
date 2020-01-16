@@ -39,14 +39,14 @@ export class TokenStorage {
         return NotFoundError.checkNotNull(scene, "scene", id);
     }
 
-    async create(scene: Token): Promise<Token> {
-        await this.storage.create(scene);
-        return scene;
+    async create(token: Token): Promise<Token> {
+        await this.storage.create(token);
+        return token;
     }
 
-    async update(scene: Token): Promise<Token> {
-        await this.storage.update(scene);
-        return scene;
+    async update(token: Token): Promise<Token> {
+        await this.storage.update(token);
+        return token;
     }
 
     async delete(ref: TokenReference): Promise<void> {

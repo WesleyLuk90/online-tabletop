@@ -1,4 +1,5 @@
 import * as t from "io-ts";
+import { TokenDeltaSchema } from "./TokenDelta";
 
 const CampaignUpdateSchema = t.strict({
     type: t.literal("campaign"),
@@ -19,7 +20,9 @@ const TokenUpdateSchema = t.strict({
     type: t.literal("token"),
     campaignID: t.string,
     sceneID: t.string,
-    tokenID: t.string
+    tokenID: t.string,
+    fromVersion: t.number,
+    update: TokenDeltaSchema
 });
 
 export type TokenUpdate = t.TypeOf<typeof TokenUpdateSchema>;

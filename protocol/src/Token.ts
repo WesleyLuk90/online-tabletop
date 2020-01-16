@@ -17,7 +17,7 @@ export const EllipseSchema = t.strict({
 
 export const TokenDataSchema = t.union([SquareTokenSchema, EllipseSchema]);
 
-export const TokenSchema = t.strict({
+export const RawTokenSchema = t.type({
     tokenID: t.string,
     sceneID: t.string,
     campaignID: t.string,
@@ -27,7 +27,10 @@ export const TokenSchema = t.strict({
     y: t.number,
     width: t.number,
     height: t.number,
+    version: t.number,
     data: TokenDataSchema
 });
+
+export const TokenSchema = t.exact(RawTokenSchema);
 
 export type Token = t.TypeOf<typeof TokenSchema>;
