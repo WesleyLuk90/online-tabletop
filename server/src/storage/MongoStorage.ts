@@ -37,6 +37,11 @@ export class MongoStorage<T, K> {
         private migrations: Migration[] = []
     ) {}
 
+    async createCollection() {
+        const db = await this.dbProvider.get();
+        await db.createCollection(this.collectionName);
+    }
+
     private migrateAndParse(data: any) {
         this.migrations.forEach(migration => migration(data));
         return this.parse(data);

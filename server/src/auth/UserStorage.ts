@@ -17,7 +17,7 @@ export class UserStorage {
     }
 
     async get(id: string): Promise<User> {
-        return checkNotNull(await this.storage.get(id));
+        return checkNotNull(await this.storage.get(id), `User not found ${id}`);
     }
 
     async create(user: User) {

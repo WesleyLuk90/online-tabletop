@@ -73,6 +73,13 @@ export class AppModule extends Module {
         () => new TokenManager(this.tokenProcessor(), this.permissionService())
     );
 
+    storage = lazy(() => [
+        this.userStorage(),
+        this.campaignStorage(),
+        this.sceneStorage(),
+        this.tokenStorage()
+    ]);
+
     async start() {
         require("dotenv").config();
         console.log(`Serving static files from ${this.staticPath()}`);
@@ -99,6 +106,10 @@ export class AppModule extends Module {
         connectRoutes(this.campaignManager().routes(), this.app());
         connectRoutes(this.sceneManager().routes(), this.app());
         connectRoutes(this.tokenManager().routes(), this.app());
+
+        for (const storage of this.storage()) {
+            await storage.storage.createCollection();
+        }
 
         this.http().listen(this.port(), () =>
             console.log(`Example app listening on port ${this.port()}!`)
