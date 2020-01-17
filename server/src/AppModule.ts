@@ -12,6 +12,9 @@ import { CampaignStorage } from "./game/CampaignStorage";
 import { NotificationService } from "./game/NotificationService";
 import { SceneManager } from "./game/SceneManager";
 import { SceneStorage } from "./game/SceneStorage";
+import { TokenManager } from "./game/TokenManager";
+import { TokenProcessor } from "./game/TokenProcessor";
+import { TokenStorage } from "./game/TokenStorage";
 import { lazy, Module } from "./Module";
 import { connectRoutes } from "./Requests";
 import { initializeSession } from "./Session";
@@ -59,6 +62,17 @@ export class AppModule extends Module {
             )
     );
 
+    tokenStorage = lazy(() => new TokenStorage(this.dbProvider()));
+
+    tokenProcessor = lazy(
+        () =>
+            new TokenProcessor(this.tokenStorage(), this.notificationService())
+    );
+
+    tokenManager = lazy(
+        () => new TokenManager(this.tokenProcessor(), this.permissionService())
+    );
+
     async start() {
         require("dotenv").config();
         console.log(`Serving static files from ${this.staticPath()}`);
@@ -84,6 +98,7 @@ export class AppModule extends Module {
         connectRoutes(this.userManager().routes(), this.app());
         connectRoutes(this.campaignManager().routes(), this.app());
         connectRoutes(this.sceneManager().routes(), this.app());
+        connectRoutes(this.tokenManager().routes(), this.app());
 
         this.http().listen(this.port(), () =>
             console.log(`Example app listening on port ${this.port()}!`)

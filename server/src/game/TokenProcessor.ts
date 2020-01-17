@@ -1,35 +1,74 @@
-import { TokenUpdateRequest } from "protocol/src/TokenDelta";
+import {
+    CreateToken,
+    DeleteToken,
+    TokenDelta,
+    UpdateToken
+} from "protocol/src/TokenDelta";
 import { assertExhaustive } from "../util/Exaustive";
 import { Queue } from "../util/Queue";
+import { NotificationService } from "./NotificationService";
 import { TokenStorage } from "./TokenStorage";
 
 export class TokenProcessor {
-    process = async (request: TokenUpdateRequest) => {
-        switch (request.update.type) {
+    constructor(
+        private tokenStorage: TokenStorage,
+        private notificationService: NotificationService
+    ) {}
+
+    private process = async (delta: TokenDelta): Promise<void> => {
+        switch (delta.type) {
             case "create":
-                return this.tokenStorage.create(request.update.token);
+                return await this.createToken(delta);
             case "delete":
-                return this.tokenStorage.delete({
-                    campaignID: request.campaignID,
-                    tokenID: request.tokenID
-                });
+                return await this.deleteToken(delta);
             case "update":
-                const token = await this.tokenStorage.get({
-                    campaignID: request.campaignID,
-                    tokenID: request.tokenID
-                });
-                const updated = {
-                    ...token,
-                    ...request.update.update,
-                    version: token.version + 1
-                };
-                return this.tokenStorage.update(updated);
+                return await this.updateToken(delta);
             default:
-                assertExhaustive(request.update);
+                assertExhaustive(delta);
         }
     };
 
-    queue = new Queue(this.process);
+    private queue = new Queue<TokenDelta>(this.process);
 
-    constructor(private tokenStorage: TokenStorage) {}
+    enqueue(delta: TokenDelta) {
+        this.queue.enqueue(delta);
+    }
+
+    private async createToken(createToken: CreateToken) {
+        await this.tokenStorage.create(createToken.token);
+        this.notificationService.tokenUpdated(
+            createToken.token.campaignID,
+            createToken
+        );
+    }
+
+    private async deleteToken(deleteToken: DeleteToken) {
+        await this.tokenStorage.delete({
+            campaignID: deleteToken.campaignID,
+            tokenID: deleteToken.tokenID
+        });
+        this.notificationService.tokenUpdated(
+            deleteToken.campaignID,
+            deleteToken
+        );
+    }
+
+    private async updateToken(updateToken: UpdateToken) {
+        const originalToken = await this.tokenStorage.get({
+            campaignID: updateToken.campaignID,
+            tokenID: updateToken.tokenID
+        });
+        const updated = {
+            ...originalToken,
+            ...updateToken.update,
+            campaignID: updateToken.campaignID,
+            tokenID: updateToken.tokenID,
+            version: originalToken.version + 1
+        };
+        await this.tokenStorage.update(updated);
+        this.notificationService.versionedTokenUpdated(
+            originalToken.version,
+            updateToken
+        );
+    }
 }

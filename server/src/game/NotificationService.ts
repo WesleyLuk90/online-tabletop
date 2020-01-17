@@ -1,5 +1,5 @@
 import { Campaign } from "protocol/src/Campaign";
-import { Token } from "protocol/src/Token";
+import { CreateToken, DeleteToken, UpdateToken } from "protocol/src/TokenDelta";
 import { BroadcastService } from "./BroadcastService";
 import { SceneReference } from "./SceneReference";
 
@@ -28,12 +28,19 @@ export class NotificationService {
         });
     }
 
-    tokenUpdated(token: Token) {
+    tokenUpdated(campaignID: string, token: CreateToken | DeleteToken) {
+        this.broadcastService.broadcast({
+            type: "token",
+            campaignID,
+            update: token
+        });
+    }
+
+    versionedTokenUpdated(fromVersion: number, token: UpdateToken) {
         this.broadcastService.broadcast({
             type: "token",
             campaignID: token.campaignID,
-            sceneID: token.sceneID,
-            tokenID: token.tokenID
+            update: { ...token, fromVersion: fromVersion }
         });
     }
 }
