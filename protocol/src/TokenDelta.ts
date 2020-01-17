@@ -3,7 +3,8 @@ import { RawTokenSchema, TokenSchema } from "./Token";
 
 export const CreateTokenSchema = t.strict({
     type: t.literal("create"),
-    token: TokenSchema
+    token: TokenSchema,
+    source: t.string
 });
 
 export type CreateToken = t.TypeOf<typeof CreateTokenSchema>;
@@ -12,7 +13,8 @@ export const UpdateTokenSchema = t.strict({
     type: t.literal("update"),
     campaignID: t.string,
     tokenID: t.string,
-    update: t.partial(RawTokenSchema.props)
+    update: t.partial(RawTokenSchema.props),
+    source: t.string
 });
 
 export type UpdateToken = t.TypeOf<typeof UpdateTokenSchema>;
@@ -20,7 +22,8 @@ export type UpdateToken = t.TypeOf<typeof UpdateTokenSchema>;
 export const DeleteTokenSchema = t.strict({
     type: t.literal("delete"),
     campaignID: t.string,
-    tokenID: t.string
+    tokenID: t.string,
+    source: t.string
 });
 
 export type DeleteToken = t.TypeOf<typeof DeleteTokenSchema>;
