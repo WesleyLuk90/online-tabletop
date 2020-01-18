@@ -12,7 +12,8 @@ export class Socket {
         readonly campaignID: string
     ) {
         this.socket = connect({
-            path: "/socket/play"
+            path: "/socket/play",
+            transports: ["websocket"]
         });
         this.socket.on("connect", this.onConnect);
         this.socket.on(campaignTopic(campaignID), (data: any) => {

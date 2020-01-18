@@ -1,1 +1,1 @@
-class TokenRequests {}
+export class TokenRequests {}

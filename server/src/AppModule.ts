@@ -70,7 +70,12 @@ export class AppModule extends Module {
     );
 
     tokenManager = lazy(
-        () => new TokenManager(this.tokenProcessor(), this.permissionService())
+        () =>
+            new TokenManager(
+                this.tokenProcessor(),
+                this.permissionService(),
+                this.tokenStorage()
+            )
     );
 
     storage = lazy(() => [
