@@ -1,11 +1,11 @@
 import { newUUID } from "protocol/src/Id";
-import { UserStorage } from "../../src/auth/UserStorage";
+import { UserCollection, UserStorage } from "../../src/auth/UserStorage";
 import { DbFixture } from "../fixtures/DbFixture";
 
 describe("UserStorage", () => {
-    const db = new DbFixture("users");
+    const db = new DbFixture(p => new UserCollection(p));
     it("should store", async () => {
-        const storage = new UserStorage(db.get());
+        const storage = new UserStorage(await db.get());
         const user = { id: newUUID(), displayName: "foo" };
         await storage.create(user);
         await storage.create(user);

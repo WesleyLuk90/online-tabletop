@@ -46,7 +46,7 @@ export class TokenManager {
     async listTokens(userID: string, campaignID: string, sceneID: string) {
         return this.permissionService.requirePlayer(
             { campaignID, userID },
-            () => this.tokenStorage.list(campaignID, sceneID)
+            () => this.tokenStorage.list({ campaignID, sceneID })
         );
     }
 }

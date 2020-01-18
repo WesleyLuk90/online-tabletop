@@ -3,18 +3,18 @@ import { Server } from "http";
 import { resolve } from "path";
 import { initializeAuth } from "./auth/Auth";
 import { UserManager } from "./auth/UserManager";
-import { UserStorage } from "./auth/UserStorage";
+import { UserCollection, UserStorage } from "./auth/UserStorage";
 import { ConfigKeys, readConfig, readConfigNumber } from "./Config";
 import { BroadcastService } from "./game/BroadcastService";
 import { CampaignManager } from "./game/CampaignManager";
 import { CampaignPermissionService } from "./game/CampaignPermissionService";
-import { CampaignStorage } from "./game/CampaignStorage";
+import { CampaignCollection, CampaignStorage } from "./game/CampaignStorage";
 import { NotificationService } from "./game/NotificationService";
 import { SceneManager } from "./game/SceneManager";
-import { SceneStorage } from "./game/SceneStorage";
+import { SceneCollection, SceneStorage } from "./game/SceneStorage";
 import { TokenManager } from "./game/TokenManager";
 import { TokenProcessor } from "./game/TokenProcessor";
-import { TokenStorage } from "./game/TokenStorage";
+import { TokenCollection, TokenStorage } from "./game/TokenStorage";
 import { lazy, Module } from "./Module";
 import { connectRoutes } from "./Requests";
 import { initializeSession } from "./Session";
@@ -34,14 +34,18 @@ export class AppModule extends Module {
             )
     );
 
-    userStorage = lazy(() => new UserStorage(this.dbProvider()));
+    userCollection = lazy(() => new UserCollection(this.dbProvider()));
+    userStorage = lazy(() => new UserStorage(this.userCollection()));
     userManager = lazy(() => new UserManager(this.userStorage()));
 
     broadcastService = lazy(() => new BroadcastService(this.http()));
     notificationService = lazy(
         () => new NotificationService(this.broadcastService())
     );
-    campaignStorage = lazy(() => new CampaignStorage(this.dbProvider()));
+    campaignCollection = lazy(() => new CampaignCollection(this.dbProvider()));
+    campaignStorage = lazy(
+        () => new CampaignStorage(this.campaignCollection())
+    );
     campaignManager = lazy(
         () =>
             new CampaignManager(
@@ -49,7 +53,8 @@ export class AppModule extends Module {
                 this.notificationService()
             )
     );
-    sceneStorage = lazy(() => new SceneStorage(this.dbProvider()));
+    sceneCollection = lazy(() => new SceneCollection(this.dbProvider()));
+    sceneStorage = lazy(() => new SceneStorage(this.sceneCollection()));
     permissionService = lazy(
         () => new CampaignPermissionService(this.campaignStorage())
     );
@@ -62,7 +67,8 @@ export class AppModule extends Module {
             )
     );
 
-    tokenStorage = lazy(() => new TokenStorage(this.dbProvider()));
+    tokenCollection = lazy(() => new TokenCollection(this.dbProvider()));
+    tokenStorage = lazy(() => new TokenStorage(this.tokenCollection()));
 
     tokenProcessor = lazy(
         () =>
@@ -78,11 +84,11 @@ export class AppModule extends Module {
             )
     );
 
-    storage = lazy(() => [
-        this.userStorage(),
-        this.campaignStorage(),
-        this.sceneStorage(),
-        this.tokenStorage()
+    collections = lazy(() => [
+        this.userCollection(),
+        this.campaignCollection(),
+        this.sceneCollection(),
+        this.tokenCollection()
     ]);
 
     async start() {
@@ -112,8 +118,8 @@ export class AppModule extends Module {
         connectRoutes(this.sceneManager().routes(), this.app());
         connectRoutes(this.tokenManager().routes(), this.app());
 
-        for (const storage of this.storage()) {
-            await storage.storage.createCollection();
+        for (const c of this.collections()) {
+            await c.initialize();
         }
 
         this.http().listen(this.port(), () =>

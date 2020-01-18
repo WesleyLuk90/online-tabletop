@@ -1,28 +1,35 @@
 import { parse } from "protocol/src/Parse";
 import { User, UserSchema } from "protocol/src/User";
-import { DatabaseProvider } from "../storage/DatabaseProvider";
-import { MongoStorage } from "../storage/MongoStorage";
+import { Document, MongoStorage } from "../storage/MongoStorage";
 import { checkNotNull } from "../util/Nullable";
 
+export class UserCollection extends MongoStorage<User> {
+    collectionName() {
+        return "users";
+    }
+
+    parse(data: Document) {
+        return parse(data, UserSchema);
+    }
+
+    id(user: User) {
+        return user.id;
+    }
+}
+
 export class UserStorage {
-    storage: MongoStorage<User, keyof User>;
-    constructor(readonly dbProvider: DatabaseProvider) {
-        this.storage = new MongoStorage(
-            dbProvider,
-            "users",
-            d => parse(d, UserSchema),
-            u => u.id,
-            []
+    constructor(readonly collection: UserCollection) {}
+
+    async get(id: string): Promise<User> {
+        return checkNotNull(
+            await this.collection.get(id),
+            `User not found ${id}`
         );
     }
 
-    async get(id: string): Promise<User> {
-        return checkNotNull(await this.storage.get(id), `User not found ${id}`);
-    }
-
     async create(user: User) {
-        if ((await this.storage.get(user.id)) == null) {
-            await this.storage.create(user);
+        if ((await this.collection.get(user.id)) == null) {
+            await this.collection.create(user);
         }
     }
 }

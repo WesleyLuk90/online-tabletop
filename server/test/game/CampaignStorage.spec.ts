@@ -1,12 +1,15 @@
 import { Role } from "protocol/src/Role";
-import { CampaignStorage } from "../../src/game/CampaignStorage";
+import {
+    CampaignCollection,
+    CampaignStorage
+} from "../../src/game/CampaignStorage";
 import { DbFixture } from "../fixtures/DbFixture";
 
 describe("CampaignStorage", () => {
-    const db = new DbFixture("campaigns");
+    const db = new DbFixture(p => new CampaignCollection(p));
 
     it("should store", async () => {
-        const storage = new CampaignStorage(db.get());
+        const storage = new CampaignStorage(await db.get());
         await storage.create({
             id: "",
             ownerID: "other",

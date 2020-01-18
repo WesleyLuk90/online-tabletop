@@ -1,12 +1,12 @@
 import { newUUID } from "protocol/src/Id";
 import { Scene } from "protocol/src/Scene";
-import { SceneStorage } from "../../src/game/SceneStorage";
+import { SceneCollection, SceneStorage } from "../../src/game/SceneStorage";
 import { DbFixture } from "../fixtures/DbFixture";
 
 describe("SceneStorage", () => {
-    const db = new DbFixture("scenes");
+    const db = new DbFixture(p => new SceneCollection(p));
     it("should store", async () => {
-        const storage = new SceneStorage(db.get());
+        const storage = new SceneStorage(await db.get());
         const scene: Scene = {
             name: "scene",
             campaignID: newUUID(),

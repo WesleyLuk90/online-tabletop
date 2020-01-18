@@ -2,31 +2,39 @@ import { Campaign, CampaignSchema } from "protocol/src/Campaign";
 import { newUUID } from "protocol/src/Id";
 import { parse } from "protocol/src/Parse";
 import { NotFoundError } from "../Errors";
-import { DatabaseProvider } from "../storage/DatabaseProvider";
-import { addProperty } from "../storage/Migrations";
-import { Field, MongoStorage } from "../storage/MongoStorage";
+import { Document, Field, MongoStorage } from "../storage/MongoStorage";
 
-type Indexes = keyof Campaign | "players.userID";
+export class CampaignCollection extends MongoStorage<Campaign> {
+    static PlayersUser = new Field("players.userID");
+
+    collectionName() {
+        return "campaigns";
+    }
+
+    parse(doc: Document) {
+        return parse(doc, CampaignSchema);
+    }
+
+    id(c: Campaign) {
+        return c.id;
+    }
+
+    fields() {
+        return [CampaignCollection.PlayersUser];
+    }
+}
 
 export class CampaignStorage {
-    storage: MongoStorage<Campaign, Indexes>;
-    constructor(readonly databaseProvider: DatabaseProvider) {
-        this.storage = new MongoStorage(
-            databaseProvider,
-            "campaigns",
-            doc => parse(doc, CampaignSchema),
-            c => c.id,
-            [new Field("players.userID")],
-            [addProperty("sceneID", "")]
+    constructor(readonly campaignCollection: CampaignCollection) {}
+
+    async list(userID: string): Promise<Campaign[]> {
+        return this.campaignCollection.list(
+            CampaignCollection.PlayersUser.contains(userID)
         );
     }
 
-    async list(userID: string): Promise<Campaign[]> {
-        return this.storage.list({ key: "players.userID", value: userID });
-    }
-
     async get(id: string): Promise<Campaign> {
-        const campaign = await this.storage.get(id);
+        const campaign = await this.campaignCollection.get(id);
         if (campaign == null) {
             throw new NotFoundError("Campaign", id);
         }
@@ -35,16 +43,16 @@ export class CampaignStorage {
 
     async create(campaign: Campaign): Promise<Campaign> {
         const c = { ...campaign, id: newUUID() };
-        await this.storage.create(c);
+        await this.campaignCollection.create(c);
         return c;
     }
 
     async update(campaign: Campaign): Promise<Campaign> {
-        await this.storage.update(campaign);
+        await this.campaignCollection.update(campaign);
         return campaign;
     }
 
     async delete(campaignID: string): Promise<void> {
-        await this.storage.delete(campaignID);
+        await this.campaignCollection.delete(campaignID);
     }
 }

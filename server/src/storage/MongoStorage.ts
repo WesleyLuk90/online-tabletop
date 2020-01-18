@@ -3,12 +3,12 @@ import { NotFoundError } from "../Errors";
 import { checkNotNull } from "../util/Nullable";
 import { DatabaseProvider } from "./DatabaseProvider";
 
-interface Document {
+export interface Document {
     _id: string;
 }
 
-interface Filter<T> {
-    key: T;
+interface Filter {
+    key: Field;
     value: string;
 }
 
@@ -16,49 +16,75 @@ interface Migration {
     (old: any): void;
 }
 
-export class Field<K> {
-    constructor(readonly name: K) {}
+export class Field {
+    constructor(readonly name: string, readonly index: boolean = true) {}
 
-    getName(): string {
-        return this.name as any;
+    isEqualTo(value: string): Filter {
+        return { key: this, value: value };
+    }
+
+    contains(value: string): Filter {
+        return { key: this, value: value };
     }
 }
 
-export class MongoStorage<T, K> {
-    knownIndexes: string[][] | null = null;
-    checkedIndexes = false;
+export class CompoundIndex {
+    constructor(readonly fields: Field[]) {}
+}
 
-    constructor(
-        private dbProvider: DatabaseProvider,
-        private collectionName: string,
-        private parse: (data: Document) => T,
-        readonly id: (t: T) => string,
-        private fields: Field<K>[],
-        private migrations: Migration[] = []
-    ) {}
+export abstract class MongoStorage<T> {
+    private knownIndexes: string[][] | null = null;
 
-    async createCollection() {
+    constructor(private dbProvider: DatabaseProvider) {}
+
+    abstract collectionName(): string;
+    abstract parse(data: Document): T;
+    abstract id(t: T): string;
+
+    fields(): Field[] {
+        return [];
+    }
+
+    migrations(): Migration[] {
+        return [];
+    }
+
+    compoundsIndexes(): CompoundIndex[] {
+        return [];
+    }
+
+    async initialize() {
         const db = await this.dbProvider.get();
-        await db.createCollection(this.collectionName);
+        await db.createCollection(this.collectionName());
+        const indexes = this.fields()
+            .filter(f => f.index)
+            .map(f => ({
+                key: {
+                    [f.name]: 1
+                }
+            }));
+        this.compoundsIndexes()
+            .map(index => {
+                const object: any = {};
+                index.fields.forEach(f => (object[f.name] = 1));
+                return object;
+            })
+            .map(key => ({ key }))
+            .forEach(index => indexes.push(index));
+        if (indexes.length > 0) {
+            const collection = await this.collection();
+            await collection.createIndexes(indexes);
+        }
     }
 
     private migrateAndParse(data: any) {
-        this.migrations.forEach(migration => migration(data));
+        this.migrations().forEach(migration => migration(data));
         return this.parse(data);
     }
 
     async collection(): Promise<Collection<Document>> {
         const db = await this.dbProvider.get();
-        const collection = db.collection(this.collectionName);
-        if (!this.checkedIndexes && this.fields.length > 0) {
-            const indexes = this.fields.map(f => ({
-                key: {
-                    [f.getName()]: 1
-                }
-            }));
-            await collection.createIndexes(indexes);
-            this.checkedIndexes = true;
-        }
+        const collection = db.collection(this.collectionName());
         return collection;
     }
 
@@ -78,10 +104,10 @@ export class MongoStorage<T, K> {
         await col.insertOne(doc);
     }
 
-    async list(...filters: Filter<K>[]): Promise<T[]> {
+    async list(...filters: Filter[]): Promise<T[]> {
         const filter: any = {};
-        await this.ensureIndexes(filters);
-        filters.forEach(f => (filter[f.key] = f.value));
+        await this.checkIndexes(filters);
+        filters.forEach(f => (filter[f.key.name] = f.value));
         const collection = await this.collection();
         const results = await collection.find(filter);
         const list = await results.toArray();
@@ -98,7 +124,7 @@ export class MongoStorage<T, K> {
         );
         NotFoundError.check(
             updateResult.matchedCount === 1,
-            this.collectionName,
+            this.collectionName(),
             this.id(data)
         );
     }
@@ -108,24 +134,30 @@ export class MongoStorage<T, K> {
         await collection.deleteOne({ _id: id });
     }
 
-    private async ensureIndexes(filters: Filter<K>[]) {
+    private async checkIndexes(filters: Filter[]) {
         if (this.knownIndexes === null) {
             const collection = await this.collection();
             const indexes = await collection.indexes();
             this.knownIndexes = indexes.map((i: any) => Object.keys(i.key));
         }
         const known = checkNotNull(this.knownIndexes);
-        filters.forEach(filter => {
-            if (
-                !known.some(
-                    index =>
-                        index.length === 1 && (index[0] as any) !== filter.key
-                )
-            ) {
-                throw new Error(
-                    `Missing index ${this.collectionName}.${filter.key}`
-                );
-            }
-        });
+        if (!filtersMatchIndexes(filters, known)) {
+            throw new Error(
+                `Missing index on ${
+                    this.collectionName
+                } cannot query [${filters
+                    .map(f => f.key.name)
+                    .join(", ")}]. Known indexes ${JSON.stringify(known)}`
+            );
+        }
     }
+}
+
+function filtersMatchIndexes<T>(filters: Filter[], indexes: string[][]) {
+    const fields = new Set(filters.map(f => f.key.name));
+    return indexes.some(index => setsEqual(fields, new Set(index)));
+}
+
+function setsEqual<T>(a: Set<T>, b: Set<T>) {
+    return a.size === b.size && Array.from(a).every(e => b.has(e));
 }

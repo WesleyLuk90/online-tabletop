@@ -1,8 +1,12 @@
 import { parse } from "protocol/src/Parse";
 import { Token, TokenSchema } from "protocol/src/Token";
 import { NotFoundError } from "../Errors";
-import { DatabaseProvider } from "../storage/DatabaseProvider";
-import { MongoStorage } from "../storage/MongoStorage";
+import {
+    CompoundIndex,
+    Document,
+    Field,
+    MongoStorage
+} from "../storage/MongoStorage";
 
 interface TokenReference {
     campaignID: string;
@@ -13,43 +17,65 @@ function generateID({ campaignID, tokenID }: TokenReference) {
     return `${campaignID}/${tokenID}`;
 }
 
-export class TokenStorage {
-    storage: MongoStorage<Token, keyof Token>;
+export class TokenCollection extends MongoStorage<Token> {
+    static CampaignField = new Field("campaignID");
+    static SceneField = new Field("sceneID");
 
-    constructor(readonly databaseProvider: DatabaseProvider) {
-        this.storage = new MongoStorage<Token, keyof Token>(
-            databaseProvider,
-            "tokens",
-            data => parse(data, TokenSchema),
-            generateID,
-            []
-        );
+    collectionName() {
+        return "tokens";
     }
 
-    async list(campaignID: string, sceneID: string): Promise<Token[]> {
-        return this.storage.list(
-            { key: "campaignID", value: campaignID },
-            { key: "sceneID", value: sceneID }
+    parse(data: Document) {
+        return parse(data, TokenSchema);
+    }
+
+    id(token: Token) {
+        return generateID(token);
+    }
+
+    compoundsIndexes() {
+        return [
+            new CompoundIndex([
+                TokenCollection.CampaignField,
+                TokenCollection.SceneField
+            ])
+        ];
+    }
+}
+
+export class TokenStorage {
+    constructor(readonly collection: TokenCollection) {}
+
+    async list({
+        campaignID,
+        sceneID
+    }: {
+        campaignID: string;
+        sceneID: string;
+    }): Promise<Token[]> {
+        return this.collection.list(
+            TokenCollection.CampaignField.isEqualTo(campaignID),
+            TokenCollection.SceneField.isEqualTo(sceneID)
         );
     }
 
     async get(ref: TokenReference): Promise<Token> {
         const id = generateID(ref);
-        const scene = await this.storage.get(generateID(ref));
+        const scene = await this.collection.get(generateID(ref));
         return NotFoundError.checkNotNull(scene, "scene", id);
     }
 
     async create(token: Token): Promise<Token> {
-        await this.storage.create(token);
+        await this.collection.create(token);
         return token;
     }
 
     async update(token: Token): Promise<Token> {
-        await this.storage.update(token);
+        await this.collection.update(token);
         return token;
     }
 
     async delete(ref: TokenReference): Promise<void> {
-        return this.storage.delete(generateID(ref));
+        return this.collection.delete(generateID(ref));
     }
 }
