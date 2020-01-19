@@ -34,10 +34,18 @@ export function ToolLayer({
         return null;
     }
 
+    function onDragEnd(start: Vector, end: Vector) {
+        const handler = ToolHandlers[tool];
+        if (handler != null) {
+            handler.dragEnd(start, end);
+        }
+        setDragState(null);
+    }
+
     return children(
         <g>{getContent()}</g>,
         () => {},
         (s, c) => setDragState([s, c]),
-        () => setDragState(null)
+        onDragEnd
     );
 }
