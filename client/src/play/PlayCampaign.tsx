@@ -8,6 +8,8 @@ import { GameMap } from "./GameMap";
 import { GameState } from "./GameState";
 import { LayersPanel } from "./LayersPanel";
 import { PlayLayout } from "./PlayLayout";
+import { TokenToolbar } from "./TokenToolbar";
+import { Tool } from "./Tools";
 import { Vector } from "./Vector";
 import { View } from "./View";
 
@@ -19,6 +21,7 @@ export function PlayCampaign({
     user: User;
 }) {
     const [gameState, setGameState] = useState<GameState | null>(null);
+    const [tool, setTool] = useState(Tool.select);
 
     useEffect(() => {
         const loader = new CampaignLoader(campaignID, user, updater =>
@@ -48,8 +51,9 @@ export function PlayCampaign({
             main={
                 scene != null ? (
                     <GameMap
-                        view={new View(1, new Vector(100, 100))}
+                        view={new View(1, new Vector(0, 0))}
                         scene={scene}
+                        tool={tool}
                     />
                 ) : (
                     "No scene yet"
@@ -88,6 +92,7 @@ export function PlayCampaign({
                 </div>
             }
             bottom="bottom"
+            toolbar={<TokenToolbar tool={tool} setTool={setTool} />}
         />
     );
 }

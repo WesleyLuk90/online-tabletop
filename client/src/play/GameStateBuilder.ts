@@ -9,6 +9,7 @@ interface State {
     readonly campaign: Campaign;
     readonly user: User;
     readonly scenes: Scene[];
+    readonly layer: string | null;
 }
 
 export class GameStateBuilder {
@@ -18,7 +19,8 @@ export class GameStateBuilder {
         this.s = new GameState(
             updated.campaign || this.s.campaign,
             updated.user || this.s.user,
-            updated.scenes || this.s.scenes
+            updated.scenes || this.s.scenes,
+            updated.layer || null
         );
         return this;
     }

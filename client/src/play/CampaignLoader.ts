@@ -82,7 +82,7 @@ export class CampaignLoader {
             this.loadCampaign();
         } else {
             this.updateNullableState(
-                () => new GameState(campaign, this.user, scenes)
+                () => new GameState(campaign, this.user, scenes, null)
             );
         }
     }

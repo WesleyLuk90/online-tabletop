@@ -5,4 +5,12 @@ export class Viewport {
         readonly right: number,
         readonly bottom: number
     ) {}
+
+    width() {
+        return this.right - this.left;
+    }
+
+    height() {
+        return this.bottom - this.top;
+    }
 }

@@ -4,17 +4,20 @@ import "./PlayLayout.css";
 export function PlayLayout({
     main,
     right,
-    bottom
+    bottom,
+    toolbar
 }: {
     main: ReactNode;
     right: ReactNode;
     bottom: ReactNode;
+    toolbar: ReactNode;
 }) {
     return (
         <div className="play-layout">
             <div className="play-layout__main">{main}</div>
             <div className="play-layout__right">{right}</div>
             <div className="play-layout__bottom">{bottom}</div>
+            <div className="play-layout__toolbar">{toolbar}</div>
         </div>
     );
 }

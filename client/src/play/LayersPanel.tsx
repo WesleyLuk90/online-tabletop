@@ -73,6 +73,7 @@ export function LayersPanel({
                                     playerVisible: !l.playerVisible
                                 })
                             }
+                            title="Player Visible"
                         />
                         <IconButton
                             icon={faPencilAlt}
@@ -80,6 +81,7 @@ export function LayersPanel({
                                 setEdit(l);
                                 setIsNew(false);
                             }}
+                            title="Edit Layer"
                         />
                     </div>
                 )}

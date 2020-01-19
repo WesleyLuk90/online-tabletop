@@ -1,0 +1,22 @@
+.toolbar {
+    border-bottom-right-radius: 4px;
+    overflow: hidden;
+}
+.toolbar__tool {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #6c757d;
+    color: white;
+    cursor: pointer;
+}
+
+.toolbar__tool:hover {
+    background-color: #5a6268;
+}
+
+.toolbar__tool--active {
+    background-color: #545b62;
+}

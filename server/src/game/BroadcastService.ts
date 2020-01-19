@@ -9,10 +9,6 @@ export class BroadcastService {
             path: "/socket/play",
             serveClient: false
         });
-
-        this.socket.on("connection", c => {
-            console.log("connect");
-        });
     }
 
     broadcast(update: Update) {

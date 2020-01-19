@@ -69,13 +69,13 @@ export function ScenePanel({
                             inactive={s.sceneID !== myScene}
                             icon={faLocationArrow}
                             onClick={() => onChangeScene(s.sceneID)}
-                            title="Active Scene"
+                            title="Visible Scene"
                         />
                         <IconButton
                             inactive={s.sceneID !== defaultScene}
                             icon={faUsers}
                             onClick={() => onChangeDefaultScene(s.sceneID)}
-                            title="Editing Scene"
+                            title="Players Scene"
                         />
                         <IconButton
                             icon={faPencilAlt}
@@ -83,7 +83,7 @@ export function ScenePanel({
                                 setEdit(s);
                                 setIsNew(false);
                             }}
-                            title="Editing Scene"
+                            title="Edit Scene"
                         />
                     </div>
                 )}
