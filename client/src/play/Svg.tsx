@@ -6,7 +6,7 @@ import { Viewport } from "./Viewport";
 
 enum Button {
     Primary = 0,
-    Secondary = 1
+    Secondary = 2
 }
 
 const MIN_DRAG_DISTANCE = 5;
@@ -15,18 +15,16 @@ class MouseState {
     constructor(
         readonly screenStart: Vector,
         readonly start: Vector,
-        readonly button: Button,
         readonly isDrag: boolean
     ) {}
 
     withIsDrag(isDrag: boolean) {
-        return new MouseState(
-            this.screenStart,
-            this.start,
-            this.button,
-            isDrag
-        );
+        return new MouseState(this.screenStart, this.start, isDrag);
     }
+}
+
+function fromEvent(e: React.MouseEvent) {
+    return new Vector(e.clientX, e.clientY);
 }
 
 export function Svg({
@@ -34,17 +32,24 @@ export function Svg({
     viewport,
     size,
     onClick,
+    onRightClick,
     onDrag,
-    onDragEnd
+    onDragEnd,
+    onPan,
+    onPanEnd
 }: {
     children: ReactNode;
     viewport: Viewport;
     size: Vector;
     onClick: (pos: Vector) => void;
+    onRightClick: (pos: Vector) => void;
     onDrag: (start: Vector, current: Vector) => void;
     onDragEnd: (start: Vector, end: Vector) => void;
+    onPan: (start: Vector, current: Vector) => void;
+    onPanEnd: (start: Vector, current: Vector) => void;
 }) {
-    const mouseState = useRef<null | MouseState>(null);
+    const primaryMouseState = useRef<null | MouseState>(null);
+    const secondaryMouseState = useRef<null | MouseState>(null);
     const ref = useRef<SVGSVGElement>(null);
 
     function screenToWorld(screen: Vector) {
@@ -63,59 +68,89 @@ export function Svg({
         );
     }
 
-    function fromEvent(e: React.MouseEvent) {
-        return new Vector(e.clientX, e.clientY);
+    function startMouseState(
+        ref: React.MutableRefObject<null | MouseState>,
+        button: Button,
+        event: React.MouseEvent<SVGSVGElement>
+    ) {
+        if (ref.current != null) {
+            return;
+        }
+        if (event.button !== button) {
+            return;
+        }
+        ref.current = new MouseState(
+            fromEvent(event),
+            screenToWorld(fromEvent(event)),
+            false
+        );
+    }
+
+    function updateMouseState(
+        ref: React.MutableRefObject<null | MouseState>,
+        event: React.MouseEvent<SVGSVGElement>,
+        dragHandler: (mouseState: MouseState, screenLocation: Vector) => void
+    ) {
+        if (ref.current == null) {
+            return;
+        }
+        if (!ref.current.isDrag) {
+            if (
+                ref.current.screenStart.subtract(fromEvent(event)).length() >
+                MIN_DRAG_DISTANCE
+            ) {
+                ref.current = ref.current.withIsDrag(true);
+            }
+        } else {
+            dragHandler(ref.current, fromEvent(event));
+        }
+    }
+
+    function updateMouseEnd(
+        ref: React.MutableRefObject<null | MouseState>,
+        event: React.MouseEvent<SVGSVGElement>,
+        clickHandler: (screenLocation: Vector) => void,
+        dragEndHandler: (mouseState: MouseState, screenLocation: Vector) => void
+    ) {
+        if (ref.current == null) {
+            return;
+        }
+        if (!ref.current.isDrag) {
+            clickHandler(ref.current.start);
+        } else {
+            dragEndHandler(ref.current, fromEvent(event));
+        }
+        ref.current = null;
     }
 
     function onMouseDown(e: React.MouseEvent<SVGSVGElement>) {
         e.preventDefault();
-        if (mouseState.current != null) {
-            return;
-        }
-        const button = e.button;
-        if (button !== Button.Primary && button !== Button.Secondary) {
-            return;
-        }
-        mouseState.current = new MouseState(
-            fromEvent(e),
-            screenToWorld(fromEvent(e)),
-            button,
-            false
-        );
+        startMouseState(primaryMouseState, Button.Primary, e);
+        startMouseState(secondaryMouseState, Button.Secondary, e);
     }
     function onMouseMove(e: React.MouseEvent<SVGSVGElement>) {
-        const current = mouseState.current;
-        if (current == null) {
-            return;
-        }
-        if (current.button !== e.button) {
-            return;
-        }
-        if (!current.isDrag) {
-            if (
-                current.screenStart.subtract(fromEvent(e)).length() >
-                MIN_DRAG_DISTANCE
-            ) {
-                mouseState.current = current.withIsDrag(true);
-            }
-        } else {
-            onDrag(current.start, screenToWorld(fromEvent(e)));
-        }
+        e.preventDefault();
+        updateMouseState(primaryMouseState, e, (s, loc) =>
+            onDrag(s.start, screenToWorld(loc))
+        );
+        updateMouseState(secondaryMouseState, e, (s, loc) =>
+            onPan(s.screenStart, loc)
+        );
     }
     function onMouseUp(e: React.MouseEvent<SVGSVGElement>) {
         e.preventDefault();
-        if (mouseState.current == null) {
-            return;
-        }
-        if (mouseState.current.button !== e.button) {
-            return;
-        }
-        if (!mouseState.current.isDrag) {
-            onClick(mouseState.current.start);
-        } else {
-            onDragEnd(mouseState.current.start, screenToWorld(fromEvent(e)));
-        }
-        mouseState.current = null;
+        updateMouseEnd(
+            primaryMouseState,
+            e,
+            s => onClick(screenToWorld(s)),
+            (s, loc) => onDragEnd(s.start, screenToWorld(loc))
+        );
+        updateMouseEnd(
+            secondaryMouseState,
+            e,
+            s => onRightClick(screenToWorld(s)),
+            (s, loc) => onPanEnd(s.screenStart, loc)
+        );
     }
 
     return (

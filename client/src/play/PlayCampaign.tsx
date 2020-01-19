@@ -22,6 +22,7 @@ export function PlayCampaign({
 }) {
     const [gameState, setGameState] = useState<GameState | null>(null);
     const [tool, setTool] = useState(Tool.select);
+    const [view, setView] = useState(new View(1, new Vector(0, 0)));
 
     useEffect(() => {
         const loader = new CampaignLoader(campaignID, user, updater =>
@@ -51,9 +52,10 @@ export function PlayCampaign({
             main={
                 scene != null ? (
                     <GameMap
-                        view={new View(1, new Vector(0, 0))}
+                        view={view}
                         scene={scene}
                         tool={tool}
+                        onPan={p => setView(view.pan(p))}
                     />
                 ) : (
                     "No scene yet"
