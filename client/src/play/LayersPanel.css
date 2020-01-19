@@ -4,3 +4,11 @@
 .layers-panel__actions > * {
     padding: 0 5px;
 }
+
+.layers-panel__layer {
+    cursor: pointer;
+}
+
+.layers-panel__layer--active {
+    font-weight: bold;
+}

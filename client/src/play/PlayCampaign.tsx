@@ -81,6 +81,10 @@ export function PlayCampaign({
                                     layers
                                 })
                             }
+                            activeLayer={gameState.getActiveLayer()}
+                            onChangeActiveLayer={l =>
+                                eventHandler.changeActiveLayer(l)
+                            }
                         />
                     )}
                 </div>

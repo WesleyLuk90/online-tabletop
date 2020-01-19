@@ -2,14 +2,14 @@ import { Campaign } from "protocol/src/Campaign";
 import { Layer, Scene } from "protocol/src/Scene";
 import { User } from "protocol/src/User";
 import { checkNotNull } from "../util/Nullable";
-import { GameStateBuilder } from "./GameStateBuilder";
+import { GameStateBuilder, RawGameState } from "./GameStateBuilder";
 
-export class GameState {
+export class GameState implements RawGameState {
     constructor(
         readonly campaign: Campaign,
         readonly user: User,
         readonly scenes: Scene[],
-        readonly activeLayer: string | null
+        readonly activeLayer: string
     ) {}
 
     builder() {
@@ -46,7 +46,7 @@ export class GameState {
         }
         const layer = scene.layers.find(l => l.id === this.activeLayer);
         if (layer == null) {
-            return null;
+            return scene.layers[0] || null;
         }
         return layer;
     }

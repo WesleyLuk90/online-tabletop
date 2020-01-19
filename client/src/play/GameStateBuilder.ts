@@ -5,22 +5,22 @@ import { checkState } from "../util/CheckState";
 import { replaceValue } from "../util/List";
 import { GameState } from "./GameState";
 
-interface State {
+export interface RawGameState {
     readonly campaign: Campaign;
     readonly user: User;
     readonly scenes: Scene[];
-    readonly layer: string | null;
+    readonly activeLayer: string;
 }
 
 export class GameStateBuilder {
     constructor(private s: GameState) {}
 
-    private update(updated: Partial<State>) {
+    private update(updated: Partial<RawGameState>) {
         this.s = new GameState(
             updated.campaign || this.s.campaign,
             updated.user || this.s.user,
             updated.scenes || this.s.scenes,
-            updated.layer || null
+            updated.activeLayer || this.s.activeLayer
         );
         return this;
     }
@@ -109,5 +109,9 @@ export class GameStateBuilder {
         return this.updateScene(sceneID, {
             layers: scene.layers.filter(l => l.id !== layer.id)
         });
+    }
+
+    withActiveLayer(layer: Layer) {
+        return this.update({ activeLayer: layer.id });
     }
 }

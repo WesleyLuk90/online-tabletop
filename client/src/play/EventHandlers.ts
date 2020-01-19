@@ -67,4 +67,10 @@ export class EventHandler {
             return g;
         });
     }
+
+    changeActiveLayer(layer: Layer) {
+        this.updateGameState(gameState =>
+            gameState.build(b => b.withActiveLayer(layer))
+        );
+    }
 }

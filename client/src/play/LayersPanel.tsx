@@ -6,22 +6,29 @@ import { ColorSquare } from "../common/ColorSquare";
 import { IconButton } from "../common/IconButton";
 import { ItemList } from "../common/ItemList";
 import { SidePanel } from "../common/SidePanel";
+import { BemBuilder } from "../util/BemBuilder";
 import { LayerEditor } from "./LayerEditor";
 import "./LayersPanel.css";
 import { SceneService } from "./SceneService";
+
+const BEM = new BemBuilder("layers-panel");
 
 export function LayersPanel({
     layers,
     onUpdate,
     onCreate,
     onDelete,
-    onSort
+    onSort,
+    activeLayer,
+    onChangeActiveLayer
 }: {
     layers: Layer[];
     onUpdate: (layer: Layer) => void;
     onCreate: (layer: Layer) => void;
     onDelete: (layer: Layer) => void;
     onSort: (layers: Layer[]) => void;
+    activeLayer: Layer | null;
+    onChangeActiveLayer: (layer: Layer) => void;
 }) {
     const [edit, setEdit] = useState<Layer | null>(null);
     const [isNew, setIsNew] = useState(false);
@@ -56,7 +63,14 @@ export function LayersPanel({
             <ItemList
                 data={layers}
                 left={l => (
-                    <div>
+                    <div
+                        onClick={() => onChangeActiveLayer(l)}
+                        className={BEM.element(
+                            "layer",
+                            "active",
+                            activeLayer != null && activeLayer.id === l.id
+                        )}
+                    >
                         <ColorSquare color={l.color} />
                         {l.name}
                     </div>
