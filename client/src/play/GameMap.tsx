@@ -5,11 +5,11 @@ import "./GameMap.css";
 import { Grid } from "./Grid";
 import { Svg } from "./Svg";
 import { ToolLayer } from "./ToolLayer";
-import { Tool } from "./Tools";
+import { ToolType } from "./tools/ToolType";
 import { Vector } from "./Vector";
 import { View } from "./View";
 
-export function GameMap({ scene, tool }: { scene: Scene; tool: Tool }) {
+export function GameMap({ scene, tool }: { scene: Scene; tool: ToolType }) {
     const [view, setView] = useState(new View(1, new Vector(0, 0)));
     const [screenSize, setScreenSize] = useState(new Vector(1000, 1000));
     const [pan, setPan] = useState(new Vector(0, 0));

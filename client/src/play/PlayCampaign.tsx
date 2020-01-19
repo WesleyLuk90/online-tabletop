@@ -9,7 +9,7 @@ import { GameState } from "./GameState";
 import { LayersPanel } from "./LayersPanel";
 import { PlayLayout } from "./PlayLayout";
 import { TokenToolbar } from "./TokenToolbar";
-import { Tool } from "./Tools";
+import { ToolType } from "./tools/ToolType";
 
 export function PlayCampaign({
     campaignID,
@@ -19,7 +19,7 @@ export function PlayCampaign({
     user: User;
 }) {
     const [gameState, setGameState] = useState<GameState | null>(null);
-    const [tool, setTool] = useState(Tool.select);
+    const [tool, setTool] = useState(ToolType.select);
 
     useEffect(() => {
         const loader = new CampaignLoader(campaignID, user, updater =>

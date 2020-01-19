@@ -9,47 +9,47 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Toolbar } from "../common/Toolbar";
-import { Tool } from "./Tools";
+import { ToolType } from "./tools/ToolType";
 
 export function TokenToolbar({
     tool,
     setTool
 }: {
-    tool: Tool;
-    setTool: (tool: Tool) => void;
+    tool: ToolType;
+    setTool: (tool: ToolType) => void;
 }) {
     return (
         <Toolbar
             selected={tool}
             tools={[
                 {
-                    id: Tool.select,
+                    id: ToolType.select,
                     icon: faMousePointer,
-                    onSelect: () => setTool(Tool.select),
+                    onSelect: () => setTool(ToolType.select),
                     title: "Select"
                 },
                 {
-                    id: Tool.rectangle,
+                    id: ToolType.rectangle,
                     icon: faVectorSquare,
-                    onSelect: () => setTool(Tool.rectangle),
+                    onSelect: () => setTool(ToolType.rectangle),
                     title: "Rectangle"
                 },
                 {
-                    id: Tool.centerRectangle,
+                    id: ToolType.centerRectangle,
                     icon: faSquare,
-                    onSelect: () => setTool(Tool.centerRectangle),
+                    onSelect: () => setTool(ToolType.centerRectangle),
                     title: "Center Rectangle"
                 },
                 {
-                    id: Tool.circle,
+                    id: ToolType.circle,
                     icon: faCircle,
-                    onSelect: () => setTool(Tool.circle),
+                    onSelect: () => setTool(ToolType.circle),
                     title: "Circle"
                 },
                 {
-                    id: Tool.centerCircle,
+                    id: ToolType.centerCircle,
                     icon: faDotCircle,
-                    onSelect: () => setTool(Tool.centerCircle),
+                    onSelect: () => setTool(ToolType.centerCircle),
                     title: "Center Circle"
                 }
             ]}

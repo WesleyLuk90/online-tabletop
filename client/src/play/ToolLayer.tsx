@@ -1,15 +1,19 @@
-import { Color, Colors } from "protocol/src/Color";
 import React, { ReactNode, useState } from "react";
-import { Rectangle } from "./Rectangle";
-import { RectangleToken } from "./tokens/RectangleToken";
-import { Tool } from "./Tools";
+import { CenterRectangleTool, RectangleTool } from "./tools/RectTool";
+import { Tool } from "./tools/Tool";
+import { ToolType } from "./tools/ToolType";
 import { Vector } from "./Vector";
+
+const ToolHandlers: { [t in ToolType]?: Tool } = {
+    [ToolType.rectangle]: new RectangleTool(),
+    [ToolType.centerRectangle]: new CenterRectangleTool()
+};
 
 export function ToolLayer({
     tool,
     children
 }: {
-    tool: Tool;
+    tool: ToolType;
     children: (
         toolContent: ReactNode,
         onClick: (point: Vector) => void,
@@ -21,29 +25,10 @@ export function ToolLayer({
 
     function getContent() {
         if (dragState != null) {
-            if (tool === Tool.rectangle) {
+            const handler = ToolHandlers[tool];
+            if (handler != null) {
                 const [start, end] = dragState;
-                const rect = Rectangle.fromCorners(start, end);
-                return (
-                    <RectangleToken
-                        rect={rect}
-                        strokeColor={Colors[0]}
-                        strokeWidth={3}
-                        fillColor={new Color(10, 10, 10, 0.1)}
-                    />
-                );
-            }
-            if (tool === Tool.centerRectangle) {
-                const [start, end] = dragState;
-                const rect = Rectangle.fromCenterAndCorner(start, end);
-                return (
-                    <RectangleToken
-                        rect={rect}
-                        strokeColor={Colors[0]}
-                        strokeWidth={3}
-                        fillColor={new Color(10, 10, 10, 0.1)}
-                    />
-                );
+                return handler.render(start, end);
             }
         }
         return null;
