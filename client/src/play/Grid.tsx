@@ -2,7 +2,7 @@ import { Scene } from "protocol/src/Scene";
 import React from "react";
 import { range } from "../util/Range";
 import "./Grid.css";
-import { Viewport } from "./Viewport";
+import { Rectangle } from "./Rectangle";
 
 export function Line({
     x1,
@@ -23,7 +23,7 @@ export function Grid({
     viewport
 }: {
     scene: Scene;
-    viewport: Viewport;
+    viewport: Rectangle;
 }) {
     const startX = Math.floor(viewport.left / scene.gridSize);
     const endX = Math.ceil(viewport.right / scene.gridSize);

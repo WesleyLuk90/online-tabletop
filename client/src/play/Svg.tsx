@@ -2,8 +2,8 @@ import React, { ReactNode, useRef } from "react";
 import { interpolate, percent } from "../util/Math";
 import { checkNotNull } from "../util/Nullable";
 import { useDebounced } from "./Debouncer";
+import { Rectangle } from "./Rectangle";
 import { Vector } from "./Vector";
-import { Viewport } from "./Viewport";
 
 enum Button {
     Primary = 0,
@@ -41,7 +41,7 @@ export function Svg({
     onZoom
 }: {
     children: ReactNode;
-    viewport: Viewport;
+    viewport: Rectangle;
     size: Vector;
     onClick: (pos: Vector) => void;
     onRightClick: (pos: Vector) => void;

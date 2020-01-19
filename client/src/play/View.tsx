@@ -1,6 +1,6 @@
 import { limit } from "../util/Math";
+import { Rectangle } from "./Rectangle";
 import { Vector } from "./Vector";
-import { Viewport } from "./Viewport";
 
 const MAX_ZOOM = 100;
 const MIN_ZOOM = 1 / 100;
@@ -26,7 +26,7 @@ export class View {
     getViewport(screenSize: Vector) {
         const scaled = screenSize.scale(this.scale);
         const topLeft = this.center.subtract(scaled.scale(0.5));
-        return new Viewport(
+        return new Rectangle(
             topLeft.x,
             topLeft.y,
             topLeft.x + scaled.x,

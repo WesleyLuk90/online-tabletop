@@ -38,36 +38,41 @@ export function GameMap({ scene, tool }: { scene: Scene; tool: Tool }) {
 
     const viewport = view.pan(pan).getViewport(screenSize);
 
-    const [pos, setPos] = useState(new Vector(0, 0));
-
     function scaleScreenToWorld(v: Vector) {
         return v.scale(view.getScale());
     }
 
     return (
         <div className="game-map" ref={container}>
-            <Svg
-                size={screenSize}
-                viewport={viewport}
-                onClick={setPos}
-                onRightClick={a => console.log("right click", a)}
-                onDrag={(a, b) => console.log("drag", a, b)}
-                onDragEnd={(a, b) => console.log("drag-end", a, b)}
-                onPan={(start, current) =>
-                    setPan(scaleScreenToWorld(current.subtract(start)))
-                }
-                onPanEnd={(start, end) => {
-                    setPan(new Vector(0, 0));
-                    setView(view.pan(scaleScreenToWorld(end.subtract(start))));
-                }}
-                onZoom={tick => {
-                    setView(view.zoom(1 + tick * 0.1));
-                }}
-            >
-                {pos && <rect x={pos.x} y={pos.y} width={10} height={10} />}
-                <Grid viewport={viewport} scene={scene} />
-                <ToolLayer tool={tool} />
-            </Svg>
+            <ToolLayer tool={tool}>
+                {(toolContent, onClick, onDrag, onDragEnd) => (
+                    <Svg
+                        size={screenSize}
+                        viewport={viewport}
+                        onClick={onClick}
+                        onRightClick={a => console.log("right click", a)}
+                        onDrag={onDrag}
+                        onDragEnd={onDragEnd}
+                        onPan={(start, current) =>
+                            setPan(scaleScreenToWorld(current.subtract(start)))
+                        }
+                        onPanEnd={(start, end) => {
+                            setPan(new Vector(0, 0));
+                            setView(
+                                view.pan(
+                                    scaleScreenToWorld(end.subtract(start))
+                                )
+                            );
+                        }}
+                        onZoom={tick => {
+                            setView(view.zoom(1 + tick * 0.1));
+                        }}
+                    >
+                        {toolContent}
+                        <Grid viewport={viewport} scene={scene} />
+                    </Svg>
+                )}
+            </ToolLayer>
         </div>
     );
 }
