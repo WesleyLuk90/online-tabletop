@@ -1,3 +1,5 @@
+import { useRef } from "react";
+
 export class Debouncer {
     animationFrame = 0;
 
@@ -5,4 +7,12 @@ export class Debouncer {
         cancelAnimationFrame(this.animationFrame);
         this.animationFrame = requestAnimationFrame(action);
     }
+}
+
+export function useDebounced<A extends any[]>(
+    f: (...args: A) => void
+): (...args: A) => void {
+    const debouncer = useRef(new Debouncer());
+
+    return (...args) => debouncer.current.debounce(() => f(...args));
 }

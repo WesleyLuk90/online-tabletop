@@ -1,6 +1,7 @@
 import React, { ReactNode, useRef } from "react";
 import { interpolate, percent } from "../util/Math";
 import { checkNotNull } from "../util/Nullable";
+import { useDebounced } from "./Debouncer";
 import { Vector } from "./Vector";
 import { Viewport } from "./Viewport";
 
@@ -123,6 +124,9 @@ export function Svg({
         ref.current = null;
     }
 
+    const panDebounced = useDebounced(onPan);
+    const dragDebounced = useDebounced(onDrag);
+
     function onMouseDown(e: React.MouseEvent<SVGSVGElement>) {
         e.preventDefault();
         startMouseState(primaryMouseState, Button.Primary, e);
@@ -131,10 +135,10 @@ export function Svg({
     function onMouseMove(e: React.MouseEvent<SVGSVGElement>) {
         e.preventDefault();
         updateMouseState(primaryMouseState, e, (s, loc) =>
-            onDrag(s.start, screenToWorld(loc))
+            dragDebounced(s.start, screenToWorld(loc))
         );
         updateMouseState(secondaryMouseState, e, (s, loc) =>
-            onPan(s.screenStart, loc)
+            panDebounced(s.screenStart, loc)
         );
     }
     function onMouseUp(e: React.MouseEvent<SVGSVGElement>) {
