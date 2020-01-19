@@ -41,15 +41,15 @@ export function TokenToolbar({
                     title: "Center Rectangle"
                 },
                 {
-                    id: ToolType.circle,
+                    id: ToolType.ellipse,
                     icon: faCircle,
-                    onSelect: () => setTool(ToolType.circle),
+                    onSelect: () => setTool(ToolType.ellipse),
                     title: "Circle"
                 },
                 {
-                    id: ToolType.centerCircle,
+                    id: ToolType.centerEllipse,
                     icon: faDotCircle,
-                    onSelect: () => setTool(ToolType.centerCircle),
+                    onSelect: () => setTool(ToolType.centerEllipse),
                     title: "Center Circle"
                 }
             ]}

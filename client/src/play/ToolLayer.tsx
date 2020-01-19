@@ -1,4 +1,5 @@
 import React, { ReactNode, useState } from "react";
+import { CenterEllipseTool, EllipseTool } from "./tools/EllipseTool";
 import { CenterRectangleTool, RectangleTool } from "./tools/RectTool";
 import { Tool } from "./tools/Tool";
 import { ToolType } from "./tools/ToolType";
@@ -6,7 +7,9 @@ import { Vector } from "./Vector";
 
 const ToolHandlers: { [t in ToolType]?: Tool } = {
     [ToolType.rectangle]: new RectangleTool(),
-    [ToolType.centerRectangle]: new CenterRectangleTool()
+    [ToolType.centerRectangle]: new CenterRectangleTool(),
+    [ToolType.ellipse]: new EllipseTool(),
+    [ToolType.centerEllipse]: new CenterEllipseTool()
 };
 
 export function ToolLayer({

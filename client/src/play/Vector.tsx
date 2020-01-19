@@ -9,6 +9,10 @@ export class Vector {
         return new Vector(this.x + other.x, this.y + other.y);
     }
 
+    abs() {
+        return new Vector(Math.abs(this.x), Math.abs(this.y));
+    }
+
     subtract(other: Vector) {
         return new Vector(this.x - other.x, this.y - other.y);
     }
