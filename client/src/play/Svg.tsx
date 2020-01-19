@@ -127,7 +127,9 @@ export function Svg({
     }
 
     const panDebounced = useDebounced(onPan);
+    const panEndDebounced = useDebounced(onPanEnd);
     const dragDebounced = useDebounced(onDrag);
+    const dragEndDebounced = useDebounced(onDragEnd);
 
     function onMouseDown(e: React.MouseEvent<SVGSVGElement>) {
         e.preventDefault();
@@ -149,13 +151,13 @@ export function Svg({
             primaryMouseState,
             e,
             s => onClick(s),
-            (s, loc) => onDragEnd(s.start, screenToWorld(loc))
+            (s, loc) => dragEndDebounced(s.start, screenToWorld(loc))
         );
         updateMouseEnd(
             secondaryMouseState,
             e,
             s => onRightClick(s),
-            (s, loc) => onPanEnd(s.screenStart, loc)
+            (s, loc) => panEndDebounced(s.screenStart, loc)
         );
     }
 
