@@ -9,17 +9,8 @@ import { Tool } from "./Tools";
 import { Vector } from "./Vector";
 import { View } from "./View";
 
-export function GameMap({
-    view,
-    scene,
-    tool,
-    onPan
-}: {
-    view: View;
-    scene: Scene;
-    tool: Tool;
-    onPan: (pan: Vector) => void;
-}) {
+export function GameMap({ scene, tool }: { scene: Scene; tool: Tool }) {
+    const [view, setView] = useState(new View(1, new Vector(0, 0)));
     const [screenSize, setScreenSize] = useState(new Vector(1000, 1000));
     const [pan, setPan] = useState(new Vector(0, 0));
     const container = useRef<HTMLDivElement>(null);
@@ -50,7 +41,7 @@ export function GameMap({
     const [pos, setPos] = useState(new Vector(0, 0));
 
     function scaleScreenToWorld(v: Vector) {
-        return v.scale(view.zoom);
+        return v.scale(view.getScale());
     }
 
     return (
@@ -67,7 +58,10 @@ export function GameMap({
                 }
                 onPanEnd={(start, end) => {
                     setPan(new Vector(0, 0));
-                    onPan(scaleScreenToWorld(end.subtract(start)));
+                    setView(view.pan(scaleScreenToWorld(end.subtract(start))));
+                }}
+                onZoom={tick => {
+                    setView(view.zoom(1 + tick * 0.1));
                 }}
             >
                 {pos && <rect x={pos.x} y={pos.y} width={10} height={10} />}

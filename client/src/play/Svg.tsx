@@ -37,7 +37,8 @@ export function Svg({
     onDrag,
     onDragEnd,
     onPan,
-    onPanEnd
+    onPanEnd,
+    onZoom
 }: {
     children: ReactNode;
     viewport: Viewport;
@@ -48,6 +49,7 @@ export function Svg({
     onDragEnd: (start: Vector, end: Vector) => void;
     onPan: (start: Vector, current: Vector) => void;
     onPanEnd: (start: Vector, current: Vector) => void;
+    onZoom: (ticks: number) => void;
 }) {
     const primaryMouseState = useRef<null | MouseState>(null);
     const secondaryMouseState = useRef<null | MouseState>(null);
@@ -157,6 +159,10 @@ export function Svg({
         );
     }
 
+    function onWheel(e: React.WheelEvent<SVGSVGElement>) {
+        onZoom(e.deltaY / 100);
+    }
+
     return (
         <svg
             ref={ref}
@@ -169,6 +175,7 @@ export function Svg({
             onMouseUp={onMouseUp}
             onMouseMove={onMouseMove}
             onContextMenu={e => e.preventDefault()}
+            onWheel={onWheel}
         >
             {children}
         </svg>

@@ -10,8 +10,6 @@ import { LayersPanel } from "./LayersPanel";
 import { PlayLayout } from "./PlayLayout";
 import { TokenToolbar } from "./TokenToolbar";
 import { Tool } from "./Tools";
-import { Vector } from "./Vector";
-import { View } from "./View";
 
 export function PlayCampaign({
     campaignID,
@@ -22,7 +20,6 @@ export function PlayCampaign({
 }) {
     const [gameState, setGameState] = useState<GameState | null>(null);
     const [tool, setTool] = useState(Tool.select);
-    const [view, setView] = useState(new View(1, new Vector(0, 0)));
 
     useEffect(() => {
         const loader = new CampaignLoader(campaignID, user, updater =>
@@ -51,12 +48,7 @@ export function PlayCampaign({
         <PlayLayout
             main={
                 scene != null ? (
-                    <GameMap
-                        view={view}
-                        scene={scene}
-                        tool={tool}
-                        onPan={p => setView(view.pan(p))}
-                    />
+                    <GameMap scene={scene} tool={tool} />
                 ) : (
                     "No scene yet"
                 )
