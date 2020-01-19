@@ -109,7 +109,7 @@ export function Svg({
     function updateMouseEnd(
         ref: React.MutableRefObject<null | MouseState>,
         event: React.MouseEvent<SVGSVGElement>,
-        clickHandler: (screenLocation: Vector) => void,
+        clickHandler: (location: Vector) => void,
         dragEndHandler: (mouseState: MouseState, screenLocation: Vector) => void
     ) {
         if (ref.current == null) {
@@ -142,13 +142,13 @@ export function Svg({
         updateMouseEnd(
             primaryMouseState,
             e,
-            s => onClick(screenToWorld(s)),
+            s => onClick(s),
             (s, loc) => onDragEnd(s.start, screenToWorld(loc))
         );
         updateMouseEnd(
             secondaryMouseState,
             e,
-            s => onRightClick(screenToWorld(s)),
+            s => onRightClick(s),
             (s, loc) => onPanEnd(s.screenStart, loc)
         );
     }
