@@ -29,4 +29,22 @@ export class Rectangle {
     height() {
         return this.bottom - this.top;
     }
+
+    topLeft() {
+        return new Vector(this.left, this.top);
+    }
+
+    bottomRight() {
+        return new Vector(this.right, this.bottom);
+    }
+
+    overlaps(rect: Rectangle) {
+        const hasSeparatingPlane =
+            rect.right < this.left ||
+            this.right < rect.left ||
+            rect.bottom < this.top ||
+            this.bottom < rect.top;
+
+        return !hasSeparatingPlane;
+    }
 }

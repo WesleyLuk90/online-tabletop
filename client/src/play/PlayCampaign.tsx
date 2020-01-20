@@ -52,6 +52,7 @@ export function PlayCampaign({
                 scene != null ? (
                     <GameMap
                         scene={scene}
+                        tokens={gameState.getTokens()}
                         tool={tool}
                         createToken={t => eventHandler.createToolToken(t)}
                     />

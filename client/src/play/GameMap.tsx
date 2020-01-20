@@ -5,6 +5,8 @@ import { Debouncer } from "./Debouncer";
 import "./GameMap.css";
 import { Grid } from "./Grid";
 import { Svg } from "./Svg";
+import { TokenLayer } from "./TokenLayer";
+import { TokenCollection } from "./tokens/TokenCollection";
 import { ToolLayer } from "./ToolLayer";
 import { ToolCreatableToken } from "./tools/Tool";
 import { ToolType } from "./tools/ToolType";
@@ -14,10 +16,12 @@ import { View } from "./View";
 export function GameMap({
     scene,
     tool,
+    tokens,
     createToken
 }: {
     scene: Scene;
     tool: ToolType;
+    tokens: TokenCollection;
     createToken: Callback<ToolCreatableToken>;
 }) {
     const [view, setView] = useState(new View(1, new Vector(0, 0)));
@@ -78,8 +82,13 @@ export function GameMap({
                             setView(view.zoom(1 + tick * 0.1));
                         }}
                     >
-                        {toolContent}
                         <Grid viewport={viewport} scene={scene} />
+                        {toolContent}
+                        <TokenLayer
+                            tokens={tokens}
+                            scene={scene}
+                            viewport={viewport}
+                        />
                     </Svg>
                 )}
             </ToolLayer>
