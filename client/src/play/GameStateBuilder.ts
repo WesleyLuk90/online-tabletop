@@ -1,5 +1,6 @@
 import { Campaign } from "protocol/src/Campaign";
 import { Layer, Scene } from "protocol/src/Scene";
+import { Token } from "protocol/src/Token";
 import { User } from "protocol/src/User";
 import { checkState } from "../util/CheckState";
 import { replaceValue } from "../util/List";
@@ -10,6 +11,7 @@ export interface RawGameState {
     readonly user: User;
     readonly scenes: Scene[];
     readonly activeLayer: string;
+    readonly tokens: Token[];
 }
 
 export class GameStateBuilder {
@@ -20,7 +22,8 @@ export class GameStateBuilder {
             updated.campaign || this.s.campaign,
             updated.user || this.s.user,
             updated.scenes || this.s.scenes,
-            updated.activeLayer || this.s.activeLayer
+            updated.activeLayer || this.s.activeLayer,
+            updated.tokens || this.s.tokens
         );
         return this;
     }
@@ -113,5 +116,9 @@ export class GameStateBuilder {
 
     withActiveLayer(layer: Layer) {
         return this.update({ activeLayer: layer.id });
+    }
+
+    addToken(token: Token) {
+        return this.update({ tokens: [...this.s.tokens, token] });
     }
 }

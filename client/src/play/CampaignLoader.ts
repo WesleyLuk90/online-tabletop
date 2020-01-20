@@ -81,8 +81,9 @@ export class CampaignLoader {
             await CampaignRequests.update(campaign);
             this.loadCampaign();
         } else {
+            // FIXME load tokens
             this.updateNullableState(
-                () => new GameState(campaign, this.user, scenes, "")
+                () => new GameState(campaign, this.user, scenes, "", [])
             );
         }
     }

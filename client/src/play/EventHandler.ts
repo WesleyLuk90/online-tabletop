@@ -1,7 +1,10 @@
+import { newUUID } from "protocol/src/Id";
 import { Layer, Scene } from "protocol/src/Scene";
+import { Token } from "protocol/src/Token";
 import { CampaignRequests } from "../games/CampaignRequests";
 import { SceneRequests } from "../games/SceneRequests";
 import { GameState } from "./GameState";
+import { ToolCreatableToken } from "./tools/Tool";
 
 export class EventHandler {
     constructor(
@@ -72,5 +75,23 @@ export class EventHandler {
         this.updateGameState(gameState =>
             gameState.build(b => b.withActiveLayer(layer))
         );
+    }
+
+    createToolToken(created: ToolCreatableToken) {
+        this.updateGameState(gameState => {
+            const layer = gameState.getActiveLayer();
+            if (layer == null) {
+                return gameState;
+            }
+            const token: Token = {
+                ...created,
+                campaignID: gameState.campaign.id,
+                sceneID: gameState.getMySceneID(),
+                layerID: layer.id,
+                tokenID: newUUID(),
+                version: 0
+            };
+            return gameState.build(b => b.addToken(token));
+        });
     }
 }

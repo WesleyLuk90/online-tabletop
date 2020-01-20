@@ -1,7 +1,8 @@
 import React, { ReactNode, useState } from "react";
+import { Callback } from "../util/Callback";
 import { CenterEllipseTool, EllipseTool } from "./tools/EllipseTool";
 import { CenterRectangleTool, RectangleTool } from "./tools/RectTool";
-import { Tool } from "./tools/Tool";
+import { Tool, ToolCreatableToken } from "./tools/Tool";
 import { ToolType } from "./tools/ToolType";
 import { Vector } from "./Vector";
 
@@ -19,9 +20,13 @@ export function ToolLayer({
     tool: ToolType;
     children: (
         toolContent: ReactNode,
-        onClick: (point: Vector) => void,
+        onClick: Callback<Vector>,
         onDrag: (start: Vector, current: Vector) => void,
-        onDragEnd: (start: Vector, end: Vector) => void
+        onDragEnd: (
+            start: Vector,
+            end: Vector,
+            createToken: Callback<ToolCreatableToken>
+        ) => void
     ) => React.ReactElement;
 }) {
     const [dragState, setDragState] = useState<[Vector, Vector] | null>(null);
@@ -37,10 +42,14 @@ export function ToolLayer({
         return null;
     }
 
-    function onDragEnd(start: Vector, end: Vector) {
+    function onDragEnd(
+        start: Vector,
+        end: Vector,
+        createToken: Callback<ToolCreatableToken>
+    ) {
         const handler = ToolHandlers[tool];
         if (handler != null) {
-            handler.dragEnd(start, end);
+            handler.dragEnd(start, end, createToken);
         }
         setDragState(null);
     }

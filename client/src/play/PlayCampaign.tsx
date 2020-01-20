@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Spinner } from "../common/Icon";
 import { ScenePanel } from "../common/ScenePanel";
 import { CampaignLoader } from "./CampaignLoader";
-import { EventHandler } from "./EventHandlers";
+import { EventHandler } from "./EventHandler";
 import { GameMap } from "./GameMap";
 import { GameState } from "./GameState";
 import { LayersPanel } from "./LayersPanel";
@@ -44,11 +44,17 @@ export function PlayCampaign({
     });
     const scene = gameState.getMyScene();
 
+    console.log(gameState.getTokens());
+
     return (
         <PlayLayout
             main={
                 scene != null ? (
-                    <GameMap scene={scene} tool={tool} />
+                    <GameMap
+                        scene={scene}
+                        tool={tool}
+                        createToken={t => eventHandler.createToolToken(t)}
+                    />
                 ) : (
                     "No scene yet"
                 )

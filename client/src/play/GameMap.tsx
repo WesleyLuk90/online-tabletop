@@ -1,15 +1,25 @@
 import { Scene } from "protocol/src/Scene";
 import React, { useEffect, useRef, useState } from "react";
+import { Callback } from "../util/Callback";
 import { Debouncer } from "./Debouncer";
 import "./GameMap.css";
 import { Grid } from "./Grid";
 import { Svg } from "./Svg";
 import { ToolLayer } from "./ToolLayer";
+import { ToolCreatableToken } from "./tools/Tool";
 import { ToolType } from "./tools/ToolType";
 import { Vector } from "./Vector";
 import { View } from "./View";
 
-export function GameMap({ scene, tool }: { scene: Scene; tool: ToolType }) {
+export function GameMap({
+    scene,
+    tool,
+    createToken
+}: {
+    scene: Scene;
+    tool: ToolType;
+    createToken: Callback<ToolCreatableToken>;
+}) {
     const [view, setView] = useState(new View(1, new Vector(0, 0)));
     const [screenSize, setScreenSize] = useState(new Vector(1000, 1000));
     const [pan, setPan] = useState(new Vector(0, 0));
@@ -52,7 +62,7 @@ export function GameMap({ scene, tool }: { scene: Scene; tool: ToolType }) {
                         onClick={onClick}
                         onRightClick={a => console.log("right click", a)}
                         onDrag={onDrag}
-                        onDragEnd={onDragEnd}
+                        onDragEnd={(s, e) => onDragEnd(s, e, createToken)}
                         onPan={(start, current) =>
                             setPan(scaleScreenToWorld(current.subtract(start)))
                         }

@@ -1,16 +1,23 @@
 import { Campaign } from "protocol/src/Campaign";
 import { Layer, Scene } from "protocol/src/Scene";
+import { Token } from "protocol/src/Token";
 import { User } from "protocol/src/User";
 import { checkNotNull } from "../util/Nullable";
 import { GameStateBuilder, RawGameState } from "./GameStateBuilder";
+import { TokenCollection } from "./tokens/TokenCollection";
 
 export class GameState implements RawGameState {
+    private tokenCollection: TokenCollection;
+
     constructor(
         readonly campaign: Campaign,
         readonly user: User,
         readonly scenes: Scene[],
-        readonly activeLayer: string
-    ) {}
+        readonly activeLayer: string,
+        readonly tokens: Token[]
+    ) {
+        this.tokenCollection = new TokenCollection(tokens);
+    }
 
     builder() {
         return new GameStateBuilder(this);
@@ -49,5 +56,9 @@ export class GameState implements RawGameState {
             return scene.layers[0] || null;
         }
         return layer;
+    }
+
+    getTokens() {
+        return this.tokenCollection;
     }
 }
