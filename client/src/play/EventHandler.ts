@@ -3,15 +3,11 @@ import { Layer, Scene } from "protocol/src/Scene";
 import { Token } from "protocol/src/Token";
 import { CampaignRequests } from "../games/CampaignRequests";
 import { SceneRequests } from "../games/SceneRequests";
-import { GameState } from "./GameState";
+import { GameStateUpdater } from "./GameState";
 import { ToolCreatableToken } from "./tools/Tool";
 
 export class EventHandler {
-    constructor(
-        private updateGameState: (
-            updater: (gameState: GameState) => GameState
-        ) => void
-    ) {}
+    constructor(private updateGameState: (updater: GameStateUpdater) => void) {}
 
     changeMyScene(sceneID: string) {
         this.updateGameState(gameState => {

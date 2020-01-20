@@ -6,6 +6,8 @@ import { checkNotNull } from "../util/Nullable";
 import { GameStateBuilder, RawGameState } from "./GameStateBuilder";
 import { TokenCollection } from "./tokens/TokenCollection";
 
+export type GameStateUpdater = (gameState: GameState) => GameState;
+
 export class GameState implements RawGameState {
     private tokenCollection: TokenCollection;
 
@@ -14,7 +16,8 @@ export class GameState implements RawGameState {
         readonly user: User,
         readonly scenes: Scene[],
         readonly activeLayer: string,
-        readonly tokens: Token[]
+        readonly tokens: Token[],
+        readonly loading: boolean
     ) {
         this.tokenCollection = new TokenCollection(tokens);
     }

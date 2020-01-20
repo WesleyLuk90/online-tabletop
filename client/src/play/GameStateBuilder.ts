@@ -12,6 +12,7 @@ export interface RawGameState {
     readonly scenes: Scene[];
     readonly activeLayer: string;
     readonly tokens: Token[];
+    readonly loading: boolean;
 }
 
 export class GameStateBuilder {
@@ -23,7 +24,8 @@ export class GameStateBuilder {
             updated.user || this.s.user,
             updated.scenes || this.s.scenes,
             updated.activeLayer || this.s.activeLayer,
-            updated.tokens || this.s.tokens
+            updated.tokens || this.s.tokens,
+            updated.loading || this.s.loading
         );
         return this;
     }

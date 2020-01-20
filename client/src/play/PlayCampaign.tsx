@@ -44,8 +44,6 @@ export function PlayCampaign({
     });
     const scene = gameState.getMyScene();
 
-    console.log(gameState.getTokens());
-
     return (
         <PlayLayout
             main={
