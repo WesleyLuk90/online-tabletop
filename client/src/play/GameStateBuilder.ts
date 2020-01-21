@@ -129,4 +129,10 @@ export class GameStateBuilder {
     updateTokens(tokens: Token[]) {
         return this.update({ tokens });
     }
+
+    removeToken(tokenID: string) {
+        return this.update({
+            tokens: this.s.tokens.filter(t => t.tokenID !== tokenID)
+        });
+    }
 }

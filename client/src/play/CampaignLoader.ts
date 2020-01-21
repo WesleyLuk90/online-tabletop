@@ -47,7 +47,11 @@ export class CampaignLoader {
             () => updateNullableState(() => null),
             campaignID
         );
-        this.tokenManager = new TokenManager(campaignID, this.updateState);
+        this.tokenManager = new TokenManager(
+            this.sessionID,
+            campaignID,
+            this.updateState
+        );
     }
 
     updateState: GameStateUpdater = (updater: GameStateUpdate) => {
@@ -68,6 +72,7 @@ export class CampaignLoader {
                 this.eventHandler.updateScene(update);
                 break;
             case "token":
+                this.tokenManager.handleTokenUpdate(update);
                 break;
             default:
                 assertExhaustive(update);
