@@ -19,7 +19,15 @@ export class TokenRequests {
         });
     }
 
-    static update(delta: TokenDelta) {
+    static create(token: Token, source: string) {
+        return this.sendDelta({
+            type: "create",
+            token,
+            source
+        });
+    }
+
+    static sendDelta(delta: TokenDelta) {
         return Axios.post(
             `/api/campaigns/${getCampaignID(delta)}/tokens`,
             delta

@@ -6,12 +6,11 @@ import { checkNotNull } from "../util/Nullable";
 import { GameStateBuilder, RawGameState } from "./GameStateBuilder";
 import { TokenCollection } from "./tokens/TokenCollection";
 
-export type GameStateUpdater = (gameState: GameState) => GameState;
-
 export class GameState implements RawGameState {
     private tokenCollection: TokenCollection;
 
     constructor(
+        readonly sessionID: string,
         readonly campaign: Campaign,
         readonly user: User,
         readonly scenes: Scene[],

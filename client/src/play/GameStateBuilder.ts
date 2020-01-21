@@ -7,6 +7,7 @@ import { replaceValue } from "../util/List";
 import { GameState } from "./GameState";
 
 export interface RawGameState {
+    readonly sessionID: string;
     readonly campaign: Campaign;
     readonly user: User;
     readonly scenes: Scene[];
@@ -20,6 +21,7 @@ export class GameStateBuilder {
 
     private update(updated: Partial<RawGameState>) {
         this.s = new GameState(
+            updated.sessionID || this.s.sessionID,
             updated.campaign || this.s.campaign,
             updated.user || this.s.user,
             updated.scenes || this.s.scenes,
@@ -122,5 +124,9 @@ export class GameStateBuilder {
 
     addToken(token: Token) {
         return this.update({ tokens: [...this.s.tokens, token] });
+    }
+
+    updateTokens(tokens: Token[]) {
+        return this.update({ tokens });
     }
 }

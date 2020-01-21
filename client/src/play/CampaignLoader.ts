@@ -1,4 +1,5 @@
 import { Campaign } from "protocol/src/Campaign";
+import { newUUID } from "protocol/src/Id";
 import { Role } from "protocol/src/Role";
 import { Update } from "protocol/src/Update";
 import { User } from "protocol/src/User";
@@ -9,6 +10,7 @@ import { CampaignEventHandler } from "./CampaignEventHandler";
 import { GameState } from "./GameState";
 import { SceneService } from "./SceneService";
 import { Socket } from "./Socket";
+import { TokenManager } from "./TokenManager";
 
 function isManager(campaign: Campaign, userID: string) {
     return campaign.players.some(
@@ -22,10 +24,16 @@ export interface GameStateUpdate {
 export interface NullableGameStateUpdate {
     (gameState: GameState | null): GameState | null;
 }
+export interface GameStateUpdater {
+    (update: GameStateUpdate): void;
+}
 
 export class CampaignLoader {
     socket: Socket;
     eventHandler: CampaignEventHandler;
+    tokenManager: TokenManager;
+
+    private sessionID = newUUID();
 
     constructor(
         private campaignID: string,
@@ -39,9 +47,10 @@ export class CampaignLoader {
             () => updateNullableState(() => null),
             campaignID
         );
+        this.tokenManager = new TokenManager(campaignID, this.updateState);
     }
 
-    updateState = (updater: GameStateUpdate) => {
+    updateState: GameStateUpdater = (updater: GameStateUpdate) => {
         this.updateNullableState(state => {
             if (state == null) {
                 return null;
@@ -81,10 +90,17 @@ export class CampaignLoader {
             await CampaignRequests.update(campaign);
             this.loadCampaign();
         } else {
-            // FIXME load tokens
-            this.updateNullableState(
-                () => new GameState(campaign, this.user, scenes, "", [])
+            const gameState = new GameState(
+                this.sessionID,
+                campaign,
+                this.user,
+                scenes,
+                "",
+                [],
+                false
             );
+            this.updateNullableState(() => gameState);
+            this.tokenManager.updateScene(gameState.getMySceneID());
         }
     }
 }

@@ -3,11 +3,12 @@ import { Layer, Scene } from "protocol/src/Scene";
 import { Token } from "protocol/src/Token";
 import { CampaignRequests } from "../games/CampaignRequests";
 import { SceneRequests } from "../games/SceneRequests";
-import { GameStateUpdater } from "./GameState";
+import { TokenRequests } from "../games/TokenRequests";
+import { GameStateUpdater } from "./CampaignLoader";
 import { ToolCreatableToken } from "./tools/Tool";
 
 export class EventHandler {
-    constructor(private updateGameState: (updater: GameStateUpdater) => void) {}
+    constructor(private updateGameState: GameStateUpdater) {}
 
     changeMyScene(sceneID: string) {
         this.updateGameState(gameState => {
@@ -87,6 +88,7 @@ export class EventHandler {
                 tokenID: newUUID(),
                 version: 0
             };
+            TokenRequests.create(token, gameState.sessionID);
             return gameState.build(b => b.addToken(token));
         });
     }
