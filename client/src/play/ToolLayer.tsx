@@ -2,11 +2,13 @@ import React, { ReactNode, useState } from "react";
 import { Callback } from "../util/Callback";
 import { CenterEllipseTool, EllipseTool } from "./tools/EllipseTool";
 import { CenterRectangleTool, RectangleTool } from "./tools/RectTool";
+import { SelectTool } from "./tools/SelectTool";
 import { Tool, ToolCreatableToken } from "./tools/Tool";
 import { ToolType } from "./tools/ToolType";
 import { Vector } from "./Vector";
 
-const ToolHandlers: { [t in ToolType]?: Tool } = {
+const ToolHandlers: { [t in ToolType]: Tool } = {
+    [ToolType.select]: new SelectTool(),
     [ToolType.rectangle]: new RectangleTool(),
     [ToolType.centerRectangle]: new CenterRectangleTool(),
     [ToolType.ellipse]: new EllipseTool(),
