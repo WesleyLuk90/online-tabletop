@@ -1,4 +1,3 @@
-import { Colors } from "protocol/src/Color";
 import { Layer } from "protocol/src/Scene";
 import React from "react";
 import { ConfirmButton } from "../common/Button";
@@ -7,6 +6,7 @@ import { ColorSquare } from "../common/ColorSquare";
 import { Input } from "../common/Input";
 import { Label } from "../common/Label";
 import { ModalForm } from "../common/Modal";
+import { Colors } from "./Colors";
 import "./LayerEditor.css";
 
 export function LayerEditor({

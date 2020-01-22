@@ -1,4 +1,4 @@
-import { Color } from "protocol/src/Color";
+import { ColorData } from "protocol/src/Color";
 import React from "react";
 import { BemBuilder } from "../util/BemBuilder";
 import { ColorService } from "./ColorService";
@@ -10,7 +10,7 @@ export function ColorSquare({
     color,
     highlight
 }: {
-    color: Color;
+    color: ColorData;
     highlight?: boolean;
 }) {
     return (

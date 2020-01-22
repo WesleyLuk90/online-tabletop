@@ -1,7 +1,8 @@
-import { Color } from "protocol/src/Color";
+import { ColorData } from "protocol/src/Color";
+import { Color } from "../play/Colors";
 
 export class ColorService {
-    static toRGBA(color: Color) {
+    static toRGBA(color: ColorData) {
         return `rgba(${color.red}, ${color.green}, ${
             color.blue
         }, ${color.alpha.toFixed(2)})`;
@@ -11,7 +12,7 @@ export class ColorService {
         return ColorService.toRGBA(color);
     }
 
-    static isEqual(a: Color, b: Color) {
+    static isEqual(a: ColorData, b: ColorData) {
         return (
             a.red === b.red &&
             a.green === b.green &&

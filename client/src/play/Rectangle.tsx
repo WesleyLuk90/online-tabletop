@@ -1,3 +1,4 @@
+import { Token } from "protocol/src/Token";
 import { Vector } from "./Vector";
 
 export class Rectangle {
@@ -13,6 +14,13 @@ export class Rectangle {
     static fromCenterAndCorner(center: Vector, corner: Vector) {
         const d = corner.subtract(center);
         return Rectangle.fromCorners(center.subtract(d), center.add(d));
+    }
+
+    static fromToken(token: Token) {
+        return Rectangle.fromCorners(
+            new Vector(token.x, token.y),
+            new Vector(token.x + token.width, token.y + token.height)
+        );
     }
 
     constructor(

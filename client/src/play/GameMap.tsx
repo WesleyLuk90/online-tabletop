@@ -3,10 +3,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { Callback } from "../util/Callback";
 import { Debouncer } from "./Debouncer";
 import "./GameMap.css";
+import { GameState } from "./GameState";
 import { Grid } from "./Grid";
 import { Svg } from "./Svg";
 import { TokenLayer } from "./TokenLayer";
-import { TokenCollection } from "./tokens/TokenCollection";
 import { ToolLayer } from "./ToolLayer";
 import { ToolCreatableToken } from "./tools/Tool";
 import { ToolType } from "./tools/ToolType";
@@ -16,13 +16,13 @@ import { View } from "./View";
 export function GameMap({
     scene,
     tool,
-    tokens,
-    createToken
+    createToken,
+    gameState
 }: {
     scene: Scene;
     tool: ToolType;
-    tokens: TokenCollection;
     createToken: Callback<ToolCreatableToken>;
+    gameState: GameState;
 }) {
     const [view, setView] = useState(new View(1, new Vector(0, 0)));
     const [screenSize, setScreenSize] = useState(new Vector(1000, 1000));
@@ -58,7 +58,7 @@ export function GameMap({
 
     return (
         <div className="game-map" ref={container}>
-            <ToolLayer tool={tool}>
+            <ToolLayer tool={tool} gameState={gameState}>
                 {(toolContent, onClick, onDrag, onDragEnd) => (
                     <Svg
                         size={screenSize}
@@ -83,12 +83,12 @@ export function GameMap({
                         }}
                     >
                         <Grid viewport={viewport} scene={scene} />
-                        {toolContent}
                         <TokenLayer
-                            tokens={tokens}
+                            tokens={gameState.getTokens()}
                             scene={scene}
                             viewport={viewport}
                         />
+                        {toolContent}
                     </Svg>
                 )}
             </ToolLayer>

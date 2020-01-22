@@ -3,8 +3,8 @@ import { Token } from "protocol/src/Token";
 import React from "react";
 import { Ellipse } from "./Ellipse";
 import { Rectangle } from "./Rectangle";
+import { SvgRect } from "./svg/SvgRect";
 import { EllipseToken } from "./tokens/EllipseToken";
-import { RectangleToken } from "./tokens/RectangleToken";
 import { TokenCollection } from "./tokens/TokenCollection";
 import { Vector } from "./Vector";
 
@@ -18,7 +18,7 @@ export function TokenRender({
     switch (token.data.type) {
         case "square":
             return (
-                <RectangleToken
+                <SvgRect
                     rect={boundingBox}
                     strokeWidth={token.data.strokeWidth}
                     strokeColor={token.data.strokeColor}

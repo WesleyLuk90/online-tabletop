@@ -1,7 +1,7 @@
-import { Color, Colors } from "protocol/src/Color";
 import React from "react";
+import { Color, Colors } from "../Colors";
 import { Rectangle } from "../Rectangle";
-import { RectangleToken } from "../tokens/RectangleToken";
+import { SvgRect } from "../svg/SvgRect";
 import { Vector } from "../Vector";
 import { TokenCreationTool, ToolCreatableToken } from "./Tool";
 
@@ -10,7 +10,7 @@ abstract class AbstractRectTool extends TokenCreationTool {
 
     render(dragStart: Vector, dragCurrent: Vector) {
         return (
-            <RectangleToken
+            <SvgRect
                 rect={this.getRect(dragStart, dragCurrent)}
                 strokeColor={Colors[0]}
                 strokeWidth={3}

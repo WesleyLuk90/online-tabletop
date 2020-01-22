@@ -1,17 +1,17 @@
-import { Color } from "protocol/src/Color";
+import { ColorData } from "protocol/src/Color";
 import React from "react";
 import { ColorService } from "../../common/ColorService";
 import { Rectangle } from "../Rectangle";
 
-export function RectangleToken({
+export function SvgRect({
     rect,
     strokeColor,
     fillColor,
     strokeWidth
 }: {
     rect: Rectangle;
-    strokeColor: Color;
-    fillColor: Color;
+    strokeColor: ColorData;
+    fillColor: ColorData;
     strokeWidth: number;
 }) {
     return (

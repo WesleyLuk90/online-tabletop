@@ -1,6 +1,6 @@
-import { Colors } from "protocol/src/Color";
 import { newUUID } from "protocol/src/Id";
 import { Layer, Scene } from "protocol/src/Scene";
+import { Colors } from "./Colors";
 
 export class SceneService {
     static createDefaultScene(campaignID: string): Scene {

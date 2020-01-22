@@ -1,6 +1,7 @@
 import { Token } from "protocol/src/Token";
 import { ReactNode } from "react";
 import { Callback } from "../../util/Callback";
+import { GameState } from "../GameState";
 import { Vector } from "../Vector";
 
 export type ToolCreatableToken = Omit<
@@ -14,7 +15,11 @@ export abstract class Tool {
         dragEnd: Vector,
         createToken: Callback<ToolCreatableToken>
     ): void;
-    abstract render(dragStart: Vector, dragCurrent: Vector): ReactNode;
+    abstract render(
+        dragStart: Vector,
+        dragCurrent: Vector,
+        gameState: GameState
+    ): ReactNode;
 }
 
 export abstract class TokenCreationTool {

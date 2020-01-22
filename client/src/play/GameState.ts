@@ -3,6 +3,7 @@ import { Layer, Scene } from "protocol/src/Scene";
 import { Token } from "protocol/src/Token";
 import { User } from "protocol/src/User";
 import { checkNotNull } from "../util/Nullable";
+import { Color, Colors } from "./Colors";
 import { GameStateBuilder, RawGameState } from "./GameStateBuilder";
 import { TokenCollection } from "./tokens/TokenCollection";
 
@@ -62,5 +63,12 @@ export class GameState implements RawGameState {
 
     getTokens() {
         return this.tokenCollection;
+    }
+
+    getLayerColor(layerID: string): Color {
+        return Color.fromData(
+            this.getMyScene()?.layers.find(l => l.id === layerID)?.color ||
+                Colors[3]
+        );
     }
 }

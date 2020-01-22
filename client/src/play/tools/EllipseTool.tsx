@@ -1,5 +1,5 @@
-import { Color, Colors } from "protocol/src/Color";
 import React from "react";
+import { Color, Colors } from "../Colors";
 import { Ellipse } from "../Ellipse";
 import { EllipseToken } from "../tokens/EllipseToken";
 import { Vector } from "../Vector";
