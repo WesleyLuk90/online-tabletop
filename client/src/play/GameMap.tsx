@@ -1,6 +1,5 @@
 import { Scene } from "protocol/src/Scene";
 import React, { useEffect, useRef, useState } from "react";
-import { Callback } from "../util/Callback";
 import { Debouncer } from "./Debouncer";
 import "./GameMap.css";
 import { GameState } from "./GameState";
@@ -8,7 +7,7 @@ import { Grid } from "./Grid";
 import { Svg } from "./Svg";
 import { TokenLayer } from "./TokenLayer";
 import { ToolLayer } from "./ToolLayer";
-import { ToolCreatableToken } from "./tools/Tool";
+import { ToolCallbacks } from "./tools/Tool";
 import { ToolType } from "./tools/ToolType";
 import { Vector } from "./Vector";
 import { View } from "./View";
@@ -16,12 +15,12 @@ import { View } from "./View";
 export function GameMap({
     scene,
     tool,
-    createToken,
+    toolCallbacks,
     gameState
 }: {
     scene: Scene;
     tool: ToolType;
-    createToken: Callback<ToolCreatableToken>;
+    toolCallbacks: ToolCallbacks;
     gameState: GameState;
 }) {
     const [view, setView] = useState(new View(1, new Vector(0, 0)));
@@ -58,7 +57,11 @@ export function GameMap({
 
     return (
         <div className="game-map" ref={container}>
-            <ToolLayer tool={tool} gameState={gameState}>
+            <ToolLayer
+                tool={tool}
+                gameState={gameState}
+                toolCallbacks={toolCallbacks}
+            >
                 {(toolContent, onClick, onDrag, onDragEnd) => (
                     <Svg
                         size={screenSize}
@@ -66,7 +69,7 @@ export function GameMap({
                         onClick={onClick}
                         onRightClick={a => console.log("right click", a)}
                         onDrag={onDrag}
-                        onDragEnd={(s, e) => onDragEnd(s, e, createToken)}
+                        onDragEnd={(s, e) => onDragEnd(s, e)}
                         onPan={(start, current) =>
                             setPan(scaleScreenToWorld(current.subtract(start)))
                         }
@@ -87,6 +90,7 @@ export function GameMap({
                             tokens={gameState.getTokens()}
                             scene={scene}
                             viewport={viewport}
+                            selection={gameState.selectedTokens}
                         />
                         {toolContent}
                     </Svg>

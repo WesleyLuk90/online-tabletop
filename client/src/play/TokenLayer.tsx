@@ -6,6 +6,7 @@ import { Rectangle } from "./Rectangle";
 import { SvgRect } from "./svg/SvgRect";
 import { EllipseToken } from "./tokens/EllipseToken";
 import { TokenCollection } from "./tokens/TokenCollection";
+import { TokenSelection } from "./tokens/TokenSelection";
 import { Vector } from "./Vector";
 
 export function TokenRender({
@@ -43,11 +44,13 @@ export function TokenRender({
 export function TokenLayer({
     tokens,
     scene,
-    viewport
+    viewport,
+    selection
 }: {
     tokens: TokenCollection;
     scene: Scene;
     viewport: Rectangle;
+    selection: TokenSelection;
 }) {
     return (
         <g>
@@ -55,6 +58,7 @@ export function TokenLayer({
                 <g key={layer.id}>
                     {tokens
                         .get(layer)
+                        .filter(t => !selection.has(t))
                         .map(withBoundingBox)
                         .filter(isVisible(viewport))
                         .map(([token, boundingBox]) => (

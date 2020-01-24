@@ -4,7 +4,7 @@ import { GameState } from "./GameState";
 import { CenterEllipseTool, EllipseTool } from "./tools/EllipseTool";
 import { CenterRectangleTool, RectangleTool } from "./tools/RectTool";
 import { SelectTool } from "./tools/SelectTool";
-import { Tool, ToolCreatableToken } from "./tools/Tool";
+import { Tool, ToolCallbacks } from "./tools/Tool";
 import { ToolType } from "./tools/ToolType";
 import { Vector } from "./Vector";
 
@@ -19,18 +19,16 @@ const ToolHandlers: { [t in ToolType]: Tool } = {
 export function ToolLayer({
     tool,
     children,
-    gameState
+    gameState,
+    toolCallbacks
 }: {
     tool: ToolType;
+    toolCallbacks: ToolCallbacks;
     children: (
         toolContent: ReactNode,
         onClick: Callback<Vector>,
         onDrag: (start: Vector, current: Vector) => void,
-        onDragEnd: (
-            start: Vector,
-            end: Vector,
-            createToken: Callback<ToolCreatableToken>
-        ) => void
+        onDragEnd: (start: Vector, end: Vector) => void
     ) => React.ReactElement;
     gameState: GameState;
 }) {
@@ -47,14 +45,10 @@ export function ToolLayer({
         return null;
     }
 
-    function onDragEnd(
-        start: Vector,
-        end: Vector,
-        createToken: Callback<ToolCreatableToken>
-    ) {
+    function onDragEnd(start: Vector, end: Vector) {
         const handler = ToolHandlers[tool];
         if (handler != null) {
-            handler.dragEnd(start, end, createToken);
+            handler.dragEnd(start, end, gameState, toolCallbacks);
         }
         setDragState(null);
     }

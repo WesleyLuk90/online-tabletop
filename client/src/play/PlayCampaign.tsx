@@ -52,7 +52,7 @@ export function PlayCampaign({
                         scene={scene}
                         gameState={gameState}
                         tool={tool}
-                        createToken={t => eventHandler.createToolToken(t)}
+                        toolCallbacks={eventHandler.toolCallbacks()}
                     />
                 ) : (
                     "No scene yet"

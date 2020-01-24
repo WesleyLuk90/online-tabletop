@@ -5,6 +5,7 @@ import { User } from "protocol/src/User";
 import { checkState } from "../util/CheckState";
 import { replaceValue } from "../util/List";
 import { GameState } from "./GameState";
+import { TokenSelection } from "./tokens/TokenSelection";
 
 export interface RawGameState {
     readonly sessionID: string;
@@ -14,6 +15,7 @@ export interface RawGameState {
     readonly activeLayer: string;
     readonly tokens: Token[];
     readonly loading: boolean;
+    readonly selectedTokens: TokenSelection;
 }
 
 export class GameStateBuilder {
@@ -27,7 +29,8 @@ export class GameStateBuilder {
             updated.scenes || this.s.scenes,
             updated.activeLayer || this.s.activeLayer,
             updated.tokens || this.s.tokens,
-            updated.loading || this.s.loading
+            updated.loading || this.s.loading,
+            updated.selectedTokens || this.s.selectedTokens
         );
         return this;
     }
@@ -133,6 +136,12 @@ export class GameStateBuilder {
     removeToken(tokenID: string) {
         return this.update({
             tokens: this.s.tokens.filter(t => t.tokenID !== tokenID)
+        });
+    }
+
+    addSelection(tokens: Token[]) {
+        return this.update({
+            selectedTokens: this.s.selectedTokens.add(tokens)
         });
     }
 }

@@ -9,11 +9,17 @@ export type ToolCreatableToken = Omit<
     "campaignID" | "tokenID" | "sceneID" | "layerID" | "version"
 >;
 
+export interface ToolCallbacks {
+    createToken: Callback<ToolCreatableToken>;
+    addSelection: Callback<Token[]>;
+}
+
 export abstract class Tool {
     abstract dragEnd(
         dragStart: Vector,
         dragEnd: Vector,
-        createToken: Callback<ToolCreatableToken>
+        gameState: GameState,
+        toolCallbacks: ToolCallbacks
     ): void;
     abstract render(
         dragStart: Vector,
@@ -22,13 +28,14 @@ export abstract class Tool {
     ): ReactNode;
 }
 
-export abstract class TokenCreationTool {
+export abstract class TokenCreationTool extends Tool {
     dragEnd(
         dragStart: Vector,
         dragEnd: Vector,
-        createToken: Callback<ToolCreatableToken>
+        gameState: GameState,
+        toolCallbacks: ToolCallbacks
     ) {
-        createToken(this.create(dragStart, dragEnd));
+        toolCallbacks.createToken(this.create(dragStart, dragEnd));
     }
     abstract create(dragStart: Vector, dragEnd: Vector): ToolCreatableToken;
 }

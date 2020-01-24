@@ -6,9 +6,28 @@ import { checkNotNull } from "../util/Nullable";
 import { Color, Colors } from "./Colors";
 import { GameStateBuilder, RawGameState } from "./GameStateBuilder";
 import { TokenCollection } from "./tokens/TokenCollection";
+import { TokenSelection } from "./tokens/TokenSelection";
 
 export class GameState implements RawGameState {
     private tokenCollection: TokenCollection;
+
+    static newGameState(
+        sessionID: string,
+        campaign: Campaign,
+        user: User,
+        scenes: Scene[]
+    ) {
+        return new GameState(
+            sessionID,
+            campaign,
+            user,
+            scenes,
+            "",
+            [],
+            false,
+            TokenSelection.empty()
+        );
+    }
 
     constructor(
         readonly sessionID: string,
@@ -17,7 +36,8 @@ export class GameState implements RawGameState {
         readonly scenes: Scene[],
         readonly activeLayer: string,
         readonly tokens: Token[],
-        readonly loading: boolean
+        readonly loading: boolean,
+        readonly selectedTokens: TokenSelection
     ) {
         this.tokenCollection = new TokenCollection(tokens);
     }

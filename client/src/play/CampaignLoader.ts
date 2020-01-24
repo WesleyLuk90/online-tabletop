@@ -95,14 +95,11 @@ export class CampaignLoader {
             await CampaignRequests.update(campaign);
             this.loadCampaign();
         } else {
-            const gameState = new GameState(
+            const gameState = GameState.newGameState(
                 this.sessionID,
                 campaign,
                 this.user,
-                scenes,
-                "",
-                [],
-                false
+                scenes
             );
             this.updateNullableState(() => gameState);
             this.tokenManager.updateScene(gameState.getMySceneID());
