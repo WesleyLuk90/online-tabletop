@@ -15,7 +15,13 @@ export class SelectTool extends Tool {
 
     render(startDrag: Vector, currentDrag: Vector, gameState: GameState) {
         const rect = Rectangle.fromCorners(startDrag, currentDrag);
-        const tokens = gameState.tokens
+        const layer = gameState.getActiveLayer();
+        if (layer == null) {
+            return null;
+        }
+        const tokens = gameState
+            .getTokens()
+            .get(layer)
             .map(withBoundingBox)
             .filter(([t, bb]) => bb.overlaps(rect));
         return (
