@@ -102,7 +102,12 @@ export class EventHandler {
     toolCallbacks(): ToolCallbacks {
         return {
             createToken: t => this.createToolToken(t),
-            addSelection: ts => this.addSelection(ts)
+            addSelection: ts => this.addSelection(ts),
+            dragSelection: p => {
+                this.updateGameState(gameState =>
+                    gameState.build(b => b.dragSelection(p))
+                );
+            }
         };
     }
 }

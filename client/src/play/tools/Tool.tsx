@@ -12,6 +12,7 @@ export type ToolCreatableToken = Omit<
 export interface ToolCallbacks {
     createToken: Callback<ToolCreatableToken>;
     addSelection: Callback<Token[]>;
+    dragSelection: Callback<Vector | null>;
 }
 
 export abstract class Tool {
@@ -21,6 +22,14 @@ export abstract class Tool {
         gameState: GameState,
         toolCallbacks: ToolCallbacks
     ): void;
+
+    onDrag(
+        dragStart: Vector,
+        dragEnd: Vector,
+        gameState: GameState,
+        toolCallbacks: ToolCallbacks
+    ) {}
+
     abstract render(
         dragStart: Vector,
         dragCurrent: Vector,

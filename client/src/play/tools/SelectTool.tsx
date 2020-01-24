@@ -1,5 +1,6 @@
 import { Token } from "protocol/src/Token";
 import React from "react";
+import { notNull } from "../../util/Nullable";
 import { Color } from "../Colors";
 import { GameState } from "../GameState";
 import { Rectangle } from "../Rectangle";
@@ -11,6 +12,8 @@ const SELECT_STROKE = new Color(2, 39, 141, 0.795);
 const SELECT_FILL = new Color(35, 81, 207, 0.308);
 
 export class SelectTool extends Tool {
+    isDragging = false;
+
     getSelection(
         startDrag: Vector,
         currentDrag: Vector,
@@ -23,7 +26,7 @@ export class SelectTool extends Tool {
         }
         return gameState
             .getTokens()
-            .get(layer)
+            .byLayer(layer)
             .filter(t => !gameState.selectedTokens.has(t))
             .map(withBoundingBox)
             .filter(([t, bb]) => bb.overlaps(rect));
@@ -35,14 +38,41 @@ export class SelectTool extends Tool {
         gameState: GameState,
         toolCallbacks: ToolCallbacks
     ) {
-        toolCallbacks.addSelection(
-            this.getSelection(dragStart, dragEnd, gameState).map(
-                ([token]) => token
-            )
-        );
+        if (!this.isDragging) {
+            toolCallbacks.addSelection(
+                this.getSelection(dragStart, dragEnd, gameState).map(
+                    ([token]) => token
+                )
+            );
+        } else {
+            this.isDragging = false;
+            toolCallbacks.dragSelection(null);
+        }
+    }
+
+    onDrag(
+        startDrag: Vector,
+        currentDrag: Vector,
+        gameState: GameState,
+        toolCallbacks: ToolCallbacks
+    ) {
+        if (
+            this.isDragging ||
+            gameState.selectedTokens
+                .asList()
+                .map(id => gameState.getTokens().byId(id))
+                .filter(notNull)
+                .some(t => Rectangle.fromToken(t).contains(startDrag))
+        ) {
+            this.isDragging = true;
+            toolCallbacks.dragSelection(currentDrag.subtract(startDrag));
+        }
     }
 
     render(startDrag: Vector, currentDrag: Vector, gameState: GameState) {
+        if (this.isDragging) {
+            return <g></g>;
+        }
         const rect = Rectangle.fromCorners(startDrag, currentDrag);
         return (
             <g>

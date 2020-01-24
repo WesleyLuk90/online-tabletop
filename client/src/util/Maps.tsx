@@ -9,3 +9,7 @@ export function groupBy<T, K>(t: T[], key: (t: T) => K): Map<K, T[]> {
     });
     return map;
 }
+
+export function keyBy<T, K>(t: T[], key: (t: T) => K): Map<K, T> {
+    return new Map(t.map(t => [key(t), t]));
+}

@@ -55,4 +55,22 @@ export class Rectangle {
 
         return !hasSeparatingPlane;
     }
+
+    contains(point: Vector) {
+        return (
+            this.left < point.x &&
+            point.x < this.right &&
+            this.top < point.y &&
+            point.y < this.bottom
+        );
+    }
+
+    offset(vector: Vector) {
+        return new Rectangle(
+            this.left + vector.x,
+            this.top + vector.y,
+            this.right + vector.x,
+            this.bottom + vector.y
+        );
+    }
 }

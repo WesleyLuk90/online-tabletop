@@ -91,6 +91,7 @@ export function GameMap({
                             scene={scene}
                             viewport={viewport}
                             selection={gameState.selectedTokens}
+                            selectionDrag={gameState.selectionDrag}
                         />
                         {toolContent}
                     </Svg>

@@ -20,4 +20,8 @@ export class TokenSelection {
         tokens.forEach(t => next.set.add(t.tokenID));
         return next;
     }
+
+    asList(): string[] {
+        return Array.from(this.set);
+    }
 }

@@ -1,14 +1,20 @@
 import { Layer } from "protocol/src/Scene";
 import { Token } from "protocol/src/Token";
-import { groupBy } from "../../util/Maps";
+import { groupBy, keyBy } from "../../util/Maps";
 
 export class TokenCollection {
-    private byLayer: Map<string, Token[]>;
+    private tokensByLayer: Map<string, Token[]>;
+    private tokensById: Map<string, Token>;
     constructor(tokens: Token[]) {
-        this.byLayer = groupBy(tokens, t => t.layerID);
+        this.tokensByLayer = groupBy(tokens, t => t.layerID);
+        this.tokensById = keyBy(tokens, t => t.tokenID);
     }
 
-    get(layer: Layer): Token[] {
-        return this.byLayer.get(layer.id) || [];
+    byLayer(layer: Layer): Token[] {
+        return this.tokensByLayer.get(layer.id) || [];
+    }
+
+    byId(id: string): Token | null {
+        return this.tokensById.get(id) || null;
     }
 }

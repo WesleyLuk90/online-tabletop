@@ -6,6 +6,7 @@ import { checkState } from "../util/CheckState";
 import { replaceValue } from "../util/List";
 import { GameState } from "./GameState";
 import { TokenSelection } from "./tokens/TokenSelection";
+import { Vector } from "./Vector";
 
 export interface RawGameState {
     readonly sessionID: string;
@@ -16,6 +17,7 @@ export interface RawGameState {
     readonly tokens: Token[];
     readonly loading: boolean;
     readonly selectedTokens: TokenSelection;
+    readonly selectionDrag: Vector | null;
 }
 
 export class GameStateBuilder {
@@ -30,7 +32,10 @@ export class GameStateBuilder {
             updated.activeLayer || this.s.activeLayer,
             updated.tokens || this.s.tokens,
             updated.loading || this.s.loading,
-            updated.selectedTokens || this.s.selectedTokens
+            updated.selectedTokens || this.s.selectedTokens,
+            updated.selectionDrag !== undefined
+                ? updated.selectionDrag
+                : this.s.selectionDrag
         );
         return this;
     }
@@ -142,6 +147,12 @@ export class GameStateBuilder {
     addSelection(tokens: Token[]) {
         return this.update({
             selectedTokens: this.s.selectedTokens.add(tokens)
+        });
+    }
+
+    dragSelection(pos: Vector | null) {
+        return this.update({
+            selectionDrag: pos
         });
     }
 }

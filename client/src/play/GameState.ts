@@ -7,6 +7,7 @@ import { Color, Colors } from "./Colors";
 import { GameStateBuilder, RawGameState } from "./GameStateBuilder";
 import { TokenCollection } from "./tokens/TokenCollection";
 import { TokenSelection } from "./tokens/TokenSelection";
+import { Vector } from "./Vector";
 
 export class GameState implements RawGameState {
     private tokenCollection: TokenCollection;
@@ -25,7 +26,8 @@ export class GameState implements RawGameState {
             "",
             [],
             false,
-            TokenSelection.empty()
+            TokenSelection.empty(),
+            null
         );
     }
 
@@ -37,7 +39,8 @@ export class GameState implements RawGameState {
         readonly activeLayer: string,
         readonly tokens: Token[],
         readonly loading: boolean,
-        readonly selectedTokens: TokenSelection
+        readonly selectedTokens: TokenSelection,
+        readonly selectionDrag: Vector | null
     ) {
         this.tokenCollection = new TokenCollection(tokens);
     }

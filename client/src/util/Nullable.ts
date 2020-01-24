@@ -7,3 +7,7 @@ export function checkNotNull<T extends {}>(
     }
     return value;
 }
+
+export function notNull<T extends {}>(t: T | null | undefined): t is T {
+    return t != null;
+}

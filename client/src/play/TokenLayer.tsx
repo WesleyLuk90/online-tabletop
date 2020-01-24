@@ -45,26 +45,34 @@ export function TokenLayer({
     tokens,
     scene,
     viewport,
-    selection
+    selection,
+    selectionDrag
 }: {
     tokens: TokenCollection;
     scene: Scene;
     viewport: Rectangle;
     selection: TokenSelection;
+    selectionDrag: Vector | null;
 }) {
+    function offset(token: Token, boundingBox: Rectangle) {
+        if (selectionDrag != null && selection.has(token)) {
+            return boundingBox.offset(selectionDrag);
+        }
+        return boundingBox;
+    }
+
     return (
         <g>
             {scene.layers.map(layer => (
                 <g key={layer.id}>
                     {tokens
-                        .get(layer)
-                        .filter(t => !selection.has(t))
+                        .byLayer(layer)
                         .map(withBoundingBox)
                         .filter(isVisible(viewport))
                         .map(([token, boundingBox]) => (
                             <TokenRender
                                 token={token}
-                                boundingBox={boundingBox}
+                                boundingBox={offset(token, boundingBox)}
                                 key={token.tokenID}
                             />
                         ))}
