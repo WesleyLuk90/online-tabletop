@@ -30,6 +30,10 @@ export function Grid({
     const startY = Math.floor(viewport.top / scene.gridSize);
     const endY = Math.ceil(viewport.bottom / scene.gridSize);
 
+    if (endX - startX > 150 || endY - startY > 150) {
+        return null;
+    }
+
     return (
         <g>
             {range(startX, endX).map(i => (
