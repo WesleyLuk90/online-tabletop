@@ -15,7 +15,7 @@ export class RequestData {
     }
 
     url(key: string): string {
-        return BadRequestError.check(
+        return BadRequestError.hasKey(
             this.urlData,
             key,
             `Required url part ${key}`
@@ -23,7 +23,7 @@ export class RequestData {
     }
 
     query(key: string): string {
-        return BadRequestError.check(
+        return BadRequestError.hasKey(
             this.queryData,
             key,
             `Required query parameter ${key}`

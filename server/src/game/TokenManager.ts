@@ -1,9 +1,11 @@
+import * as t from "io-ts";
 import { parse } from "protocol/src/Parse";
 import {
     getCampaignID,
     TokenDelta,
     TokenDeltaSchema
 } from "protocol/src/TokenDelta";
+import { BadRequestError } from "../Errors";
 import { Route } from "../Route";
 import { CampaignPermissionService } from "./CampaignPermissionService";
 import { TokenProcessor } from "./TokenProcessor";
@@ -28,16 +30,28 @@ export class TokenManager {
                     )
             ),
             Route.create("post", "/api/campaigns/:id/tokens", (user, data) =>
-                this.handleUpdate(user, parse(data.body(), TokenDeltaSchema))
+                this.handleUpdate(
+                    user,
+                    data.url("id"),
+                    parse(data.body(), t.array(TokenDeltaSchema))
+                )
             )
         ];
     }
 
-    async handleUpdate(userID: string, update: TokenDelta) {
+    async handleUpdate(
+        userID: string,
+        campaignId: string,
+        updates: TokenDelta[]
+    ) {
+        BadRequestError.check(
+            updates.every(u => getCampaignID(u) === campaignId),
+            "Campaign ids do not match"
+        );
         return this.permissionService.requirePlayer(
-            { campaignID: getCampaignID(update), userID },
+            { campaignID: campaignId, userID },
             () => {
-                this.tokenProcessor.enqueue(update);
+                updates.forEach(update => this.tokenProcessor.enqueue(update));
                 return {};
             }
         );

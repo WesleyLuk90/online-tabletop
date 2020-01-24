@@ -63,11 +63,17 @@ export class UnauthorizedError extends UserFacingError {
 }
 
 export class BadRequestError extends UserFacingError {
-    static check(object: any, key: string, message?: string) {
+    static hasKey(object: any, key: string, message?: string) {
         if (object == null || object[key] == null) {
             throw new BadRequestError(message);
         }
         return object[key];
+    }
+
+    static check(check: boolean, message?: string) {
+        if (!check) {
+            throw new BadRequestError(message);
+        }
     }
 
     constructor(message?: string) {
