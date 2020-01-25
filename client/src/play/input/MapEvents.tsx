@@ -6,6 +6,7 @@ import { Vector } from "../Vector";
 export interface MapEvents {
     onClick: (position: Vector) => void;
     onRightClick: (position: Vector) => void;
+    onDragStart: (start: Vector) => void;
     onDrag: (start: Vector, current: Vector) => void;
     onDragEnd: (start: Vector, end: Vector) => void;
 }
@@ -59,6 +60,7 @@ export function MapContextProvider({
     const subscribers = useRef({
         onClick: new SubscriptionManager<[Vector]>(),
         onRightClick: new SubscriptionManager<[Vector]>(),
+        onDragStart: new SubscriptionManager<[Vector]>(),
         onDrag: new SubscriptionManager<[Vector, Vector]>(),
         onDragEnd: new SubscriptionManager<[Vector, Vector]>()
     });
@@ -67,6 +69,7 @@ export function MapContextProvider({
         const subscriptions = [
             subscribers.current.onClick.subscribe(events.onClick),
             subscribers.current.onRightClick.subscribe(events.onRightClick),
+            subscribers.current.onDragStart.subscribe(events.onDragStart),
             subscribers.current.onDrag.subscribe(events.onDrag),
             subscribers.current.onDragEnd.subscribe(events.onDragEnd)
         ];
@@ -76,6 +79,7 @@ export function MapContextProvider({
     const {
         onClick,
         onRightClick,
+        onDragStart,
         onDrag,
         onDragEnd: onDragEng
     } = subscribers.current;
@@ -85,6 +89,7 @@ export function MapContextProvider({
             {children({
                 onClick: onClick.invoke.bind(onClick),
                 onRightClick: onRightClick.invoke.bind(onRightClick),
+                onDragStart: onDragStart.invoke.bind(onDragStart),
                 onDrag: onDrag.invoke.bind(onDrag),
                 onDragEnd: onDragEng.invoke.bind(onDragEng)
             })}

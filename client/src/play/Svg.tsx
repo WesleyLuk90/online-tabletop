@@ -34,6 +34,7 @@ export function Svg({
     size,
     onClick,
     onRightClick,
+    onDragStart,
     onDrag,
     onDragEnd,
     onPan,
@@ -45,6 +46,7 @@ export function Svg({
     size: Vector;
     onClick: (pos: Vector) => void;
     onRightClick: (pos: Vector) => void;
+    onDragStart: (start: Vector) => void;
     onDrag: (start: Vector, current: Vector) => void;
     onDragEnd: (start: Vector, end: Vector) => void;
     onPan: (start: Vector, current: Vector) => void;
@@ -92,6 +94,7 @@ export function Svg({
     function updateMouseState(
         ref: React.MutableRefObject<null | MouseState>,
         event: React.MouseEvent<SVGSVGElement>,
+        dragStartHandler: (mouseState: MouseState) => void,
         dragHandler: (mouseState: MouseState, screenLocation: Vector) => void
     ) {
         if (ref.current == null) {
@@ -103,6 +106,7 @@ export function Svg({
                 MIN_DRAG_DISTANCE
             ) {
                 ref.current = ref.current.withIsDrag(true);
+                dragStartHandler(ref.current);
             }
         } else {
             dragHandler(ref.current, fromEvent(event));
@@ -128,6 +132,7 @@ export function Svg({
 
     const panDebounced = useDebounced(onPan);
     const panEndDebounced = useDebounced(onPanEnd);
+    const dragStartDebounced = useDebounced(onDragStart);
     const dragDebounced = useDebounced(onDrag);
     const dragEndDebounced = useDebounced(onDragEnd);
 
@@ -138,11 +143,17 @@ export function Svg({
     }
     function onMouseMove(e: React.MouseEvent<SVGSVGElement>) {
         e.preventDefault();
-        updateMouseState(primaryMouseState, e, (s, loc) =>
-            dragDebounced(s.start, screenToWorld(loc))
+        updateMouseState(
+            primaryMouseState,
+            e,
+            s => dragStartDebounced(s.start),
+            (s, loc) => dragDebounced(s.start, screenToWorld(loc))
         );
-        updateMouseState(secondaryMouseState, e, (s, loc) =>
-            panDebounced(s.screenStart, loc)
+        updateMouseState(
+            secondaryMouseState,
+            e,
+            () => {},
+            (s, loc) => panDebounced(s.screenStart, loc)
         );
     }
     function onMouseUp(e: React.MouseEvent<SVGSVGElement>) {

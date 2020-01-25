@@ -2,7 +2,7 @@ import { Campaign } from "protocol/src/Campaign";
 import { Layer, Scene } from "protocol/src/Scene";
 import { Token } from "protocol/src/Token";
 import { User } from "protocol/src/User";
-import { checkNotNull } from "../util/Nullable";
+import { checkNotNull, notNull } from "../util/Nullable";
 import { Color, Colors } from "./Colors";
 import { GameStateBuilder, RawGameState } from "./GameStateBuilder";
 import { TokenCollection } from "./tokens/TokenCollection";
@@ -93,5 +93,12 @@ export class GameState implements RawGameState {
             this.getMyScene()?.layers.find(l => l.id === layerID)?.color ||
                 Colors[3]
         );
+    }
+
+    getSelectedTokens(): Token[] {
+        return this.selectedTokens
+            .asList()
+            .map(t => this.tokenCollection.byId(t))
+            .filter(notNull);
     }
 }

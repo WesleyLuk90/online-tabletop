@@ -6,7 +6,7 @@ import { GameState } from "./GameState";
 import { Grid } from "./Grid";
 import { MapContextProvider } from "./input/MapEvents";
 import { Svg } from "./Svg";
-import { TokenLayer } from "./TokenLayer";
+import { TokenLayer } from "./tokens/TokenLayer";
 import { ToolLayer } from "./ToolLayer";
 import { ToolCallbacks } from "./tools/Tool";
 import { ToolType } from "./tools/ToolType";
@@ -59,12 +59,19 @@ export function GameMap({
     return (
         <div className="game-map" ref={container}>
             <MapContextProvider>
-                {({ onClick, onRightClick, onDrag, onDragEnd }) => (
+                {({
+                    onClick,
+                    onRightClick,
+                    onDragStart,
+                    onDrag,
+                    onDragEnd
+                }) => (
                     <Svg
                         size={screenSize}
                         viewport={viewport}
                         onClick={onClick}
                         onRightClick={onRightClick}
+                        onDragStart={onDragStart}
                         onDrag={onDrag}
                         onDragEnd={onDragEnd}
                         onPan={(start, current) =>
@@ -88,7 +95,6 @@ export function GameMap({
                             scene={scene}
                             viewport={viewport}
                             selection={gameState.selectedTokens}
-                            selectionDrag={gameState.selectionDrag}
                         />
                         <ToolLayer
                             tool={tool}

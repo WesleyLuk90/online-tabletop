@@ -3,6 +3,7 @@ import { assertExhaustive } from "../util/Exaustive";
 import { GameState } from "./GameState";
 import { CenterEllipseTool, EllipseTool } from "./tools/EllipseTool";
 import { CenterRectangleTool, RectangleTool } from "./tools/RectTool";
+import { SelectTool } from "./tools/SelectTool";
 import { ToolCallbacks } from "./tools/Tool";
 import { ToolType } from "./tools/ToolType";
 
@@ -17,7 +18,9 @@ export function ToolLayer({
 }) {
     switch (tool) {
         case ToolType.select:
-            return null;
+            return (
+                <SelectTool gameState={gameState} callbacks={toolCallbacks} />
+            );
         case ToolType.rectangle:
             return (
                 <RectangleTool
