@@ -6,12 +6,12 @@ import { GameState } from "../GameState";
 import { Rectangle } from "../Rectangle";
 import { SvgRect } from "../svg/SvgRect";
 import { Vector } from "../Vector";
-import { Tool, ToolCallbacks } from "./Tool";
+import { ToolCallbacks } from "./Tool";
 
 const SELECT_STROKE = new Color(2, 39, 141, 0.795);
 const SELECT_FILL = new Color(35, 81, 207, 0.308);
-
-export class SelectTool extends Tool {
+class Foo {}
+export class SelectTool extends Foo {
     isDragging = false;
 
     getSelection(

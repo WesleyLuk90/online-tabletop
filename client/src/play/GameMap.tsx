@@ -4,6 +4,7 @@ import { Debouncer } from "./Debouncer";
 import "./GameMap.css";
 import { GameState } from "./GameState";
 import { Grid } from "./Grid";
+import { MapContextProvider } from "./input/MapEvents";
 import { Svg } from "./Svg";
 import { TokenLayer } from "./TokenLayer";
 import { ToolLayer } from "./ToolLayer";
@@ -57,19 +58,15 @@ export function GameMap({
 
     return (
         <div className="game-map" ref={container}>
-            <ToolLayer
-                tool={tool}
-                gameState={gameState}
-                toolCallbacks={toolCallbacks}
-            >
-                {(toolContent, onClick, onDrag, onDragEnd) => (
+            <MapContextProvider>
+                {({ onClick, onRightClick, onDrag, onDragEnd }) => (
                     <Svg
                         size={screenSize}
                         viewport={viewport}
                         onClick={onClick}
-                        onRightClick={a => console.log("right click", a)}
+                        onRightClick={onRightClick}
                         onDrag={onDrag}
-                        onDragEnd={(s, e) => onDragEnd(s, e)}
+                        onDragEnd={onDragEnd}
                         onPan={(start, current) =>
                             setPan(scaleScreenToWorld(current.subtract(start)))
                         }
@@ -93,10 +90,14 @@ export function GameMap({
                             selection={gameState.selectedTokens}
                             selectionDrag={gameState.selectionDrag}
                         />
-                        {toolContent}
+                        <ToolLayer
+                            tool={tool}
+                            toolCallbacks={toolCallbacks}
+                            gameState={gameState}
+                        />
                     </Svg>
                 )}
-            </ToolLayer>
+            </MapContextProvider>
         </div>
     );
 }
