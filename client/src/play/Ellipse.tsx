@@ -10,6 +10,7 @@ export class Ellipse {
                 .scale(0.5)
         );
     }
+
     constructor(readonly center: Vector, readonly radius: Vector) {}
 
     left() {

@@ -1,6 +1,8 @@
 import React from "react";
+import { assertExhaustive } from "../util/Exaustive";
 import { GameState } from "./GameState";
-import { RectangleTool } from "./tools/RectTool";
+import { CenterEllipseTool, EllipseTool } from "./tools/EllipseTool";
+import { CenterRectangleTool, RectangleTool } from "./tools/RectTool";
 import { ToolCallbacks } from "./tools/Tool";
 import { ToolType } from "./tools/ToolType";
 
@@ -24,10 +26,24 @@ export function ToolLayer({
                 />
             );
         case ToolType.centerRectangle:
-            return null;
+            return (
+                <CenterRectangleTool
+                    gameState={gameState}
+                    callbacks={toolCallbacks}
+                />
+            );
         case ToolType.ellipse:
-            return null;
+            return (
+                <EllipseTool gameState={gameState} callbacks={toolCallbacks} />
+            );
         case ToolType.centerEllipse:
-            return null;
+            return (
+                <CenterEllipseTool
+                    gameState={gameState}
+                    callbacks={toolCallbacks}
+                />
+            );
+        default:
+            return assertExhaustive(tool);
     }
 }
