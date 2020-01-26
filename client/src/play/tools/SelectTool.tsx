@@ -58,20 +58,29 @@ export function SelectTool({
             }
         },
         onDragStart(start) {
+            const underCursor = SelectionService.point(start, gameState)[0];
             setStartPos(start);
-            setIsMoving(
-                gameState
-                    .getSelectedTokens()
-                    .map(RenderableToken.fromToken)
-                    .some(t => t.boundingBox.contains(start))
-            );
+            if (
+                underCursor != null &&
+                !gameState.selectedTokens.has(underCursor.token)
+            ) {
+                updateSelection([underCursor.token]);
+                setIsMoving(true);
+            } else {
+                setIsMoving(
+                    gameState
+                        .getSelectedTokens()
+                        .map(RenderableToken.fromToken)
+                        .some(t => t.boundingBox.contains(start))
+                );
+            }
         },
         onDrag(start, current) {
             setCurrentPos(current);
         },
         onDragEnd(start, end) {
             if (!isMoving) {
-                addSelection(
+                updateSelection(
                     SelectionService.area(
                         Rectangle.fromCorners(start, end),
                         gameState
