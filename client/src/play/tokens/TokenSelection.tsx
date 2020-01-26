@@ -5,6 +5,10 @@ export class TokenSelection {
         return new TokenSelection([]);
     }
 
+    static fromTokens(tokens: Token[]) {
+        return new TokenSelection(tokens.map(t => t.tokenID));
+    }
+
     private set: Set<string>;
 
     constructor(tokens: Iterable<string>) {

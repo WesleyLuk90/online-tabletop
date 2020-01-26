@@ -11,6 +11,7 @@ export type ToolCreatableToken = Omit<
 export interface ToolCallbacks {
     createToken: Callback<ToolCreatableToken>;
     addSelection: Callback<Token[]>;
+    updateSelection: Callback<Token[]>;
     updateTokens: Callback<TokenUpdate[]>;
 }
 

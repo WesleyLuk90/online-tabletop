@@ -42,35 +42,43 @@ function ActiveSelection({
 
 export function SelectTool({
     gameState,
-    callbacks: { addSelection, updateTokens }
+    callbacks: { addSelection, updateTokens, updateSelection }
 }: ToolProps) {
     const [startPos, setStartPos] = useState<Vector | null>(null);
     const [currentPos, setCurrentPos] = useState<Vector | null>(null);
     const [isMoving, setIsMoving] = useState(false);
 
     useMapEvents({
-        onDragStart(s) {
-            setStartPos(s);
+        onClick(loc) {
+            const first = SelectionService.point(loc, gameState)[0];
+            if (first != null) {
+                updateSelection([first.token]);
+            } else {
+                updateSelection([]);
+            }
+        },
+        onDragStart(start) {
+            setStartPos(start);
             setIsMoving(
                 gameState
                     .getSelectedTokens()
                     .map(RenderableToken.fromToken)
-                    .some(t => t.boundingBox.contains(s))
+                    .some(t => t.boundingBox.contains(start))
             );
         },
-        onDrag(s, c) {
-            setCurrentPos(c);
+        onDrag(start, current) {
+            setCurrentPos(current);
         },
-        onDragEnd(s, e) {
+        onDragEnd(start, end) {
             if (!isMoving) {
                 addSelection(
                     SelectionService.area(
-                        Rectangle.fromCorners(s, e),
+                        Rectangle.fromCorners(start, end),
                         gameState
                     ).map(t => t.token)
                 );
             } else {
-                const delta = e.subtract(s);
+                const delta = end.subtract(start);
                 updateTokens(
                     gameState.getSelectedTokens().map(t => ({
                         campaignID: t.campaignID,

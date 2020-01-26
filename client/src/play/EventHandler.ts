@@ -100,6 +100,12 @@ export class EventHandler {
         );
     }
 
+    updateSelection(tokens: Token[]) {
+        this.updateGameState(gameState =>
+            gameState.build(b => b.updateSelection(tokens))
+        );
+    }
+
     updateTokens(updates: TokenUpdate[]) {
         this.updateGameState(gameState => {
             TokenRequests.update(updates, gameState.sessionID);
@@ -113,6 +119,7 @@ export class EventHandler {
         return {
             createToken: t => this.createToolToken(t),
             addSelection: ts => this.addSelection(ts),
+            updateSelection: ts => this.updateSelection(ts),
             updateTokens: t => this.updateTokens(t)
         };
     }

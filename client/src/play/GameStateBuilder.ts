@@ -144,4 +144,10 @@ export class GameStateBuilder {
             selectedTokens: this.s.selectedTokens.add(tokens)
         });
     }
+
+    updateSelection(tokens: Token[]) {
+        return this.update({
+            selectedTokens: TokenSelection.fromTokens(tokens)
+        });
+    }
 }
