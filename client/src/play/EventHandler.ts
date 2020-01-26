@@ -5,6 +5,7 @@ import { CampaignRequests } from "../games/CampaignRequests";
 import { SceneRequests } from "../games/SceneRequests";
 import { TokenRequests } from "../games/TokenRequests";
 import { GameStateUpdater } from "./CampaignLoader";
+import { TokenUpdate, TokenUpdater } from "./tokens/TokenUpdater";
 import { ToolCallbacks, ToolCreatableToken } from "./tools/Tool";
 
 export class EventHandler {
@@ -99,15 +100,20 @@ export class EventHandler {
         );
     }
 
+    updateTokens(updates: TokenUpdate[]) {
+        this.updateGameState(gameState => {
+            TokenRequests.update(updates, gameState.sessionID);
+            return gameState.build(b =>
+                b.updateTokens(TokenUpdater.apply(gameState.tokens, updates))
+            );
+        });
+    }
+
     toolCallbacks(): ToolCallbacks {
         return {
             createToken: t => this.createToolToken(t),
             addSelection: ts => this.addSelection(ts),
-            dragSelection: p => {
-                this.updateGameState(gameState =>
-                    gameState.build(b => b.dragSelection(p))
-                );
-            }
+            updateTokens: t => this.updateTokens(t)
         };
     }
 }

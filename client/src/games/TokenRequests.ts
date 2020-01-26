@@ -1,7 +1,12 @@
 import Axios from "axios";
 import { parse } from "protocol/src/Parse";
 import { Token, TokenSchema } from "protocol/src/Token";
-import { getCampaignID, TokenDelta } from "protocol/src/TokenDelta";
+import {
+    getCampaignID,
+    TokenDelta,
+    UpdateToken
+} from "protocol/src/TokenDelta";
+import { TokenUpdate } from "../play/tokens/TokenUpdater";
 
 export class TokenRequests {
     static list({
@@ -27,6 +32,21 @@ export class TokenRequests {
                 source
             }
         ]);
+    }
+
+    static update(updates: TokenUpdate[], source: string) {
+        return this.sendDeltas(
+            updates.map(u => {
+                const update: UpdateToken = {
+                    type: "update",
+                    campaignID: u.campaignID,
+                    tokenID: u.tokenID,
+                    update: u.updatedFields,
+                    source: source
+                };
+                return update;
+            })
+        );
     }
 
     static sendDeltas(deltas: TokenDelta[]) {

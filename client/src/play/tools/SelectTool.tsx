@@ -8,6 +8,7 @@ import { RenderableToken } from "../tokens/RenderableToken";
 import { Vector } from "../Vector";
 import { Selected } from "./Selected";
 import { SelectionRectangle } from "./SelectionRectangle";
+import { SelectionService } from "./SelectionService";
 import { ToolProps } from "./Tool";
 
 const SELECT_STROKE = new Color(2, 39, 141, 0.795);
@@ -22,7 +23,7 @@ function ActiveSelection({
 }) {
     return (
         <g>
-            {computeSelection(rect, gameState).map(t => (
+            {SelectionService.area(rect, gameState).map(t => (
                 <SelectionRectangle
                     key={t.key()}
                     token={t}
@@ -41,7 +42,7 @@ function ActiveSelection({
 
 export function SelectTool({
     gameState,
-    callbacks: { addSelection }
+    callbacks: { addSelection, updateTokens }
 }: ToolProps) {
     const [startPos, setStartPos] = useState<Vector | null>(null);
     const [currentPos, setCurrentPos] = useState<Vector | null>(null);
@@ -63,10 +64,22 @@ export function SelectTool({
         onDragEnd(s, e) {
             if (!isMoving) {
                 addSelection(
-                    computeSelection(
+                    SelectionService.area(
                         Rectangle.fromCorners(s, e),
                         gameState
                     ).map(t => t.token)
+                );
+            } else {
+                const delta = e.subtract(s);
+                updateTokens(
+                    gameState.getSelectedTokens().map(t => ({
+                        campaignID: t.campaignID,
+                        tokenID: t.tokenID,
+                        updatedFields: {
+                            x: t.x + delta.x,
+                            y: t.y + delta.y
+                        }
+                    }))
                 );
             }
             setStartPos(null);
@@ -96,20 +109,4 @@ export function SelectTool({
             <ActiveSelection rect={rect} gameState={gameState} />
         </g>
     );
-}
-
-function computeSelection(
-    area: Rectangle,
-    gameState: GameState
-): RenderableToken[] {
-    const layer = gameState.getActiveLayer();
-    if (layer == null) {
-        return [];
-    }
-    return gameState
-        .getTokens()
-        .byLayer(layer)
-        .filter(t => !gameState.selectedTokens.has(t))
-        .map(RenderableToken.fromToken)
-        .filter(t => t.boundingBox.overlaps(area));
 }

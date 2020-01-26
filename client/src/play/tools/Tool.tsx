@@ -1,7 +1,7 @@
 import { Token } from "protocol/src/Token";
 import { Callback } from "../../util/Callback";
 import { GameState } from "../GameState";
-import { Vector } from "../Vector";
+import { TokenUpdate } from "../tokens/TokenUpdater";
 
 export type ToolCreatableToken = Omit<
     Token,
@@ -11,7 +11,7 @@ export type ToolCreatableToken = Omit<
 export interface ToolCallbacks {
     createToken: Callback<ToolCreatableToken>;
     addSelection: Callback<Token[]>;
-    dragSelection: Callback<Vector | null>;
+    updateTokens: Callback<TokenUpdate[]>;
 }
 
 export interface ToolProps {
