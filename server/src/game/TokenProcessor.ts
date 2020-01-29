@@ -1,13 +1,18 @@
 import {
     CreateToken,
     DeleteToken,
+    getCampaignID,
     TokenDelta,
     UpdateToken
 } from "protocol/src/TokenDelta";
 import { assertExhaustive } from "../util/Exaustive";
-import { Queue } from "../util/Queue";
+import { Lock } from "../util/Lock";
 import { NotificationService } from "./NotificationService";
 import { TokenStorage } from "./TokenStorage";
+
+function key({ campaignID, tokenID }: { campaignID: string; tokenID: string }) {
+    return `${campaignID}/${tokenID}`;
+}
 
 export class TokenProcessor {
     constructor(
@@ -28,10 +33,28 @@ export class TokenProcessor {
         }
     };
 
-    private queue = new Queue<TokenDelta>(this.process);
+    private lock = new Lock(key);
 
+    private getTokenID(delta: TokenDelta) {
+        switch (delta.type) {
+            case "create":
+                return delta.token.tokenID;
+            case "delete":
+                return delta.tokenID;
+            case "update":
+                return delta.tokenID;
+            default:
+                assertExhaustive(delta);
+        }
+    }
     enqueue(delta: TokenDelta) {
-        this.queue.enqueue(delta);
+        this.lock.runExclusive(
+            {
+                campaignID: getCampaignID(delta),
+                tokenID: this.getTokenID(delta)
+            },
+            () => this.process(delta)
+        );
     }
 
     private async createToken(createToken: CreateToken) {
