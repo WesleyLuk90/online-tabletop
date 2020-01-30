@@ -1,4 +1,9 @@
 import { Campaign } from "protocol/src/Campaign";
+import {
+    CreateEntityDelta,
+    DeleteEntityDelta,
+    UpdateEntityDelta
+} from "protocol/src/EntityDelta";
 import { CreateToken, DeleteToken, UpdateToken } from "protocol/src/TokenDelta";
 import { BroadcastService } from "./BroadcastService";
 import { SceneReference } from "./SceneReference";
@@ -41,6 +46,33 @@ export class NotificationService {
             type: "token",
             campaignID: token.campaignID,
             update: { ...token, fromVersion: fromVersion }
+        });
+    }
+
+    entityUpdated(entityDelta: CreateEntityDelta | DeleteEntityDelta) {
+        if (entityDelta.type === "delete") {
+            this.broadcastService.broadcast({
+                type: "entity",
+                campaignID: entityDelta.campaignID,
+                update: entityDelta
+            });
+        } else {
+            this.broadcastService.broadcast({
+                type: "entity",
+                campaignID: entityDelta.entity.campaignID,
+                update: entityDelta
+            });
+        }
+    }
+
+    versionedEntityUpdated(
+        fromVersion: number,
+        entityDelta: UpdateEntityDelta
+    ) {
+        this.broadcastService.broadcast({
+            type: "entity",
+            campaignID: entityDelta.campaignID,
+            update: { fromVersion, ...entityDelta }
         });
     }
 }

@@ -1,5 +1,10 @@
 import * as t from "io-ts";
 import {
+    CreateEntityDeltaSchema,
+    DeleteEntityDeltaSchema,
+    UpdateEntityDeltaSchema
+} from "./EntityDelta";
+import {
     CreateTokenSchema,
     DeleteTokenSchema,
     UpdateTokenSchema
@@ -37,10 +42,26 @@ const TokenUpdateSchema = t.strict({
 
 export type TokenUpdate = t.TypeOf<typeof TokenUpdateSchema>;
 
+const EntityUpdateSchema = t.strict({
+    type: t.literal("entity"),
+    campaignID: t.string,
+    update: t.union([
+        CreateEntityDeltaSchema,
+        DeleteEntityDeltaSchema,
+        t.intersection([
+            t.strict({
+                fromVersion: t.number
+            }),
+            UpdateEntityDeltaSchema
+        ])
+    ])
+});
+
 export const UpdateSchema = t.union([
     CampaignUpdateSchema,
     SceneUpdateSchema,
-    TokenUpdateSchema
+    TokenUpdateSchema,
+    EntityUpdateSchema
 ]);
 
 export type Update = t.TypeOf<typeof UpdateSchema>;

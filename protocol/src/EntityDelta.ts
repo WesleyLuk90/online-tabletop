@@ -7,12 +7,16 @@ export const CreateEntityDeltaSchema = t.strict({
     entity: EntitySchema
 });
 
+export type CreateEntityDelta = t.TypeOf<typeof CreateEntityDeltaSchema>;
+
 export const DeleteEntityDeltaSchema = t.strict({
     type: t.literal("delete"),
     source: t.string,
     campaignID: t.string,
     entityID: t.string
 });
+
+export type DeleteEntityDelta = t.TypeOf<typeof DeleteEntityDeltaSchema>;
 
 export const DeleteEntityAttributeSchema = t.strict({
     type: t.literal("delete-attribute"),

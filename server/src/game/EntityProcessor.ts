@@ -1,9 +1,13 @@
 import { applyDelta, EntityDelta } from "protocol/src/EntityDelta";
 import { Lock } from "../util/Lock";
 import { EntityReference, EntityStorage } from "./EntityStorage";
+import { NotificationService } from "./NotificationService";
 
 export class EntityProcessor {
-    constructor(private entityStorage: EntityStorage) {}
+    constructor(
+        private entityStorage: EntityStorage,
+        private notificationService: NotificationService
+    ) {}
 
     queue(delta: EntityDelta) {
         this.lock.runExclusive(this.getReference(delta), () =>
@@ -28,13 +32,22 @@ export class EntityProcessor {
     private async process(delta: EntityDelta) {
         switch (delta.type) {
             case "create":
-                return this.entityStorage.create(delta.entity);
+                await this.entityStorage.create(delta.entity);
+                this.notificationService.entityUpdated(delta);
+                return;
             case "delete":
-                return this.entityStorage.delete(delta);
+                await this.entityStorage.delete(delta);
+                this.notificationService.entityUpdated(delta);
+                return;
             default:
                 const entity = await this.entityStorage.get(delta);
                 const updated = applyDelta(entity, delta);
-                return this.entityStorage.update(updated);
+                updated.version += 1;
+                await this.entityStorage.update(updated);
+                this.notificationService.versionedEntityUpdated(
+                    entity.version,
+                    delta
+                );
         }
     }
 }
