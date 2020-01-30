@@ -1,13 +1,13 @@
 import * as t from "io-ts";
 import { AttributeSchema, Entity, EntitySchema } from "./Entity";
 
-export const CreateEntityDelta = t.strict({
+export const CreateEntityDeltaSchema = t.strict({
     type: t.literal("create"),
     source: t.string,
     entity: EntitySchema
 });
 
-export const DeleteEntityDelta = t.strict({
+export const DeleteEntityDeltaSchema = t.strict({
     type: t.literal("delete"),
     source: t.string,
     campaignID: t.string,
@@ -37,13 +37,15 @@ export const UpdateEntityDeltaSchema = t.union([
 
 export type UpdateEntityDelta = t.TypeOf<typeof UpdateEntityDeltaSchema>;
 
-export const EntityDelta = t.union([
-    CreateEntityDelta,
-    DeleteEntityDelta,
+export const EntityDeltaSchema = t.union([
+    CreateEntityDeltaSchema,
+    DeleteEntityDeltaSchema,
     UpdateEntityDeltaSchema
 ]);
 
-export function applyUpdate(e: Entity, update: UpdateEntityDelta): Entity {
+export type EntityDelta = t.TypeOf<typeof EntityDeltaSchema>;
+
+export function applyDelta(e: Entity, update: UpdateEntityDelta): Entity {
     switch (update.type) {
         case "delete-attribute":
             return {

@@ -3,7 +3,7 @@ import { parse } from "protocol/src/Parse";
 import { NotFoundError } from "../Errors";
 import { Document, Field, MongoStorage } from "../storage/MongoStorage";
 
-interface EntityReference {
+export interface EntityReference {
     campaignID: string;
     entityID: string;
 }
