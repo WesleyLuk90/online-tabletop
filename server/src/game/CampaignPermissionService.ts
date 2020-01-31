@@ -6,6 +6,11 @@ interface PermissionQuery {
     userID: string;
     campaignID: string;
 }
+interface EntityPermissionQuery {
+    userID: string;
+    entityIDs: string[];
+    campaignID: string;
+}
 
 export class CampaignPermissionService {
     constructor(private campaignStorage: CampaignStorage) {}
@@ -24,6 +29,18 @@ export class CampaignPermissionService {
 
     async requirePlayer<T>(
         { userID, campaignID }: PermissionQuery,
+        success: () => T
+    ): Promise<T> {
+        checkPermissions(
+            (await this.campaignStorage.get(campaignID)).players.some(
+                p => p.userID === userID
+            )
+        );
+        return success();
+    }
+
+    async requireEntityPermission<T>(
+        { userID, campaignID, entityIDs }: EntityPermissionQuery,
         success: () => T
     ): Promise<T> {
         checkPermissions(

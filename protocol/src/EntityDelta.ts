@@ -49,6 +49,23 @@ export const EntityDeltaSchema = t.union([
 
 export type EntityDelta = t.TypeOf<typeof EntityDeltaSchema>;
 
+export function deltaCampaignID(delta: EntityDelta): string {
+    switch (delta.type) {
+        case "create":
+            return delta.entity.campaignID;
+        default:
+            return delta.campaignID;
+    }
+}
+export function deltaEntityID(delta: EntityDelta): string {
+    switch (delta.type) {
+        case "create":
+            return delta.entity.entityID;
+        default:
+            return delta.entityID;
+    }
+}
+
 export function applyDelta(e: Entity, update: UpdateEntityDelta): Entity {
     switch (update.type) {
         case "delete-attribute":
