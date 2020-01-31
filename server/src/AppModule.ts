@@ -9,6 +9,9 @@ import { BroadcastService } from "./game/BroadcastService";
 import { CampaignManager } from "./game/CampaignManager";
 import { CampaignPermissionService } from "./game/CampaignPermissionService";
 import { CampaignCollection, CampaignStorage } from "./game/CampaignStorage";
+import { EntityManager } from "./game/EntityManager";
+import { EntityProcessor } from "./game/EntityProcessor";
+import { EntityCollection, EntityStorage } from "./game/EntityStorage";
 import { NotificationService } from "./game/NotificationService";
 import { SceneManager } from "./game/SceneManager";
 import { SceneCollection, SceneStorage } from "./game/SceneStorage";
@@ -84,11 +87,30 @@ export class AppModule extends Module {
             )
     );
 
+    entityCollection = lazy(() => new EntityCollection(this.dbProvider()));
+    entityStorage = lazy(() => new EntityStorage(this.entityCollection()));
+    entityProcessor = lazy(
+        () =>
+            new EntityProcessor(
+                this.entityStorage(),
+                this.notificationService()
+            )
+    );
+    entityManager = lazy(
+        () =>
+            new EntityManager(
+                this.permissionService(),
+                this.entityStorage(),
+                this.entityProcessor()
+            )
+    );
+
     collections = lazy(() => [
         this.userCollection(),
         this.campaignCollection(),
         this.sceneCollection(),
-        this.tokenCollection()
+        this.tokenCollection(),
+        this.entityCollection()
     ]);
 
     async start() {
@@ -117,6 +139,7 @@ export class AppModule extends Module {
         connectRoutes(this.campaignManager().routes(), this.app());
         connectRoutes(this.sceneManager().routes(), this.app());
         connectRoutes(this.tokenManager().routes(), this.app());
+        connectRoutes(this.entityManager().routes(), this.app());
 
         for (const c of this.collections()) {
             await c.initialize();
