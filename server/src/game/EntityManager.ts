@@ -1,4 +1,5 @@
 import * as t from "io-ts";
+import { Entity } from "protocol/src/Entity";
 import {
     deltaCampaignID,
     deltaEntityID,
@@ -61,7 +62,13 @@ export class EntityManager {
         );
     }
 
-    async list({ userID, campaignID }: { userID: string; campaignID: string }) {
+    async list({
+        userID,
+        campaignID
+    }: {
+        userID: string;
+        campaignID: string;
+    }): Promise<Entity[]> {
         return this.permissionService.requirePlayer(
             {
                 userID,
