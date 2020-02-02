@@ -5,7 +5,7 @@ import { EntityDelta } from "protocol/src/EntityDelta";
 import { parse } from "protocol/src/Parse";
 
 export class EntityRequests {
-    async get({
+    static async get({
         campaignID,
         entityID
     }: {
@@ -18,14 +18,14 @@ export class EntityRequests {
         return parse(response.data, EntitySchema);
     }
 
-    async list(campaignID: string): Promise<Entity[]> {
+    static async list(campaignID: string): Promise<Entity[]> {
         const response = await Axios.get(
             `/api/campaign/${campaignID}/entities`
         );
         return parse(response.data, t.array(EntitySchema));
     }
 
-    async update(campaignID: string, deltas: EntityDelta[]) {
+    static async update(campaignID: string, deltas: EntityDelta[]) {
         await Axios.post(`/api/campaign/${campaignID}/entities`, deltas);
     }
 }

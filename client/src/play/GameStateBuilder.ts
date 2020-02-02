@@ -4,6 +4,7 @@ import { Token } from "protocol/src/Token";
 import { User } from "protocol/src/User";
 import { checkState } from "../util/CheckState";
 import { replaceValue } from "../util/List";
+import { EntityCollection } from "./EntityCollection";
 import { GameState } from "./GameState";
 import { TokenSelection } from "./tokens/TokenSelection";
 
@@ -16,6 +17,7 @@ export interface RawGameState {
     readonly tokens: Token[];
     readonly loading: boolean;
     readonly selectedTokens: TokenSelection;
+    readonly entities: EntityCollection;
 }
 
 export class GameStateBuilder {
@@ -30,7 +32,8 @@ export class GameStateBuilder {
             updated.activeLayer || this.s.activeLayer,
             updated.tokens || this.s.tokens,
             updated.loading || this.s.loading,
-            updated.selectedTokens || this.s.selectedTokens
+            updated.selectedTokens || this.s.selectedTokens,
+            updated.entities || this.s.entities
         );
         return this;
     }

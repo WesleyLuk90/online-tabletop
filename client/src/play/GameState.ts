@@ -4,6 +4,7 @@ import { Token } from "protocol/src/Token";
 import { User } from "protocol/src/User";
 import { checkNotNull, notNull } from "../util/Nullable";
 import { Color, Colors } from "./Colors";
+import { EntityCollection } from "./EntityCollection";
 import { GameStateBuilder, RawGameState } from "./GameStateBuilder";
 import { TokenCollection } from "./tokens/TokenCollection";
 import { TokenSelection } from "./tokens/TokenSelection";
@@ -25,7 +26,8 @@ export class GameState implements RawGameState {
             "",
             [],
             false,
-            TokenSelection.empty()
+            TokenSelection.empty(),
+            EntityCollection.empty()
         );
     }
 
@@ -37,7 +39,8 @@ export class GameState implements RawGameState {
         readonly activeLayer: string,
         readonly tokens: Token[],
         readonly loading: boolean,
-        readonly selectedTokens: TokenSelection
+        readonly selectedTokens: TokenSelection,
+        readonly entities: EntityCollection
     ) {
         this.tokenCollection = new TokenCollection(tokens);
     }
