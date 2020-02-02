@@ -7,6 +7,7 @@ import { CampaignRequests } from "../games/CampaignRequests";
 import { SceneRequests } from "../games/SceneRequests";
 import { assertExhaustive } from "../util/Exaustive";
 import { CampaignEventHandler } from "./CampaignEventHandler";
+import { EntityManager } from "./EntityManager";
 import { GameState } from "./GameState";
 import { SceneService } from "./SceneService";
 import { Socket } from "./Socket";
@@ -32,6 +33,7 @@ export class CampaignLoader {
     socket: Socket;
     eventHandler: CampaignEventHandler;
     tokenManager: TokenManager;
+    entityManager: EntityManager;
 
     private sessionID = newUUID();
 
@@ -50,6 +52,11 @@ export class CampaignLoader {
         this.tokenManager = new TokenManager(
             this.sessionID,
             campaignID,
+            this.updateState
+        );
+        this.entityManager = new EntityManager(
+            this.sessionID,
+            this.campaignID,
             this.updateState
         );
     }
@@ -105,6 +112,7 @@ export class CampaignLoader {
             );
             this.updateNullableState(() => gameState);
             this.tokenManager.updateScene(gameState.getMySceneID());
+            this.entityManager.load();
         }
     }
 }

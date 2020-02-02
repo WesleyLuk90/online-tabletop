@@ -153,4 +153,10 @@ export class GameStateBuilder {
             selectedTokens: TokenSelection.fromTokens(tokens)
         });
     }
+
+    updateEntities(entities: EntityCollection) {
+        return this.update({
+            entities
+        });
+    }
 }

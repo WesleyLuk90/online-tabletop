@@ -1,8 +1,8 @@
 import { Entity } from "protocol/src/Entity";
-import { EntityDelta } from "protocol/src/EntityDelta";
 import { EntityRequests } from "../games/EntityRequests";
 import { PromiseDebouncer } from "../util/PromiseDebouncer";
 import { GameStateUpdater } from "./CampaignLoader";
+import { EntityCollection } from "./EntityCollection";
 
 export class EntityManager {
     debounce = new PromiseDebouncer<Entity[]>();
@@ -17,9 +17,7 @@ export class EntityManager {
         const entities = await this.debounce.debounce(
             EntityRequests.list(this.campaignID)
         );
+        const manager = new EntityCollection(entities);
+        this.gameStateUpdater(g => g.build(b => b.updateEntities(manager)));
     }
-
-    async loadTokens() {}
-
-    handleTokenUpdate(entityDelta: EntityDelta) {}
 }
