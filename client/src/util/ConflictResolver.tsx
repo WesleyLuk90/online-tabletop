@@ -23,6 +23,16 @@ export abstract class ConflictResolver<Data, Update extends UpdateType> {
     protected abstract applyUpdate(data: Data, update: Update): Data;
     protected abstract onUpdated(data: Data): void;
 
+    add(data: Data) {
+        this.local.set(this.getID(data), data);
+        this.remote.set(this.getID(data), data);
+    }
+
+    remove(id: string) {
+        this.local.delete(id);
+        this.remote.delete(id);
+    }
+
     updateAll(data: Data[]) {
         this.local = keyBy(data, d => this.getID(d));
         this.remote = new Map(this.local);

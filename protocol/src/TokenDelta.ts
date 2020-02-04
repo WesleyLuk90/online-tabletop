@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import { RawTokenSchema, TokenSchema } from "./Token";
+import { RawTokenSchema, Token, TokenSchema } from "./Token";
 
 export const CreateTokenSchema = t.strict({
     type: t.literal("create"),
@@ -18,6 +18,10 @@ export const UpdateTokenSchema = t.strict({
 });
 
 export type UpdateToken = t.TypeOf<typeof UpdateTokenSchema>;
+
+export function applyUpdateToken(token: Token, update: UpdateToken): Token {
+    return { ...token, ...update };
+}
 
 export const DeleteTokenSchema = t.strict({
     type: t.literal("delete"),
