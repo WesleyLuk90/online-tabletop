@@ -110,7 +110,9 @@ export class EventHandler {
         this.updateGameState(gameState => {
             TokenRequests.update(updates, gameState.sessionID);
             return gameState.build(b =>
-                b.updateTokens(TokenUpdater.apply(gameState.tokens, updates))
+                b.updateTokens(
+                    TokenUpdater.apply(gameState.tokens.asList(), updates)
+                )
             );
         });
     }

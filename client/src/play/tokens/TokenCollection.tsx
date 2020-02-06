@@ -3,6 +3,14 @@ import { Token } from "protocol/src/Token";
 import { groupBy, keyBy } from "../../util/Maps";
 
 export class TokenCollection {
+    static empty() {
+        return new TokenCollection([]);
+    }
+
+    static fromList(tokens: Token[]) {
+        return new TokenCollection(tokens);
+    }
+
     private tokensByLayer: Map<string, Token[]>;
     private tokensById: Map<string, Token>;
     constructor(tokens: Token[]) {
@@ -16,5 +24,21 @@ export class TokenCollection {
 
     byId(id: string): Token | null {
         return this.tokensById.get(id) || null;
+    }
+
+    update(token: Token) {
+        const byId = new Map(this.tokensById);
+        byId.set(token.tokenID, token);
+        return TokenCollection.fromList(Array.from(byId.values()));
+    }
+
+    remove(tokenID: string) {
+        const byId = new Map(this.tokensById);
+        byId.delete(tokenID);
+        return TokenCollection.fromList(Array.from(byId.values()));
+    }
+
+    asList() {
+        return Array.from(this.tokensById.values());
     }
 }

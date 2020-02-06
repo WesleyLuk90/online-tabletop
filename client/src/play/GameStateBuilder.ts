@@ -6,6 +6,7 @@ import { checkState } from "../util/CheckState";
 import { replaceValue } from "../util/List";
 import { EntityCollection } from "./EntityCollection";
 import { GameState } from "./GameState";
+import { TokenCollection } from "./tokens/TokenCollection";
 import { TokenSelection } from "./tokens/TokenSelection";
 
 export interface RawGameState {
@@ -14,7 +15,7 @@ export interface RawGameState {
     readonly user: User;
     readonly scenes: Scene[];
     readonly activeLayer: string;
-    readonly tokens: Token[];
+    readonly tokens: TokenCollection;
     readonly loading: boolean;
     readonly selectedTokens: TokenSelection;
     readonly entities: EntityCollection;
@@ -129,16 +130,20 @@ export class GameStateBuilder {
     }
 
     addToken(token: Token) {
-        return this.update({ tokens: [...this.s.tokens, token] });
+        return this.update({ tokens: this.s.tokens.update(token) });
     }
 
     updateTokens(tokens: Token[]) {
-        return this.update({ tokens });
+        return this.update({ tokens: TokenCollection.fromList(tokens) });
+    }
+
+    updateToken(token: Token) {
+        return this.update({ tokens: this.s.tokens.update(token) });
     }
 
     removeToken(tokenID: string) {
         return this.update({
-            tokens: this.s.tokens.filter(t => t.tokenID !== tokenID)
+            tokens: this.s.tokens.remove(tokenID)
         });
     }
 

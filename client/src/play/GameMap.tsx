@@ -91,7 +91,7 @@ export function GameMap({
                     >
                         <Grid viewport={viewport} scene={scene} />
                         <TokenLayer
-                            tokens={gameState.getTokens()}
+                            tokens={gameState.tokens}
                             scene={scene}
                             viewport={viewport}
                             selection={gameState.selectedTokens}

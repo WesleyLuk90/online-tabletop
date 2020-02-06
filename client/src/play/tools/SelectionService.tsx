@@ -9,8 +9,7 @@ export class SelectionService {
         if (layer == null) {
             return [];
         }
-        return gameState
-            .getTokens()
+        return gameState.tokens
             .byLayer(layer)
             .filter(t => !gameState.selectedTokens.has(t))
             .map(RenderableToken.fromToken);

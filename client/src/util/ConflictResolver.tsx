@@ -44,7 +44,7 @@ export abstract class ConflictResolver<Data, Update extends UpdateType> {
     }
 
     applyRemoteUpdate(update: Update) {
-        if (update.source == this.sessionID) {
+        if (update.source === this.sessionID) {
             const id = this.updateID(update);
             this.updateValue(this.remote, update);
             withValue(this.remote, id, value => {

@@ -10,8 +10,6 @@ import { TokenCollection } from "./tokens/TokenCollection";
 import { TokenSelection } from "./tokens/TokenSelection";
 
 export class GameState implements RawGameState {
-    private tokenCollection: TokenCollection;
-
     static newGameState(
         sessionID: string,
         campaign: Campaign,
@@ -24,7 +22,7 @@ export class GameState implements RawGameState {
             user,
             scenes,
             "",
-            [],
+            TokenCollection.empty(),
             false,
             TokenSelection.empty(),
             EntityCollection.empty()
@@ -37,13 +35,11 @@ export class GameState implements RawGameState {
         readonly user: User,
         readonly scenes: Scene[],
         readonly activeLayer: string,
-        readonly tokens: Token[],
+        readonly tokens: TokenCollection,
         readonly loading: boolean,
         readonly selectedTokens: TokenSelection,
         readonly entities: EntityCollection
-    ) {
-        this.tokenCollection = new TokenCollection(tokens);
-    }
+    ) {}
 
     builder() {
         return new GameStateBuilder(this);
@@ -84,10 +80,6 @@ export class GameState implements RawGameState {
         return layer;
     }
 
-    getTokens() {
-        return this.tokenCollection;
-    }
-
     getLayerColor(layerID: string): Color {
         return Color.fromData(
             this.getMyScene()?.layers.find(l => l.id === layerID)?.color ||
@@ -98,7 +90,7 @@ export class GameState implements RawGameState {
     getSelectedTokens(): Token[] {
         return this.selectedTokens
             .asList()
-            .map(t => this.tokenCollection.byId(t))
+            .map(t => this.tokens.byId(t))
             .filter(notNull);
     }
 }

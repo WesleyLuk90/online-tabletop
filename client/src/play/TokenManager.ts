@@ -9,7 +9,6 @@ import { TokenUpdate } from "protocol/src/Update";
 import { TokenRequests } from "../games/TokenRequests";
 import { ConflictResolver } from "../util/ConflictResolver";
 import { assertExhaustive } from "../util/Exaustive";
-import { replaceValue } from "../util/List";
 import { PromiseDebouncer } from "../util/PromiseDebouncer";
 import { GameStateUpdater } from "./CampaignLoader";
 import { GameState } from "./GameState";
@@ -92,9 +91,7 @@ export class TokenManager {
     tokenCreate(create: CreateToken) {
         this.conflictResolver.add(create.token);
         this.gameStateUpdater(s => {
-            if (
-                s.tokens.find(t => t.tokenID === create.token.tokenID) == null
-            ) {
+            if (s.tokens.byId(create.token.tokenID) == null) {
                 return s.build(b => b.addToken(create.token));
             } else {
                 return s;
@@ -110,17 +107,7 @@ export class TokenManager {
     }
 
     updateToken(token: Token) {
-        this.gameStateUpdater(s =>
-            s.build(b =>
-                b.updateTokens(
-                    replaceValue(
-                        s.tokens,
-                        t => t.tokenID === token.tokenID,
-                        () => token
-                    )
-                )
-            )
-        );
+        this.gameStateUpdater(s => s.build(b => b.updateToken(token)));
     }
 
     tokenDelete(del: DeleteToken) {
