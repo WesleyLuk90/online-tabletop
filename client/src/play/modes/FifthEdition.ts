@@ -3,6 +3,7 @@ import { AttributeType, EntityType, GameMode } from "./GameMode";
 export const CreatureType: EntityType = {
     id: "creature",
     name: "Creature",
+    pluralName: "Creatures",
     attributes: [
         {
             id: "health",

@@ -10,6 +10,7 @@ export interface GameMode {
 export interface EntityType {
     id: string;
     name: string;
+    pluralName: string;
     attributes: Attribute[];
     editor: Editor;
 }

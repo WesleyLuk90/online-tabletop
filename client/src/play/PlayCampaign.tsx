@@ -3,10 +3,12 @@ import React, { useEffect, useState } from "react";
 import { Spinner } from "../common/Icon";
 import { ScenePanel } from "../common/ScenePanel";
 import { CampaignLoader } from "./CampaignLoader";
+import { EntityPanel } from "./EntityPanel";
 import { EventHandler } from "./EventHandler";
 import { GameMap } from "./GameMap";
 import { GameState } from "./GameState";
 import { LayersPanel } from "./LayersPanel";
+import { GameModes } from "./modes/GameModes";
 import { PlayLayout } from "./PlayLayout";
 import { TokenToolbar } from "./TokenToolbar";
 import { ToolType } from "./tools/ToolType";
@@ -20,6 +22,7 @@ export function PlayCampaign({
 }) {
     const [gameState, setGameState] = useState<GameState | null>(null);
     const [tool, setTool] = useState(ToolType.select);
+    const mode = GameModes[0];
 
     useEffect(() => {
         const loader = new CampaignLoader(campaignID, user, updater =>
@@ -92,6 +95,14 @@ export function PlayCampaign({
                             }
                         />
                     )}
+                    {mode.entityTypes.map(entityType => (
+                        <EntityPanel
+                            campaignID={campaignID}
+                            entityType={entityType}
+                            entities={gameState.entities}
+                            onAddEntity={() => {}}
+                        />
+                    ))}
                 </div>
             }
             bottom="bottom"
