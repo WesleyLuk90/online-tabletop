@@ -2,6 +2,7 @@ import React from "react";
 import { Tab, Tabs } from "../../common/layout/Tabs";
 import { GameMode } from "../modes/GameMode";
 import "./EntityEditor.css";
+import { EntityPage } from "./EntityEditorLayout";
 import { GameEntity } from "./GameEntity";
 
 export function EntityEditor({
@@ -16,15 +17,11 @@ export function EntityEditor({
     return (
         <div className="entity-editor">
             <Tabs>
-                <Tab id="foo1" title="Foo1">
-                    a
-                </Tab>
-                <Tab id="foo2" title="Foo2">
-                    b
-                </Tab>
-                <Tab id="foo3" title="Foo3">
-                    c
-                </Tab>
+                {editor.pages.map(p => (
+                    <Tab id={p.name} key={p.name} title={p.name}>
+                        <EntityPage layout={p} />
+                    </Tab>
+                ))}
             </Tabs>
         </div>
     );
