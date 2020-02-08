@@ -1,7 +1,12 @@
 import { Attribute, Entity } from "protocol/src/Entity";
 import { newUUID } from "protocol/src/Id";
+import { assertExhaustive } from "../../util/Exaustive";
 import { keyBy } from "../../util/Maps";
-import { AttributeDefinition, EntityType } from "../modes/GameMode";
+import {
+    AttributeDefinition,
+    AttributeType,
+    EntityType
+} from "../modes/GameMode";
 
 export class GameEntity {
     static fromEntity(entity: Entity) {
@@ -34,5 +39,23 @@ export class GameEntity {
 
     getAttribute(attribute: AttributeDefinition): Attribute | null {
         return this.attributes.get(attribute.id) || null;
+    }
+
+    getAttributeAsString(attribute: AttributeDefinition): string {
+        const value = this.attributes.get(attribute.id);
+        if (value == null) {
+            return "";
+        }
+        switch (attribute.type) {
+            case AttributeType.Number:
+                return value.numberValue != null
+                    ? value.numberValue.toString()
+                    : "";
+            case AttributeType.Text:
+            case AttributeType.RichText:
+                return value.stringValue || "";
+            default:
+                assertExhaustive(attribute.type);
+        }
     }
 }

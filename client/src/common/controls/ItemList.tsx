@@ -5,6 +5,7 @@ import { FollowMouse } from "../mouse/FollowMouse";
 import { GlobalMouseUp } from "../mouse/GlobalMouseUp";
 import { Icon } from "./Icon";
 import "./ItemList.css";
+import { Search } from "./Search";
 
 const ITEM_HEIGHT = 32;
 
@@ -13,7 +14,8 @@ export function ItemList<T>({
     left,
     right,
     id,
-    onMove
+    onMove,
+    filter
 }: {
     data: T[];
     left: (t: T) => ReactNode;
@@ -68,6 +70,7 @@ export function ItemList<T>({
 
     return (
         <div className="item-list" ref={ref}>
+            {filter && <Search value={search} onChange={setSearch} />}
             {items.map((d, i) => {
                 if (d == null) {
                     return <div className="item-list__item" key="spacer"></div>;

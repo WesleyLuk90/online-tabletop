@@ -1,12 +1,26 @@
 import React from "react";
 import { Button } from "../../common/controls/Button";
 import { ItemList } from "../../common/controls/ItemList";
+import { defaultSearch } from "../../common/controls/Search";
 import { SidePanel } from "../../common/layout/SidePanel";
 import { Callback } from "../../util/Callback";
 import { EntityCollection } from "../EntityCollection";
 import { EntityType, getNameAttributeDefinition } from "../modes/GameMode";
 import { AttributeDisplay } from "./AttributeDisplay";
 import { GameEntity } from "./GameEntity";
+
+function nameFilter(
+    search: string,
+    entity: GameEntity,
+    entityType: EntityType
+): boolean {
+    return defaultSearch({
+        needle: search,
+        haystack: entity.getAttributeAsString(
+            getNameAttributeDefinition(entityType)
+        )
+    });
+}
 
 export function EntityPanel({
     campaignID,
@@ -30,6 +44,7 @@ export function EntityPanel({
                         attribute={getNameAttributeDefinition(entityType)}
                     />
                 )}
+                filter={(s, e) => nameFilter(s, e, entityType)}
             />
             <Button
                 onClick={() =>

@@ -1,0 +1,20 @@
+.search {
+    position: relative;
+}
+
+.search__input {
+    display: block;
+    max-width: 500px;
+    width: 100%;
+    padding: 5px 7px;
+    border: 1px solid #ced4da;
+    border-radius: 20px;
+    line-height: 1.5;
+    padding: 6px 12px;
+}
+
+.search__icon {
+    position: absolute;
+    right: 8px;
+    top: 10px;
+}
