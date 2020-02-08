@@ -39,10 +39,13 @@ export function EntityPanel({
                 data={entities.getByType(entityType)}
                 id={e => e.entityID()}
                 left={e => (
-                    <AttributeDisplay
-                        entity={e}
-                        attribute={getNameAttributeDefinition(entityType)}
-                    />
+                    <div onClick={() => console.log(e)}>
+                        <AttributeDisplay
+                            entity={e}
+                            attribute={getNameAttributeDefinition(entityType)}
+                            placeholder={entityType.name}
+                        />
+                    </div>
                 )}
                 filter={(s, e) => nameFilter(s, e, entityType)}
             />

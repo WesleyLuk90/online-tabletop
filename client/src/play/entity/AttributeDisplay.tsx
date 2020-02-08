@@ -1,6 +1,7 @@
 import React from "react";
 import { assertExhaustive } from "../../util/Exaustive";
 import { AttributeDefinition, AttributeType } from "../modes/GameMode";
+import "./AttributeDisplay.css";
 import { GameEntity } from "./GameEntity";
 
 export function AttributeDisplay({
@@ -15,7 +16,11 @@ export function AttributeDisplay({
     const value = entity.getAttribute(attribute);
 
     if (value == null) {
-        return <span>{placeholder}</span>;
+        return (
+            <span className="attribute-display__placeholder">
+                {placeholder}
+            </span>
+        );
     }
 
     switch (attribute.type) {
