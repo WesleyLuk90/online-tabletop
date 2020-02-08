@@ -2,11 +2,11 @@ import { Campaign } from "protocol/src/Campaign";
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { Routes } from "../app/Routes";
+import { Spinner } from "../common/controls/Icon";
 import { ConfirmButton } from "../common/forms/Button";
 import { Form } from "../common/forms/Form";
 import { Input } from "../common/forms/Input";
-import { Spinner } from "../common/Icon";
-import { Page } from "../common/Page";
+import { Page } from "../common/layout/Page";
 import { CampaignRequests } from "./CampaignRequests";
 
 export function EditCampaignPage() {

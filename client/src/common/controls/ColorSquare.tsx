@@ -1,7 +1,7 @@
 import { ColorData } from "protocol/src/Color";
 import React from "react";
-import { BemBuilder } from "../util/BemBuilder";
-import { ColorService } from "./ColorService";
+import { BemBuilder } from "../../util/BemBuilder";
+import { ColorService } from "../ColorService";
 import "./ColorSquare.css";
 
 const BEM = new BemBuilder("color-square");

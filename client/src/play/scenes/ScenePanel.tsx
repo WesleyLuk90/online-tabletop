@@ -6,14 +6,14 @@ import {
 import { Campaign } from "protocol/src/Campaign";
 import { Scene } from "protocol/src/Scene";
 import React, { useState } from "react";
-import { SceneService } from "../play/SceneService";
-import { plural } from "../util/Plural";
-import { Button } from "./forms/Button";
-import { IconButton } from "./IconButton";
-import { ItemList } from "./ItemList";
+import { IconButton } from "../../common/controls/IconButton";
+import { ItemList } from "../../common/controls/ItemList";
+import { Button } from "../../common/forms/Button";
+import { SidePanel } from "../../common/layout/SidePanel";
+import { plural } from "../../util/Plural";
+import { SceneService } from "../SceneService";
 import { SceneModal } from "./SceneModal";
 import "./ScenePanel.css";
-import { SidePanel } from "./SidePanel";
 
 export function ScenePanel({
     campaign,

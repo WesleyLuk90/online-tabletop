@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useParams } from "react-router-dom";
 import { Auth } from "../app/Auth";
-import { Alert } from "../common/Alert";
+import { Alert } from "../common/controls/Alert";
 import { checkNotNull } from "../util/Nullable";
 import { PlayCampaign } from "./PlayCampaign";
 import "./PlayPage.css";

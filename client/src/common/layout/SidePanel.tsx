@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from "react";
-import { ExpandToggle } from "./ExpandToggle";
+import { ExpandToggle } from "../controls/ExpandToggle";
 import "./SidePanel.css";
 
 export function SidePanel({

@@ -1,7 +1,7 @@
 import React from "react";
+import { ItemList } from "../../common/controls/ItemList";
 import { Button } from "../../common/forms/Button";
-import { ItemList } from "../../common/ItemList";
-import { SidePanel } from "../../common/SidePanel";
+import { SidePanel } from "../../common/layout/SidePanel";
 import { Callback } from "../../util/Callback";
 import { EntityCollection } from "../EntityCollection";
 import { EntityType, getNameAttributeDefinition } from "../modes/GameMode";

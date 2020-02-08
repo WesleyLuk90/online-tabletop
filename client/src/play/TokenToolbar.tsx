@@ -8,7 +8,7 @@ import {
     faVectorSquare
 } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { Toolbar } from "../common/Toolbar";
+import { Toolbar } from "../common/layout/Toolbar";
 import { ToolType } from "./tools/ToolType";
 
 export function TokenToolbar({

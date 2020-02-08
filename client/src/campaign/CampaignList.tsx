@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Routes } from "../app/Routes";
+import { SectionList } from "../common/controls/SectionList";
 import { ButtonLink } from "../common/forms/Button";
-import { SectionList } from "../common/SectionList";
 import { CampaignRequests } from "../games/CampaignRequests";
 import { useAsyncData } from "../util/AsyncData";
 

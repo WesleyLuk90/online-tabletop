@@ -4,8 +4,8 @@ import React, {
     useEffect,
     useState
 } from "react";
-import { Alert } from "../common/Alert";
-import { Spinner } from "../common/Icon";
+import { Alert } from "../common/controls/Alert";
+import { Spinner } from "../common/controls/Icon";
 
 export function useAsyncData<T>(
     load: () => Promise<T>,

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Alert } from "../Alert";
-import { Spinner } from "../Icon";
+import { Alert } from "../controls/Alert";
+import { Spinner } from "../controls/Icon";
 import { Button } from "./Button";
 
 export function Form({

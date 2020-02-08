@@ -1,8 +1,8 @@
 import { faGripVertical } from "@fortawesome/free-solid-svg-icons";
 import React, { ReactNode, useRef, useState } from "react";
-import { Vector } from "../play/Vector";
-import { FollowMouse } from "./FollowMouse";
-import { GlobalMouseUp } from "./GlobalMouseUp";
+import { Vector } from "../../play/Vector";
+import { FollowMouse } from "../mouse/FollowMouse";
+import { GlobalMouseUp } from "../mouse/GlobalMouseUp";
 import { Icon } from "./Icon";
 import "./ItemList.css";
 

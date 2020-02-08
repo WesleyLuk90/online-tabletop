@@ -7,7 +7,7 @@ import React, {
     useState
 } from "react";
 import { createPortal } from "react-dom";
-import { Vector } from "../play/Vector";
+import { Vector } from "../../play/Vector";
 
 const FollowContext = React.createContext<HTMLDivElement | null>(null);
 

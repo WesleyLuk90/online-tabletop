@@ -1,7 +1,6 @@
 import { User } from "protocol/src/User";
 import React, { useEffect, useState } from "react";
-import { Spinner } from "../common/Icon";
-import { ScenePanel } from "../common/ScenePanel";
+import { Spinner } from "../common/controls/Icon";
 import { CampaignLoader } from "./CampaignLoader";
 import { EntityPanel } from "./entity/EntityPanel";
 import { EventHandler } from "./EventHandler";
@@ -10,6 +9,7 @@ import { GameState } from "./GameState";
 import { LayersPanel } from "./LayersPanel";
 import { GameModes } from "./modes/GameModes";
 import { PlayLayout } from "./PlayLayout";
+import { ScenePanel } from "./scenes/ScenePanel";
 import { TokenToolbar } from "./TokenToolbar";
 import { ToolType } from "./tools/ToolType";
 

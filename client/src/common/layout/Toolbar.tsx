@@ -1,7 +1,7 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import React from "react";
-import { BemBuilder } from "../util/BemBuilder";
-import { Icon } from "./Icon";
+import { BemBuilder } from "../../util/BemBuilder";
+import { Icon } from "../controls/Icon";
 import "./Toolbar.css";
 
 interface Tool {

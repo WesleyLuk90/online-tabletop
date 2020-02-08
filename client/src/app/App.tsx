@@ -1,8 +1,8 @@
 import "normalize.css/normalize.css";
 import React from "react";
 import { HashRouter as Router, Route } from "react-router-dom";
-import { FollowContainer } from "../common/FollowMouse";
-import { ModalContainer } from "../common/Modal";
+import { ModalContainer } from "../common/controls/Modal";
+import { FollowContainer } from "../common/mouse/FollowMouse";
 import { EditCampaignPage } from "../games/EditCampaignPage";
 import { PlayPage } from "../play/PlayPage";
 import "./App.css";

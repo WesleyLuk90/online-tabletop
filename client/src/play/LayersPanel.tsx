@@ -1,11 +1,11 @@
 import { faEye, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { Layer } from "protocol/src/Scene";
 import React, { useState } from "react";
-import { ColorSquare } from "../common/ColorSquare";
+import { ColorSquare } from "../common/controls/ColorSquare";
+import { IconButton } from "../common/controls/IconButton";
+import { ItemList } from "../common/controls/ItemList";
 import { Button } from "../common/forms/Button";
-import { IconButton } from "../common/IconButton";
-import { ItemList } from "../common/ItemList";
-import { SidePanel } from "../common/SidePanel";
+import { SidePanel } from "../common/layout/SidePanel";
 import { BemBuilder } from "../util/BemBuilder";
 import { LayerEditor } from "./LayerEditor";
 import "./LayersPanel.css";

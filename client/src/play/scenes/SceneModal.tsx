@@ -1,7 +1,7 @@
 import { Scene } from "protocol/src/Scene";
 import React from "react";
-import { ConfirmButton } from "./forms/Button";
-import { ModalForm } from "./Modal";
+import { ModalForm } from "../../common/controls/Modal";
+import { ConfirmButton } from "../../common/forms/Button";
 import { SceneForm } from "./SceneForm";
 
 export function SceneModal({
