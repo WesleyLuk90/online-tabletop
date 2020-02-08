@@ -1,11 +1,12 @@
 import React from "react";
-import { Button } from "../common/Button";
-import { ItemList } from "../common/ItemList";
-import { SidePanel } from "../common/SidePanel";
-import { Callback } from "../util/Callback";
-import { GameEntity } from "./entity/GameEntity";
-import { EntityCollection } from "./EntityCollection";
-import { EntityType } from "./modes/GameMode";
+import { Button } from "../../common/Button";
+import { ItemList } from "../../common/ItemList";
+import { SidePanel } from "../../common/SidePanel";
+import { Callback } from "../../util/Callback";
+import { EntityCollection } from "../EntityCollection";
+import { EntityType, getNameAttributeDefinition } from "../modes/GameMode";
+import { AttributeDisplay } from "./AttributeDisplay";
+import { GameEntity } from "./GameEntity";
 
 export function EntityPanel({
     campaignID,
@@ -23,7 +24,12 @@ export function EntityPanel({
             <ItemList
                 data={entities.getByType(entityType)}
                 id={e => e.entityID()}
-                left={e => e.entityID()}
+                left={e => (
+                    <AttributeDisplay
+                        entity={e}
+                        attribute={getNameAttributeDefinition(entityType)}
+                    />
+                )}
             />
             <Button
                 onClick={() =>

@@ -4,7 +4,13 @@ export const CreatureType: EntityType = {
     id: "creature",
     name: "Creature",
     pluralName: "Creatures",
+    nameAttributeID: "name",
     attributes: [
+        {
+            id: "name",
+            name: "Name",
+            type: AttributeType.Text
+        },
         {
             id: "health",
             name: "Health",

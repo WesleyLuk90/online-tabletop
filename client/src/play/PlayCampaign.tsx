@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Spinner } from "../common/Icon";
 import { ScenePanel } from "../common/ScenePanel";
 import { CampaignLoader } from "./CampaignLoader";
-import { EntityPanel } from "./EntityPanel";
+import { EntityPanel } from "./entity/EntityPanel";
 import { EventHandler } from "./EventHandler";
 import { GameMap } from "./GameMap";
 import { GameState } from "./GameState";

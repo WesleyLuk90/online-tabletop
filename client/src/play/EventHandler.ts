@@ -120,7 +120,6 @@ export class EventHandler {
 
     addEntity(entity: GameEntity) {
         this.updateGameState(gameState => {
-            console.log(gameState.build(b => b.addEntity(entity)));
             return gameState.build(b => b.addEntity(entity));
         });
     }

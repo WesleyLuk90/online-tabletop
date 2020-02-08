@@ -1,6 +1,7 @@
-import { Entity } from "protocol/src/Entity";
+import { Attribute, Entity } from "protocol/src/Entity";
 import { newUUID } from "protocol/src/Id";
-import { EntityType } from "../modes/GameMode";
+import { keyBy } from "../../util/Maps";
+import { AttributeDefinition, EntityType } from "../modes/GameMode";
 
 export class GameEntity {
     static fromEntity(entity: Entity) {
@@ -17,7 +18,11 @@ export class GameEntity {
         });
     }
 
-    constructor(private entity: Entity) {}
+    constructor(private entity: Entity) {
+        this.attributes = keyBy(entity.attributes, a => a.attributeID);
+    }
+
+    private attributes: Map<string, Attribute>;
 
     entityID() {
         return this.entity.entityID;
@@ -25,5 +30,9 @@ export class GameEntity {
 
     entityTypeID(): string {
         return this.entity.type;
+    }
+
+    getAttribute(attribute: AttributeDefinition): Attribute | null {
+        return this.attributes.get(attribute.id) || null;
     }
 }
