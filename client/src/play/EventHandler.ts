@@ -5,6 +5,7 @@ import { CampaignRequests } from "../games/CampaignRequests";
 import { SceneRequests } from "../games/SceneRequests";
 import { TokenRequests } from "../games/TokenRequests";
 import { GameStateUpdater } from "./CampaignLoader";
+import { GameEntity } from "./entity/GameEntity";
 import { TokenUpdate, TokenUpdater } from "./tokens/TokenUpdater";
 import { ToolCallbacks, ToolCreatableToken } from "./tools/Tool";
 
@@ -114,6 +115,13 @@ export class EventHandler {
                     TokenUpdater.apply(gameState.tokens.asList(), updates)
                 )
             );
+        });
+    }
+
+    addEntity(entity: GameEntity) {
+        this.updateGameState(gameState => {
+            console.log(gameState.build(b => b.addEntity(entity)));
+            return gameState.build(b => b.addEntity(entity));
         });
     }
 

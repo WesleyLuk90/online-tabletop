@@ -22,4 +22,8 @@ export class GameEntity {
     entityID() {
         return this.entity.entityID;
     }
+
+    entityTypeID(): string {
+        return this.entity.type;
+    }
 }

@@ -4,6 +4,7 @@ import { Token } from "protocol/src/Token";
 import { User } from "protocol/src/User";
 import { checkState } from "../util/CheckState";
 import { replaceValue } from "../util/List";
+import { GameEntity } from "./entity/GameEntity";
 import { EntityCollection } from "./EntityCollection";
 import { GameState } from "./GameState";
 import { TokenCollection } from "./tokens/TokenCollection";
@@ -162,6 +163,12 @@ export class GameStateBuilder {
     updateEntities(entities: EntityCollection) {
         return this.update({
             entities
+        });
+    }
+
+    addEntity(entity: GameEntity) {
+        return this.update({
+            entities: this.s.entities.add(entity)
         });
     }
 }

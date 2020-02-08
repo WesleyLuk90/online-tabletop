@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "../common/Button";
+import { ItemList } from "../common/ItemList";
 import { SidePanel } from "../common/SidePanel";
 import { Callback } from "../util/Callback";
 import { GameEntity } from "./entity/GameEntity";
@@ -19,6 +20,11 @@ export function EntityPanel({
 }) {
     return (
         <SidePanel header={entityType.pluralName}>
+            <ItemList
+                data={entities.getByType(entityType)}
+                id={e => e.entityID()}
+                left={e => e.entityID()}
+            />
             <Button
                 onClick={() =>
                     onAddEntity(GameEntity.create(campaignID, entityType))

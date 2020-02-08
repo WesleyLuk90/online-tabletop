@@ -97,10 +97,11 @@ export function PlayCampaign({
                     )}
                     {mode.entityTypes.map(entityType => (
                         <EntityPanel
+                            key={entityType.id}
                             campaignID={campaignID}
                             entityType={entityType}
                             entities={gameState.entities}
-                            onAddEntity={() => {}}
+                            onAddEntity={e => eventHandler.addEntity(e)}
                         />
                     ))}
                 </div>
