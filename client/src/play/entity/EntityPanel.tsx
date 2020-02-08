@@ -26,12 +26,14 @@ export function EntityPanel({
     campaignID,
     onAddEntity,
     entities,
-    entityType
+    entityType,
+    onEditEntity
 }: {
     campaignID: string;
     onAddEntity: Callback<GameEntity>;
     entities: EntityCollection;
     entityType: EntityType;
+    onEditEntity: Callback<GameEntity>;
 }) {
     return (
         <SidePanel header={entityType.pluralName}>
@@ -39,7 +41,7 @@ export function EntityPanel({
                 data={entities.getByType(entityType)}
                 id={e => e.entityID()}
                 left={e => (
-                    <div onClick={() => console.log(e)}>
+                    <div onClick={() => onEditEntity(e)}>
                         <AttributeDisplay
                             entity={e}
                             attribute={getNameAttributeDefinition(entityType)}

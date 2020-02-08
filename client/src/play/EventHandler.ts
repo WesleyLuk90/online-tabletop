@@ -132,4 +132,8 @@ export class EventHandler {
             updateTokens: t => this.updateTokens(t)
         };
     }
+
+    editEntity(entity: GameEntity | null) {
+        return this.updateGameState(s => s.build(s => s.setEditEntity(entity)));
+    }
 }

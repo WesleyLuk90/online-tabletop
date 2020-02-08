@@ -2,10 +2,12 @@ import { Attribute, Entity } from "protocol/src/Entity";
 import { newUUID } from "protocol/src/Id";
 import { assertExhaustive } from "../../util/Exaustive";
 import { keyBy } from "../../util/Maps";
+import { checkNotNull } from "../../util/Nullable";
 import {
     AttributeDefinition,
     AttributeType,
-    EntityType
+    EntityType,
+    GameMode
 } from "../modes/GameMode";
 
 export class GameEntity {
@@ -57,5 +59,12 @@ export class GameEntity {
             default:
                 assertExhaustive(attribute.type);
         }
+    }
+
+    getEntityType(gameMode: GameMode): EntityType {
+        return checkNotNull(
+            gameMode.entityTypes.find(e => this.entityTypeID() === e.id),
+            "Failed to find entity type"
+        );
     }
 }

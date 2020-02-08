@@ -20,6 +20,7 @@ export interface RawGameState {
     readonly loading: boolean;
     readonly selectedTokens: TokenSelection;
     readonly entities: EntityCollection;
+    readonly editEntity: string;
 }
 
 export class GameStateBuilder {
@@ -35,7 +36,8 @@ export class GameStateBuilder {
             updated.tokens || this.s.tokens,
             updated.loading || this.s.loading,
             updated.selectedTokens || this.s.selectedTokens,
-            updated.entities || this.s.entities
+            updated.entities || this.s.entities,
+            updated.editEntity || this.s.editEntity
         );
         return this;
     }
@@ -170,5 +172,17 @@ export class GameStateBuilder {
         return this.update({
             entities: this.s.entities.add(entity)
         });
+    }
+
+    setEditEntity(entity: GameEntity | null) {
+        if (entity == null) {
+            return this.update({
+                editEntity: ""
+            });
+        } else {
+            return this.update({
+                editEntity: entity.entityID()
+            });
+        }
     }
 }

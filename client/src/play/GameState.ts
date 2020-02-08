@@ -25,7 +25,8 @@ export class GameState implements RawGameState {
             TokenCollection.empty(),
             false,
             TokenSelection.empty(),
-            EntityCollection.empty()
+            EntityCollection.empty(),
+            ""
         );
     }
 
@@ -38,7 +39,8 @@ export class GameState implements RawGameState {
         readonly tokens: TokenCollection,
         readonly loading: boolean,
         readonly selectedTokens: TokenSelection,
-        readonly entities: EntityCollection
+        readonly entities: EntityCollection,
+        readonly editEntity: string
     ) {}
 
     builder() {

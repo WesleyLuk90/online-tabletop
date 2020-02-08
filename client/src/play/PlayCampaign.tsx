@@ -2,6 +2,7 @@ import { User } from "protocol/src/User";
 import React, { useEffect, useState } from "react";
 import { Spinner } from "../common/controls/Icon";
 import { CampaignLoader } from "./CampaignLoader";
+import { EntityEditor } from "./entity/EntityEditor";
 import { EntityPanel } from "./entity/EntityPanel";
 import { EventHandler } from "./EventHandler";
 import { GameMap } from "./GameMap";
@@ -46,20 +47,26 @@ export function PlayCampaign({
         }
     });
     const scene = gameState.getMyScene();
+    const editEntity = gameState.entities.get(gameState.editEntity);
 
     return (
         <PlayLayout
             main={
-                scene != null ? (
-                    <GameMap
-                        scene={scene}
-                        gameState={gameState}
-                        tool={tool}
-                        toolCallbacks={eventHandler.toolCallbacks()}
-                    />
-                ) : (
-                    "No scene yet"
-                )
+                <>
+                    {editEntity && (
+                        <EntityEditor entity={editEntity} gameMode={mode} />
+                    )}
+                    {scene != null ? (
+                        <GameMap
+                            scene={scene}
+                            gameState={gameState}
+                            tool={tool}
+                            toolCallbacks={eventHandler.toolCallbacks()}
+                        />
+                    ) : (
+                        "No scene yet"
+                    )}
+                </>
             }
             right={
                 <div>
@@ -102,6 +109,7 @@ export function PlayCampaign({
                             entityType={entityType}
                             entities={gameState.entities}
                             onAddEntity={e => eventHandler.addEntity(e)}
+                            onEditEntity={e => eventHandler.editEntity(e)}
                         />
                     ))}
                 </div>
