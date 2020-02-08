@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Alert } from "./Alert";
+import { Alert } from "../Alert";
+import { Spinner } from "../Icon";
 import { Button } from "./Button";
-import { Spinner } from "./Icon";
 
 export function Form({
     onSave,

@@ -13,6 +13,8 @@ describe("TokenUpdater", () => {
                     y: 1,
                     width: 1,
                     height: 1,
+                    layerID: "",
+                    version: 0,
                     data: {
                         type: "square",
                         strokeColor: Colors[0],

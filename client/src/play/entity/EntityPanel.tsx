@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "../../common/Button";
+import { Button } from "../../common/forms/Button";
 import { ItemList } from "../../common/ItemList";
 import { SidePanel } from "../../common/SidePanel";
 import { Callback } from "../../util/Callback";

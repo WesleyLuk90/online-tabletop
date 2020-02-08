@@ -20,10 +20,12 @@ export function ItemList<T>({
     right?: (t: T) => ReactNode;
     id: (t: T) => string;
     onMove?: (from: number, to: number) => void;
+    filter?: (search: string, t: T) => void;
 }) {
     const [index, setIndex] = useState<number | null>(null);
     const [spacerIndex, setSpacerIndex] = useState<number | null>(null);
     const [width, setWidth] = useState<number>(100);
+    const [search, setSearch] = useState("");
     const ref = useRef<HTMLDivElement>(null);
 
     function onMouseDown(e: React.MouseEvent<HTMLDivElement>, index: number) {

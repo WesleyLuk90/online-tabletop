@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Routes } from "../app/Routes";
-import { ButtonLink } from "../common/Button";
+import { ButtonLink } from "../common/forms/Button";
 import { SectionList } from "../common/SectionList";
 import { CampaignRequests } from "../games/CampaignRequests";
 import { useAsyncData } from "../util/AsyncData";

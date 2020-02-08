@@ -1,6 +1,6 @@
 import { Scene } from "protocol/src/Scene";
 import React from "react";
-import { Dropdown } from "../common/Dropdown";
+import { Dropdown } from "../common/forms/Dropdown";
 import "./SceneSelector.css";
 
 function SceneOption({ scene }: { scene: Scene | null }) {

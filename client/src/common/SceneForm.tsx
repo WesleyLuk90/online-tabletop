@@ -1,6 +1,6 @@
 import { Scene } from "protocol/src/Scene";
 import React from "react";
-import { Input, NumberInput } from "./Input";
+import { Input, NumberInput } from "./forms/Input";
 
 export function SceneForm({
     scene,

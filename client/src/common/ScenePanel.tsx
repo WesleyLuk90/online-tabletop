@@ -8,7 +8,7 @@ import { Scene } from "protocol/src/Scene";
 import React, { useState } from "react";
 import { SceneService } from "../play/SceneService";
 import { plural } from "../util/Plural";
-import { Button } from "./Button";
+import { Button } from "./forms/Button";
 import { IconButton } from "./IconButton";
 import { ItemList } from "./ItemList";
 import { SceneModal } from "./SceneModal";

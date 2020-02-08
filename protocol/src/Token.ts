@@ -1,21 +1,17 @@
 import * as t from "io-ts";
 import { ColorSchema } from "./Color";
 
-export const SquareTokenSchema = t.strict({
-    type: t.literal("square"),
+export const ShapeToken = t.strict({
+    type: t.keyof({
+        square: null,
+        ellipse: null
+    }),
     fillColor: ColorSchema,
     strokeColor: ColorSchema,
     strokeWidth: t.number
 });
 
-export const EllipseSchema = t.strict({
-    type: t.literal("ellipse"),
-    fillColor: ColorSchema,
-    strokeColor: ColorSchema,
-    strokeWidth: t.number
-});
-
-export const TokenDataSchema = t.union([SquareTokenSchema, EllipseSchema]);
+export const TokenDataSchema = ShapeToken;
 
 export const RawTokenSchema = t.type({
     tokenID: t.string,
