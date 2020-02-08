@@ -1,11 +1,11 @@
 import { Layer } from "protocol/src/Scene";
 import React from "react";
 import { ColorService } from "../common/ColorService";
+import { ConfirmButton } from "../common/controls/Button";
 import { ColorSquare } from "../common/controls/ColorSquare";
+import { Input } from "../common/controls/Input";
+import { Label } from "../common/controls/Label";
 import { ModalForm } from "../common/controls/Modal";
-import { ConfirmButton } from "../common/forms/Button";
-import { Input } from "../common/forms/Input";
-import { Label } from "../common/forms/Label";
 import { Colors } from "./Colors";
 import "./LayerEditor.css";
 

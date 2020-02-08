@@ -1,8 +1,8 @@
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import React, { ReactNode, useState } from "react";
-import { Icon } from "../controls/Icon";
 import { ClickAway } from "../mouse/ClickAway";
 import "./Dropdown.css";
+import { Icon } from "./Icon";
 
 export function Dropdown<T>({
     value,

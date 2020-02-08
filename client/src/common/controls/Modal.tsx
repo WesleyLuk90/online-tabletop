@@ -1,7 +1,7 @@
 import React, { ReactNode, useCallback, useContext, useState } from "react";
 import { createPortal } from "react-dom";
 import { BemBuilder } from "../../util/BemBuilder";
-import { Button } from "../forms/Button";
+import { Button } from "./Button";
 import "./Modal.css";
 
 const BEM = new BemBuilder("modal");

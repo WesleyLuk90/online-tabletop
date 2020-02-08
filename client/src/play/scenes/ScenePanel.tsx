@@ -6,9 +6,9 @@ import {
 import { Campaign } from "protocol/src/Campaign";
 import { Scene } from "protocol/src/Scene";
 import React, { useState } from "react";
+import { Button } from "../../common/controls/Button";
 import { IconButton } from "../../common/controls/IconButton";
 import { ItemList } from "../../common/controls/ItemList";
-import { Button } from "../../common/forms/Button";
 import { SidePanel } from "../../common/layout/SidePanel";
 import { plural } from "../../util/Plural";
 import { SceneService } from "../SceneService";

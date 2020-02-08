@@ -2,10 +2,10 @@ import { Campaign } from "protocol/src/Campaign";
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { Routes } from "../app/Routes";
+import { ConfirmButton } from "../common/controls/Button";
+import { Form } from "../common/controls/Form";
 import { Spinner } from "../common/controls/Icon";
-import { ConfirmButton } from "../common/forms/Button";
-import { Form } from "../common/forms/Form";
-import { Input } from "../common/forms/Input";
+import { Input } from "../common/controls/Input";
 import { Page } from "../common/layout/Page";
 import { CampaignRequests } from "./CampaignRequests";
 
