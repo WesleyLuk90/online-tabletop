@@ -1,0 +1,8 @@
+.number-spinner {
+    width: 75px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+}
+.number-spinner__value {
+    width: 60px;
+}

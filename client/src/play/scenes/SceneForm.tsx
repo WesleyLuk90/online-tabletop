@@ -1,6 +1,9 @@
 import { Scene } from "protocol/src/Scene";
 import React from "react";
-import { Input, NumberInput } from "../../common/controls/Input";
+import {
+    NumberFormControl,
+    TextFormControl
+} from "../../common/controls/TextFormControl";
 
 export function SceneForm({
     scene,
@@ -11,12 +14,12 @@ export function SceneForm({
 }) {
     return (
         <div>
-            <Input
+            <TextFormControl
                 label="Name"
                 value={scene.name}
                 onChange={name => onChange({ ...scene, name })}
             />
-            <NumberInput
+            <NumberFormControl
                 label="Grid Size"
                 value={scene.gridSize}
                 onChange={gridSize => onChange({ ...scene, gridSize })}

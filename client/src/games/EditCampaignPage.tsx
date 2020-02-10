@@ -5,7 +5,7 @@ import { Routes } from "../app/Routes";
 import { ConfirmButton } from "../common/controls/Button";
 import { Form } from "../common/controls/Form";
 import { Spinner } from "../common/controls/Icon";
-import { Input } from "../common/controls/Input";
+import { TextFormControl } from "../common/controls/TextFormControl";
 import { Page } from "../common/layout/Page";
 import { CampaignRequests } from "./CampaignRequests";
 
@@ -55,7 +55,7 @@ export function EditCampaignPage() {
     return (
         <Page title={isNew ? "Create Campaign" : "Edit Campaign"}>
             <Form onSave={onSave}>
-                <Input
+                <TextFormControl
                     value={campaign.name}
                     label="Name"
                     onChange={name => setEdits({ ...campaign, name })}

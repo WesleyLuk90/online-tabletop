@@ -2,7 +2,7 @@ import React from "react";
 import { Tab, Tabs } from "../../common/layout/Tabs";
 import { GameMode } from "../modes/GameMode";
 import "./EntityEditor.css";
-import { EntityPage } from "./EntityEditorLayout";
+import { EntityComponents } from "./EntityEditorLayout";
 import { GameEntity } from "./GameEntity";
 
 export function EntityEditor({
@@ -19,7 +19,11 @@ export function EntityEditor({
             <Tabs>
                 {editor.pages.map(p => (
                     <Tab id={p.name} key={p.name} title={p.name}>
-                        <EntityPage layout={p} />
+                        <EntityComponents
+                            components={p.components}
+                            entity={entity}
+                            entityType={entityType}
+                        />
                     </Tab>
                 ))}
             </Tabs>

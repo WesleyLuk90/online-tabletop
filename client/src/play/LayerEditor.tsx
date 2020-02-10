@@ -3,9 +3,9 @@ import React from "react";
 import { ColorService } from "../common/ColorService";
 import { ConfirmButton } from "../common/controls/Button";
 import { ColorSquare } from "../common/controls/ColorSquare";
-import { Input } from "../common/controls/Input";
 import { Label } from "../common/controls/Label";
 import { ModalForm } from "../common/controls/Modal";
+import { TextFormControl } from "../common/controls/TextFormControl";
 import { Colors } from "./Colors";
 import "./LayerEditor.css";
 
@@ -30,7 +30,7 @@ export function LayerEditor({
         }
         return (
             <div>
-                <Input
+                <TextFormControl
                     label="Name"
                     value={layer.name}
                     onChange={name => onUpdate({ ...layer, name })}

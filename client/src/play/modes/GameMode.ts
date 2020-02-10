@@ -41,3 +41,13 @@ export function getNameAttributeDefinition(
         "Missing name attribute"
     );
 }
+
+export function getAttribute(
+    attributeID: string,
+    entityType: EntityType
+): AttributeDefinition {
+    return checkNotNull(
+        entityType.attributes.find(a => a.id === attributeID),
+        `Missing attribute ${attributeID}`
+    );
+}

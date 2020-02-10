@@ -1,35 +1,28 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Input.css";
-import { Label } from "./Label";
 
 export function Input({
     value,
-    onChange,
-    label
+    onChange
 }: {
     value: string;
     onChange: (newValue: string) => void;
-    label: ReactNode;
 }) {
     return (
-        <Label label={label}>
-            <input
-                className="input__input"
-                value={value}
-                onChange={e => onChange(e.target.value)}
-            />
-        </Label>
+        <input
+            className="input__input"
+            value={value}
+            onChange={e => onChange(e.target.value)}
+        />
     );
 }
 
 export function NumberInput({
     value,
-    onChange,
-    label
+    onChange
 }: {
     value: number;
     onChange: (newValue: number) => void;
-    label: ReactNode;
 }) {
     const [stringValue, setStringValue] = useState(value.toString());
 
@@ -43,18 +36,17 @@ export function NumberInput({
             setStringValue(value.toString());
         } else {
             onChange(parsed);
+            setStringValue(value.toString());
         }
     }
 
     return (
-        <Label label={label}>
-            <input
-                className="input__input"
-                type="number"
-                value={stringValue}
-                onChange={e => setStringValue(e.target.value)}
-                onBlur={updateValue}
-            />
-        </Label>
+        <input
+            className="input__input"
+            type="number"
+            value={stringValue}
+            onChange={e => setStringValue(e.target.value)}
+            onBlur={updateValue}
+        />
     );
 }

@@ -21,23 +21,10 @@ export const CreatureType: EntityType = {
         pages: [
             {
                 name: "Main",
-                sections: [
+                components: [
                     {
-                        label: "Basic",
-                        rows: [
-                            {
-                                columns: [
-                                    {
-                                        width: 12,
-                                        components: [
-                                            {
-                                                attributeID: "health"
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
+                        type: "control",
+                        attributeID: "health"
                     }
                 ]
             }

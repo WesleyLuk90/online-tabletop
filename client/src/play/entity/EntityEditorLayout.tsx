@@ -1,51 +1,68 @@
 import React from "react";
-import { Column, Component, Page, Row, Section } from "../modes/Editor";
+import { assertExhaustive } from "../../util/Exaustive";
+import { Component } from "../modes/Editor";
+import { EntityType } from "../modes/GameMode";
+import { EntityControl } from "./controls/Control";
+import { GameEntity } from "./GameEntity";
 
-interface LayoutProps<L> {
-    layout: L;
+export interface LayoutProps {
+    entity: GameEntity;
+    entityType: EntityType;
 }
 
-export function EntityPage(props: LayoutProps<Page>) {
+export function EntityComponents(
+    props: { components: Component[] } & LayoutProps
+) {
     return (
-        <div>
-            {props.layout.sections.map((s, i) => (
-                <EntitySection key={i} {...props} layout={s} />
+        <>
+            {props.components.map((s, i) => (
+                <EntityComponent key={i} {...props} component={s} />
             ))}
-        </div>
+        </>
     );
 }
 
-export function EntitySection(props: LayoutProps<Section>) {
-    return (
-        <section>
-            <h3>{props.layout.label}</h3>
-            {props.layout.rows.map((r, i) => (
-                <EntityRow key={i} {...props} layout={r} />
-            ))}
-        </section>
-    );
-}
-
-export function EntityRow(props: LayoutProps<Row>) {
-    return (
-        <div>
-            {props.layout.columns.map((c, i) => (
-                <EntityColumn key={i} {...props} layout={c} />
-            ))}
-        </div>
-    );
-}
-
-export function EntityColumn(props: LayoutProps<Column>) {
-    return (
-        <div>
-            {props.layout.components.map((c, i) => (
-                <EntityComponent key={i} {...props} layout={c} />
-            ))}
-        </div>
-    );
-}
-
-export function EntityComponent(props: LayoutProps<Component>) {
-    return <div>{props.layout.attributeID}</div>;
+export function EntityComponent(props: { component: Component } & LayoutProps) {
+    const { component } = props;
+    switch (component.type) {
+        case "control":
+            return (
+                <div>
+                    <EntityControl {...props} control={component} />
+                </div>
+            );
+        case "control-row":
+            return (
+                <div>
+                    {component.controls.map(c => (
+                        <EntityControl {...props} control={c} />
+                    ))}
+                </div>
+            );
+        case "row":
+            return (
+                <div>
+                    {component.columns.map(c => (
+                        <div>
+                            <EntityComponents
+                                {...props}
+                                components={c.components}
+                            />
+                        </div>
+                    ))}
+                </div>
+            );
+        case "section":
+            return (
+                <section>
+                    <h2>{component.label}</h2>
+                    <EntityComponents
+                        {...props}
+                        components={component.components}
+                    />
+                </section>
+            );
+        default:
+            assertExhaustive(component);
+    }
 }
