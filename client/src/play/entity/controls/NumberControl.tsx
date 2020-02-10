@@ -1,22 +1,30 @@
 import React from "react";
 import { NumberInput } from "../../../common/controls/Input";
-import { getAttribute } from "../../modes/GameMode";
+import { Attributes } from "../../modes/Attributes";
 import { ControlProps } from "./Control";
+import "./NumberControl.css";
 
 export function NumberControl({
-    attributeId,
+    attributeID,
     entityType,
     entity
 }: ControlProps) {
-    const attributeDefinition = getAttribute(attributeId, entityType);
-    const attribute = entity.getAttribute(attributeDefinition);
+    const attributeDefinition = Attributes.getAttribute(
+        attributeID,
+        entityType
+    );
     return (
-        <div>
+        <div className="number-control">
             <label>{attributeDefinition.name}</label>
-            <NumberInput
-                value={attribute?.numberValue || 0}
-                onChange={() => {}}
-            />
+            <div className="number-control__input">
+                <NumberInput
+                    value={Attributes.getAttributeNumberValue(
+                        attributeDefinition,
+                        entity
+                    )}
+                    onChange={() => {}}
+                />
+            </div>
         </div>
     );
 }

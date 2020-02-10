@@ -3,7 +3,8 @@
     line-height: 1.5;
 }
 
-.input__input {
+.input__input,
+.input__number-input {
     display: block;
     max-width: 500px;
     width: 100%;
@@ -12,4 +13,8 @@
     border-radius: 4px;
     line-height: 1.5;
     padding: 6px 12px;
+}
+
+.input__number-input {
+    padding-right: 0px;
 }

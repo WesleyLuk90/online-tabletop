@@ -1,0 +1,13 @@
+.number-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 150px;
+    padding: 5px 8px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+}
+
+.number-control__input {
+    width: 60px;
+}

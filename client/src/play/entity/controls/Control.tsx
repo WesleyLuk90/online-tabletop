@@ -1,22 +1,26 @@
 import React from "react";
 import { assertExhaustive } from "../../../util/Exaustive";
+import { Attributes } from "../../modes/Attributes";
 import { Control } from "../../modes/Editor";
-import { AttributeType, getAttribute } from "../../modes/GameMode";
+import { AttributeType } from "../../modes/GameMode";
 import { LayoutProps } from "../EntityEditorLayout";
 import { NumberControl } from "./NumberControl";
 
 export interface ControlProps extends LayoutProps {
-    attributeId: string;
+    attributeID: string;
 }
 
 export function EntityControl(props: { control: Control } & LayoutProps) {
-    const attribute = getAttribute(props.control.attributeID, props.entityType);
+    const attribute = Attributes.getAttribute(
+        props.control.attributeID,
+        props.entityType
+    );
     switch (attribute.type) {
         case AttributeType.Number:
             return (
                 <NumberControl
                     {...props}
-                    attributeId={props.control.attributeID}
+                    attributeID={props.control.attributeID}
                 />
             );
         case AttributeType.Text:

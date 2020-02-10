@@ -42,7 +42,7 @@ export function NumberInput({
 
     return (
         <input
-            className="input__input"
+            className="input__number-input"
             type="number"
             value={stringValue}
             onChange={e => setStringValue(e.target.value)}

@@ -5,7 +5,8 @@ import { defaultSearch } from "../../common/controls/Search";
 import { SidePanel } from "../../common/layout/SidePanel";
 import { Callback } from "../../util/Callback";
 import { EntityCollection } from "../EntityCollection";
-import { EntityType, getNameAttributeDefinition } from "../modes/GameMode";
+import { Attributes } from "../modes/Attributes";
+import { EntityType } from "../modes/GameMode";
 import { AttributeDisplay } from "./AttributeDisplay";
 import { GameEntity } from "./GameEntity";
 
@@ -17,7 +18,7 @@ function nameFilter(
     return defaultSearch({
         needle: search,
         haystack: entity.getAttributeAsString(
-            getNameAttributeDefinition(entityType)
+            Attributes.getNameAttributeDefinition(entityType)
         )
     });
 }
@@ -44,7 +45,9 @@ export function EntityPanel({
                     <div onClick={() => onEditEntity(e)}>
                         <AttributeDisplay
                             entity={e}
-                            attribute={getNameAttributeDefinition(entityType)}
+                            attribute={Attributes.getNameAttributeDefinition(
+                                entityType
+                            )}
                             placeholder={entityType.name}
                         />
                     </div>

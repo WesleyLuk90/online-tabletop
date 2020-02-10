@@ -1,4 +1,3 @@
-import { checkNotNull } from "../../util/Nullable";
 import { Editor } from "./Editor";
 
 export interface GameMode {
@@ -31,23 +30,4 @@ export interface AttributeDefinition {
 
 export interface TokenEntities {
     entityTypeID: string;
-}
-
-export function getNameAttributeDefinition(
-    entityType: EntityType
-): AttributeDefinition {
-    return checkNotNull(
-        entityType.attributes.find(a => a.id === entityType.nameAttributeID),
-        "Missing name attribute"
-    );
-}
-
-export function getAttribute(
-    attributeID: string,
-    entityType: EntityType
-): AttributeDefinition {
-    return checkNotNull(
-        entityType.attributes.find(a => a.id === attributeID),
-        `Missing attribute ${attributeID}`
-    );
 }
