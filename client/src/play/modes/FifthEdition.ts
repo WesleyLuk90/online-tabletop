@@ -19,32 +19,38 @@ export const CreatureType: EntityType = {
         {
             id: "str",
             name: "Strength",
-            type: AttributeType.Number
+            type: AttributeType.Number,
+            defaultValue: 10
         },
         {
             id: "dex",
             name: "Agility",
-            type: AttributeType.Number
+            type: AttributeType.Number,
+            defaultValue: 10
         },
         {
             id: "con",
             name: "Constitution",
-            type: AttributeType.Number
+            type: AttributeType.Number,
+            defaultValue: 10
         },
         {
             id: "int",
             name: "Intelligence",
-            type: AttributeType.Number
+            type: AttributeType.Number,
+            defaultValue: 10
         },
         {
             id: "wis",
             name: "Wisdom",
-            type: AttributeType.Number
+            type: AttributeType.Number,
+            defaultValue: 10
         },
         {
             id: "cha",
             name: "Charisma",
-            type: AttributeType.Number
+            type: AttributeType.Number,
+            defaultValue: 10
         }
     ],
     editor: {

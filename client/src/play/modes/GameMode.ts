@@ -22,11 +22,29 @@ export enum AttributeType {
     RichText = "RichText"
 }
 
-export interface AttributeDefinition {
+export interface NumberAttribute {
     id: string;
     name: string;
-    type: AttributeType;
+    type: AttributeType.Number;
+    defaultValue?: number;
 }
+
+export interface TextAttribute {
+    id: string;
+    name: string;
+    type: AttributeType.Text;
+}
+
+export interface RichTextAttribute {
+    id: string;
+    name: string;
+    type: AttributeType.RichText;
+}
+
+export type AttributeDefinition =
+    | NumberAttribute
+    | TextAttribute
+    | RichTextAttribute;
 
 export interface TokenEntities {
     entityTypeID: string;

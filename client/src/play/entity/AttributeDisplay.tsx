@@ -30,6 +30,6 @@ export function AttributeDisplay({
         case AttributeType.RichText:
             return <span>{value.stringValue}</span>;
         default:
-            assertExhaustive(attribute.type);
+            assertExhaustive(attribute);
     }
 }

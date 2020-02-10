@@ -57,7 +57,7 @@ export class GameEntity {
             case AttributeType.RichText:
                 return value.stringValue || "";
             default:
-                assertExhaustive(attribute.type);
+                assertExhaustive(attribute);
         }
     }
 
