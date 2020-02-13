@@ -2,9 +2,11 @@ import { newUUID } from "protocol/src/Id";
 import { Layer, Scene } from "protocol/src/Scene";
 import { Token } from "protocol/src/Token";
 import { CampaignRequests } from "../games/CampaignRequests";
+import { EntityRequests } from "../games/EntityRequests";
 import { SceneRequests } from "../games/SceneRequests";
 import { TokenRequests } from "../games/TokenRequests";
 import { GameStateUpdater } from "./CampaignLoader";
+import { EntityDeltaFactory } from "./entity/EntityDeltaFactory";
 import { GameEntity } from "./entity/GameEntity";
 import { TokenUpdate, TokenUpdater } from "./tokens/TokenUpdater";
 import { ToolCallbacks, ToolCreatableToken } from "./tools/Tool";
@@ -120,6 +122,12 @@ export class EventHandler {
 
     addEntity(entity: GameEntity) {
         this.updateGameState(gameState => {
+            EntityRequests.update(gameState.campaign.id, [
+                EntityDeltaFactory.create(
+                    gameState.sessionID,
+                    entity.getEntity()
+                )
+            ]);
             return gameState.build(b => b.addEntity(entity));
         });
     }

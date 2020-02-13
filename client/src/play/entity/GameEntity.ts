@@ -67,4 +67,8 @@ export class GameEntity {
             "Failed to find entity type"
         );
     }
+
+    getEntity() {
+        return this.entity;
+    }
 }
