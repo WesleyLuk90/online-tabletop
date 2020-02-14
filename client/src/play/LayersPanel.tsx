@@ -7,7 +7,13 @@ import { IconButton } from "../common/controls/IconButton";
 import { ItemList } from "../common/controls/ItemList";
 import { SidePanel } from "../common/layout/SidePanel";
 import { BemBuilder } from "../util/BemBuilder";
+import { replaceValue } from "../util/List";
 import { DispatchGameEvent } from "./gamestate/events/GameEvent";
+import {
+    RequestUpdateSceneLayers,
+    RequestUpdateSceneLayerVisibility
+} from "./gamestate/events/LayerRequests";
+import { UpdateActiveLayer } from "./gamestate/events/UpdateActiveLayer";
 import { LayerEditor } from "./LayerEditor";
 import "./LayersPanel.css";
 import { SceneService } from "./SceneService";
@@ -15,10 +21,12 @@ import { SceneService } from "./SceneService";
 const BEM = new BemBuilder("layers-panel");
 
 export function LayersPanel({
+    sceneID,
     layers,
     activeLayer,
     dispatch
 }: {
+    sceneID: string;
     layers: Layer[];
     activeLayer: Layer | null;
     dispatch: DispatchGameEvent;
@@ -30,7 +38,7 @@ export function LayersPanel({
         const copy = layers.slice();
         const [removed] = copy.splice(from, 1);
         copy.splice(to, 0, removed);
-        onSort(copy);
+        dispatch(new RequestUpdateSceneLayers(sceneID, layers));
     }
 
     return (
@@ -39,16 +47,35 @@ export function LayersPanel({
                 layer={edit}
                 onUpdate={setEdit}
                 onCancel={() => setEdit(null)}
-                onSave={l => {
+                onSave={newLayer => {
                     if (isNew) {
-                        onCreate(l);
+                        dispatch(
+                            new RequestUpdateSceneLayers(sceneID, [
+                                ...layers,
+                                newLayer
+                            ])
+                        );
                     } else {
-                        onUpdate(l);
+                        dispatch(
+                            new RequestUpdateSceneLayers(
+                                sceneID,
+                                replaceValue(
+                                    layers,
+                                    l => l.id === newLayer.id,
+                                    () => newLayer
+                                )
+                            )
+                        );
                     }
                     setEdit(null);
                 }}
-                onDelete={l => {
-                    onDelete(l);
+                onDelete={toDelete => {
+                    dispatch(
+                        new RequestUpdateSceneLayers(
+                            sceneID,
+                            layers.filter(l => l.id !== toDelete.id)
+                        )
+                    );
                     setEdit(null);
                 }}
                 isNew={isNew}
@@ -57,7 +84,7 @@ export function LayersPanel({
                 data={layers}
                 left={l => (
                     <div
-                        onClick={() => onChangeActiveLayer(l)}
+                        onClick={() => dispatch(new UpdateActiveLayer(l))}
                         className={BEM.element(
                             "layer",
                             "active",
@@ -75,10 +102,13 @@ export function LayersPanel({
                             icon={faEye}
                             inactive={!l.playerVisible}
                             onClick={() =>
-                                onUpdate({
-                                    ...l,
-                                    playerVisible: !l.playerVisible
-                                })
+                                dispatch(
+                                    new RequestUpdateSceneLayerVisibility(
+                                        sceneID,
+                                        l.id,
+                                        !l.playerVisible
+                                    )
+                                )
                             }
                             title="Player Visible"
                         />

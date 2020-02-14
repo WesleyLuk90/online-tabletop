@@ -7,7 +7,7 @@ import { EntityEditor } from "./entity/EntityEditor";
 import { EntityPanel } from "./entity/EntityPanel";
 import { EventHandler } from "./EventHandler";
 import { GameMap } from "./GameMap";
-import { GameEvent, reduce } from "./gamestate/events/GameEvent";
+import { GameEventType, reduce } from "./gamestate/events/GameEvent";
 import { GameState } from "./gamestate/GameState";
 import { LayersPanel } from "./LayersPanel";
 import { GameModes } from "./modes/GameModes";
@@ -24,17 +24,17 @@ export function PlayCampaign({
     user: User;
 }) {
     const [gameState, dispatch] = useReducer(
-        (g: GameState | null, gameEvent: GameEvent | GameState | null) => {
+        (g: GameState | null, update: GameEventType | GameState | null) => {
             if (g == null) {
                 return null;
             }
-            if (gameEvent == null) {
+            if (update == null) {
                 return null;
             }
-            if (gameEvent instanceof GameState) {
-                return gameEvent;
+            if (update instanceof GameState) {
+                return update;
             }
-            return reduce(gameEvent, g);
+            return reduce(update, g);
         },
         null
     );
@@ -102,19 +102,10 @@ export function PlayCampaign({
                     />
                     {scene && (
                         <LayersPanel
+                            sceneID={scene.sceneID}
                             layers={scene.layers}
-                            onCreate={l => eventHandler.createLayer(scene, l)}
-                            onUpdate={l => eventHandler.updateLayer(scene, l)}
-                            onDelete={l => eventHandler.deleteLayer(scene, l)}
-                            onSort={layers =>
-                                eventHandler.updateSceneDetails(scene.sceneID, {
-                                    layers
-                                })
-                            }
                             activeLayer={gameState.getActiveLayer()}
-                            onChangeActiveLayer={l =>
-                                eventHandler.changeActiveLayer(l)
-                            }
+                            dispatch={dispatch}
                         />
                     )}
                     {mode.entityTypes.map(entityType => (
