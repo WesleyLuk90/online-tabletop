@@ -89,7 +89,7 @@ export class TokenManager {
     }
 
     applyLocalUpdate(update: TokenUpdate[]) {
-        this.conflictResolver.applyLocalUpdate(update);
+        // this.conflictResolver.applyLocalUpdate(update);//FIXME
     }
 
     private tokenCreate(create: CreateToken) {

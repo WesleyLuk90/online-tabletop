@@ -44,11 +44,17 @@ export function PlayCampaign({
 
     const deltaFactory = new EntityDeltaFactory(gameState.sessionID);
 
-    const eventHandler = new EventHandler(updater => {
-        if (gameState != null) {
-            setGameState(updater(gameState));
-        }
-    }, deltaFactory);
+    const eventHandler = new EventHandler(
+        gameState.sessionID,
+        updater => {
+            if (gameState != null) {
+                setGameState(updater(gameState));
+            }
+        },
+        deltaFactory,
+        null as any,
+        null as any
+    );
     const scene = gameState.getMyScene();
     const editEntity = gameState.entities.get(gameState.editEntity);
 

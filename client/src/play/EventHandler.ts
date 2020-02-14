@@ -120,7 +120,8 @@ export class EventHandler {
 
     updateTokens(updates: TokenUpdate[]) {
         TokenRequests.update(updates, this.sessionID);
-        this.tokenManager.
+        // this.tokenManager.
+        //FIXME
     }
 
     addEntity(entity: GameEntity) {
@@ -135,7 +136,7 @@ export class EventHandler {
     updateEntity(delta: EntityDelta) {
         this.updateGameState(gameState => {
             EntityRequests.update(gameState.campaign.id, [delta]);
-            return gameState.build(b => b.applyEntityDelta(delta));
+            return gameState; //FIXME
         });
     }
 
