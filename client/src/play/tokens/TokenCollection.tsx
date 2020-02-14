@@ -26,6 +26,10 @@ export class TokenCollection {
         return this.tokensById.get(id) || null;
     }
 
+    has(tokenID: string) {
+        return this.byId(tokenID) != null;
+    }
+
     update(token: Token) {
         const byId = new Map(this.tokensById);
         byId.set(token.tokenID, token);

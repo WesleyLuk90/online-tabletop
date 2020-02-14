@@ -7,12 +7,16 @@ import {
 } from "protocol/src/TokenDelta";
 import { TokenUpdate } from "protocol/src/Update";
 import { TokenRequests } from "../games/TokenRequests";
-import { Callback } from "../util/Callback";
 import { ConflictResolver } from "../util/ConflictResolver";
 import { assertExhaustive } from "../util/Exaustive";
 import { PromiseDebouncer } from "../util/PromiseDebouncer";
-import { GameEvent } from "./gamestate/events/GameEvent";
-import { GameState } from "./gamestate/GameState";
+import { DispatchGameEvent } from "./gamestate/events/GameEvent";
+import {
+    AddTokenEvent,
+    DeleteTokenEvent,
+    UpdateTokenEvent
+} from "./gamestate/events/TokenEvents";
+import { UpdateAllTokens } from "./gamestate/events/UpdateAllTokens";
 
 class TokenConflictResolver extends ConflictResolver<Token, UpdateToken> {
     constructor(session: string, protected onUpdated: (token: Token) => void) {
@@ -40,7 +44,7 @@ export class TokenManager {
     constructor(
         private sessionID: string,
         private campaignID: string,
-        private update: Callback<GameEvent>
+        private dispatch: DispatchGameEvent
     ) {
         this.conflictResolver = new TokenConflictResolver(sessionID, token =>
             this.updateToken(token)
@@ -51,9 +55,7 @@ export class TokenManager {
         const changed = this.sceneID !== sceneID;
         this.sceneID = sceneID;
         if (changed) {
-            this.gameStateUpdater((g: GameState) =>
-                g.build(b => b.updateTokens([]))
-            );
+            this.dispatch(new UpdateAllTokens([]));
             this.loadTokens();
         }
     }
@@ -69,7 +71,7 @@ export class TokenManager {
             })
         );
         this.conflictResolver.updateAll(tokens);
-        this.gameStateUpdater(g => g.build(b => b.updateTokens(tokens)));
+        this.dispatch(new UpdateAllTokens(tokens));
     }
 
     handleTokenUpdate(tokenUpdate: TokenUpdate) {
@@ -95,13 +97,7 @@ export class TokenManager {
 
     private tokenCreate(create: CreateToken) {
         this.conflictResolver.add(create.token);
-        this.gameStateUpdater(s => {
-            if (s.tokens.byId(create.token.tokenID) == null) {
-                return s.build(b => b.addToken(create.token));
-            } else {
-                return s;
-            }
-        });
+        this.dispatch(new AddTokenEvent(create.token));
     }
 
     private tokenUpdate(update: UpdateToken) {
@@ -112,11 +108,11 @@ export class TokenManager {
     }
 
     private updateToken(token: Token) {
-        this.gameStateUpdater(s => s.build(b => b.updateToken(token)));
+        this.dispatch(new UpdateTokenEvent(token));
     }
 
     private tokenDelete(del: DeleteToken) {
+        this.dispatch(new DeleteTokenEvent(del.tokenID));
         this.conflictResolver.remove(del.tokenID);
-        this.gameStateUpdater(s => s.build(b => b.removeToken(del.tokenID)));
     }
 }
