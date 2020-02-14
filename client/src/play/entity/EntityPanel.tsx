@@ -3,8 +3,10 @@ import { Button } from "../../common/controls/Button";
 import { ItemList } from "../../common/controls/ItemList";
 import { defaultSearch } from "../../common/controls/Search";
 import { SidePanel } from "../../common/layout/SidePanel";
-import { Callback } from "../../util/Callback";
 import { EntityCollection } from "../EntityCollection";
+import { EditEntity } from "../gamestate/events/EditEntity";
+import { DispatchGameEvent } from "../gamestate/events/GameEvent";
+import { RequestCreateEntity } from "../gamestate/events/RequestCreateEntity";
 import { Attributes } from "../modes/Attributes";
 import { EntityType } from "../modes/GameMode";
 import { AttributeDisplay } from "./AttributeDisplay";
@@ -26,16 +28,14 @@ function nameFilter(
 
 export function EntityPanel({
     campaignID,
-    onAddEntity,
     entities,
     entityType,
-    onEditEntity
+    dispatch
 }: {
     campaignID: string;
-    onAddEntity: Callback<GameEntity>;
     entities: EntityCollection;
     entityType: EntityType;
-    onEditEntity: Callback<GameEntity>;
+    dispatch: DispatchGameEvent;
 }) {
     return (
         <SidePanel header={entityType.pluralName}>
@@ -44,7 +44,7 @@ export function EntityPanel({
                 id={e => e.entityID()}
                 left={e => (
                     <div
-                        onClick={() => onEditEntity(e)}
+                        onClick={() => dispatch(new EditEntity(e))}
                         className="entity-panel__entity-link"
                     >
                         <AttributeDisplay
@@ -60,7 +60,11 @@ export function EntityPanel({
             />
             <Button
                 onClick={() =>
-                    onAddEntity(GameEntity.create(campaignID, entityType))
+                    dispatch(
+                        new RequestCreateEntity(
+                            GameEntity.create(campaignID, entityType)
+                        )
+                    )
                 }
             >
                 Add {entityType.name}

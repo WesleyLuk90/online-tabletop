@@ -5,7 +5,6 @@ import { CampaignLoader } from "./CampaignLoader";
 import { EntityDeltaFactory } from "./entity/EntityDeltaFactory";
 import { EntityEditor } from "./entity/EntityEditor";
 import { EntityPanel } from "./entity/EntityPanel";
-import { EventHandler } from "./EventHandler";
 import { GameMap } from "./GameMap";
 import { GameEvent, reduce } from "./gamestate/events/GameEvent";
 import { GameState } from "./gamestate/GameState";
@@ -56,14 +55,6 @@ export function PlayCampaign({
     }
 
     const deltaFactory = new EntityDeltaFactory(gameState.sessionID);
-
-    const eventHandler = new EventHandler(
-        gameState.sessionID,
-        null as any,
-        deltaFactory,
-        null as any,
-        null as any
-    );
     const scene = gameState.getMyScene();
     const editEntity = gameState.entities.get(gameState.editEntity);
 
@@ -114,8 +105,7 @@ export function PlayCampaign({
                             campaignID={campaignID}
                             entityType={entityType}
                             entities={gameState.entities}
-                            onAddEntity={e => eventHandler.addEntity(e)}
-                            onEditEntity={e => eventHandler.editEntity(e)}
+                            dispatch={dispatch}
                         />
                     ))}
                 </div>
