@@ -2,12 +2,12 @@ import { Campaign } from "protocol/src/Campaign";
 import { Layer, Scene } from "protocol/src/Scene";
 import { Token } from "protocol/src/Token";
 import { User } from "protocol/src/User";
-import { checkNotNull, notNull } from "../util/Nullable";
-import { Color, Colors } from "./Colors";
-import { EntityCollection } from "./EntityCollection";
+import { checkNotNull, notNull } from "../../util/Nullable";
+import { Color, Colors } from "../Colors";
+import { EntityCollection } from "../EntityCollection";
+import { TokenCollection } from "../tokens/TokenCollection";
+import { TokenSelection } from "../tokens/TokenSelection";
 import { GameStateBuilder, RawGameState } from "./GameStateBuilder";
-import { TokenCollection } from "./tokens/TokenCollection";
-import { TokenSelection } from "./tokens/TokenSelection";
 
 export class GameState implements RawGameState {
     static newGameState(

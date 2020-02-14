@@ -1,4 +1,4 @@
-import { GameState } from "../GameState";
+import { GameState } from "../gamestate/GameState";
 import { Rectangle } from "../Rectangle";
 import { RenderableToken } from "../tokens/RenderableToken";
 import { Vector } from "../Vector";

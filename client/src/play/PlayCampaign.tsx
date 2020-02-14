@@ -7,7 +7,7 @@ import { EntityEditor } from "./entity/EntityEditor";
 import { EntityPanel } from "./entity/EntityPanel";
 import { EventHandler } from "./EventHandler";
 import { GameMap } from "./GameMap";
-import { GameState } from "./GameState";
+import { GameState } from "./gamestate/GameState";
 import { LayersPanel } from "./LayersPanel";
 import { GameModes } from "./modes/GameModes";
 import { PlayLayout } from "./PlayLayout";

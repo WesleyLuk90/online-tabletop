@@ -2,13 +2,13 @@ import { Campaign } from "protocol/src/Campaign";
 import { Layer, Scene } from "protocol/src/Scene";
 import { Token } from "protocol/src/Token";
 import { User } from "protocol/src/User";
-import { checkState } from "../util/CheckState";
-import { replaceValue } from "../util/List";
-import { GameEntity } from "./entity/GameEntity";
-import { EntityCollection } from "./EntityCollection";
+import { checkState } from "../../util/CheckState";
+import { replaceValue } from "../../util/List";
+import { GameEntity } from "../entity/GameEntity";
+import { EntityCollection } from "../EntityCollection";
+import { TokenCollection } from "../tokens/TokenCollection";
+import { TokenSelection } from "../tokens/TokenSelection";
 import { GameState } from "./GameState";
-import { TokenCollection } from "./tokens/TokenCollection";
-import { TokenSelection } from "./tokens/TokenSelection";
 
 export interface RawGameState {
     readonly sessionID: string;

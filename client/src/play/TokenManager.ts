@@ -11,7 +11,7 @@ import { ConflictResolver } from "../util/ConflictResolver";
 import { assertExhaustive } from "../util/Exaustive";
 import { PromiseDebouncer } from "../util/PromiseDebouncer";
 import { GameStateUpdater } from "./CampaignLoader";
-import { GameState } from "./GameState";
+import { GameState } from "./gamestate/GameState";
 
 class TokenConflictResolver extends ConflictResolver<Token, UpdateToken> {
     constructor(session: string, protected onUpdated: (token: Token) => void) {

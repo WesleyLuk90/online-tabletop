@@ -8,7 +8,7 @@ import { SceneRequests } from "../games/SceneRequests";
 import { assertExhaustive } from "../util/Exaustive";
 import { CampaignEventHandler } from "./CampaignEventHandler";
 import { EntityManager } from "./EntityManager";
-import { GameState } from "./GameState";
+import { GameState } from "./gamestate/GameState";
 import { SceneService } from "./SceneService";
 import { Socket } from "./Socket";
 import { TokenManager } from "./TokenManager";

@@ -1,6 +1,6 @@
 import { Token } from "protocol/src/Token";
 import { Callback } from "../../util/Callback";
-import { GameState } from "../GameState";
+import { GameState } from "../gamestate/GameState";
 import { TokenUpdate } from "../tokens/TokenUpdater";
 
 export type ToolCreatableToken = Omit<

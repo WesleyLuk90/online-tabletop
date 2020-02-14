@@ -2,7 +2,7 @@ import { Scene } from "protocol/src/Scene";
 import React, { useEffect, useRef, useState } from "react";
 import { Debouncer } from "./Debouncer";
 import "./GameMap.css";
-import { GameState } from "./GameState";
+import { GameState } from "./gamestate/GameState";
 import { Grid } from "./Grid";
 import { MapContextProvider } from "./input/MapEvents";
 import { Svg } from "./Svg";

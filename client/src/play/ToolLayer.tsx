@@ -1,6 +1,6 @@
 import React from "react";
 import { assertExhaustive } from "../util/Exaustive";
-import { GameState } from "./GameState";
+import { GameState } from "./gamestate/GameState";
 import { CenterEllipseTool, EllipseTool } from "./tools/EllipseTool";
 import { CenterRectangleTool, RectangleTool } from "./tools/RectTool";
 import { SelectTool } from "./tools/SelectTool";

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Color } from "../Colors";
-import { GameState } from "../GameState";
+import { GameState } from "../gamestate/GameState";
 import { useMapEvents } from "../input/MapEvents";
 import { Rectangle } from "../Rectangle";
 import { SvgRect } from "../svg/SvgRect";
