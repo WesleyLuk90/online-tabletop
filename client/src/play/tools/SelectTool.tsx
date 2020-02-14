@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Color } from "../Colors";
-import { RequestUpdateTokens } from "../gamestate/events/RequestUpdateTokens";
 import { UpdateSelection } from "../gamestate/events/SelectionEvents";
 import { GameState } from "../gamestate/GameState";
 import { useMapEvents } from "../input/MapEvents";
@@ -89,18 +88,15 @@ export function SelectTool({ gameState, dispatch, services }: ToolProps) {
                 );
             } else {
                 const delta = end.subtract(start);
-                dispatch(
-                    new RequestUpdateTokens(
-                        gameState.getSelectedTokens().map(t => ({
-                            campaignID: t.campaignID,
-                            tokenID: t.tokenID,
-                            updatedFields: {
-                                x: t.x + delta.x,
-                                y: t.y + delta.y
-                            }
-                        })),
-                        services
-                    )
+                services.tokenService().update(
+                    gameState.getSelectedTokens().map(t => ({
+                        campaignID: t.campaignID,
+                        tokenID: t.tokenID,
+                        updatedFields: {
+                            x: t.x + delta.x,
+                            y: t.y + delta.y
+                        }
+                    }))
                 );
             }
             setStartPos(null);

@@ -28,6 +28,7 @@ function reduceGameState(
     if (g == null) {
         return null;
     }
+    console.log("Apply update", update);
     return reduce(update, g);
 }
 

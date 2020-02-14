@@ -20,7 +20,7 @@ export const UpdateTokenSchema = t.strict({
 export type UpdateToken = t.TypeOf<typeof UpdateTokenSchema>;
 
 export function applyUpdateToken(token: Token, update: UpdateToken): Token {
-    return { ...token, ...update };
+    return { ...token, ...update.update };
 }
 
 export const DeleteTokenSchema = t.strict({

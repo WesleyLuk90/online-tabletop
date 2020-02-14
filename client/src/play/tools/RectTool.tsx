@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import { Color, Colors } from "../Colors";
-import {
-    CreatableToken,
-    RequestCreateToken
-} from "../gamestate/events/RequestCreateToken";
 import { useMapEvents } from "../input/MapEvents";
 import { Rectangle } from "../Rectangle";
 import { SvgRect } from "../svg/SvgRect";
+import { CreatableToken } from "../tokens/TokenService";
 import { ToolProps } from "./Tool";
 
 function rectToken(rect: Rectangle): CreatableToken {
@@ -24,18 +21,15 @@ function rectToken(rect: Rectangle): CreatableToken {
     };
 }
 
-export function RectangleTool({ dispatch, services }: ToolProps) {
+export function RectangleTool({ gameState, services }: ToolProps) {
     const [rect, setRect] = useState<Rectangle | null>();
     useMapEvents({
         onDrag: (s, c) => setRect(Rectangle.fromCorners(s, c)),
         onDragEnd: (s, e) => {
             setRect(null);
-            dispatch(
-                new RequestCreateToken(
-                    rectToken(Rectangle.fromCorners(s, e)),
-                    services
-                )
-            );
+            services
+                .tokenService()
+                .create(gameState, rectToken(Rectangle.fromCorners(s, e)));
         }
     });
 
@@ -53,18 +47,18 @@ export function RectangleTool({ dispatch, services }: ToolProps) {
     );
 }
 
-export function CenterRectangleTool({ dispatch, services }: ToolProps) {
+export function CenterRectangleTool({ gameState, services }: ToolProps) {
     const [rect, setRect] = useState<Rectangle | null>();
     useMapEvents({
         onDrag: (s, c) => setRect(Rectangle.fromCenterAndCorner(s, c)),
         onDragEnd: (s, e) => {
             setRect(null);
-            dispatch(
-                new RequestCreateToken(
-                    rectToken(Rectangle.fromCenterAndCorner(s, e)),
-                    services
-                )
-            );
+            services
+                .tokenService()
+                .create(
+                    gameState,
+                    rectToken(Rectangle.fromCenterAndCorner(s, e))
+                );
         }
     });
 

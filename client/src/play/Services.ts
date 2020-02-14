@@ -9,6 +9,7 @@ import { GameEvent } from "./gamestate/events/GameEvent";
 import { GameState } from "./gamestate/GameState";
 import { TokenManager } from "./TokenManager";
 import { TokenDeltaFactory } from "./tokens/TokenDeltaFactory";
+import { TokenService } from "./tokens/TokenService";
 
 export function lazy<T>(f: () => T): () => T {
     let value: T | null = null;
@@ -59,5 +60,8 @@ export class Services {
     );
     readonly tokenDeltaFactory = lazy(
         () => new TokenDeltaFactory(this.sessionID, this.campaignID)
+    );
+    readonly tokenService = lazy(
+        () => new TokenService(this.tokenDeltaFactory(), this.tokenManager())
     );
 }

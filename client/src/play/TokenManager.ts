@@ -46,9 +46,9 @@ export class TokenManager {
         private campaignID: string,
         private dispatch: DispatchGameEvent
     ) {
-        this.conflictResolver = new TokenConflictResolver(sessionID, token =>
-            this.updateToken(token)
-        );
+        this.conflictResolver = new TokenConflictResolver(sessionID, token => {
+            this.updateToken(token);
+        });
     }
 
     updateScene(sceneID: string | null) {
@@ -91,8 +91,10 @@ export class TokenManager {
         }
     }
 
-    applyLocalUpdate(update: UpdateToken[]) {
-        // this.conflictResolver.applyLocalUpdate(update);//FIXME
+    applyLocalUpdate(updates: UpdateToken[]) {
+        updates.forEach(update =>
+            this.conflictResolver.applyLocalUpdate(update)
+        );
     }
 
     createLocally(create: CreateToken) {
