@@ -38,7 +38,7 @@ export function LayersPanel({
         const copy = layers.slice();
         const [removed] = copy.splice(from, 1);
         copy.splice(to, 0, removed);
-        dispatch(new RequestUpdateSceneLayers(sceneID, layers));
+        dispatch(new RequestUpdateSceneLayers(sceneID, copy));
     }
 
     return (

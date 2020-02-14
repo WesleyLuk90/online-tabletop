@@ -26,7 +26,7 @@ export class RequestUpdateSceneLayers extends AbstractSceneUpdater {
     }
 
     updateScene(scene: Scene): Scene {
-        return { ...scene, ...this.layers };
+        return { ...scene, layers: this.layers };
     }
 }
 
