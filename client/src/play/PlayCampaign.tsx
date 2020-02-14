@@ -24,14 +24,14 @@ export function PlayCampaign({
 }) {
     const [gameState, dispatch] = useReducer(
         (g: GameState | null, update: GameEvent | GameState | null) => {
-            if (g == null) {
-                return null;
-            }
             if (update == null) {
                 return null;
             }
             if (update instanceof GameState) {
                 return update;
+            }
+            if (g == null) {
+                return null;
             }
             return reduce(update, g);
         },
