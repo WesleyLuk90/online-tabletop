@@ -1,6 +1,5 @@
 import { newUUID } from "protocol/src/Id";
 import { Token } from "protocol/src/Token";
-import { TokenRequests } from "../../../games/TokenRequests";
 import { GameState } from "../GameState";
 import { GameEvent } from "./GameEvent";
 
@@ -20,7 +19,6 @@ export class AddSelection implements GameEvent {
             tokenID: newUUID(),
             version: 0
         };
-        TokenRequests.create(token, gameState.sessionID);
         return gameState.build(b => b.addToken(token));
     }
 }

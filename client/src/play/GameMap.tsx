@@ -6,6 +6,7 @@ import { DispatchGameEvent } from "./gamestate/events/GameEvent";
 import { GameState } from "./gamestate/GameState";
 import { Grid } from "./Grid";
 import { MapContextProvider } from "./input/MapEvents";
+import { Services } from "./Services";
 import { Svg } from "./Svg";
 import { TokenLayer } from "./tokens/TokenLayer";
 import { ToolLayer } from "./ToolLayer";
@@ -17,12 +18,14 @@ export function GameMap({
     scene,
     tool,
     gameState,
-    dispatch
+    dispatch,
+    services
 }: {
     scene: Scene;
     tool: ToolType;
     gameState: GameState;
     dispatch: DispatchGameEvent;
+    services: Services;
 }) {
     const [view, setView] = useState(new View(1, new Vector(0, 0)));
     const [screenSize, setScreenSize] = useState(new Vector(1000, 1000));
@@ -100,6 +103,7 @@ export function GameMap({
                             tool={tool}
                             dispatch={dispatch}
                             gameState={gameState}
+                            services={services}
                         />
                     </Svg>
                 )}

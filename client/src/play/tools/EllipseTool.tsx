@@ -24,14 +24,17 @@ function ellipseToken(ellipse: Ellipse): CreatableToken {
     };
 }
 
-export function EllipseTool({ dispatch }: ToolProps) {
+export function EllipseTool({ dispatch, services }: ToolProps) {
     const [ellipse, setEllipse] = useState<Ellipse | null>();
     useMapEvents({
         onDrag: (s, c) => setEllipse(Ellipse.fromCorners(s, c)),
         onDragEnd: (s, e) => {
             setEllipse(null);
             dispatch(
-                new RequestCreateToken(ellipseToken(Ellipse.fromCorners(s, e)))
+                new RequestCreateToken(
+                    ellipseToken(Ellipse.fromCorners(s, e)),
+                    services
+                )
             );
         }
     });
@@ -50,7 +53,7 @@ export function EllipseTool({ dispatch }: ToolProps) {
     );
 }
 
-export function CenterEllipseTool({ dispatch }: ToolProps) {
+export function CenterEllipseTool({ dispatch, services }: ToolProps) {
     const [ellipse, setEllipse] = useState<Ellipse | null>();
     useMapEvents({
         onDrag: (s, c) => setEllipse(new Ellipse(s, c.subtract(s).abs())),
@@ -58,7 +61,8 @@ export function CenterEllipseTool({ dispatch }: ToolProps) {
             setEllipse(null);
             dispatch(
                 new RequestCreateToken(
-                    ellipseToken(new Ellipse(s, e.subtract(s).abs()))
+                    ellipseToken(new Ellipse(s, e.subtract(s).abs())),
+                    services
                 )
             );
         }

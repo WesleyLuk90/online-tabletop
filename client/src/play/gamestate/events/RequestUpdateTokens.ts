@@ -1,27 +1,23 @@
-import { Token } from "protocol/src/Token";
 import { TokenRequests } from "../../../games/TokenRequests";
-import { TokenUpdate, TokenUpdater } from "../../tokens/TokenUpdater";
+import { Services } from "../../Services";
+import { GameTokenUpdate } from "../../tokens/TokenDeltaFactory";
 import { GameState } from "../GameState";
 import { GameEvent } from "./GameEvent";
 
-export type CreatableToken = Omit<
-    Token,
-    "campaignID" | "tokenID" | "sceneID" | "layerID" | "version"
->;
-
 export class RequestUpdateTokens implements GameEvent {
-    constructor(private updates: TokenUpdate[]) {}
+    constructor(
+        private updates: GameTokenUpdate[],
+        private services: Services
+    ) {}
 
     update(gameState: GameState): GameState {
         const layer = gameState.getActiveLayer();
         if (layer == null) {
             return gameState;
         }
-        TokenRequests.update(this.updates, gameState.sessionID);
-        const tokens = TokenUpdater.apply(
-            gameState.tokens.asList(),
-            this.updates
-        );
-        return gameState.build(b => b.updateTokens(tokens));
+        const deltas = this.services.tokenDeltaFactory().update(this.updates);
+        TokenRequests.update(deltas);
+        this.services.tokenManager().applyLocalUpdate(deltas);
+        return gameState;
     }
 }

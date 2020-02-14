@@ -24,14 +24,17 @@ function rectToken(rect: Rectangle): CreatableToken {
     };
 }
 
-export function RectangleTool({ dispatch }: ToolProps) {
+export function RectangleTool({ dispatch, services }: ToolProps) {
     const [rect, setRect] = useState<Rectangle | null>();
     useMapEvents({
         onDrag: (s, c) => setRect(Rectangle.fromCorners(s, c)),
         onDragEnd: (s, e) => {
             setRect(null);
             dispatch(
-                new RequestCreateToken(rectToken(Rectangle.fromCorners(s, e)))
+                new RequestCreateToken(
+                    rectToken(Rectangle.fromCorners(s, e)),
+                    services
+                )
             );
         }
     });
@@ -50,7 +53,7 @@ export function RectangleTool({ dispatch }: ToolProps) {
     );
 }
 
-export function CenterRectangleTool({ dispatch }: ToolProps) {
+export function CenterRectangleTool({ dispatch, services }: ToolProps) {
     const [rect, setRect] = useState<Rectangle | null>();
     useMapEvents({
         onDrag: (s, c) => setRect(Rectangle.fromCenterAndCorner(s, c)),
@@ -58,7 +61,8 @@ export function CenterRectangleTool({ dispatch }: ToolProps) {
             setRect(null);
             dispatch(
                 new RequestCreateToken(
-                    rectToken(Rectangle.fromCenterAndCorner(s, e))
+                    rectToken(Rectangle.fromCenterAndCorner(s, e)),
+                    services
                 )
             );
         }

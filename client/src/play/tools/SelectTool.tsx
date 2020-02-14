@@ -42,7 +42,7 @@ function ActiveSelection({
     );
 }
 
-export function SelectTool({ gameState, dispatch }: ToolProps) {
+export function SelectTool({ gameState, dispatch, services }: ToolProps) {
     const [startPos, setStartPos] = useState<Vector | null>(null);
     const [currentPos, setCurrentPos] = useState<Vector | null>(null);
     const [isMoving, setIsMoving] = useState(false);
@@ -98,7 +98,8 @@ export function SelectTool({ gameState, dispatch }: ToolProps) {
                                 x: t.x + delta.x,
                                 y: t.y + delta.y
                             }
-                        }))
+                        })),
+                        services
                     )
                 );
             }

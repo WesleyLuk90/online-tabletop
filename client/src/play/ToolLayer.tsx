@@ -1,40 +1,28 @@
 import React from "react";
 import { assertExhaustive } from "../util/Exaustive";
-import { DispatchGameEvent } from "./gamestate/events/GameEvent";
-import { GameState } from "./gamestate/GameState";
 import { CenterEllipseTool, EllipseTool } from "./tools/EllipseTool";
 import { CenterRectangleTool, RectangleTool } from "./tools/RectTool";
 import { SelectTool } from "./tools/SelectTool";
+import { ToolProps } from "./tools/Tool";
 import { ToolType } from "./tools/ToolType";
 
-export function ToolLayer({
-    tool,
-    gameState,
-    dispatch
-}: {
-    tool: ToolType;
-    dispatch: DispatchGameEvent;
-    gameState: GameState;
-}) {
-    switch (tool) {
+export function ToolLayer(
+    props: {
+        tool: ToolType;
+    } & ToolProps
+) {
+    switch (props.tool) {
         case ToolType.select:
-            return <SelectTool gameState={gameState} dispatch={dispatch} />;
+            return <SelectTool {...props} />;
         case ToolType.rectangle:
-            return <RectangleTool gameState={gameState} dispatch={dispatch} />;
+            return <RectangleTool {...props} />;
         case ToolType.centerRectangle:
-            return (
-                <CenterRectangleTool
-                    gameState={gameState}
-                    dispatch={dispatch}
-                />
-            );
+            return <CenterRectangleTool {...props} />;
         case ToolType.ellipse:
-            return <EllipseTool gameState={gameState} dispatch={dispatch} />;
+            return <EllipseTool {...props} />;
         case ToolType.centerEllipse:
-            return (
-                <CenterEllipseTool gameState={gameState} dispatch={dispatch} />
-            );
+            return <CenterEllipseTool {...props} />;
         default:
-            return assertExhaustive(tool);
+            return assertExhaustive(props.tool);
     }
 }

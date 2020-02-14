@@ -3,10 +3,12 @@ import { User } from "protocol/src/User";
 import { Callback } from "../util/Callback";
 import { CampaignEventHandler } from "./CampaignEventHandler";
 import { CampaignLoader } from "./CampaignLoader";
+import { EntityDeltaFactory } from "./entity/EntityDeltaFactory";
 import { EntityManager } from "./EntityManager";
 import { GameEvent } from "./gamestate/events/GameEvent";
 import { GameState } from "./gamestate/GameState";
 import { TokenManager } from "./TokenManager";
+import { TokenDeltaFactory } from "./tokens/TokenDeltaFactory";
 
 export function lazy<T>(f: () => T): () => T {
     let value: T | null = null;
@@ -51,5 +53,11 @@ export class Services {
     );
     readonly entityManager = lazy(
         () => new EntityManager(this.sessionID, this.campaignID, this.dispatch)
+    );
+    readonly entityDeltaFactory = lazy(
+        () => new EntityDeltaFactory(this.sessionID)
+    );
+    readonly tokenDeltaFactory = lazy(
+        () => new TokenDeltaFactory(this.sessionID, this.campaignID)
     );
 }

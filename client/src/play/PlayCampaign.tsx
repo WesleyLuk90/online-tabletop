@@ -19,7 +19,6 @@ function reduceGameState(
     g: GameState | null,
     update: GameEvent | GameState | null
 ) {
-    console.log("Event", update);
     if (update == null) {
         return null;
     }
@@ -46,8 +45,9 @@ export function PlayCampaign({
     const services = useRef(new Services(campaignID, user, dispatch));
 
     useEffect(() => {
-        services.current.loader().start();
-        return () => services.current.loader().stop();
+        const current = services.current;
+        current.loader().start();
+        return () => current.loader().stop();
     }, []);
 
     if (gameState == null) {
@@ -80,6 +80,7 @@ export function PlayCampaign({
                             gameState={gameState}
                             tool={tool}
                             dispatch={dispatch}
+                            services={services.current}
                         />
                     ) : (
                         "No scene yet"

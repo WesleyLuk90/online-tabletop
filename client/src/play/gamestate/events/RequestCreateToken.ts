@@ -1,6 +1,7 @@
 import { newUUID } from "protocol/src/Id";
 import { Token } from "protocol/src/Token";
 import { TokenRequests } from "../../../games/TokenRequests";
+import { Services } from "../../Services";
 import { GameState } from "../GameState";
 import { GameEvent } from "./GameEvent";
 
@@ -10,7 +11,7 @@ export type CreatableToken = Omit<
 >;
 
 export class RequestCreateToken implements GameEvent {
-    constructor(private token: CreatableToken) {}
+    constructor(private token: CreatableToken, private services: Services) {}
 
     update(gameState: GameState): GameState {
         const layer = gameState.getActiveLayer();
@@ -25,7 +26,9 @@ export class RequestCreateToken implements GameEvent {
             tokenID: newUUID(),
             version: 0
         };
-        TokenRequests.create(token, gameState.sessionID);
-        return gameState.build(b => b.addToken(token));
+        const delta = this.services.tokenDeltaFactory().create(token);
+        TokenRequests.create(delta);
+        this.services.tokenManager().createLocally(delta);
+        return gameState;
     }
 }

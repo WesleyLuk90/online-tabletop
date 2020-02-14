@@ -78,7 +78,7 @@ export class TokenManager {
         const update = tokenUpdate.update;
         switch (update.type) {
             case "create":
-                this.tokenCreate(update);
+                this.createLocally(update);
                 break;
             case "update":
                 this.tokenUpdate(update);
@@ -91,11 +91,11 @@ export class TokenManager {
         }
     }
 
-    applyLocalUpdate(update: TokenUpdate[]) {
+    applyLocalUpdate(update: UpdateToken[]) {
         // this.conflictResolver.applyLocalUpdate(update);//FIXME
     }
 
-    private tokenCreate(create: CreateToken) {
+    createLocally(create: CreateToken) {
         this.conflictResolver.add(create.token);
         this.dispatch(new AddTokenEvent(create.token));
     }
