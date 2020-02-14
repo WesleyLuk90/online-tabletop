@@ -7,10 +7,11 @@ import {
 } from "protocol/src/TokenDelta";
 import { TokenUpdate } from "protocol/src/Update";
 import { TokenRequests } from "../games/TokenRequests";
+import { Callback } from "../util/Callback";
 import { ConflictResolver } from "../util/ConflictResolver";
 import { assertExhaustive } from "../util/Exaustive";
 import { PromiseDebouncer } from "../util/PromiseDebouncer";
-import { GameStateUpdater } from "./CampaignLoader";
+import { GameEvent } from "./gamestate/events/GameEvent";
 import { GameState } from "./gamestate/GameState";
 
 class TokenConflictResolver extends ConflictResolver<Token, UpdateToken> {
@@ -39,7 +40,7 @@ export class TokenManager {
     constructor(
         private sessionID: string,
         private campaignID: string,
-        private gameStateUpdater: GameStateUpdater
+        private update: Callback<GameEvent>
     ) {
         this.conflictResolver = new TokenConflictResolver(sessionID, token =>
             this.updateToken(token)

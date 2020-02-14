@@ -1,14 +1,18 @@
 import { CampaignUpdate, SceneUpdate } from "protocol/src/Update";
 import { CampaignRequests } from "../games/CampaignRequests";
 import { SceneRequests } from "../games/SceneRequests";
-import { GameStateUpdate } from "./CampaignLoader";
+import { Callback } from "../util/Callback";
+import { DeleteScene } from "./gamestate/events/DeleteScene";
+import { GameEvent } from "./gamestate/events/GameEvent";
+import { UpdateCampaign } from "./gamestate/events/UpdateCampaign";
+import { UpdateScene } from "./gamestate/events/UpdateScene";
 
 export class CampaignEventHandler {
-    constructor(private update: (update: GameStateUpdate) => void) {}
+    constructor(private update: Callback<GameEvent>) {}
 
     async handleCampaignUpdate(campaignUpdate: CampaignUpdate) {
         const campaign = await CampaignRequests.get(campaignUpdate.campaignID);
-        this.update(state => state.build(b => b.updateCampaign(campaign)));
+        this.update(new UpdateCampaign(campaign));
     }
 
     async updateScene(update: SceneUpdate) {
@@ -16,12 +20,10 @@ export class CampaignEventHandler {
             update.campaignID,
             update.sceneID
         );
-        this.update(state => {
-            if (scene == null) {
-                return state.build(b => b.deleteScene(update.sceneID));
-            } else {
-                return state.build(b => b.upsertScene(scene));
-            }
-        });
+        if (scene == null) {
+            return this.update(new DeleteScene(update.sceneID));
+        } else {
+            return this.update(new UpdateScene(scene));
+        }
     }
 }

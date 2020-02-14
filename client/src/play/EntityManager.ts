@@ -6,11 +6,13 @@ import {
     UpdateEntityDelta
 } from "protocol/src/EntityDelta";
 import { EntityRequests } from "../games/EntityRequests";
+import { Callback } from "../util/Callback";
 import { ConflictResolver } from "../util/ConflictResolver";
 import { PromiseDebouncer } from "../util/PromiseDebouncer";
-import { GameStateUpdater } from "./CampaignLoader";
 import { GameEntity } from "./entity/GameEntity";
 import { EntityCollection } from "./EntityCollection";
+import { GameEvent } from "./gamestate/events/GameEvent";
+import { UpdateEntity } from "./gamestate/events/UpdateEntity";
 
 class EntityConflictResolver extends ConflictResolver<
     Entity,
@@ -40,20 +42,13 @@ export class EntityManager {
     private debounce = new PromiseDebouncer<Entity[]>();
     private conflictResolver: EntityConflictResolver;
 
-    private onUpdated = (entity: Entity) => {
-        this.gameStateUpdater(state =>
-            state.build(b => b.updateEntity(new GameEntity(entity)))
-        );
-    };
-
     constructor(
         sessionID: string,
         private campaignID: string,
-        private gameStateUpdater: GameStateUpdater
+        private update: Callback<GameEvent>
     ) {
-        this.conflictResolver = new EntityConflictResolver(
-            sessionID,
-            this.onUpdated
+        this.conflictResolver = new EntityConflictResolver(sessionID, e =>
+            this.update(new UpdateEntity(e))
         );
     }
 

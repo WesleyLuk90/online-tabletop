@@ -1,5 +1,5 @@
 import { User } from "protocol/src/User";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { Spinner } from "../common/controls/Icon";
 import { CampaignLoader } from "./CampaignLoader";
 import { EntityDeltaFactory } from "./entity/EntityDeltaFactory";
@@ -7,6 +7,7 @@ import { EntityEditor } from "./entity/EntityEditor";
 import { EntityPanel } from "./entity/EntityPanel";
 import { EventHandler } from "./EventHandler";
 import { GameMap } from "./GameMap";
+import { GameEvent, reduce } from "./gamestate/events/GameEvent";
 import { GameState } from "./gamestate/GameState";
 import { LayersPanel } from "./LayersPanel";
 import { GameModes } from "./modes/GameModes";
@@ -22,14 +23,27 @@ export function PlayCampaign({
     campaignID: string;
     user: User;
 }) {
-    const [gameState, setGameState] = useState<GameState | null>(null);
+    // const [gameState, setGameState] = useState<GameState | null>(null);
+    const [gameState, dispatch] = useReducer(
+        (g: GameState | null, gameEvent: GameEvent | GameState | null) => {
+            if (g == null) {
+                return null;
+            }
+            if (gameEvent == null) {
+                return null;
+            }
+            if (gameEvent instanceof GameState) {
+                return gameEvent;
+            }
+            return reduce(gameEvent, g);
+        },
+        null
+    );
     const [tool, setTool] = useState(ToolType.select);
     const mode = GameModes[0];
 
     useEffect(() => {
-        const loader = new CampaignLoader(campaignID, user, updater =>
-            setGameState(updater)
-        );
+        const loader = new CampaignLoader(campaignID, user, dispatch);
 
         return () => loader.close();
     }, [campaignID, user]);

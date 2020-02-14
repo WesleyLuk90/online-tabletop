@@ -5,9 +5,11 @@ import { Update } from "protocol/src/Update";
 import { User } from "protocol/src/User";
 import { CampaignRequests } from "../games/CampaignRequests";
 import { SceneRequests } from "../games/SceneRequests";
+import { Callback } from "../util/Callback";
 import { assertExhaustive } from "../util/Exaustive";
 import { CampaignEventHandler } from "./CampaignEventHandler";
 import { EntityManager } from "./EntityManager";
+import { GameEvent } from "./gamestate/events/GameEvent";
 import { GameState } from "./gamestate/GameState";
 import { SceneService } from "./SceneService";
 import { Socket } from "./Socket";
@@ -40,35 +42,26 @@ export class CampaignLoader {
     constructor(
         private campaignID: string,
         private user: User,
-        private updateNullableState: (updater: NullableGameStateUpdate) => void
+        private update: Callback<GameEvent | GameState | null>
     ) {
         this.eventHandler = new CampaignEventHandler(this.updateState);
         this.socket = new Socket(
             () => this.loadCampaign(),
             u => this.handleUpdate(u),
-            () => updateNullableState(() => null),
+            () => this.update(null),
             campaignID
         );
         this.tokenManager = new TokenManager(
             this.sessionID,
             campaignID,
-            this.updateState
+            this.update
         );
         this.entityManager = new EntityManager(
             this.sessionID,
             this.campaignID,
-            this.updateState
+            this.update
         );
     }
-
-    updateState: GameStateUpdater = (updater: GameStateUpdate) => {
-        this.updateNullableState(state => {
-            if (state == null) {
-                return null;
-            }
-            return updater(state);
-        });
-    };
 
     handleUpdate(update: Update) {
         switch (update.type) {
@@ -111,7 +104,7 @@ export class CampaignLoader {
                 this.user,
                 scenes
             );
-            this.updateNullableState(() => gameState);
+            this.update(gameState);
             this.tokenManager.updateScene(gameState.getMySceneID());
             this.entityManager.load();
         }
