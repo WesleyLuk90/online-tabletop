@@ -1,7 +1,6 @@
 import { User } from "protocol/src/User";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { Spinner } from "../common/controls/Icon";
-import { CampaignLoader } from "./CampaignLoader";
 import { EntityDeltaFactory } from "./entity/EntityDeltaFactory";
 import { EntityEditor } from "./entity/EntityEditor";
 import { EntityPanel } from "./entity/EntityPanel";
@@ -12,6 +11,7 @@ import { LayersPanel } from "./LayersPanel";
 import { GameModes } from "./modes/GameModes";
 import { PlayLayout } from "./PlayLayout";
 import { ScenePanel } from "./scenes/ScenePanel";
+import { Services } from "./Services";
 import { TokenToolbar } from "./TokenToolbar";
 import { ToolType } from "./tools/ToolType";
 
@@ -19,6 +19,7 @@ function reduceGameState(
     g: GameState | null,
     update: GameEvent | GameState | null
 ) {
+    console.log("Event", update);
     if (update == null) {
         return null;
     }
@@ -42,11 +43,12 @@ export function PlayCampaign({
     const [tool, setTool] = useState(ToolType.select);
     const mode = GameModes[0];
 
-    useEffect(() => {
-        const loader = new CampaignLoader(campaignID, user, dispatch);
+    const services = useRef(new Services(campaignID, user, dispatch));
 
-        return () => loader.close();
-    }, [campaignID, user]);
+    useEffect(() => {
+        services.current.loader().start();
+        return () => services.current.loader().stop();
+    }, []);
 
     if (gameState == null) {
         return (

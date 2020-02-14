@@ -7,6 +7,7 @@ import { CampaignRequests } from "../games/CampaignRequests";
 import { SceneRequests } from "../games/SceneRequests";
 import { Callback } from "../util/Callback";
 import { assertExhaustive } from "../util/Exaustive";
+import { checkNotNull } from "../util/Nullable";
 import { CampaignEventHandler } from "./CampaignEventHandler";
 import { EntityManager } from "./EntityManager";
 import { GameEvent } from "./gamestate/events/GameEvent";
@@ -21,45 +22,29 @@ function isManager(campaign: Campaign, userID: string) {
     );
 }
 
-export interface GameStateUpdate {
-    (gameState: GameState): GameState;
-}
-export interface NullableGameStateUpdate {
-    (gameState: GameState | null): GameState | null;
-}
-export interface GameStateUpdater {
-    (update: GameStateUpdate): void;
-}
-
 export class CampaignLoader {
-    socket: Socket;
-    eventHandler: CampaignEventHandler;
-    tokenManager: TokenManager;
-    entityManager: EntityManager;
+    private socket: Socket | null = null;
 
     private sessionID = newUUID();
 
     constructor(
         private campaignID: string,
         private user: User,
-        private update: Callback<GameEvent | GameState | null>
-    ) {
-        this.eventHandler = new CampaignEventHandler(this.update);
+        private update: Callback<GameEvent | GameState | null>,
+        private eventHandler: CampaignEventHandler,
+        private tokenManager: TokenManager,
+        private entityManager: EntityManager
+    ) {}
+
+    async start() {
+        if (this.socket != null) {
+            throw new Error("Already started");
+        }
         this.socket = new Socket(
             () => this.loadCampaign(),
             u => this.handleUpdate(u),
             () => this.update(null),
-            campaignID
-        );
-        this.tokenManager = new TokenManager(
-            this.sessionID,
-            campaignID,
-            this.update
-        );
-        this.entityManager = new EntityManager(
-            this.sessionID,
-            this.campaignID,
-            this.update
+            this.campaignID
         );
     }
 
@@ -82,11 +67,11 @@ export class CampaignLoader {
         }
     }
 
-    close() {
-        this.socket.close();
+    stop() {
+        checkNotNull(this.socket, "Not running").close();
     }
 
-    async loadCampaign() {
+    private async loadCampaign() {
         const campaign = await CampaignRequests.get(this.campaignID);
         const scenes = await SceneRequests.list(this.campaignID);
         if (scenes.length === 0 && isManager(campaign, this.user.id)) {
