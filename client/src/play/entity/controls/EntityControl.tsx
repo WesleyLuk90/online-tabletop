@@ -5,6 +5,7 @@ import { Control } from "../../modes/Editor";
 import { AttributeType } from "../../modes/GameMode";
 import { LayoutProps } from "../EntityEditorLayout";
 import { NumberControl } from "./NumberControl";
+import { TextControl } from "./TextControl";
 
 export interface ControlProps extends LayoutProps {
     attributeID: string;
@@ -24,7 +25,12 @@ export function EntityControl(props: { control: Control } & LayoutProps) {
                 />
             );
         case AttributeType.Text:
-            return <div></div>;
+            return (
+                <TextControl
+                    {...props}
+                    attributeID={props.control.attributeID}
+                />
+            );
         case AttributeType.RichText:
             return <div></div>;
         default:

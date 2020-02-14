@@ -1,25 +1,21 @@
 import React from "react";
-import { NumberInput } from "../../../common/controls/Input";
+import { Input } from "../../../common/controls/Input";
 import { Attributes } from "../../modes/Attributes";
-import { NumberAttribute } from "../../modes/GameMode";
+import { TextAttribute } from "../../modes/GameMode";
 import { ControlProps } from "./EntityControl";
-import "./NumberControl.css";
+import "./TextControl.css";
 
-export function NumberControl({
-    attributeID,
-    entityType,
-    entity
-}: ControlProps) {
+export function TextControl({ attributeID, entityType, entity }: ControlProps) {
     const attributeDefinition = Attributes.getAttribute(
         attributeID,
         entityType
-    ) as NumberAttribute;
+    ) as TextAttribute;
     return (
-        <div className="number-control">
+        <div className="text-control">
             <label>{attributeDefinition.name}</label>
-            <div className="number-control__input">
-                <NumberInput
-                    value={Attributes.getAttributeNumberValue(
+            <div className="text-control__input">
+                <Input
+                    value={Attributes.getAttributeStringValue(
                         attributeDefinition,
                         entity
                     )}

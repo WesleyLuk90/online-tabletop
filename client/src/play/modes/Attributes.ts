@@ -1,6 +1,11 @@
 import { checkNotNull } from "../../util/Nullable";
 import { GameEntity } from "../entity/GameEntity";
-import { AttributeDefinition, EntityType, NumberAttribute } from "./GameMode";
+import {
+    AttributeDefinition,
+    EntityType,
+    NumberAttribute,
+    TextAttribute
+} from "./GameMode";
 
 export class Attributes {
     static getNameAttributeDefinition(
@@ -36,5 +41,16 @@ export class Attributes {
             return 0;
         }
         return attribute.numberValue;
+    }
+
+    static getAttributeStringValue(
+        attributeDefinition: TextAttribute,
+        entity: GameEntity
+    ): string {
+        const attribute = entity.getAttribute(attributeDefinition);
+        if (attribute == null || attribute.stringValue == null) {
+            return "";
+        }
+        return attribute.stringValue;
     }
 }

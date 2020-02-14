@@ -60,6 +60,10 @@ export const CreatureType: EntityType = {
                 components: [
                     {
                         type: "control",
+                        attributeID: "name"
+                    },
+                    {
+                        type: "control",
                         attributeID: "str"
                     },
                     {

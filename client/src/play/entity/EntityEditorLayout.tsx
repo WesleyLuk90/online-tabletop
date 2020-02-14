@@ -2,7 +2,7 @@ import React from "react";
 import { assertExhaustive } from "../../util/Exaustive";
 import { Component } from "../modes/Editor";
 import { EntityType } from "../modes/GameMode";
-import { EntityControl } from "./controls/Control";
+import { EntityControl } from "./controls/EntityControl";
 import { GameEntity } from "./GameEntity";
 
 export interface LayoutProps {
