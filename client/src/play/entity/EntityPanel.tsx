@@ -8,6 +8,7 @@ import { EntityCollection } from "../EntityCollection";
 import { Attributes } from "../modes/Attributes";
 import { EntityType } from "../modes/GameMode";
 import { AttributeDisplay } from "./AttributeDisplay";
+import "./EntityPanel.css";
 import { GameEntity } from "./GameEntity";
 
 function nameFilter(
@@ -42,7 +43,10 @@ export function EntityPanel({
                 data={entities.getByType(entityType)}
                 id={e => e.entityID()}
                 left={e => (
-                    <div onClick={() => onEditEntity(e)}>
+                    <div
+                        onClick={() => onEditEntity(e)}
+                        className="entity-panel__entity-link"
+                    >
                         <AttributeDisplay
                             entity={e}
                             attribute={Attributes.getNameAttributeDefinition(
