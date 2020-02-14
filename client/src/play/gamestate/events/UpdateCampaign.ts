@@ -1,8 +1,8 @@
 import { Campaign } from "protocol/src/Campaign";
 import { GameState } from "../GameState";
-import { GameEventType } from "./GameEvent";
+import { GameEvent } from "./GameEvent";
 
-export class UpdateCampaign implements GameEventType {
+export class UpdateCampaign implements GameEvent {
     constructor(private campaign: Campaign) {}
 
     update(gameState: GameState): GameState {

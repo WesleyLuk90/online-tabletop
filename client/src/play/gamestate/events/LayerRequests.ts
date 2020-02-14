@@ -2,9 +2,9 @@ import { Layer, Scene } from "protocol/src/Scene";
 import { SceneRequests } from "../../../games/SceneRequests";
 import { replaceValue } from "../../../util/List";
 import { GameState } from "../GameState";
-import { GameEventType } from "./GameEvent";
+import { GameEvent } from "./GameEvent";
 
-abstract class AbstractSceneUpdater implements GameEventType {
+abstract class AbstractSceneUpdater implements GameEvent {
     constructor(private sceneID: string) {}
 
     abstract updateScene(scene: Scene): Scene;

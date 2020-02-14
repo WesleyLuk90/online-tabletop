@@ -1,23 +1,9 @@
-import { Token } from "protocol/src/Token";
-import { Callback } from "../../util/Callback";
+import { DispatchGameEvent } from "../gamestate/events/GameEvent";
 import { GameState } from "../gamestate/GameState";
-import { TokenUpdate } from "../tokens/TokenUpdater";
-
-export type ToolCreatableToken = Omit<
-    Token,
-    "campaignID" | "tokenID" | "sceneID" | "layerID" | "version"
->;
-
-export interface ToolCallbacks {
-    createToken: Callback<ToolCreatableToken>;
-    addSelection: Callback<Token[]>;
-    updateSelection: Callback<Token[]>;
-    updateTokens: Callback<TokenUpdate[]>;
-}
 
 export interface ToolProps {
     gameState: GameState;
-    callbacks: ToolCallbacks;
+    dispatch: DispatchGameEvent;
 }
 
 export interface Tool {

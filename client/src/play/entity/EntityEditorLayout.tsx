@@ -1,7 +1,6 @@
-import { EntityDelta } from "protocol/src/EntityDelta";
 import React from "react";
-import { Callback } from "../../util/Callback";
 import { assertExhaustive } from "../../util/Exaustive";
+import { DispatchGameEvent } from "../gamestate/events/GameEvent";
 import { Component } from "../modes/Editor";
 import { EntityType } from "../modes/GameMode";
 import { EntityControl } from "./controls/EntityControl";
@@ -12,7 +11,7 @@ export interface LayoutProps {
     deltaFactory: EntityDeltaFactory;
     entity: GameEntity;
     entityType: EntityType;
-    onChange: Callback<EntityDelta>;
+    dispatch: DispatchGameEvent;
 }
 
 export function EntityComponents(

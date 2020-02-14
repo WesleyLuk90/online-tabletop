@@ -1,8 +1,8 @@
 import { CampaignRequests } from "../../../games/CampaignRequests";
 import { GameState } from "../GameState";
-import { GameEventType } from "./GameEvent";
+import { GameEvent } from "./GameEvent";
 
-export class RequestChangeMyScene implements GameEventType {
+export class RequestChangeMyScene implements GameEvent {
     constructor(private sceneID: string) {}
 
     update(gameState: GameState): GameState {

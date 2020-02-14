@@ -1,7 +1,7 @@
 import { GameState } from "../GameState";
-import { GameEventType } from "./GameEvent";
+import { GameEvent } from "./GameEvent";
 
-export class DeleteEntity implements GameEventType {
+export class DeleteEntity implements GameEvent {
     constructor(private entityID: string) {}
 
     update(gameState: GameState): GameState {

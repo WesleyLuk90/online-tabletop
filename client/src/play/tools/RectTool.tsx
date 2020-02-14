@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { Color, Colors } from "../Colors";
+import {
+    CreatableToken,
+    RequestCreateToken
+} from "../gamestate/events/RequestCreateToken";
 import { useMapEvents } from "../input/MapEvents";
 import { Rectangle } from "../Rectangle";
 import { SvgRect } from "../svg/SvgRect";
-import { ToolCreatableToken, ToolProps } from "./Tool";
+import { ToolProps } from "./Tool";
 
-function rectToken(rect: Rectangle): ToolCreatableToken {
+function rectToken(rect: Rectangle): CreatableToken {
     return {
         x: rect.left,
         y: rect.top,
@@ -20,13 +24,15 @@ function rectToken(rect: Rectangle): ToolCreatableToken {
     };
 }
 
-export function RectangleTool({ callbacks: { createToken } }: ToolProps) {
+export function RectangleTool({ dispatch }: ToolProps) {
     const [rect, setRect] = useState<Rectangle | null>();
     useMapEvents({
         onDrag: (s, c) => setRect(Rectangle.fromCorners(s, c)),
         onDragEnd: (s, e) => {
             setRect(null);
-            createToken(rectToken(Rectangle.fromCorners(s, e)));
+            dispatch(
+                new RequestCreateToken(rectToken(Rectangle.fromCorners(s, e)))
+            );
         }
     });
 
@@ -44,13 +50,17 @@ export function RectangleTool({ callbacks: { createToken } }: ToolProps) {
     );
 }
 
-export function CenterRectangleTool({ callbacks: { createToken } }: ToolProps) {
+export function CenterRectangleTool({ dispatch }: ToolProps) {
     const [rect, setRect] = useState<Rectangle | null>();
     useMapEvents({
         onDrag: (s, c) => setRect(Rectangle.fromCenterAndCorner(s, c)),
         onDragEnd: (s, e) => {
             setRect(null);
-            createToken(rectToken(Rectangle.fromCenterAndCorner(s, e)));
+            dispatch(
+                new RequestCreateToken(
+                    rectToken(Rectangle.fromCenterAndCorner(s, e))
+                )
+            );
         }
     });
 

@@ -7,7 +7,7 @@ import { EntityEditor } from "./entity/EntityEditor";
 import { EntityPanel } from "./entity/EntityPanel";
 import { EventHandler } from "./EventHandler";
 import { GameMap } from "./GameMap";
-import { GameEventType, reduce } from "./gamestate/events/GameEvent";
+import { GameEvent, reduce } from "./gamestate/events/GameEvent";
 import { GameState } from "./gamestate/GameState";
 import { LayersPanel } from "./LayersPanel";
 import { GameModes } from "./modes/GameModes";
@@ -24,7 +24,7 @@ export function PlayCampaign({
     user: User;
 }) {
     const [gameState, dispatch] = useReducer(
-        (g: GameState | null, update: GameEventType | GameState | null) => {
+        (g: GameState | null, update: GameEvent | GameState | null) => {
             if (g == null) {
                 return null;
             }
@@ -75,8 +75,8 @@ export function PlayCampaign({
                         <EntityEditor
                             entity={editEntity}
                             gameMode={mode}
-                            onChange={d => eventHandler.updateEntity(d)}
                             deltaFactory={deltaFactory}
+                            dispatch={dispatch}
                         />
                     )}
                     {scene != null ? (
@@ -84,7 +84,7 @@ export function PlayCampaign({
                             scene={scene}
                             gameState={gameState}
                             tool={tool}
-                            toolCallbacks={eventHandler.toolCallbacks()}
+                            dispatch={dispatch}
                         />
                     ) : (
                         "No scene yet"

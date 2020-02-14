@@ -1,9 +1,9 @@
 import { Scene } from "protocol/src/Scene";
 import { SceneRequests } from "../../../games/SceneRequests";
 import { GameState } from "../GameState";
-import { GameEventType } from "./GameEvent";
+import { GameEvent } from "./GameEvent";
 
-export class RequestUpdateScene implements GameEventType {
+export class RequestUpdateScene implements GameEvent {
     constructor(private scene: Scene) {}
 
     update(gameState: GameState): GameState {

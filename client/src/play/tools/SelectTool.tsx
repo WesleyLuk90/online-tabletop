@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Color } from "../Colors";
+import { RequestUpdateTokens } from "../gamestate/events/RequestUpdateTokens";
+import { UpdateSelection } from "../gamestate/events/SelectionEvents";
 import { GameState } from "../gamestate/GameState";
 import { useMapEvents } from "../input/MapEvents";
 import { Rectangle } from "../Rectangle";
@@ -40,10 +42,7 @@ function ActiveSelection({
     );
 }
 
-export function SelectTool({
-    gameState,
-    callbacks: { addSelection, updateTokens, updateSelection }
-}: ToolProps) {
+export function SelectTool({ gameState, dispatch }: ToolProps) {
     const [startPos, setStartPos] = useState<Vector | null>(null);
     const [currentPos, setCurrentPos] = useState<Vector | null>(null);
     const [isMoving, setIsMoving] = useState(false);
@@ -52,9 +51,9 @@ export function SelectTool({
         onClick(loc) {
             const first = SelectionService.point(loc, gameState)[0];
             if (first != null) {
-                updateSelection([first.token]);
+                dispatch(new UpdateSelection([first.token]));
             } else {
-                updateSelection([]);
+                dispatch(new UpdateSelection([]));
             }
         },
         onDragStart(start) {
@@ -64,7 +63,7 @@ export function SelectTool({
                 underCursor != null &&
                 !gameState.selectedTokens.has(underCursor.token)
             ) {
-                updateSelection([underCursor.token]);
+                dispatch(new UpdateSelection([underCursor.token]));
                 setIsMoving(true);
             } else {
                 setIsMoving(
@@ -80,23 +79,27 @@ export function SelectTool({
         },
         onDragEnd(start, end) {
             if (!isMoving) {
-                updateSelection(
-                    SelectionService.area(
-                        Rectangle.fromCorners(start, end),
-                        gameState
-                    ).map(t => t.token)
+                dispatch(
+                    new UpdateSelection(
+                        SelectionService.area(
+                            Rectangle.fromCorners(start, end),
+                            gameState
+                        ).map(t => t.token)
+                    )
                 );
             } else {
                 const delta = end.subtract(start);
-                updateTokens(
-                    gameState.getSelectedTokens().map(t => ({
-                        campaignID: t.campaignID,
-                        tokenID: t.tokenID,
-                        updatedFields: {
-                            x: t.x + delta.x,
-                            y: t.y + delta.y
-                        }
-                    }))
+                dispatch(
+                    new RequestUpdateTokens(
+                        gameState.getSelectedTokens().map(t => ({
+                            campaignID: t.campaignID,
+                            tokenID: t.tokenID,
+                            updatedFields: {
+                                x: t.x + delta.x,
+                                y: t.y + delta.y
+                            }
+                        }))
+                    )
                 );
             }
             setStartPos(null);

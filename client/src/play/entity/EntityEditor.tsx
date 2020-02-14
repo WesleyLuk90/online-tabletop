@@ -1,7 +1,6 @@
-import { EntityDelta } from "protocol/src/EntityDelta";
 import React from "react";
 import { Tab, Tabs } from "../../common/layout/Tabs";
-import { Callback } from "../../util/Callback";
+import { DispatchGameEvent } from "../gamestate/events/GameEvent";
 import { GameMode } from "../modes/GameMode";
 import { EntityDeltaFactory } from "./EntityDeltaFactory";
 import "./EntityEditor.css";
@@ -11,13 +10,13 @@ import { GameEntity } from "./GameEntity";
 export function EntityEditor({
     entity,
     gameMode,
-    onChange,
-    deltaFactory
+    deltaFactory,
+    dispatch
 }: {
     entity: GameEntity;
     gameMode: GameMode;
-    onChange: Callback<EntityDelta>;
     deltaFactory: EntityDeltaFactory;
+    dispatch: DispatchGameEvent;
 }) {
     const entityType = entity.getEntityType(gameMode);
     const editor = entityType.editor;
@@ -30,7 +29,7 @@ export function EntityEditor({
                             components={p.components}
                             entity={entity}
                             entityType={entityType}
-                            onChange={onChange}
+                            dispatch={dispatch}
                             deltaFactory={deltaFactory}
                         />
                     </Tab>

@@ -1,8 +1,8 @@
 import { Token } from "protocol/src/Token";
 import { GameState } from "../GameState";
-import { GameEventType } from "./GameEvent";
+import { GameEvent } from "./GameEvent";
 
-export class UpdateTokenEvent implements GameEventType {
+export class UpdateTokenEvent implements GameEvent {
     constructor(private token: Token) {}
 
     update(gameState: GameState): GameState {
@@ -10,7 +10,7 @@ export class UpdateTokenEvent implements GameEventType {
     }
 }
 
-export class DeleteTokenEvent implements GameEventType {
+export class DeleteTokenEvent implements GameEvent {
     constructor(private tokenID: string) {}
 
     update(gameState: GameState): GameState {
@@ -18,7 +18,7 @@ export class DeleteTokenEvent implements GameEventType {
     }
 }
 
-export class AddTokenEvent implements GameEventType {
+export class AddTokenEvent implements GameEvent {
     constructor(private token: Token) {}
 
     update(gameState: GameState): GameState {

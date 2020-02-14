@@ -1,5 +1,4 @@
 import { EntityDelta } from "protocol/src/EntityDelta";
-import { newUUID } from "protocol/src/Id";
 import { Token } from "protocol/src/Token";
 import { EntityRequests } from "../games/EntityRequests";
 import { TokenRequests } from "../games/TokenRequests";
@@ -9,7 +8,6 @@ import { GameEntity } from "./entity/GameEntity";
 import { EntityManager } from "./EntityManager";
 import { TokenManager } from "./TokenManager";
 import { TokenUpdate } from "./tokens/TokenUpdater";
-import { ToolCallbacks, ToolCreatableToken } from "./tools/Tool";
 
 export class EventHandler {
     constructor(
@@ -19,25 +17,6 @@ export class EventHandler {
         private tokenManager: TokenManager,
         private entityManager: EntityManager
     ) {}
-
-    createToolToken(created: ToolCreatableToken) {
-        this.updateGameState(gameState => {
-            const layer = gameState.getActiveLayer();
-            if (layer == null) {
-                return gameState;
-            }
-            const token: Token = {
-                ...created,
-                campaignID: gameState.campaign.id,
-                sceneID: gameState.getMySceneID(),
-                layerID: layer.id,
-                tokenID: newUUID(),
-                version: 0
-            };
-            TokenRequests.create(token, gameState.sessionID);
-            return gameState.build(b => b.addToken(token));
-        });
-    }
 
     addSelection(tokens: Token[]) {
         this.updateGameState(gameState =>
@@ -71,15 +50,6 @@ export class EventHandler {
             EntityRequests.update(gameState.campaign.id, [delta]);
             return gameState; //FIXME
         });
-    }
-
-    toolCallbacks(): ToolCallbacks {
-        return {
-            createToken: t => this.createToolToken(t),
-            addSelection: ts => this.addSelection(ts),
-            updateSelection: ts => this.updateSelection(ts),
-            updateTokens: t => this.updateTokens(t)
-        };
     }
 
     editEntity(entity: GameEntity | null) {

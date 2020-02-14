@@ -2,13 +2,13 @@ import { Scene } from "protocol/src/Scene";
 import React, { useEffect, useRef, useState } from "react";
 import { Debouncer } from "./Debouncer";
 import "./GameMap.css";
+import { DispatchGameEvent } from "./gamestate/events/GameEvent";
 import { GameState } from "./gamestate/GameState";
 import { Grid } from "./Grid";
 import { MapContextProvider } from "./input/MapEvents";
 import { Svg } from "./Svg";
 import { TokenLayer } from "./tokens/TokenLayer";
 import { ToolLayer } from "./ToolLayer";
-import { ToolCallbacks } from "./tools/Tool";
 import { ToolType } from "./tools/ToolType";
 import { Vector } from "./Vector";
 import { View } from "./View";
@@ -16,13 +16,13 @@ import { View } from "./View";
 export function GameMap({
     scene,
     tool,
-    toolCallbacks,
-    gameState
+    gameState,
+    dispatch
 }: {
     scene: Scene;
     tool: ToolType;
-    toolCallbacks: ToolCallbacks;
     gameState: GameState;
+    dispatch: DispatchGameEvent;
 }) {
     const [view, setView] = useState(new View(1, new Vector(0, 0)));
     const [screenSize, setScreenSize] = useState(new Vector(1000, 1000));
@@ -98,7 +98,7 @@ export function GameMap({
                         />
                         <ToolLayer
                             tool={tool}
-                            toolCallbacks={toolCallbacks}
+                            dispatch={dispatch}
                             gameState={gameState}
                         />
                     </Svg>

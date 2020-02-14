@@ -9,7 +9,7 @@ import { Callback } from "../util/Callback";
 import { assertExhaustive } from "../util/Exaustive";
 import { CampaignEventHandler } from "./CampaignEventHandler";
 import { EntityManager } from "./EntityManager";
-import { GameEventType } from "./gamestate/events/GameEvent";
+import { GameEvent } from "./gamestate/events/GameEvent";
 import { GameState } from "./gamestate/GameState";
 import { SceneService } from "./SceneService";
 import { Socket } from "./Socket";
@@ -42,7 +42,7 @@ export class CampaignLoader {
     constructor(
         private campaignID: string,
         private user: User,
-        private update: Callback<GameEventType | GameState | null>
+        private update: Callback<GameEvent | GameState | null>
     ) {
         this.eventHandler = new CampaignEventHandler(this.update);
         this.socket = new Socket(

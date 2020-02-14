@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { Color, Colors } from "../Colors";
 import { Ellipse } from "../Ellipse";
+import {
+    CreatableToken,
+    RequestCreateToken
+} from "../gamestate/events/RequestCreateToken";
 import { useMapEvents } from "../input/MapEvents";
 import { EllipseToken } from "../tokens/EllipseToken";
-import { ToolCreatableToken, ToolProps } from "./Tool";
+import { ToolProps } from "./Tool";
 
-function ellipseToken(ellipse: Ellipse): ToolCreatableToken {
+function ellipseToken(ellipse: Ellipse): CreatableToken {
     return {
         x: ellipse.left(),
         y: ellipse.top(),
@@ -20,13 +24,15 @@ function ellipseToken(ellipse: Ellipse): ToolCreatableToken {
     };
 }
 
-export function EllipseTool({ callbacks: { createToken } }: ToolProps) {
+export function EllipseTool({ dispatch }: ToolProps) {
     const [ellipse, setEllipse] = useState<Ellipse | null>();
     useMapEvents({
         onDrag: (s, c) => setEllipse(Ellipse.fromCorners(s, c)),
         onDragEnd: (s, e) => {
             setEllipse(null);
-            createToken(ellipseToken(Ellipse.fromCorners(s, e)));
+            dispatch(
+                new RequestCreateToken(ellipseToken(Ellipse.fromCorners(s, e)))
+            );
         }
     });
 
@@ -44,13 +50,17 @@ export function EllipseTool({ callbacks: { createToken } }: ToolProps) {
     );
 }
 
-export function CenterEllipseTool({ callbacks: { createToken } }: ToolProps) {
+export function CenterEllipseTool({ dispatch }: ToolProps) {
     const [ellipse, setEllipse] = useState<Ellipse | null>();
     useMapEvents({
         onDrag: (s, c) => setEllipse(new Ellipse(s, c.subtract(s).abs())),
         onDragEnd: (s, e) => {
             setEllipse(null);
-            createToken(ellipseToken(new Ellipse(s, e.subtract(s).abs())));
+            dispatch(
+                new RequestCreateToken(
+                    ellipseToken(new Ellipse(s, e.subtract(s).abs()))
+                )
+            );
         }
     });
 

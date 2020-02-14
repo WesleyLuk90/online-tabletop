@@ -1,9 +1,9 @@
 import { Entity } from "protocol/src/Entity";
 import { EntityCollection } from "../../EntityCollection";
 import { GameState } from "../GameState";
-import { GameEventType } from "./GameEvent";
+import { GameEvent } from "./GameEvent";
 
-export class UpdateAllEntities implements GameEventType {
+export class UpdateAllEntities implements GameEvent {
     constructor(private entities: Entity[]) {}
 
     update(gameState: GameState): GameState {

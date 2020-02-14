@@ -1,8 +1,8 @@
 import { Layer } from "protocol/src/Scene";
 import { GameState } from "../GameState";
-import { GameEventType } from "./GameEvent";
+import { GameEvent } from "./GameEvent";
 
-export class UpdateActiveLayer implements GameEventType {
+export class UpdateActiveLayer implements GameEvent {
     constructor(private layer: Layer) {}
 
     update(gameState: GameState) {

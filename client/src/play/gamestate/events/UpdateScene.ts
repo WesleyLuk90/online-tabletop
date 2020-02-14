@@ -1,8 +1,8 @@
 import { Scene } from "protocol/src/Scene";
 import { GameState } from "../GameState";
-import { GameEventType } from "./GameEvent";
+import { GameEvent } from "./GameEvent";
 
-export class UpdateScene implements GameEventType {
+export class UpdateScene implements GameEvent {
     constructor(private scene: Scene) {}
 
     update(gameState: GameState): GameState {
