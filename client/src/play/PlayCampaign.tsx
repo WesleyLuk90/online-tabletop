@@ -15,6 +15,22 @@ import { ScenePanel } from "./scenes/ScenePanel";
 import { TokenToolbar } from "./TokenToolbar";
 import { ToolType } from "./tools/ToolType";
 
+function reduceGameState(
+    g: GameState | null,
+    update: GameEvent | GameState | null
+) {
+    if (update == null) {
+        return null;
+    }
+    if (update instanceof GameState) {
+        return update;
+    }
+    if (g == null) {
+        return null;
+    }
+    return reduce(update, g);
+}
+
 export function PlayCampaign({
     campaignID,
     user
@@ -22,21 +38,7 @@ export function PlayCampaign({
     campaignID: string;
     user: User;
 }) {
-    const [gameState, dispatch] = useReducer(
-        (g: GameState | null, update: GameEvent | GameState | null) => {
-            if (update == null) {
-                return null;
-            }
-            if (update instanceof GameState) {
-                return update;
-            }
-            if (g == null) {
-                return null;
-            }
-            return reduce(update, g);
-        },
-        null
-    );
+    const [gameState, dispatch] = useReducer(reduceGameState, null);
     const [tool, setTool] = useState(ToolType.select);
     const mode = GameModes[0];
 
