@@ -9,9 +9,10 @@ import { EntityRequests } from "../games/EntityRequests";
 import { Callback } from "../util/Callback";
 import { ConflictResolver } from "../util/ConflictResolver";
 import { PromiseDebouncer } from "../util/PromiseDebouncer";
-import { GameEntity } from "./entity/GameEntity";
-import { EntityCollection } from "./EntityCollection";
+import { AddEntity } from "./gamestate/events/AddEntity";
+import { DeleteEntity } from "./gamestate/events/DeleteEntity";
 import { GameEvent } from "./gamestate/events/GameEvent";
+import { UpdateAllEntities } from "./gamestate/events/UpdateAllEntities";
 import { UpdateEntity } from "./gamestate/events/UpdateEntity";
 
 class EntityConflictResolver extends ConflictResolver<
@@ -56,25 +57,18 @@ export class EntityManager {
         const entities = await this.debounce.debounce(
             EntityRequests.list(this.campaignID)
         );
-        const manager = new EntityCollection(
-            entities.map(GameEntity.fromEntity)
-        );
-        this.gameStateUpdater(g => g.build(b => b.updateEntities(manager)));
+        this.update(new UpdateAllEntities(entities));
     }
 
     applyLocalUpdate(update: EntityDelta) {
         switch (update.type) {
             case "create":
                 this.conflictResolver.add(update.entity);
-                this.gameStateUpdater(g =>
-                    g.build(b => b.addEntity(new GameEntity(update.entity)))
-                );
+                this.update(new AddEntity(update.entity));
                 return;
             case "delete":
                 this.conflictResolver.remove(update.entityID);
-                this.gameStateUpdater(g =>
-                    g.build(b => b.removeEntity(update.entityID))
-                );
+                this.update(new DeleteEntity(update.entityID));
                 return;
             default:
                 this.conflictResolver.applyLocalUpdate(update);

@@ -11,6 +11,12 @@ import { IconButton } from "../../common/controls/IconButton";
 import { ItemList } from "../../common/controls/ItemList";
 import { SidePanel } from "../../common/layout/SidePanel";
 import { plural } from "../../util/Plural";
+import { DispatchGameEvent } from "../gamestate/events/GameEvent";
+import { RequestChangeDefaultScene } from "../gamestate/events/RequestChangeDefaultScene";
+import { RequestChangeMyScene } from "../gamestate/events/RequestChangeMyScene";
+import { RequestCreateScene } from "../gamestate/events/RequestCreateScene";
+import { RequestDeleteScene } from "../gamestate/events/RequestDeleteScene";
+import { RequestUpdateScene } from "../gamestate/events/RequestUpdateScene";
 import { SceneService } from "../SceneService";
 import { SceneModal } from "./SceneModal";
 import "./ScenePanel.css";
@@ -20,21 +26,13 @@ export function ScenePanel({
     myScene,
     defaultScene,
     scenes,
-    onChangeScene,
-    onChangeDefaultScene,
-    onUpdateScene,
-    onCreateScene,
-    onDeleteScene
+    dispatch
 }: {
     campaign: Campaign;
     myScene: string;
     defaultScene: string;
     scenes: Scene[];
-    onChangeScene: (sceneID: string) => void;
-    onChangeDefaultScene: (sceneID: string) => void;
-    onUpdateScene: (sceneID: string, update: Partial<Scene>) => void;
-    onCreateScene: (scene: Scene) => void;
-    onDeleteScene: (scene: Scene) => void;
+    dispatch: DispatchGameEvent;
 }) {
     const [edit, setEdit] = useState<Scene | null>(null);
     const [isNew, setIsNew] = useState(false);
@@ -46,15 +44,15 @@ export function ScenePanel({
                 onChange={setEdit}
                 onCancel={() => setEdit(null)}
                 onDelete={s => {
-                    onDeleteScene(s);
+                    dispatch(new RequestDeleteScene(s));
                     setEdit(null);
                 }}
                 isNew={isNew}
                 onSave={async toSave => {
                     if (isNew) {
-                        onCreateScene(toSave);
+                        dispatch(new RequestCreateScene(toSave));
                     } else {
-                        onUpdateScene(toSave.sceneID, toSave);
+                        dispatch(new RequestUpdateScene(toSave));
                     }
                     setEdit(null);
                 }}
@@ -68,13 +66,19 @@ export function ScenePanel({
                         <IconButton
                             inactive={s.sceneID !== myScene}
                             icon={faLocationArrow}
-                            onClick={() => onChangeScene(s.sceneID)}
+                            onClick={() =>
+                                dispatch(new RequestChangeMyScene(s.sceneID))
+                            }
                             title="Visible Scene"
                         />
                         <IconButton
                             inactive={s.sceneID !== defaultScene}
                             icon={faUsers}
-                            onClick={() => onChangeDefaultScene(s.sceneID)}
+                            onClick={() =>
+                                dispatch(
+                                    new RequestChangeDefaultScene(s.sceneID)
+                                )
+                            }
                             title="Players Scene"
                         />
                         <IconButton

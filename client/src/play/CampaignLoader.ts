@@ -44,7 +44,7 @@ export class CampaignLoader {
         private user: User,
         private update: Callback<GameEvent | GameState | null>
     ) {
-        this.eventHandler = new CampaignEventHandler(this.updateState);
+        this.eventHandler = new CampaignEventHandler(this.update);
         this.socket = new Socket(
             () => this.loadCampaign(),
             u => this.handleUpdate(u),

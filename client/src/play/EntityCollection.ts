@@ -1,9 +1,14 @@
+import { Entity } from "protocol/src/Entity";
 import { replaceValue } from "../util/List";
 import { groupBy, keyBy } from "../util/Maps";
 import { GameEntity } from "./entity/GameEntity";
 import { EntityType } from "./modes/GameMode";
 
 export class EntityCollection {
+    static fromEntities(entities: Entity[]) {
+        return new EntityCollection(entities.map(e => new GameEntity(e)));
+    }
+
     static empty() {
         return new EntityCollection([]);
     }

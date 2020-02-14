@@ -23,7 +23,6 @@ export function PlayCampaign({
     campaignID: string;
     user: User;
 }) {
-    // const [gameState, setGameState] = useState<GameState | null>(null);
     const [gameState, dispatch] = useReducer(
         (g: GameState | null, gameEvent: GameEvent | GameState | null) => {
             if (g == null) {
@@ -60,11 +59,7 @@ export function PlayCampaign({
 
     const eventHandler = new EventHandler(
         gameState.sessionID,
-        updater => {
-            if (gameState != null) {
-                setGameState(updater(gameState));
-            }
-        },
+        null as any,
         deltaFactory,
         null as any,
         null as any
@@ -103,15 +98,7 @@ export function PlayCampaign({
                         myScene={gameState.getMySceneID()}
                         defaultScene={gameState.campaign.sceneID}
                         scenes={gameState.scenes}
-                        onChangeScene={s => eventHandler.changeMyScene(s)}
-                        onChangeDefaultScene={s =>
-                            eventHandler.changeDefaultScene(s)
-                        }
-                        onUpdateScene={(id, updates) =>
-                            eventHandler.updateSceneDetails(id, updates)
-                        }
-                        onCreateScene={scene => eventHandler.createScene(scene)}
-                        onDeleteScene={scene => eventHandler.deleteScene(scene)}
+                        dispatch={dispatch}
                     />
                     {scene && (
                         <LayersPanel

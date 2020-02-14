@@ -7,6 +7,7 @@ import { IconButton } from "../common/controls/IconButton";
 import { ItemList } from "../common/controls/ItemList";
 import { SidePanel } from "../common/layout/SidePanel";
 import { BemBuilder } from "../util/BemBuilder";
+import { DispatchGameEvent } from "./gamestate/events/GameEvent";
 import { LayerEditor } from "./LayerEditor";
 import "./LayersPanel.css";
 import { SceneService } from "./SceneService";
@@ -15,20 +16,12 @@ const BEM = new BemBuilder("layers-panel");
 
 export function LayersPanel({
     layers,
-    onUpdate,
-    onCreate,
-    onDelete,
-    onSort,
     activeLayer,
-    onChangeActiveLayer
+    dispatch
 }: {
     layers: Layer[];
-    onUpdate: (layer: Layer) => void;
-    onCreate: (layer: Layer) => void;
-    onDelete: (layer: Layer) => void;
-    onSort: (layers: Layer[]) => void;
     activeLayer: Layer | null;
-    onChangeActiveLayer: (layer: Layer) => void;
+    dispatch: DispatchGameEvent;
 }) {
     const [edit, setEdit] = useState<Layer | null>(null);
     const [isNew, setIsNew] = useState(false);
