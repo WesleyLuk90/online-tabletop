@@ -8,11 +8,21 @@ export function Input({
     value: string;
     onChange: (newValue: string) => void;
 }) {
+    const [text, setText] = useState(value);
+
+    useEffect(() => setText(value), [value]);
+
+    function onBlur() {
+        onChange(text);
+        setText(value);
+    }
+
     return (
         <input
             className="input__input"
-            value={value}
-            onChange={e => onChange(e.target.value)}
+            value={text}
+            onChange={e => setText(e.target.value)}
+            onBlur={onBlur}
         />
     );
 }
