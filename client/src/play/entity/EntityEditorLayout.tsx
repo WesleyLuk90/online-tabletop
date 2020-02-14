@@ -1,13 +1,18 @@
+import { EntityDelta } from "protocol/src/EntityDelta";
 import React from "react";
+import { Callback } from "../../util/Callback";
 import { assertExhaustive } from "../../util/Exaustive";
 import { Component } from "../modes/Editor";
 import { EntityType } from "../modes/GameMode";
 import { EntityControl } from "./controls/EntityControl";
+import { EntityDeltaFactory } from "./EntityDeltaFactory";
 import { GameEntity } from "./GameEntity";
 
 export interface LayoutProps {
+    deltaFactory: EntityDeltaFactory;
     entity: GameEntity;
     entityType: EntityType;
+    onChange: Callback<EntityDelta>;
 }
 
 export function EntityComponents(

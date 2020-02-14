@@ -1,3 +1,4 @@
+import { EntityDelta } from "protocol/src/EntityDelta";
 import { newUUID } from "protocol/src/Id";
 import { Layer, Scene } from "protocol/src/Scene";
 import { Token } from "protocol/src/Token";
@@ -8,11 +9,19 @@ import { TokenRequests } from "../games/TokenRequests";
 import { GameStateUpdater } from "./CampaignLoader";
 import { EntityDeltaFactory } from "./entity/EntityDeltaFactory";
 import { GameEntity } from "./entity/GameEntity";
-import { TokenUpdate, TokenUpdater } from "./tokens/TokenUpdater";
+import { EntityManager } from "./EntityManager";
+import { TokenManager } from "./TokenManager";
+import { TokenUpdate } from "./tokens/TokenUpdater";
 import { ToolCallbacks, ToolCreatableToken } from "./tools/Tool";
 
 export class EventHandler {
-    constructor(private updateGameState: GameStateUpdater) {}
+    constructor(
+        private sessionID: string,
+        private updateGameState: GameStateUpdater,
+        private deltaFactory: EntityDeltaFactory,
+        private tokenManager: TokenManager,
+        private entityManager: EntityManager
+    ) {}
 
     changeMyScene(sceneID: string) {
         this.updateGameState(gameState => {
@@ -110,25 +119,23 @@ export class EventHandler {
     }
 
     updateTokens(updates: TokenUpdate[]) {
-        this.updateGameState(gameState => {
-            TokenRequests.update(updates, gameState.sessionID);
-            return gameState.build(b =>
-                b.updateTokens(
-                    TokenUpdater.apply(gameState.tokens.asList(), updates)
-                )
-            );
-        });
+        TokenRequests.update(updates, this.sessionID);
+        this.tokenManager.
     }
 
     addEntity(entity: GameEntity) {
         this.updateGameState(gameState => {
             EntityRequests.update(gameState.campaign.id, [
-                EntityDeltaFactory.create(
-                    gameState.sessionID,
-                    entity.getEntity()
-                )
+                this.deltaFactory.create(entity.getEntity())
             ]);
             return gameState.build(b => b.addEntity(entity));
+        });
+    }
+
+    updateEntity(delta: EntityDelta) {
+        this.updateGameState(gameState => {
+            EntityRequests.update(gameState.campaign.id, [delta]);
+            return gameState.build(b => b.applyEntityDelta(delta));
         });
     }
 

@@ -82,6 +82,7 @@ export class CampaignLoader {
                 this.tokenManager.handleTokenUpdate(update);
                 break;
             case "entity":
+                this.entityManager.handleEntityUpdate(update.update);
                 break;
             default:
                 assertExhaustive(update);

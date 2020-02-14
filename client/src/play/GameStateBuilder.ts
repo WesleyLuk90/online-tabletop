@@ -174,6 +174,18 @@ export class GameStateBuilder {
         });
     }
 
+    updateEntity(entity: GameEntity) {
+        return this.update({
+            entities: this.s.entities.update(entity)
+        });
+    }
+
+    removeEntity(entityID: string) {
+        return this.update({
+            entities: this.s.entities.delete(entityID)
+        });
+    }
+
     setEditEntity(entity: GameEntity | null) {
         if (entity == null) {
             return this.update({

@@ -2,10 +2,12 @@ import { Entity } from "protocol/src/Entity";
 import { EntityDelta } from "protocol/src/EntityDelta";
 
 export class EntityDeltaFactory {
-    static create(source: string, entity: Entity): EntityDelta {
+    constructor(private source: string) {}
+
+    create(entity: Entity): EntityDelta {
         return {
             type: "create",
-            source,
+            source: this.source,
             entity
         };
     }

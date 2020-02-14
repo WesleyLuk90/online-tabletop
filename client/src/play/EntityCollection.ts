@@ -36,9 +36,9 @@ export class EntityCollection {
         );
     }
 
-    delete(entity: GameEntity): EntityCollection {
+    delete(entityID: string): EntityCollection {
         return new EntityCollection(
-            this.toList().filter(e => e.entityID() !== entity.entityID())
+            this.toList().filter(e => e.entityID() !== entityID)
         );
     }
 

@@ -2,6 +2,7 @@ import { User } from "protocol/src/User";
 import React, { useEffect, useState } from "react";
 import { Spinner } from "../common/controls/Icon";
 import { CampaignLoader } from "./CampaignLoader";
+import { EntityDeltaFactory } from "./entity/EntityDeltaFactory";
 import { EntityEditor } from "./entity/EntityEditor";
 import { EntityPanel } from "./entity/EntityPanel";
 import { EventHandler } from "./EventHandler";
@@ -41,11 +42,13 @@ export function PlayCampaign({
         );
     }
 
+    const deltaFactory = new EntityDeltaFactory(gameState.sessionID);
+
     const eventHandler = new EventHandler(updater => {
         if (gameState != null) {
             setGameState(updater(gameState));
         }
-    });
+    }, deltaFactory);
     const scene = gameState.getMyScene();
     const editEntity = gameState.entities.get(gameState.editEntity);
 
@@ -54,7 +57,12 @@ export function PlayCampaign({
             main={
                 <>
                     {editEntity && (
-                        <EntityEditor entity={editEntity} gameMode={mode} />
+                        <EntityEditor
+                            entity={editEntity}
+                            gameMode={mode}
+                            onChange={d => eventHandler.updateEntity(d)}
+                            deltaFactory={deltaFactory}
+                        />
                     )}
                     {scene != null ? (
                         <GameMap

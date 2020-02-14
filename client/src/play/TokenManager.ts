@@ -32,9 +32,9 @@ class TokenConflictResolver extends ConflictResolver<Token, UpdateToken> {
 }
 
 export class TokenManager {
-    sceneID: string | null = null;
-    debounce = new PromiseDebouncer<Token[]>();
-    conflictResolver: TokenConflictResolver;
+    private sceneID: string | null = null;
+    private debounce = new PromiseDebouncer<Token[]>();
+    private conflictResolver: TokenConflictResolver;
 
     constructor(
         private sessionID: string,
@@ -57,7 +57,7 @@ export class TokenManager {
         }
     }
 
-    async loadTokens() {
+    private async loadTokens() {
         if (this.sceneID == null) {
             return;
         }
@@ -88,7 +88,11 @@ export class TokenManager {
         }
     }
 
-    tokenCreate(create: CreateToken) {
+    applyLocalUpdate(update: TokenUpdate[]) {
+        this.conflictResolver.applyLocalUpdate(update);
+    }
+
+    private tokenCreate(create: CreateToken) {
         this.conflictResolver.add(create.token);
         this.gameStateUpdater(s => {
             if (s.tokens.byId(create.token.tokenID) == null) {
@@ -99,18 +103,18 @@ export class TokenManager {
         });
     }
 
-    tokenUpdate(update: UpdateToken) {
+    private tokenUpdate(update: UpdateToken) {
         if (update.source === this.sessionID) {
             return;
         }
         this.conflictResolver.applyLocalUpdate(update);
     }
 
-    updateToken(token: Token) {
+    private updateToken(token: Token) {
         this.gameStateUpdater(s => s.build(b => b.updateToken(token)));
     }
 
-    tokenDelete(del: DeleteToken) {
+    private tokenDelete(del: DeleteToken) {
         this.conflictResolver.remove(del.tokenID);
         this.gameStateUpdater(s => s.build(b => b.removeToken(del.tokenID)));
     }
