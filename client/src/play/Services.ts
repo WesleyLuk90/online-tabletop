@@ -4,6 +4,7 @@ import { Callback } from "../util/Callback";
 import { CampaignEventHandler } from "./CampaignEventHandler";
 import { CampaignLoader } from "./CampaignLoader";
 import { EntityDeltaFactory } from "./entity/EntityDeltaFactory";
+import { EntityService } from "./entity/EntityService";
 import { EntityManager } from "./EntityManager";
 import { GameEvent } from "./gamestate/events/GameEvent";
 import { GameState } from "./gamestate/GameState";
@@ -63,5 +64,13 @@ export class Services {
     );
     readonly tokenService = lazy(
         () => new TokenService(this.tokenDeltaFactory(), this.tokenManager())
+    );
+    readonly entityService = lazy(
+        () =>
+            new EntityService(
+                this.campaignID,
+                this.entityManager(),
+                this.entityDeltaFactory()
+            )
     );
 }

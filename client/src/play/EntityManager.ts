@@ -59,20 +59,28 @@ export class EntityManager {
         this.dispatch(new UpdateAllEntities(entities));
     }
 
-    applyLocalUpdate(update: EntityDelta) {
+    applyRemoteUpdate(update: EntityDelta) {
         switch (update.type) {
             case "create":
-                this.conflictResolver.add(update.entity);
-                this.dispatch(new AddEntity(update.entity));
-                return;
+                return this.createEntity(update.entity);
             case "delete":
-                this.conflictResolver.remove(update.entityID);
-                this.dispatch(new DeleteEntity(update.entityID));
-                return;
+                return this.deleteEntity(update.entityID);
             default:
-                this.conflictResolver.applyLocalUpdate(update);
+                this.conflictResolver.applyRemoteUpdate(update);
         }
     }
 
-    handleEntityUpdate(update: EntityDelta) {}
+    createEntity(entity: Entity) {
+        this.conflictResolver.add(entity);
+        this.dispatch(new AddEntity(entity));
+    }
+
+    deleteEntity(entityID: string) {
+        this.conflictResolver.remove(entityID);
+        this.dispatch(new DeleteEntity(entityID));
+    }
+
+    updateEntity(update: UpdateEntityDelta) {
+        this.conflictResolver.applyLocalUpdate(update);
+    }
 }

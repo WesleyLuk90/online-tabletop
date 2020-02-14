@@ -107,10 +107,10 @@ export function PlayCampaign({
                     {mode.entityTypes.map(entityType => (
                         <EntityPanel
                             key={entityType.id}
-                            campaignID={campaignID}
                             entityType={entityType}
                             entities={gameState.entities}
                             dispatch={dispatch}
+                            services={services.current}
                         />
                     ))}
                 </div>

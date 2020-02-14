@@ -6,9 +6,9 @@ import { SidePanel } from "../../common/layout/SidePanel";
 import { EntityCollection } from "../EntityCollection";
 import { EditEntity } from "../gamestate/events/EditEntity";
 import { DispatchGameEvent } from "../gamestate/events/GameEvent";
-import { RequestCreateEntity } from "../gamestate/events/RequestCreateEntity";
 import { Attributes } from "../modes/Attributes";
 import { EntityType } from "../modes/GameMode";
+import { Services } from "../Services";
 import { AttributeDisplay } from "./AttributeDisplay";
 import "./EntityPanel.css";
 import { GameEntity } from "./GameEntity";
@@ -27,15 +27,15 @@ function nameFilter(
 }
 
 export function EntityPanel({
-    campaignID,
     entities,
     entityType,
-    dispatch
+    dispatch,
+    services
 }: {
-    campaignID: string;
     entities: EntityCollection;
     entityType: EntityType;
     dispatch: DispatchGameEvent;
+    services: Services;
 }) {
     return (
         <SidePanel header={entityType.pluralName}>
@@ -59,13 +59,7 @@ export function EntityPanel({
                 filter={(s, e) => nameFilter(s, e, entityType)}
             />
             <Button
-                onClick={() =>
-                    dispatch(
-                        new RequestCreateEntity(
-                            GameEntity.create(campaignID, entityType)
-                        )
-                    )
-                }
+                onClick={() => services.entityService().createNew(entityType)}
             >
                 Add {entityType.name}
             </Button>

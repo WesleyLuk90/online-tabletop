@@ -57,10 +57,10 @@ export class CampaignLoader {
                 this.eventHandler.updateScene(update);
                 break;
             case "token":
-                this.tokenManager.handleTokenUpdate(update);
+                this.tokenManager.applyRemoteUpdate(update);
                 break;
             case "entity":
-                this.entityManager.handleEntityUpdate(update.update);
+                this.entityManager.applyRemoteUpdate(update.update);
                 break;
             default:
                 assertExhaustive(update);

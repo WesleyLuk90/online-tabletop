@@ -46,9 +46,9 @@ export class TokenManager {
         private campaignID: string,
         private dispatch: DispatchGameEvent
     ) {
-        this.conflictResolver = new TokenConflictResolver(sessionID, token => {
-            this.updateToken(token);
-        });
+        this.conflictResolver = new TokenConflictResolver(sessionID, token =>
+            this.dispatch(new UpdateTokenEvent(token))
+        );
     }
 
     updateScene(sceneID: string | null) {
@@ -74,46 +74,35 @@ export class TokenManager {
         this.dispatch(new UpdateAllTokens(tokens));
     }
 
-    handleTokenUpdate(tokenUpdate: TokenUpdate) {
+    applyRemoteUpdate(tokenUpdate: TokenUpdate) {
         const update = tokenUpdate.update;
         switch (update.type) {
             case "create":
-                this.createLocally(update);
+                this.createToken(update);
                 break;
             case "update":
-                this.tokenUpdate(update);
+                this.conflictResolver.applyRemoteUpdate(update);
                 break;
             case "delete":
-                this.tokenDelete(update);
+                this.deleteToken(update);
                 break;
             default:
                 assertExhaustive(update);
         }
     }
 
-    applyLocalUpdate(updates: UpdateToken[]) {
+    updateToken(updates: UpdateToken[]) {
         updates.forEach(update =>
             this.conflictResolver.applyLocalUpdate(update)
         );
     }
 
-    createLocally(create: CreateToken) {
+    createToken(create: CreateToken) {
         this.conflictResolver.add(create.token);
         this.dispatch(new AddTokenEvent(create.token));
     }
 
-    private tokenUpdate(update: UpdateToken) {
-        if (update.source === this.sessionID) {
-            return;
-        }
-        this.conflictResolver.applyLocalUpdate(update);
-    }
-
-    private updateToken(token: Token) {
-        this.dispatch(new UpdateTokenEvent(token));
-    }
-
-    private tokenDelete(del: DeleteToken) {
+    private deleteToken(del: DeleteToken) {
         this.dispatch(new DeleteTokenEvent(del.tokenID));
         this.conflictResolver.remove(del.tokenID);
     }

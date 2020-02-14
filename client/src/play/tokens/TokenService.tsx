@@ -18,7 +18,7 @@ export class TokenService {
 
     update(updates: GameTokenUpdate[]) {
         const deltas = this.tokenDeltaFactory.update(updates);
-        this.tokenManager.applyLocalUpdate(deltas);
+        this.tokenManager.updateToken(deltas);
         TokenRequests.update(deltas);
     }
 
@@ -37,7 +37,7 @@ export class TokenService {
         };
         const delta = this.tokenDeltaFactory.create(token);
         TokenRequests.create(delta);
-        this.tokenManager.createLocally(delta);
+        this.tokenManager.createToken(delta);
         return gameState;
     }
 }
