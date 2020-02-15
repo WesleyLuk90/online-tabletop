@@ -17,7 +17,9 @@ export function NumberControl({
     ) as NumberAttribute;
     return (
         <div className="number-control">
-            <label>{attributeDefinition.name}</label>
+            <label className="number-control__label">
+                {attributeDefinition.name}
+            </label>
             <div className="number-control__input">
                 <NumberInput
                     value={Attributes.getAttributeNumberValue(
@@ -25,12 +27,10 @@ export function NumberControl({
                         entity
                     )}
                     onChange={numberValue =>
-                        services
-                            .entityService()
-                            .updateAttribute(entity, {
-                                attributeID,
-                                numberValue
-                            })
+                        services.entityService().updateAttribute(entity, {
+                            attributeID,
+                            numberValue
+                        })
                     }
                 />
             </div>

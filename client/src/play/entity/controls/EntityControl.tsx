@@ -3,7 +3,7 @@ import { assertExhaustive } from "../../../util/Exaustive";
 import { Attributes } from "../../modes/Attributes";
 import { Control } from "../../modes/Editor";
 import { AttributeType } from "../../modes/GameMode";
-import { LayoutProps } from "../EntityEditorLayout";
+import { LayoutProps } from "../EntityComponent";
 import { NumberControl } from "./NumberControl";
 import { TextControl } from "./TextControl";
 

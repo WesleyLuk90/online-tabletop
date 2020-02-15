@@ -1,37 +1,29 @@
-export interface Editor {
-    pages: Page[];
+export class Editor {
+    constructor(readonly pages: Page[]) {}
 }
 
-export interface Page {
-    name: string;
-    components: Component[];
+export class Page {
+    constructor(readonly name: string, readonly components: Component[]) {}
 }
 
-export type Component =
-    | ({ type: "row" } & Row)
-    | ({ type: "control" } & Control)
-    | ({ type: "section" } & Section)
-    | ({ type: "control-row" } & ControlRow);
+export type Component = Row | Control | Section;
 
-export interface Section {
-    label?: string;
-    border: boolean;
-    components: Component[];
+export class Section {
+    constructor(
+        readonly border: boolean,
+        readonly components: Component[],
+        readonly label?: string
+    ) {}
 }
 
-export interface Row {
-    columns: Column[];
+export class Row {
+    constructor(readonly columns: Column[]) {}
 }
 
-export interface Column {
-    width: number;
-    components: Component[];
+export class Column {
+    constructor(readonly width: number, readonly components: Component[]) {}
 }
 
-export interface Control {
-    attributeID: string;
-}
-
-export interface ControlRow {
-    controls: Control[];
+export class Control {
+    constructor(readonly attributeID: string) {}
 }

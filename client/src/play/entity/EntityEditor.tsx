@@ -2,8 +2,8 @@ import React from "react";
 import { Tab, Tabs } from "../../common/layout/Tabs";
 import { GameMode } from "../modes/GameMode";
 import { Services } from "../Services";
+import { EntityComponents } from "./EntityComponent";
 import "./EntityEditor.css";
-import { EntityComponents } from "./EntityEditorLayout";
 import { GameEntity } from "./GameEntity";
 
 export function EntityEditor({

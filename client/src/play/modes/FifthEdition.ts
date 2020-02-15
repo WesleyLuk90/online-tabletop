@@ -1,3 +1,4 @@
+import { Column, Control, Editor, Page, Row } from "./Editor";
 import { AttributeType, EntityType, GameMode } from "./GameMode";
 
 export const CreatureType: EntityType = {
@@ -53,47 +54,22 @@ export const CreatureType: EntityType = {
             defaultValue: 10
         }
     ],
-    editor: {
-        pages: [
-            {
-                name: "Main",
-                components: [
-                    {
-                        type: "control",
-                        attributeID: "name"
-                    },
-                    {
-                        type: "control",
-                        attributeID: "str"
-                    },
-                    {
-                        type: "control",
-                        attributeID: "dex"
-                    },
-                    {
-                        type: "control",
-                        attributeID: "con"
-                    },
-                    {
-                        type: "control",
-                        attributeID: "int"
-                    },
-                    {
-                        type: "control",
-                        attributeID: "wis"
-                    },
-                    {
-                        type: "control",
-                        attributeID: "cha"
-                    },
-                    {
-                        type: "control",
-                        attributeID: "health"
-                    }
-                ]
-            }
-        ]
-    }
+    editor: new Editor([
+        new Page("Main", [
+            new Row([
+                new Column(10, [new Control("name")]),
+                new Column(2, [new Control("health")])
+            ]),
+            new Row([
+                new Column(2, [new Control("str")]),
+                new Column(2, [new Control("dex")]),
+                new Column(2, [new Control("con")]),
+                new Column(2, [new Control("int")]),
+                new Column(2, [new Control("wis")]),
+                new Column(2, [new Control("cha")])
+            ])
+        ])
+    ])
 };
 
 export const FifthEdition: GameMode = {

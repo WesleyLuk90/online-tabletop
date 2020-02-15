@@ -25,12 +25,10 @@ export function TextControl({
                         entity
                     )}
                     onChange={stringValue =>
-                        services
-                            .entityService()
-                            .updateAttribute(entity, {
-                                attributeID,
-                                stringValue
-                            })
+                        services.entityService().updateAttribute(entity, {
+                            attributeID,
+                            stringValue
+                        })
                     }
                 />
             </div>
