@@ -58,9 +58,7 @@ export const CreatureType: EntityType = {
         new Page("Main", [
             new Row([
                 new Column(10, [new Control("name")]),
-                new Column(2, [new Control("health")])
-            ]),
-            new Row([
+                new Column(2, [new Control("health")]),
                 new Column(2, [new Control("str")]),
                 new Column(2, [new Control("dex")]),
                 new Column(2, [new Control("con")]),
