@@ -1,7 +1,6 @@
 import { User } from "protocol/src/User";
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { Spinner } from "../common/controls/Icon";
-import { EntityDeltaFactory } from "./entity/EntityDeltaFactory";
 import { EntityEditor } from "./entity/EntityEditor";
 import { EntityPanel } from "./entity/EntityPanel";
 import { GameMap } from "./GameMap";
@@ -58,7 +57,6 @@ export function PlayCampaign({
         );
     }
 
-    const deltaFactory = new EntityDeltaFactory(gameState.sessionID);
     const scene = gameState.getMyScene();
     const editEntity = gameState.entities.get(gameState.editEntity);
 
@@ -70,8 +68,7 @@ export function PlayCampaign({
                         <EntityEditor
                             entity={editEntity}
                             gameMode={mode}
-                            deltaFactory={deltaFactory}
-                            dispatch={dispatch}
+                            services={services.current}
                         />
                     )}
                     {scene != null ? (

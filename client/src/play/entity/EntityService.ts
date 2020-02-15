@@ -1,14 +1,16 @@
+import { Attribute } from "protocol/src/Entity";
 import { newUUID } from "protocol/src/Id";
 import { EntityRequests } from "../../games/EntityRequests";
 import { EntityManager } from "../EntityManager";
 import { EntityType } from "../modes/GameMode";
 import { EntityDeltaFactory } from "./EntityDeltaFactory";
+import { GameEntity } from "./GameEntity";
 
 export class EntityService {
     constructor(
         private campaignID: string,
         private entityManager: EntityManager,
-        private entityFactory: EntityDeltaFactory
+        private entityDeltaFactory: EntityDeltaFactory
     ) {}
 
     createNew(entityType: EntityType) {
@@ -20,7 +22,16 @@ export class EntityService {
             version: 0
         };
         this.entityManager.createEntity(entity);
-        const delta = this.entityFactory.create(entity);
+        const delta = this.entityDeltaFactory.create(entity);
+        EntityRequests.update(this.campaignID, [delta]);
+    }
+
+    updateAttribute(entity: GameEntity, value: Attribute) {
+        const delta = this.entityDeltaFactory.attributeUpdate(
+            entity.getEntity(),
+            value
+        );
+        this.entityManager.updateEntity(delta);
         EntityRequests.update(this.campaignID, [delta]);
     }
 }

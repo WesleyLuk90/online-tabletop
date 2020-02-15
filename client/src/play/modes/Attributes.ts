@@ -4,6 +4,7 @@ import {
     AttributeDefinition,
     EntityType,
     NumberAttribute,
+    RichTextAttribute,
     TextAttribute
 } from "./GameMode";
 
@@ -34,7 +35,7 @@ export class Attributes {
         entity: GameEntity
     ): number {
         const attribute = entity.getAttribute(attributeDefinition);
-        if (attribute == null || attribute.numberValue == null) {
+        if (attribute == null || !("numberValue" in attribute)) {
             if (attributeDefinition.defaultValue != null) {
                 return attributeDefinition.defaultValue;
             }
@@ -44,11 +45,11 @@ export class Attributes {
     }
 
     static getAttributeStringValue(
-        attributeDefinition: TextAttribute,
+        attributeDefinition: TextAttribute | RichTextAttribute,
         entity: GameEntity
     ): string {
         const attribute = entity.getAttribute(attributeDefinition);
-        if (attribute == null || attribute.stringValue == null) {
+        if (attribute == null || !("stringValue" in attribute)) {
             return "";
         }
         return attribute.stringValue;

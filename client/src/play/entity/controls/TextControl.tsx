@@ -5,7 +5,12 @@ import { TextAttribute } from "../../modes/GameMode";
 import { ControlProps } from "./EntityControl";
 import "./TextControl.css";
 
-export function TextControl({ attributeID, entityType, entity }: ControlProps) {
+export function TextControl({
+    attributeID,
+    entityType,
+    entity,
+    services
+}: ControlProps) {
     const attributeDefinition = Attributes.getAttribute(
         attributeID,
         entityType
@@ -19,7 +24,14 @@ export function TextControl({ attributeID, entityType, entity }: ControlProps) {
                         attributeDefinition,
                         entity
                     )}
-                    onChange={() => {}}
+                    onChange={stringValue =>
+                        services
+                            .entityService()
+                            .updateAttribute(entity, {
+                                attributeID,
+                                stringValue
+                            })
+                    }
                 />
             </div>
         </div>

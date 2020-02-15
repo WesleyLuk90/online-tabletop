@@ -20,7 +20,7 @@ function nameFilter(
 ): boolean {
     return defaultSearch({
         needle: search,
-        haystack: entity.getAttributeAsString(
+        haystack: entity.formatAttribute(
             Attributes.getNameAttributeDefinition(entityType)
         )
     });

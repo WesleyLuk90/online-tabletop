@@ -47,15 +47,16 @@ export class EntityManager {
         private campaignID: string,
         private dispatch: DispatchGameEvent
     ) {
-        this.conflictResolver = new EntityConflictResolver(sessionID, e =>
-            this.dispatch(new UpdateEntity(e))
-        );
+        this.conflictResolver = new EntityConflictResolver(sessionID, e => {
+            this.dispatch(new UpdateEntity(e));
+        });
     }
 
     async load() {
         const entities = await this.debounce.debounce(
             EntityRequests.list(this.campaignID)
         );
+        this.conflictResolver.updateAll(entities);
         this.dispatch(new UpdateAllEntities(entities));
     }
 

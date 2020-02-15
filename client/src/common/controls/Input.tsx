@@ -46,7 +46,6 @@ export function NumberInput({
             setStringValue(value.toString());
         } else {
             onChange(parsed);
-            setStringValue(value.toString());
         }
     }
 

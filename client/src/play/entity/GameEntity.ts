@@ -43,19 +43,19 @@ export class GameEntity {
         return this.attributes.get(attribute.id) || null;
     }
 
-    getAttributeAsString(attribute: AttributeDefinition): string {
+    formatAttribute(attribute: AttributeDefinition): string {
         const value = this.attributes.get(attribute.id);
         if (value == null) {
             return "";
         }
         switch (attribute.type) {
             case AttributeType.Number:
-                return value.numberValue != null
+                return "numberValue" in value
                     ? value.numberValue.toString()
                     : "";
             case AttributeType.Text:
             case AttributeType.RichText:
-                return value.stringValue || "";
+                return "stringValue" in value ? value.stringValue : "";
             default:
                 assertExhaustive(attribute);
         }

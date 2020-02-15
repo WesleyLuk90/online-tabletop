@@ -8,7 +8,8 @@ import "./NumberControl.css";
 export function NumberControl({
     attributeID,
     entityType,
-    entity
+    entity,
+    services
 }: ControlProps) {
     const attributeDefinition = Attributes.getAttribute(
         attributeID,
@@ -23,7 +24,14 @@ export function NumberControl({
                         attributeDefinition,
                         entity
                     )}
-                    onChange={() => {}}
+                    onChange={numberValue =>
+                        services
+                            .entityService()
+                            .updateAttribute(entity, {
+                                attributeID,
+                                numberValue
+                            })
+                    }
                 />
             </div>
         </div>

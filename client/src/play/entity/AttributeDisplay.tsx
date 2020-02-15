@@ -1,5 +1,6 @@
 import React from "react";
 import { assertExhaustive } from "../../util/Exaustive";
+import { Attributes } from "../modes/Attributes";
 import { AttributeDefinition, AttributeType } from "../modes/GameMode";
 import "./AttributeDisplay.css";
 import { GameEntity } from "./GameEntity";
@@ -25,10 +26,18 @@ export function AttributeDisplay({
 
     switch (attribute.type) {
         case AttributeType.Number:
-            return <span>{value.numberValue}</span>;
+            return (
+                <span>
+                    {Attributes.getAttributeNumberValue(attribute, entity)}
+                </span>
+            );
         case AttributeType.Text:
         case AttributeType.RichText:
-            return <span>{value.stringValue}</span>;
+            return (
+                <span>
+                    {Attributes.getAttributeStringValue(attribute, entity)}
+                </span>
+            );
         default:
             assertExhaustive(attribute);
     }

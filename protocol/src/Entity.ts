@@ -1,10 +1,18 @@
 import * as t from "io-ts";
 
-export const AttributeSchema = t.strict({
+export const NumberAttributeSchema = t.strict({
     attributeID: t.string,
-    numberValue: t.union([t.number, t.undefined]),
-    stringValue: t.union([t.string, t.undefined])
+    numberValue: t.number
 });
+export const StringAttributeSchema = t.strict({
+    attributeID: t.string,
+    stringValue: t.string
+});
+
+export const AttributeSchema = t.union([
+    NumberAttributeSchema,
+    StringAttributeSchema
+]);
 
 export type Attribute = t.TypeOf<typeof AttributeSchema>;
 

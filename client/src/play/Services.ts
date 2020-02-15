@@ -57,7 +57,7 @@ export class Services {
         () => new EntityManager(this.sessionID, this.campaignID, this.dispatch)
     );
     readonly entityDeltaFactory = lazy(
-        () => new EntityDeltaFactory(this.sessionID)
+        () => new EntityDeltaFactory(this.campaignID, this.sessionID)
     );
     readonly tokenDeltaFactory = lazy(
         () => new TokenDeltaFactory(this.sessionID, this.campaignID)
