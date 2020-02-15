@@ -4,7 +4,7 @@ import {
     AttributeType,
     EntityType,
     GameMode,
-    SubEntityAttributeType
+    SubEntityAttribute
 } from "./GameMode";
 import { GameModes } from "./GameModes";
 
@@ -62,7 +62,7 @@ describe("GameMode", () => {
                 .filter(t => t.type === AttributeType.SubEntities)
                 .forEach(subEntityType => {
                     expect(gameMode.entityTypes.map(e => e.id)).toContain(
-                        (subEntityType as SubEntityAttributeType).subEntityType
+                        (subEntityType as SubEntityAttribute).subEntityType
                     );
                 })
         );

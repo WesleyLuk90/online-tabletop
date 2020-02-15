@@ -42,7 +42,7 @@ export interface RichTextAttribute {
     type: AttributeType.RichText;
 }
 
-export interface SubEntityAttributeType {
+export interface SubEntityAttribute {
     id: string;
     name: string;
     subEntityType: string;
@@ -53,7 +53,7 @@ export type AttributeDefinition =
     | NumberAttribute
     | TextAttribute
     | RichTextAttribute
-    | SubEntityAttributeType;
+    | SubEntityAttribute;
 
 export interface TokenEntities {
     entityTypeID: string;

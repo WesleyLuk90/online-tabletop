@@ -56,6 +56,9 @@ export class GameEntity {
             case AttributeType.Text:
             case AttributeType.RichText:
                 return "stringValue" in value ? value.stringValue : "";
+            case AttributeType.SubEntities:
+                const entities = "entities" in value ? value.entities : [];
+                return `${entities.length} ${attribute.name}`;
             default:
                 assertExhaustive(attribute);
         }

@@ -1,4 +1,4 @@
-import { SubEntity, SubEntityAttribute } from "protocol/src/Entity";
+import { SubEntity } from "protocol/src/Entity";
 import { checkNotNull } from "../../util/Nullable";
 import { GameEntity } from "../entity/GameEntity";
 import {
@@ -6,6 +6,7 @@ import {
     EntityType,
     NumberAttribute,
     RichTextAttribute,
+    SubEntityAttribute,
     TextAttribute
 } from "./GameMode";
 
@@ -61,9 +62,9 @@ export class Attributes {
         entity: GameEntity
     ): SubEntity[] {
         const attribute = entity.getAttribute(attributeDefinition);
-        if (attribute == null || !("stringValue" in attribute)) {
-            return "";
+        if (attribute == null || !("entities" in attribute)) {
+            return [];
         }
-        return attribute.stringValue;
+        return attribute.entities;
     }
 }
