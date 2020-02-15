@@ -33,6 +33,8 @@ export function EntityControl(props: { control: Control } & LayoutProps) {
             );
         case AttributeType.RichText:
             return <div></div>;
+        case AttributeType.SubEntities:
+            return <div></div>;
         default:
             assertExhaustive(attribute);
     }

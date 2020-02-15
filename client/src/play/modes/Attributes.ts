@@ -1,3 +1,4 @@
+import { SubEntity, SubEntityAttribute } from "protocol/src/Entity";
 import { checkNotNull } from "../../util/Nullable";
 import { GameEntity } from "../entity/GameEntity";
 import {
@@ -48,6 +49,17 @@ export class Attributes {
         attributeDefinition: TextAttribute | RichTextAttribute,
         entity: GameEntity
     ): string {
+        const attribute = entity.getAttribute(attributeDefinition);
+        if (attribute == null || !("stringValue" in attribute)) {
+            return "";
+        }
+        return attribute.stringValue;
+    }
+
+    static getSubEntityAttribute(
+        attributeDefinition: SubEntityAttribute,
+        entity: GameEntity
+    ): SubEntity[] {
         const attribute = entity.getAttribute(attributeDefinition);
         if (attribute == null || !("stringValue" in attribute)) {
             return "";

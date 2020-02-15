@@ -19,7 +19,8 @@ export interface EntityType {
 export enum AttributeType {
     Number = "Number",
     Text = "Text",
-    RichText = "RichText"
+    RichText = "RichText",
+    SubEntities = "SubEntities"
 }
 
 export interface NumberAttribute {
@@ -41,10 +42,18 @@ export interface RichTextAttribute {
     type: AttributeType.RichText;
 }
 
+export interface SubEntityAttributeType {
+    id: string;
+    name: string;
+    subEntityType: string;
+    type: AttributeType.SubEntities;
+}
+
 export type AttributeDefinition =
     | NumberAttribute
     | TextAttribute
-    | RichTextAttribute;
+    | RichTextAttribute
+    | SubEntityAttributeType;
 
 export interface TokenEntities {
     entityTypeID: string;

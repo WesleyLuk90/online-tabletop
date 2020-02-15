@@ -52,6 +52,12 @@ export const CreatureType: EntityType = {
             name: "Charisma",
             type: AttributeType.Number,
             defaultValue: 10
+        },
+        {
+            id: "classes",
+            name: "Classes",
+            type: AttributeType.SubEntities,
+            subEntityType: "class"
         }
     ],
     editor: new Editor([

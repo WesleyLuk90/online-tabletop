@@ -38,6 +38,12 @@ export function AttributeDisplay({
                     {Attributes.getAttributeStringValue(attribute, entity)}
                 </span>
             );
+        case AttributeType.SubEntities:
+            return (
+                <span>
+                    {/* {Attributes.getSubEntityAttribute(attribute, entity)} */}
+                </span>
+            );
         default:
             assertExhaustive(attribute);
     }
