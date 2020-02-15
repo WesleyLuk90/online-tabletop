@@ -1,5 +1,5 @@
-import { Column, Control, Editor, Page, Row } from "./Editor";
-import { AttributeType, EntityType, GameMode } from "./GameMode";
+import { Column, Control, Editor, Page, Row } from "../Editor";
+import { AttributeType, EntityType } from "../GameMode";
 
 export const CreatureType: EntityType = {
     id: "creature",
@@ -68,15 +68,4 @@ export const CreatureType: EntityType = {
             ])
         ])
     ])
-};
-
-export const FifthEdition: GameMode = {
-    id: "5e",
-    name: "5th Edition",
-    entityTypes: [CreatureType],
-    tokenEntities: [
-        {
-            entityTypeID: "creature"
-        }
-    ]
 };

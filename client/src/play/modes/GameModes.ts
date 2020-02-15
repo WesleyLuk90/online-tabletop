@@ -1,4 +1,4 @@
-import { FifthEdition } from "./FifthEdition";
+import { FifthEdition } from "./fifth/FifthEdition";
 import { GameMode } from "./GameMode";
 
 export const GameModes: GameMode[] = [FifthEdition];

@@ -2,7 +2,7 @@ import { User } from "protocol/src/User";
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { Spinner } from "../common/controls/Icon";
 import { EntityEditor } from "./entity/EntityEditor";
-import { EntityPanel } from "./entity/EntityPanel";
+import { EntityPanels } from "./entity/EntityPanels";
 import { GameMap } from "./GameMap";
 import { GameEvent, reduce } from "./gamestate/events/GameEvent";
 import { GameState } from "./gamestate/GameState";
@@ -101,15 +101,12 @@ export function PlayCampaign({
                             dispatch={dispatch}
                         />
                     )}
-                    {mode.entityTypes.map(entityType => (
-                        <EntityPanel
-                            key={entityType.id}
-                            entityType={entityType}
-                            entities={gameState.entities}
-                            dispatch={dispatch}
-                            services={services.current}
-                        />
-                    ))}
+                    <EntityPanels
+                        mode={mode}
+                        gameState={gameState}
+                        dispatch={dispatch}
+                        services={services.current}
+                    />
                 </div>
             }
             bottom="bottom"
