@@ -9,7 +9,7 @@ export const StringAttributeSchema = t.strict({
     stringValue: t.string
 });
 
-interface SubEntityAttribute {
+export interface SubEntityAttribute {
     attributeID: string;
     entities: SubEntity[];
 }
