@@ -7,7 +7,8 @@ export const CreateEntityDeltaSchema = t.strict({
     entity: EntitySchema
 });
 
-export type CreateEntityDelta = t.TypeOf<typeof CreateEntityDeltaSchema>;
+export interface CreateEntityDelta
+    extends t.TypeOf<typeof CreateEntityDeltaSchema> {}
 
 export const DeleteEntityDeltaSchema = t.strict({
     type: t.literal("delete"),
@@ -16,7 +17,8 @@ export const DeleteEntityDeltaSchema = t.strict({
     entityID: t.string
 });
 
-export type DeleteEntityDelta = t.TypeOf<typeof DeleteEntityDeltaSchema>;
+export interface DeleteEntityDelta
+    extends t.TypeOf<typeof DeleteEntityDeltaSchema> {}
 
 export const DeleteEntityAttributeSchema = t.strict({
     type: t.literal("delete-attribute"),

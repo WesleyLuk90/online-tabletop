@@ -9,7 +9,7 @@ export const LayerSchema = t.strict({
     playerVisible: t.boolean
 });
 
-export type Layer = t.TypeOf<typeof LayerSchema>;
+export interface Layer extends t.TypeOf<typeof LayerSchema> {}
 
 export const SceneSchema = t.strict({
     sceneID: t.string,
@@ -19,4 +19,4 @@ export const SceneSchema = t.strict({
     gridSize: t.number
 });
 
-export type Scene = t.TypeOf<typeof SceneSchema>;
+export interface Scene extends t.TypeOf<typeof SceneSchema> {}

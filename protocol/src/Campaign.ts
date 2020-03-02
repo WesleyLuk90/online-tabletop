@@ -7,7 +7,7 @@ export const PlayerSchema = t.strict({
     role: RoleSchema
 });
 
-export type Player = t.TypeOf<typeof PlayerSchema>;
+export interface Player extends t.TypeOf<typeof PlayerSchema> {}
 
 export const CampaignSchema = t.strict({
     id: t.string,
@@ -17,4 +17,4 @@ export const CampaignSchema = t.strict({
     players: t.array(PlayerSchema)
 });
 
-export type Campaign = t.TypeOf<typeof CampaignSchema>;
+export interface Campaign extends t.TypeOf<typeof CampaignSchema> {}

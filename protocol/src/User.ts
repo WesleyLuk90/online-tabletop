@@ -5,4 +5,4 @@ export const UserSchema = t.strict({
     displayName: t.string
 });
 
-export type User = t.TypeOf<typeof UserSchema>;
+export interface User extends t.TypeOf<typeof UserSchema> {}

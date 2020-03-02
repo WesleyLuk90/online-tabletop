@@ -7,7 +7,7 @@ export const CreateTokenSchema = t.strict({
     source: t.string
 });
 
-export type CreateToken = t.TypeOf<typeof CreateTokenSchema>;
+export interface CreateToken extends t.TypeOf<typeof CreateTokenSchema> {}
 
 export const UpdateTokenSchema = t.strict({
     type: t.literal("update"),
@@ -17,7 +17,7 @@ export const UpdateTokenSchema = t.strict({
     source: t.string
 });
 
-export type UpdateToken = t.TypeOf<typeof UpdateTokenSchema>;
+export interface UpdateToken extends t.TypeOf<typeof UpdateTokenSchema> {}
 
 export function applyUpdateToken(token: Token, update: UpdateToken): Token {
     return { ...token, ...update.update };
@@ -30,7 +30,7 @@ export const DeleteTokenSchema = t.strict({
     source: t.string
 });
 
-export type DeleteToken = t.TypeOf<typeof DeleteTokenSchema>;
+export interface DeleteToken extends t.TypeOf<typeof DeleteTokenSchema> {}
 
 export const TokenDeltaSchema = t.union([
     CreateTokenSchema,

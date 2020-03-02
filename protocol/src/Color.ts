@@ -7,4 +7,4 @@ export const ColorSchema = t.strict({
     alpha: t.number
 });
 
-export type ColorData = t.TypeOf<typeof ColorSchema>;
+export interface ColorData extends t.TypeOf<typeof ColorSchema> {}

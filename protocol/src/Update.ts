@@ -15,7 +15,7 @@ const CampaignUpdateSchema = t.strict({
     campaignID: t.string
 });
 
-export type CampaignUpdate = t.TypeOf<typeof CampaignUpdateSchema>;
+export interface CampaignUpdate extends t.TypeOf<typeof CampaignUpdateSchema> {}
 
 const SceneUpdateSchema = t.strict({
     type: t.literal("scene"),
@@ -23,7 +23,7 @@ const SceneUpdateSchema = t.strict({
     sceneID: t.string
 });
 
-export type SceneUpdate = t.TypeOf<typeof SceneUpdateSchema>;
+export interface SceneUpdate extends t.TypeOf<typeof SceneUpdateSchema> {}
 
 const TokenUpdateSchema = t.strict({
     type: t.literal("token"),
@@ -40,7 +40,7 @@ const TokenUpdateSchema = t.strict({
     ])
 });
 
-export type TokenUpdate = t.TypeOf<typeof TokenUpdateSchema>;
+export interface TokenUpdate extends t.TypeOf<typeof TokenUpdateSchema> {}
 
 const EntityUpdateSchema = t.strict({
     type: t.literal("entity"),

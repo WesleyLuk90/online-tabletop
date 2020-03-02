@@ -28,4 +28,4 @@ export const RawTokenSchema = t.type({
 
 export const TokenSchema = t.exact(RawTokenSchema);
 
-export type Token = t.TypeOf<typeof TokenSchema>;
+export interface Token extends t.TypeOf<typeof TokenSchema> {}
