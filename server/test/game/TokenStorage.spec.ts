@@ -1,4 +1,3 @@
-import { Colors } from "protocol/src/Color";
 import { newUUID } from "protocol/src/Id";
 import { Token } from "protocol/src/Token";
 import { TokenCollection, TokenStorage } from "../../src/game/TokenStorage";
@@ -21,8 +20,8 @@ describe("TokenStorage", () => {
             layerID: newUUID(),
             data: {
                 type: "square",
-                fillColor: Colors[0],
-                strokeColor: Colors[0],
+                fillColor: { red: 0, green: 0, blue: 0, alpha: 0 },
+                strokeColor: { red: 0, green: 0, blue: 0, alpha: 0 },
                 strokeWidth: 10
             }
         };
