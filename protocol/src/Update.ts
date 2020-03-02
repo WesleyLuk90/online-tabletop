@@ -56,8 +56,14 @@ const EntityUpdateSchema = t.strict({
         ])
     ])
 });
+export interface EntityUpdate extends t.TypeOf<typeof EntityUpdateSchema> {}
 
-export const UpdateSchema = t.union([
+export const UpdateSchema: t.UnionC<[
+    t.Type<CampaignUpdate>,
+    t.Type<SceneUpdate>,
+    t.Type<TokenUpdate>,
+    t.Type<EntityUpdate>
+]> = t.union([
     CampaignUpdateSchema,
     SceneUpdateSchema,
     TokenUpdateSchema,

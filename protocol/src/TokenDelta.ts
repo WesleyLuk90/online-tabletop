@@ -32,11 +32,11 @@ export const DeleteTokenSchema = t.strict({
 
 export interface DeleteToken extends t.TypeOf<typeof DeleteTokenSchema> {}
 
-export const TokenDeltaSchema = t.union([
-    CreateTokenSchema,
-    UpdateTokenSchema,
-    DeleteTokenSchema
-]);
+export const TokenDeltaSchema: t.UnionC<[
+    t.Type<CreateToken>,
+    t.Type<UpdateToken>,
+    t.Type<DeleteToken>
+]> = t.union([CreateTokenSchema, UpdateTokenSchema, DeleteTokenSchema]);
 
 export type TokenDelta = t.TypeOf<typeof TokenDeltaSchema>;
 

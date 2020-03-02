@@ -4,10 +4,14 @@ export const NumberAttributeSchema = t.strict({
     attributeID: t.string,
     numberValue: t.number
 });
+export interface NumberAttribute
+    extends t.TypeOf<typeof NumberAttributeSchema> {}
 export const StringAttributeSchema = t.strict({
     attributeID: t.string,
     stringValue: t.string
 });
+export interface StringAttribute
+    extends t.TypeOf<typeof StringAttributeSchema> {}
 
 export interface SubEntityAttribute {
     attributeID: string;
@@ -23,7 +27,11 @@ export const SubEntityAttributeSchema: t.Type<SubEntityAttribute> = t.recursion(
         })
 );
 
-export const AttributeSchema = t.union([
+export const AttributeSchema: t.UnionC<[
+    t.Type<NumberAttribute>,
+    t.Type<StringAttribute>,
+    t.Type<SubEntityAttribute>
+]> = t.union([
     NumberAttributeSchema,
     StringAttributeSchema,
     SubEntityAttributeSchema
@@ -53,4 +61,4 @@ export const EntitySchema = t.intersection([
     })
 ]);
 
-export type Entity = t.TypeOf<typeof EntitySchema>;
+export interface Entity extends t.TypeOf<typeof EntitySchema> {}

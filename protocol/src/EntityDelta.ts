@@ -27,6 +27,8 @@ export const DeleteEntityAttributeSchema = t.strict({
     entityID: t.string,
     attribute: AttributeSchema
 });
+export interface DeleteEntityAttribute
+    extends t.TypeOf<typeof DeleteEntityAttributeSchema> {}
 
 export const UpdateEntityAttributeSchema = t.strict({
     type: t.literal("update-attribute"),
@@ -35,15 +37,21 @@ export const UpdateEntityAttributeSchema = t.strict({
     entityID: t.string,
     attribute: AttributeSchema
 });
+export interface UpdateEntityAttribute
+    extends t.TypeOf<typeof UpdateEntityAttributeSchema> {}
 
-export const UpdateEntityDeltaSchema = t.union([
-    DeleteEntityAttributeSchema,
-    UpdateEntityAttributeSchema
-]);
+export const UpdateEntityDeltaSchema: t.UnionC<[
+    t.Type<DeleteEntityAttribute>,
+    t.Type<UpdateEntityAttribute>
+]> = t.union([DeleteEntityAttributeSchema, UpdateEntityAttributeSchema]);
 
 export type UpdateEntityDelta = t.TypeOf<typeof UpdateEntityDeltaSchema>;
 
-export const EntityDeltaSchema = t.union([
+export const EntityDeltaSchema: t.UnionC<[
+    t.Type<CreateEntityDelta>,
+    t.Type<DeleteEntityDelta>,
+    t.Type<UpdateEntityDelta>
+]> = t.union([
     CreateEntityDeltaSchema,
     DeleteEntityDeltaSchema,
     UpdateEntityDeltaSchema
