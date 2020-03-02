@@ -5,7 +5,7 @@
     "types": "./dist/index.d.ts",
     "license": "MIT",
     "scripts": {
-        "test": "jest",
+        "test": "jest --passWithNoTests",
         "clean": "rm -f src/*.js && rm -f src/*.js.map && rm -f src/*.d.ts",
         "build": "tsc",
         "rebuild": "yarn run clean && yarn run build"
