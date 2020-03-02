@@ -18,7 +18,7 @@ export class DbFixture<T extends MongoStorage<any>> {
                 checkNotNull(process.env.MONGO_DATABASE)
             );
         });
-        afterAll(async () => {
+        afterEach(async () => {
             if (this.provider) {
                 const db = await this.provider.get();
                 if (this.storage != null) {
