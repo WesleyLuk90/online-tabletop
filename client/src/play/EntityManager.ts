@@ -43,7 +43,7 @@ export class EntityManager {
     private conflictResolver: EntityConflictResolver;
 
     constructor(
-        sessionID: string,
+        private sessionID: string,
         private campaignID: string,
         private dispatch: DispatchGameEvent
     ) {
@@ -63,8 +63,14 @@ export class EntityManager {
     applyRemoteUpdate(update: EntityDelta) {
         switch (update.type) {
             case "create":
+                if (update.source === this.sessionID) {
+                    return;
+                }
                 return this.createEntity(update.entity);
             case "delete":
+                if (update.source === this.sessionID) {
+                    return;
+                }
                 return this.deleteEntity(update.entityID);
             default:
                 this.conflictResolver.applyRemoteUpdate(update);
