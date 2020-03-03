@@ -1,25 +1,21 @@
 import { range } from "../../../util/Range";
 import { Editor } from "../Editor";
-import { AttributeType, EntityType, NumberAttribute } from "../GameMode";
+import { EntityType, NumberAttribute, TextAttribute } from "../GameMode";
 
-export const ClassType: EntityType = {
-    id: "class",
-    name: "Class",
-    pluralName: "Classes",
-    attributes: [
-        {
-            id: "name",
-            name: "Name",
-            type: AttributeType.Text
-        },
+export const ClassType: EntityType = new EntityType(
+    "class",
+    "Class",
+    "Classes",
+    [
+        new TextAttribute("name", "Name"),
         ...range(1, 10).map(
-            (level): NumberAttribute => ({
-                id: `level-${level}-spell-slots`,
-                name: `Level ${level} Spell Slots`,
-                type: AttributeType.Number
-            })
+            level =>
+                new NumberAttribute(
+                    `level-${level}-spell-slots`,
+                    `Level ${level} Spell Slots`
+                )
         )
     ],
-    editor: new Editor([]),
-    nameAttributeID: "name"
-};
+    new Editor([]),
+    "name"
+);

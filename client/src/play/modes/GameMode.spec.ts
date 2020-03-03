@@ -1,10 +1,10 @@
 import { assertExhaustive } from "../../util/Exaustive";
 import { Component, Control, Row, Section } from "./Editor";
 import {
-    AttributeType,
     EntityType,
     GameMode,
-    SubEntityAttribute
+    SubEntityAttribute,
+    TextAttribute
 } from "./GameMode";
 import { GameModes } from "./GameModes";
 
@@ -21,8 +21,8 @@ describe("GameMode", () => {
             entity.nameAttributeID
         );
         expect(
-            entity.attributes.find(a => a.id === entity.nameAttributeID)?.type
-        ).toBe(AttributeType.Text);
+            entity.attributes.find(a => a.id === entity.nameAttributeID)
+        ).toBeInstanceOf(TextAttribute);
     }
 
     function validateUniqueAttributes(entity: EntityType) {
@@ -59,7 +59,7 @@ describe("GameMode", () => {
     function validateEntitySubEntities(gameMode: GameMode) {
         gameMode.entityTypes.forEach(entityType =>
             entityType.attributes
-                .filter(t => t.type === AttributeType.SubEntities)
+                .filter(t => t instanceof SubEntityAttribute)
                 .forEach(subEntityType => {
                     expect(gameMode.entityTypes.map(e => e.id)).toContain(
                         (subEntityType as SubEntityAttribute).subEntityType

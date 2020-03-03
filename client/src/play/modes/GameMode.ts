@@ -1,52 +1,47 @@
 import { Editor } from "./Editor";
 
-export interface GameMode {
-    id: string;
-    name: string;
-    entityTypes: EntityType[];
-    tokenEntities: TokenEntities[];
+export class GameMode {
+    constructor(
+        readonly id: string,
+        readonly name: string,
+        readonly entityTypes: EntityType[],
+        readonly tokenEntities: TokenEntities[]
+    ) {}
 }
 
-export interface EntityType {
-    id: string;
-    name: string;
-    pluralName: string;
-    attributes: AttributeDefinition[];
-    editor: Editor;
-    nameAttributeID: string;
+export class EntityType {
+    constructor(
+        readonly id: string,
+        readonly name: string,
+        readonly pluralName: string,
+        readonly attributes: AttributeDefinition[],
+        readonly editor: Editor,
+        readonly nameAttributeID: string
+    ) {}
 }
 
-export enum AttributeType {
-    Number = "Number",
-    Text = "Text",
-    RichText = "RichText",
-    SubEntities = "SubEntities"
+export class NumberAttribute {
+    constructor(
+        readonly id: string,
+        readonly name: string,
+        readonly defaultValue?: number
+    ) {}
 }
 
-export interface NumberAttribute {
-    id: string;
-    name: string;
-    type: AttributeType.Number;
-    defaultValue?: number;
+export class TextAttribute {
+    constructor(readonly id: string, readonly name: string) {}
 }
 
-export interface TextAttribute {
-    id: string;
-    name: string;
-    type: AttributeType.Text;
+export class RichTextAttribute {
+    constructor(readonly id: string, readonly name: string) {}
 }
 
-export interface RichTextAttribute {
-    id: string;
-    name: string;
-    type: AttributeType.RichText;
-}
-
-export interface SubEntityAttribute {
-    id: string;
-    name: string;
-    subEntityType: string;
-    type: AttributeType.SubEntities;
+export class SubEntityAttribute {
+    constructor(
+        readonly id: string,
+        readonly name: string,
+        readonly subEntityType: string
+    ) {}
 }
 
 export type AttributeDefinition =
@@ -55,6 +50,6 @@ export type AttributeDefinition =
     | RichTextAttribute
     | SubEntityAttribute;
 
-export interface TokenEntities {
-    entityTypeID: string;
+export class TokenEntities {
+    constructor(readonly entityTypeID: string) {}
 }

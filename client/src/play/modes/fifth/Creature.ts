@@ -1,66 +1,27 @@
 import { Column, Control, Editor, Page, Row } from "../Editor";
-import { AttributeType, EntityType } from "../GameMode";
+import {
+    EntityType,
+    NumberAttribute,
+    SubEntityAttribute,
+    TextAttribute
+} from "../GameMode";
 
-export const CreatureType: EntityType = {
-    id: "creature",
-    name: "Creature",
-    pluralName: "Creatures",
-    nameAttributeID: "name",
-    attributes: [
-        {
-            id: "name",
-            name: "Name",
-            type: AttributeType.Text
-        },
-        {
-            id: "health",
-            name: "Health",
-            type: AttributeType.Number
-        },
-        {
-            id: "str",
-            name: "Strength",
-            type: AttributeType.Number,
-            defaultValue: 10
-        },
-        {
-            id: "dex",
-            name: "Agility",
-            type: AttributeType.Number,
-            defaultValue: 10
-        },
-        {
-            id: "con",
-            name: "Constitution",
-            type: AttributeType.Number,
-            defaultValue: 10
-        },
-        {
-            id: "int",
-            name: "Intelligence",
-            type: AttributeType.Number,
-            defaultValue: 10
-        },
-        {
-            id: "wis",
-            name: "Wisdom",
-            type: AttributeType.Number,
-            defaultValue: 10
-        },
-        {
-            id: "cha",
-            name: "Charisma",
-            type: AttributeType.Number,
-            defaultValue: 10
-        },
-        {
-            id: "classes",
-            name: "Classes",
-            type: AttributeType.SubEntities,
-            subEntityType: "class"
-        }
+export const CreatureType = new EntityType(
+    "creature",
+    "Creature",
+    "Creatures",
+    [
+        new TextAttribute("name", "Name"),
+        new NumberAttribute("health", "Health"),
+        new NumberAttribute("str", "Strength", 10),
+        new NumberAttribute("dex", "Agility", 10),
+        new NumberAttribute("con", "Constitution", 10),
+        new NumberAttribute("int", "Intelligence", 10),
+        new NumberAttribute("wis", "Wisdom", 10),
+        new NumberAttribute("cha", "Charisma", 10),
+        new SubEntityAttribute("classes", "Classes", "class")
     ],
-    editor: new Editor([
+    new Editor([
         new Page("Main", [
             new Row([
                 new Column(10, [new Control("name")]),
@@ -73,5 +34,6 @@ export const CreatureType: EntityType = {
                 new Column(2, [new Control("cha")])
             ])
         ])
-    ])
-};
+    ]),
+    "name"
+);
