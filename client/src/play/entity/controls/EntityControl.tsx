@@ -10,6 +10,7 @@ import {
 } from "../../modes/GameMode";
 import { LayoutProps } from "../EntityComponent";
 import { NumberControl } from "./NumberControl";
+import { SubEntityEditor } from "./SubEntityEditor";
 import { TextControl } from "./TextControl";
 
 export interface ControlProps extends LayoutProps {
@@ -34,7 +35,12 @@ export function EntityControl(
     } else if (attribute instanceof RichTextAttribute) {
         return <div></div>;
     } else if (attribute instanceof SubEntityAttribute) {
-        return <div></div>;
+        return (
+            <SubEntityEditor
+                {...props}
+                attributeID={props.control.attributeID}
+            />
+        );
     } else {
         return assertExhaustive(attribute);
     }

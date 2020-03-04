@@ -19,7 +19,8 @@ export const CreatureType = new EntityType(
         new NumberAttribute("int", "Intelligence", 10),
         new NumberAttribute("wis", "Wisdom", 10),
         new NumberAttribute("cha", "Charisma", 10),
-        new SubEntityAttribute("classes", "Classes", "class")
+        new SubEntityAttribute("classes", "Classes", "class"),
+        new SubEntityAttribute("items", "Items", "item")
     ],
     new Editor([
         new Page("Main", [
@@ -32,7 +33,8 @@ export const CreatureType = new EntityType(
                 new Column(2, [new Control("int")]),
                 new Column(2, [new Control("wis")]),
                 new Column(2, [new Control("cha")])
-            ])
+            ]),
+            new Row([new Column(12, [new Control("items")])])
         ])
     ]),
     "name"

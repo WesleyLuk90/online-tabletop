@@ -2,7 +2,7 @@ import React from "react";
 import { BemBuilder } from "../../util/BemBuilder";
 import { assertExhaustive } from "../../util/Exaustive";
 import { Component, Control, Row, Section } from "../modes/Editor";
-import { EntityType } from "../modes/GameMode";
+import { EntityType, GameMode } from "../modes/GameMode";
 import { Services } from "../Services";
 import { EntityControl } from "./controls/EntityControl";
 import "./EntityComponent.css";
@@ -12,6 +12,7 @@ export interface LayoutProps {
     entity: GameEntity;
     entityType: EntityType;
     services: Services;
+    gameMode: GameMode;
 }
 
 export function EntityComponents(

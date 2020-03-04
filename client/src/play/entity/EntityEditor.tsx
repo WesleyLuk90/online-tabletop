@@ -27,6 +27,7 @@ export function EntityEditor({
                             entity={entity}
                             entityType={entityType}
                             services={services}
+                            gameMode={gameMode}
                         />
                     </Tab>
                 ))}

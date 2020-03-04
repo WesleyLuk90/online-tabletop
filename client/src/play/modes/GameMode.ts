@@ -1,3 +1,5 @@
+import { assert } from "../../util/Assert";
+import { checkNotNull } from "../../util/Nullable";
 import { Editor } from "./Editor";
 
 export class GameMode {
@@ -7,6 +9,10 @@ export class GameMode {
         readonly entityTypes: EntityType[],
         readonly tokenEntities: TokenEntities[]
     ) {}
+
+    getEntityType(id: string) {
+        return checkNotNull(this.entityTypes.find(e => e.id === id));
+    }
 }
 
 export class EntityType {
@@ -18,6 +24,12 @@ export class EntityType {
         readonly editor: Editor,
         readonly nameAttributeID: string
     ) {}
+
+    getSubEntityAttribute(id: string): SubEntityAttribute {
+        const attribute = checkNotNull(this.attributes.find(a => a.id === id));
+        assert(attribute instanceof SubEntityAttribute);
+        return attribute;
+    }
 }
 
 export class NumberAttribute {
