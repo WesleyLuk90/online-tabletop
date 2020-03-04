@@ -1,7 +1,13 @@
 import React from "react";
 import { assertExhaustive } from "../../util/Exaustive";
 import { Attributes } from "../modes/Attributes";
-import { AttributeDefinition, AttributeType } from "../modes/GameMode";
+import {
+    AttributeDefinition,
+    NumberAttribute,
+    RichTextAttribute,
+    SubEntityAttribute,
+    TextAttribute
+} from "../modes/GameMode";
 import "./AttributeDisplay.css";
 import { GameEntity } from "./GameEntity";
 
@@ -24,27 +30,24 @@ export function AttributeDisplay({
         );
     }
 
-    switch (attribute.type) {
-        case AttributeType.Number:
-            return (
-                <span>
-                    {Attributes.getAttributeNumberValue(attribute, entity)}
-                </span>
-            );
-        case AttributeType.Text:
-        case AttributeType.RichText:
-            return (
-                <span>
-                    {Attributes.getAttributeStringValue(attribute, entity)}
-                </span>
-            );
-        case AttributeType.SubEntities:
-            return (
-                <span>
-                    {/* {Attributes.getSubEntityAttribute(attribute, entity)} */}
-                </span>
-            );
-        default:
-            assertExhaustive(attribute);
+    if (attribute instanceof NumberAttribute) {
+        return (
+            <span>{Attributes.getAttributeNumberValue(attribute, entity)}</span>
+        );
+    } else if (
+        attribute instanceof TextAttribute ||
+        attribute instanceof RichTextAttribute
+    ) {
+        return (
+            <span>{Attributes.getAttributeStringValue(attribute, entity)}</span>
+        );
+    } else if (attribute instanceof SubEntityAttribute) {
+        return (
+            <span>
+                {/* {Attributes.getSubEntityAttribute(attribute, entity)} */}
+            </span>
+        );
+    } else {
+        return assertExhaustive(attribute);
     }
 }

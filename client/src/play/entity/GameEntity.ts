@@ -5,9 +5,12 @@ import { keyBy } from "../../util/Maps";
 import { checkNotNull } from "../../util/Nullable";
 import {
     AttributeDefinition,
-    AttributeType,
     EntityType,
-    GameMode
+    GameMode,
+    NumberAttribute,
+    RichTextAttribute,
+    SubEntityAttribute,
+    TextAttribute
 } from "../modes/GameMode";
 
 export class GameEntity {
@@ -48,19 +51,19 @@ export class GameEntity {
         if (value == null) {
             return "";
         }
-        switch (attribute.type) {
-            case AttributeType.Number:
-                return "numberValue" in value
-                    ? value.numberValue.toString()
-                    : "";
-            case AttributeType.Text:
-            case AttributeType.RichText:
-                return "stringValue" in value ? value.stringValue : "";
-            case AttributeType.SubEntities:
-                const entities = "entities" in value ? value.entities : [];
-                return `${entities.length} ${attribute.name}`;
-            default:
-                assertExhaustive(attribute);
+
+        if (attribute instanceof NumberAttribute) {
+            return "numberValue" in value ? value.numberValue.toString() : "";
+        } else if (
+            attribute instanceof TextAttribute ||
+            attribute instanceof RichTextAttribute
+        ) {
+            return "stringValue" in value ? value.stringValue : "";
+        } else if (attribute instanceof SubEntityAttribute) {
+            const entities = "entities" in value ? value.entities : [];
+            return `${entities.length} ${attribute.name}`;
+        } else {
+            return assertExhaustive(attribute);
         }
     }
 
