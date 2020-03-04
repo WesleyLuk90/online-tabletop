@@ -9,7 +9,7 @@ export function NumberControl({
     attributeID,
     entityType,
     entity,
-    services
+    updateAttribute
 }: ControlProps) {
     const attributeDefinition = Attributes.getAttribute(
         attributeID,
@@ -27,7 +27,7 @@ export function NumberControl({
                         entity
                     )}
                     onChange={numberValue =>
-                        services.entityService().updateAttribute(entity, {
+                        updateAttribute({
                             attributeID,
                             numberValue
                         })

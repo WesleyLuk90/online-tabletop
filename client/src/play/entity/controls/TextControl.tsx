@@ -9,7 +9,7 @@ export function TextControl({
     attributeID,
     entityType,
     entity,
-    services
+    updateAttribute
 }: ControlProps) {
     const attributeDefinition = Attributes.getAttribute(
         attributeID,
@@ -25,7 +25,7 @@ export function TextControl({
                         entity
                     )}
                     onChange={stringValue =>
-                        services.entityService().updateAttribute(entity, {
+                        updateAttribute({
                             attributeID,
                             stringValue
                         })

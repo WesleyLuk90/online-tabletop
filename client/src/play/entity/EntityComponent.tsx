@@ -1,9 +1,10 @@
+import { Attribute } from "protocol/src/Entity";
 import React from "react";
 import { BemBuilder } from "../../util/BemBuilder";
+import { Callback } from "../../util/Callback";
 import { assertExhaustive } from "../../util/Exaustive";
 import { Component, Control, Row, Section } from "../modes/Editor";
 import { EntityType, GameMode } from "../modes/GameMode";
-import { Services } from "../Services";
 import { EntityControl } from "./controls/EntityControl";
 import "./EntityComponent.css";
 import { GameEntity } from "./GameEntity";
@@ -11,7 +12,7 @@ import { GameEntity } from "./GameEntity";
 export interface LayoutProps {
     entity: GameEntity;
     entityType: EntityType;
-    services: Services;
+    updateAttribute: Callback<Attribute>;
     gameMode: GameMode;
 }
 

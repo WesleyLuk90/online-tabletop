@@ -26,7 +26,11 @@ export function EntityEditor({
                             components={p.components}
                             entity={entity}
                             entityType={entityType}
-                            services={services}
+                            updateAttribute={a =>
+                                services
+                                    .entityService()
+                                    .updateAttribute(entity, a)
+                            }
                             gameMode={gameMode}
                         />
                     </Tab>
