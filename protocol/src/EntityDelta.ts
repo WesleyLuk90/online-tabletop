@@ -1,5 +1,10 @@
 import * as t from "io-ts";
-import { AttributeSchema, Entity, EntitySchema } from "./Entity";
+import {
+    AttributeSchema,
+    Entity,
+    EntitySchema,
+    SubEntitySchema
+} from "./Entity";
 
 export const CreateEntityDeltaSchema = t.strict({
     type: t.literal("create"),
@@ -25,7 +30,7 @@ export const DeleteEntityAttributeSchema = t.strict({
     source: t.string,
     campaignID: t.string,
     entityID: t.string,
-    attribute: AttributeSchema
+    attributeID: t.string
 });
 export interface DeleteEntityAttribute
     extends t.TypeOf<typeof DeleteEntityAttributeSchema> {}
@@ -40,10 +45,58 @@ export const UpdateEntityAttributeSchema = t.strict({
 export interface UpdateEntityAttribute
     extends t.TypeOf<typeof UpdateEntityAttributeSchema> {}
 
+export const SubEntityPath = t.array(
+    t.strict({
+        attributeID: t.string,
+        subEntityID: t.string
+    })
+);
+
+export const CreateSubEntitySchema = t.strict({
+    type: t.literal("create-subentity-attribute"),
+    source: t.string,
+    campaignID: t.string,
+    entityID: t.string,
+    path: SubEntityPath,
+    subEntity: SubEntitySchema
+});
+export interface CreateSubEntity
+    extends t.TypeOf<typeof CreateSubEntitySchema> {}
+
+export const UpdateSubEntitySchema = t.strict({
+    type: t.literal("update-subentity-attribute"),
+    source: t.string,
+    campaignID: t.string,
+    entityID: t.string,
+    path: SubEntityPath,
+    attribute: AttributeSchema
+});
+export interface UpdateSubEntity
+    extends t.TypeOf<typeof UpdateSubEntitySchema> {}
+
+export const DeleteSubEntitySchema = t.strict({
+    type: t.literal("delete-subentity-attribute"),
+    source: t.string,
+    campaignID: t.string,
+    entityID: t.string,
+    path: SubEntityPath
+});
+export interface DeleteSubEntity
+    extends t.TypeOf<typeof DeleteSubEntitySchema> {}
+
 export const UpdateEntityDeltaSchema: t.UnionC<[
     t.Type<DeleteEntityAttribute>,
-    t.Type<UpdateEntityAttribute>
-]> = t.union([DeleteEntityAttributeSchema, UpdateEntityAttributeSchema]);
+    t.Type<UpdateEntityAttribute>,
+    t.Type<CreateSubEntity>,
+    t.Type<UpdateSubEntity>,
+    t.Type<DeleteSubEntity>
+]> = t.union([
+    DeleteEntityAttributeSchema,
+    UpdateEntityAttributeSchema,
+    CreateSubEntitySchema,
+    UpdateSubEntitySchema,
+    DeleteSubEntitySchema
+]);
 
 export type UpdateEntityDelta = t.TypeOf<typeof UpdateEntityDeltaSchema>;
 
@@ -82,7 +135,7 @@ export function applyDelta(e: Entity, update: UpdateEntityDelta): Entity {
             return {
                 ...e,
                 attributes: e.attributes.filter(
-                    e => e.attributeID !== update.attribute.attributeID
+                    e => e.attributeID !== update.attributeID
                 )
             };
         case "update-attribute":
