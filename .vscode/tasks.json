@@ -9,7 +9,7 @@
             "command": "yarn",
             "args": ["rebuild"],
             "options": {
-                "cwd": "protocol"
+                "cwd": "${workspaceRoot}/protocol"
             },
             "group": {
                 "kind": "build",

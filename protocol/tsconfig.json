@@ -7,8 +7,9 @@
         "moduleResolution": "node",
         "outDir": "src",
         "sourceMap": true,
-        "declaration": true
+        "declaration": true,
+        "strictNullChecks": true
     },
     "include": ["src/**/*.ts", "test/**/*.ts"],
-    "exclude": ["node_modules"]
+    "exclude": ["node_modules", "src/**/*.spec.ts"]
 }
