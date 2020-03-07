@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import { RoleSchema } from "./Role";
+import { Role, RoleSchema } from "./Role";
 
 export const PlayerSchema = t.strict({
     userID: t.string,
@@ -7,7 +7,9 @@ export const PlayerSchema = t.strict({
     role: RoleSchema
 });
 
-export interface Player extends t.TypeOf<typeof PlayerSchema> {}
+export interface Player extends t.TypeOf<typeof PlayerSchema> {
+    role: Role;
+}
 
 export const CampaignSchema = t.strict({
     id: t.string,

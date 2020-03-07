@@ -18,7 +18,8 @@ export class EntityDeltaFactory {
             attribute: value,
             campaignID: this.campaignID,
             entityID: entity.entityID,
-            source: this.source
+            source: this.source,
+            path: []
         };
     }
 }
