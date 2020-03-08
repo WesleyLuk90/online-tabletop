@@ -7,8 +7,7 @@
     "scripts": {
         "test": "jest --passWithNoTests",
         "clean": "rm -f src/*.js && rm -f src/*.js.map && rm -f src/*.d.ts",
-        "build": "tsc",
-        "rebuild": "yarn run clean && yarn run build"
+        "build": "tsc"
     },
     "dependencies": {
         "fp-ts": "^1.18.1",
