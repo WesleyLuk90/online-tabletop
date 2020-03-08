@@ -12,12 +12,14 @@
         "@types/react": "16.8.14",
         "@types/react-dom": "16.8.4",
         "axios": "^0.18.0",
+        "customize-cra": "^0.9.1",
         "fp-ts": "^1.17.3",
         "io-ts": "^1.8.5",
         "lodash": "^4.17.13",
         "normalize.css": "^8.0.1",
         "protocol": "1.0.0",
         "react": "^16.8.6",
+        "react-app-rewired": "^2.1.5",
         "react-dom": "^16.8.6",
         "react-router-dom": "^5.1.2",
         "react-scripts": "3.2.0",
@@ -26,10 +28,10 @@
         "yarn": "^1.22.0"
     },
     "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "start": "react-app-rewired start",
+        "build": "react-app-rewired build",
+        "test": "react-app-rewired test",
+        "eject": "react-app-rewired eject"
     },
     "eslintConfig": {
         "extends": "react-app"
