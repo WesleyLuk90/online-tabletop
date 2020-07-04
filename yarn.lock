@@ -4697,7 +4697,7 @@ __metadata:
     react-router-dom: ^5.1.2
     react-scripts: 3.2.0
     socket.io-client: ^2.2.0
-    typescript: 3.7.5
+    typescript: 3.9.6
     yarn: ^1.22.0
   languageName: unknown
   linkType: soft
@@ -13232,7 +13232,7 @@ fsevents@^2.1.2:
     jest: 26.1.0
     lodash: ^4.17.13
     ts-jest: ^26.1.1
-    typescript: 3.7.5
+    typescript: 3.9.6
     yarn: ^1.22.0
   languageName: unknown
   linkType: soft
@@ -14639,7 +14639,7 @@ resolve@^1.17.0:
     socket.io: ^2.2.0
     ts-jest: ^26.1.1
     ts-node: ^8.10.2
-    typescript: 3.7.5
+    typescript: 3.9.6
     yarn: ^1.22.0
   languageName: unknown
   linkType: soft
@@ -16096,23 +16096,23 @@ resolve@^1.17.0:
   languageName: node
   linkType: hard
 
-typescript@3.7.5:
-  version: 3.7.5
-  resolution: "typescript@npm:3.7.5"
+typescript@3.9.6:
+  version: 3.9.6
+  resolution: "typescript@npm:3.9.6"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 48a96fb7dc48746e6b76cf0946545181b0d5013368e510768402f1374e6c6a9f29b00e8ca4f40bc7523a655473f7bc7c55d1c8458970e96b7187bcee1b47e96b
+  checksum: 75d8e3610ca435b0feaa3eb714ef3aa9060ec72621da3c62c45ceee1d8d0ddcbd8ff2a816de2d24ab28dcd2249953edb640d34595d59e491656156da4c2903fc
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@3.7.5#builtin<compat/typescript>":
-  version: 3.7.5
-  resolution: "typescript@patch:typescript@npm%3A3.7.5#builtin<compat/typescript>::version=3.7.5&hash=64df9d"
+"typescript@patch:typescript@3.9.6#builtin<compat/typescript>":
+  version: 3.9.6
+  resolution: "typescript@patch:typescript@npm%3A3.9.6#builtin<compat/typescript>::version=3.9.6&hash=64df9d"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 8ec50d9f9b9ec13a280d98a5d1b5db8b84005cc7bea5eebac3f97943567aa0d7c3c665d64a36eb6dccd2451db9b080100c6ae4b1b6a5277fc8814fe4662993e0
+  checksum: 74cb55c847841e1aeea9c78bdf0156cf6ba311eb353e555ba70cb6df120e9b4c4a7feff2a153f04fda3d6b7124496fd4d444be62f3d2d448e77c667ea5beaa0b
   languageName: node
   linkType: hard
 
