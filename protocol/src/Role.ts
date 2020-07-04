@@ -5,7 +5,4 @@ export enum Role {
     manager = "manager"
 }
 
-export const RoleSchema = t.keyof({
-    [Role.player]: null,
-    [Role.manager]: null
-});
+export const RoleSchema = t.union([t.literal(Role.player), t.literal(Role.manager)])
