@@ -6,7 +6,7 @@ services:
     - mongodb
 
 script:
-    - yarn install --frozen-lockfile
+    - yarn install
     - cd protocol
     - yarn build
     - yarn test
