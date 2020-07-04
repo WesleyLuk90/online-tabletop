@@ -5,8 +5,12 @@ node_js:
 services:
     - mongodb
 
-script:
+cache: yarn
+
+install:
     - yarn install
+
+script:
     - cd protocol
     - yarn build
     - yarn test
