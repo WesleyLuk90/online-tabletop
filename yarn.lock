@@ -13029,7 +13029,7 @@ resolve@^1.10.1:
     session-file-store: ^1.2.0
     socket.io: ^2.2.0
     ts-jest: ^24.0.2
-    ts-node: ^8.1.0
+    ts-node: ^8.10.2
     typescript: 3.7.5
     yarn: ^1.22.0
   languageName: unknown
@@ -13378,6 +13378,16 @@ resolve@^1.10.1:
     source-map-url: ^0.4.0
     urix: ^0.1.0
   checksum: 042ad0c0ba70458ba45fc8726a4eb61068ca0a5273578994803e25fc0fb8da00854cf5004616c9b6d0cb7fcd528c50313789d75dfc56a2f5c789cbd332bf4331
+  languageName: node
+  linkType: hard
+
+"source-map-support@npm:^0.5.17":
+  version: 0.5.19
+  resolution: "source-map-support@npm:0.5.19"
+  dependencies:
+    buffer-from: ^1.0.0
+    source-map: ^0.6.0
+  checksum: 59d4efaae97755155b078413ecba63517e3ef054cc7ab767bbd30e6f3054be2ae8e8f5cce7eef53b7eb93e98fe27a58dd8f5e7abfb13144ba420ddaf5267bbb2
   languageName: node
   linkType: hard
 
@@ -14198,21 +14208,23 @@ resolve@^1.10.1:
   languageName: node
   linkType: hard
 
-"ts-node@npm:^8.1.0":
-  version: 8.5.4
-  resolution: "ts-node@npm:8.5.4"
+"ts-node@npm:^8.10.2":
+  version: 8.10.2
+  resolution: "ts-node@npm:8.10.2"
   dependencies:
     arg: ^4.1.0
     diff: ^4.0.1
     make-error: ^1.1.1
-    source-map-support: ^0.5.6
-    yn: ^3.0.0
+    source-map-support: ^0.5.17
+    yn: 3.1.1
   peerDependencies:
-    typescript: ">=2.0"
+    typescript: ">=2.7"
   bin:
     ts-node: dist/bin.js
-    ts-script: dist/script.js
-  checksum: f8f8c7a29601b146ad2e2175e26e5bd19799464e15a56e6998b2b636b432461145fa0bbb608e77a11fb2c7a95fa1d6c089a81bc70e8da400d09bc46a5acdd9da
+    ts-node-script: dist/bin-script.js
+    ts-node-transpile-only: dist/bin-transpile.js
+    ts-script: dist/bin-script-deprecated.js
+  checksum: cd6e023e073d65ea346cf4a5b70bfd1e7c7f342c967a23a83038fd3462067558a4dda4fc8b238e6709db69aca3847590a93b4c52ae001e23ed9fef3b4fecbc71
   languageName: node
   linkType: hard
 
@@ -15400,7 +15412,7 @@ typescript@3.7.5:
   languageName: node
   linkType: hard
 
-"yn@npm:^3.0.0":
+"yn@npm:3.1.1":
   version: 3.1.1
   resolution: "yn@npm:3.1.1"
   checksum: bff63b80568d80c711670935427494dde47cdf97e8b04196b140ce0af519c81c5ee857eddad0caa8b422dd65aea0157bbfaacbb1546bebba623f0f383d5d9ae5
