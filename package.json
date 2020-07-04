@@ -7,5 +7,8 @@
     ],
     "scripts": {
         "run-services": "docker-compose -f docker-compose.services.yml up -d"
+    },
+    "devDependencies": {
+        "typescript": "3.9.6"
     }
 }

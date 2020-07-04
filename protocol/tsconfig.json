@@ -8,9 +8,14 @@
         "outDir": "src",
         "sourceMap": true,
         "declaration": true,
-        "strictNullChecks": true,
-        "noEmit": true
+        "strictNullChecks": true
     },
-    "include": ["src/**/*.ts", "test/**/*.ts"],
-    "exclude": ["node_modules", "src/**/*.spec.ts"]
+    "include": [
+        "src/**/*.ts",
+        "test/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "src/**/*.spec.ts"
+    ]
 }

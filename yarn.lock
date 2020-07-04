@@ -14330,6 +14330,8 @@ resolve@^1.17.0:
 "root-workspace-0b6124@workspace:.":
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
+  dependencies:
+    typescript: 3.9.6
   languageName: unknown
   linkType: soft
 

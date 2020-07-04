@@ -19,4 +19,4 @@ export const CampaignSchema = t.strict({
     players: t.array(PlayerSchema)
 });
 
-export interface Campaign extends t.TypeOf<typeof CampaignSchema> {}
+export interface Campaign extends t.TypeOf<typeof CampaignSchema> { }
