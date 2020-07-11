@@ -14,13 +14,12 @@
         "baseUrl": ".",
         "paths": {
             "protocol": [
-                "../protocol"
+                "protocol"
             ]
         }
     },
     "include": [
-        "src/**/*",
-        "test/**/*",
-        "../protocol/src"
+        "server/src/**/*",
+        "protocol/src/**/*"
     ],
 }
