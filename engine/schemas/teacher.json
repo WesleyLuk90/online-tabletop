@@ -9,7 +9,15 @@
             "type": "string"
         },
         "value": {
-            "$ref": "something.json#/definitions/baz"
+            "$ref": "#/definitions/baz"
+        }
+    },
+    "definitions": {
+        "baz": {
+            "type": "string",
+            "title": "NamedInteger",
+            "tsEnumNames": ["red", "amber", "green"],
+            "enum": ["red", "amber", "green"]
         }
     },
     "additionalProperties": false,
