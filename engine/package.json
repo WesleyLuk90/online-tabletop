@@ -1,0 +1,16 @@
+{
+    "name": "engine",
+    "devDependencies": {
+        "@types/jest": "^26.0.7",
+        "jest": "^26.1.0",
+        "ts-jest": "^26.1.3",
+        "typescript": "^3.9.7"
+    },
+    "scripts": {
+        "test": "jest",
+        "generate": "node generate.js"
+    },
+    "dependencies": {
+        "json-schema-to-typescript": "^9.1.1"
+    }
+}

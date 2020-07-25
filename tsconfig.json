@@ -7,19 +7,12 @@
         "moduleResolution": "node",
         "sourceMap": true,
         "outDir": "dist",
-        "types": [
-            "jest"
-        ],
+        "types": ["jest"],
         "strictNullChecks": true,
         "baseUrl": ".",
         "paths": {
-            "protocol": [
-                "protocol"
-            ]
+            "protocol": ["protocol"]
         }
     },
-    "include": [
-        "server/src/**/*",
-        "protocol/src/**/*"
-    ],
+    "include": ["server/src/**/*", "protocol/src/**/*"]
 }

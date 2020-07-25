@@ -1,0 +1,12 @@
+{
+    "title": "Student",
+    "type": "object",
+    "properties": {
+        "name": { "$ref": "name.json" },
+        "grade": {
+            "type": "integer"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["firstName", "lastName"]
+}

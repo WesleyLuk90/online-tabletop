@@ -3,7 +3,8 @@
     "workspaces": [
         "client",
         "protocol",
-        "server"
+        "server",
+        "engine"
     ],
     "scripts": {
         "run-services": "docker-compose -f docker-compose.services.yml up -d"

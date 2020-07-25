@@ -1,0 +1,10 @@
+{
+    "definitions": {
+        "baz": {
+            "type": "string",
+            "title": "NamedInteger",
+            "tsEnumNames": ["red", "amber", "green"],
+            "enum": ["red", "amber", "green"]
+        }
+    }
+}

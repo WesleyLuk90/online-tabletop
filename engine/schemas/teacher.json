@@ -1,0 +1,17 @@
+{
+    "title": "Example Schema",
+    "type": "object",
+    "properties": {
+        "firstName": {
+            "type": "string"
+        },
+        "lastName": {
+            "type": "string"
+        },
+        "value": {
+            "$ref": "something.json#/definitions/baz"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["firstName", "lastName"]
+}
