@@ -4994,7 +4994,7 @@ __metadata:
     fp-ts: ^1.17.3
     http-proxy-middleware: ^0.20.0
     io-ts: ^1.8.5
-    lodash: ^4.17.13
+    lodash: ^4.17.19
     normalize.css: ^8.0.1
     protocol: 1.0.0
     react: ^16.8.6
@@ -10904,7 +10904,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.16":
+"lodash@npm:^4.17.16, lodash@npm:^4.17.19":
   version: 4.17.19
   resolution: "lodash@npm:4.17.19"
   checksum: ff2b7a95f0129dba9101e346d44e0eda0f159d76bbbf23721eec1969b87a32bde3de0cfef0733218c64620e9be08040a973278d46a686540233b356115f3527c
@@ -13789,7 +13789,7 @@ fsevents@^1.2.7:
     fp-ts: ^1.18.1
     io-ts: ^1.8.6
     jest: 26.1.0
-    lodash: ^4.17.13
+    lodash: ^4.17.19
     ts-jest: ^26.1.1
     typescript: 3.9.6
     yarn: ^1.22.0
@@ -15210,7 +15210,7 @@ resolve@1.1.7:
     express-session: ^1.16.1
     io-ts: ^1.8.5
     jest: 26.1.0
-    lodash: ^4.17.13
+    lodash: ^4.17.19
     mongodb: ^3.4.1
     passport: ^0.4.0
     passport-auth0: ^1.3.1
