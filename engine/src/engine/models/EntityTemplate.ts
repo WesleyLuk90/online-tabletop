@@ -1,10 +1,9 @@
 import { Collection } from "../../utils/Collection";
 import { Attribute } from "./Attribute";
 
-export class Entity {
+export class EntityTemplate {
     constructor(
         readonly id: string,
-        readonly templateId: string,
         readonly attributes: Collection<Attribute>
     ) {}
 }
