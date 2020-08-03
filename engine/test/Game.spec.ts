@@ -1,7 +1,8 @@
+import { NumberAttribute } from "../src/engine/models/Attribute";
 import { Campaign } from "../src/engine/models/Campaign";
 import { Entity } from "../src/engine/models/Entity";
 import { EntityTemplate } from "../src/engine/models/EntityTemplate";
-import { FifthEditionGameMode } from "../src/gamemodes/FifthEdition";
+import { FifthEditionGameMode } from "../src/gamemodes/5e/FifthEdition";
 import { Collection } from "../src/utils/Collection";
 import { uuid } from "../src/utils/Uuid";
 
@@ -11,7 +12,7 @@ describe("Game", () => {
         const entity = new Entity(
             uuid(),
             entityTemplate.id,
-            Collection.empty()
+            Collection.of(new NumberAttribute("strength", 15))
         );
         Campaign.empty(uuid(), "Game", FifthEditionGameMode)
             .addEntityTemplate(entityTemplate)
