@@ -1,6 +1,7 @@
 import { Tokenizer } from "../../src/engine/rolls/Tokenizer";
 import {
     DivideToken,
+    FunctionCallToken,
     IdentifierToken,
     LeftParenthesesToken,
     NumberToken,
@@ -16,7 +17,7 @@ describe("Tokenizer", () => {
             new PlusToken(),
             new RollToken(3, 4, "d"),
             new PlusToken(),
-            new IdentifierToken("floor"),
+            new FunctionCallToken("floor"),
             new LeftParenthesesToken(),
             new IdentifierToken("str"),
             new DivideToken(),

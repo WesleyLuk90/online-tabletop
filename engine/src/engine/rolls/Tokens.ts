@@ -1,22 +1,56 @@
-export class NumberToken {
-    constructor(readonly number: number) {}
+export class BaseToken {
+    constructor(readonly precedence: number = 0) {}
 }
-export class IdentifierToken {
-    constructor(readonly identifier: string) {}
+
+export class NumberToken extends BaseToken {
+    constructor(readonly number: number) {
+        super();
+    }
 }
-export class RollToken {
+export class IdentifierToken extends BaseToken {
+    constructor(readonly identifier: string) {
+        super();
+    }
+}
+export class RollToken extends BaseToken {
     constructor(
         readonly lhs: number,
         readonly rhs: number,
         readonly roll: string
-    ) {}
+    ) {
+        super();
+    }
 }
-export class PlusToken {}
-export class MinusToken {}
-export class MultiplyToken {}
-export class DivideToken {}
-export class LeftParenthesesToken {}
-export class RightParenthesesToken {}
+export class PlusToken extends BaseToken {
+    constructor() {
+        super(1);
+    }
+}
+export class MinusToken extends BaseToken {
+    constructor() {
+        super(1);
+    }
+}
+export class MultiplyToken extends BaseToken {
+    constructor() {
+        super(2);
+    }
+}
+export class DivideToken extends BaseToken {
+    constructor() {
+        super(2);
+    }
+}
+export class LeftParenthesesToken extends BaseToken {
+    constructor() {
+        super(0);
+    }
+}
+export class RightParenthesesToken extends BaseToken {
+    constructor() {
+        super(0);
+    }
+}
 
 export type Token =
     | NumberToken
