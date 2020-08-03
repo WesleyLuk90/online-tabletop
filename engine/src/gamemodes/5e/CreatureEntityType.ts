@@ -1,55 +1,57 @@
-import { NumericAttributeDescription } from "../../engine/models/AttributeDescription";
+import {
+    AttributeDescription,
+    NumberAttributeDescription,
+    SubEntityAttributeDescription,
+} from "../../engine/models/AttributeDescription";
 import { EntityType } from "../../engine/models/EntityType";
 import { Collection } from "../../utils/Collection";
+import { ItemEntityType } from "./ItemEntityType";
 
-const StrengthAttribute = new NumericAttributeDescription(
+const StrengthAttribute = NumberAttributeDescription.create(
     "strength",
     "Str",
-    "Strength",
     10
 );
-const DexterityAttribute = new NumericAttributeDescription(
+const DexterityAttribute = NumberAttributeDescription.create(
     "dexterity",
     "dex",
-    "Dexterity",
     10
 );
-const ConstitutionAttribute = new NumericAttributeDescription(
+const ConstitutionAttribute = NumberAttributeDescription.create(
     "constitution",
     "con",
-    "Constitution",
     10
 );
 
-const IntelligenceAttribute = new NumericAttributeDescription(
+const IntelligenceAttribute = NumberAttributeDescription.create(
     "intelligence",
     "int",
-    "Intelligence",
     10
 );
-const WisdomAttribute = new NumericAttributeDescription(
-    "wisdom",
-    "wis",
-    "Wisdom",
-    10
-);
-const CharismaAttribute = new NumericAttributeDescription(
+const WisdomAttribute = NumberAttributeDescription.create("wisdom", "wis", 10);
+const CharismaAttribute = NumberAttributeDescription.create(
     "charisma",
     "cha",
-    "Charisma",
     10
+);
+
+const InventoryAttribute = SubEntityAttributeDescription.create(
+    "inventory",
+    "Inventory",
+    ItemEntityType.id
 );
 
 export const CreatureEntityType = new EntityType(
     "creature",
     "Creature",
     "Creatures",
-    Collection.of(
+    Collection.of<AttributeDescription>(
         StrengthAttribute,
         DexterityAttribute,
         ConstitutionAttribute,
         IntelligenceAttribute,
         WisdomAttribute,
-        CharismaAttribute
+        CharismaAttribute,
+        InventoryAttribute
     )
 );

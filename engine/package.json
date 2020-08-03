@@ -10,7 +10,8 @@
     },
     "scripts": {
         "test": "jest",
-        "generate": "node generate.js"
+        "generate": "node generate.js",
+        "build": "tsc"
     },
     "dependencies": {
         "ajv": "^6.12.3",
