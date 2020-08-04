@@ -68,6 +68,16 @@ describe("RollParser", () => {
         );
     });
 
+    it("should multi args", () => {
+        expect(RollParser.parse("min(1, 2, 3)")).toEqual(
+            new RollFunction("min", [
+                new RollLiteral(1),
+                new RollLiteral(2),
+                new RollLiteral(3),
+            ])
+        );
+    });
+
     it("should parse", () => {
         expect(RollParser.parse("1+3d4+floor(str/2)")).toEqual(
             new RollFunction("add", [

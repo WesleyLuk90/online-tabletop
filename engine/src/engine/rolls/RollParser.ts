@@ -8,6 +8,7 @@ import {
 } from "../models/RollDefinition";
 import { Tokenizer } from "./Tokenizer";
 import {
+    CommaToken,
     DivideToken,
     IdentifierToken,
     LeftParenthesesToken,
@@ -26,7 +27,8 @@ type Operator =
     | DivideToken
     | MultiplyToken
     | LeftParenthesesToken
-    | IdentifierToken;
+    | IdentifierToken
+    | CommaToken;
 
 class MissingArgumentError extends BaseError {
     constructor() {
@@ -39,12 +41,41 @@ class MissingOperatorError extends BaseError {
     }
 }
 
+class FunctionArguments {
+    constructor(
+        readonly lhs: ExpressionOrArgs,
+        readonly rhs: ExpressionOrArgs
+    ) {}
+
+    flatten(): RollExpression[] {
+        const lhs =
+            this.lhs instanceof FunctionArguments
+                ? this.lhs.flatten()
+                : [this.lhs];
+        const rhs =
+            this.rhs instanceof FunctionArguments
+                ? this.rhs.flatten()
+                : [this.rhs];
+        return [...lhs, ...rhs];
+    }
+}
+
+type ExpressionOrArgs = RollExpression | FunctionArguments;
+
 class OutputStack {
-    private stack: RollExpression[] = [];
-    push(output: RollExpression) {
+    private stack: ExpressionOrArgs[] = [];
+    push(output: ExpressionOrArgs) {
         this.stack.push(output);
     }
-    pop(): RollExpression {
+    popExpression(): RollExpression {
+        const out = this.pop();
+        if (out instanceof FunctionArguments) {
+            throw new Error("Unexpected function arguments");
+        }
+        return out;
+    }
+
+    pop(): ExpressionOrArgs {
         const out = this.stack.pop();
         if (out == null) {
             throw new MissingArgumentError();
@@ -75,28 +106,36 @@ export class RollParser {
         const tokens = Tokenizer.tokenize(expression);
         function shiftOperatorToOutput(operator: Operator) {
             if (operator instanceof PlusToken) {
-                const rhs = output.pop();
-                const lhs = output.pop();
+                const rhs = output.popExpression();
+                const lhs = output.popExpression();
                 output.push(new RollFunction("add", [lhs, rhs]));
             } else if (operator instanceof MinusToken) {
-                const rhs = output.pop();
-                const lhs = output.pop();
+                const rhs = output.popExpression();
+                const lhs = output.popExpression();
                 output.push(new RollFunction("sub", [lhs, rhs]));
             } else if (operator instanceof MultiplyToken) {
-                const rhs = output.pop();
-                const lhs = output.pop();
+                const rhs = output.popExpression();
+                const lhs = output.popExpression();
                 output.push(new RollFunction("mul", [lhs, rhs]));
             } else if (operator instanceof DivideToken) {
-                const rhs = output.pop();
-                const lhs = output.pop();
+                const rhs = output.popExpression();
+                const lhs = output.popExpression();
                 output.push(new RollFunction("div", [lhs, rhs]));
             } else if (operator instanceof IdentifierToken) {
-                output.push(
-                    // Figure out how to do varargs
-                    new RollFunction(operator.identifier, [output.pop()])
-                );
+                const args = output.pop();
+                if (args instanceof FunctionArguments) {
+                    output.push(
+                        new RollFunction(operator.identifier, args.flatten())
+                    );
+                } else {
+                    output.push(new RollFunction(operator.identifier, [args]));
+                }
             } else if (operator instanceof LeftParenthesesToken) {
                 return;
+            } else if (operator instanceof CommaToken) {
+                const rhs = output.pop();
+                const lhs = output.pop();
+                output.push(new FunctionArguments(lhs, rhs));
             } else {
                 assertExaustive(operator);
             }
@@ -151,7 +190,8 @@ export class RollParser {
                 token instanceof PlusToken ||
                 token instanceof MinusToken ||
                 token instanceof DivideToken ||
-                token instanceof MultiplyToken
+                token instanceof MultiplyToken ||
+                token instanceof CommaToken
             ) {
                 processOperatorWithPrecedence(token);
                 operators.push(token);
@@ -168,6 +208,6 @@ export class RollParser {
         while ((operator = operators.pop())) {
             shiftOperatorToOutput(operator);
         }
-        return output.pop();
+        return output.popExpression();
     }
 }

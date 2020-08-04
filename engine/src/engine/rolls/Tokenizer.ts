@@ -1,6 +1,7 @@
 import { BaseError } from "../../BaseError";
 import { notNull } from "../../utils/Nullable";
 import {
+    CommaToken,
     DivideToken,
     IdentifierToken,
     LeftParenthesesToken,
@@ -35,6 +36,7 @@ const TokenMakers = [
     createMatcher(/^\-/, (s) => new MinusToken()),
     createMatcher(/^\//, (s) => new DivideToken()),
     createMatcher(/^\*/, (s) => new MultiplyToken()),
+    createMatcher(/^,/, (s) => new CommaToken()),
     createMatcher(/^\(/, (s) => new LeftParenthesesToken()),
     createMatcher(/^\)/, (s) => new RightParenthesesToken()),
     createMatcher(/^([a-z_][\w_]+)/, (s) => new IdentifierToken(s[1])),

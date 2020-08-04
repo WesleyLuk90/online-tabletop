@@ -22,6 +22,11 @@ export class RollToken extends BaseToken {
         super();
     }
 }
+export class CommaToken extends BaseToken {
+    constructor() {
+        super(0);
+    }
+}
 export class PlusToken extends BaseToken {
     constructor() {
         super(1);
@@ -63,4 +68,5 @@ export type Token =
     | DivideToken
     | LeftParenthesesToken
     | RightParenthesesToken
-    | WhitespaceToken;
+    | WhitespaceToken
+    | CommaToken;
