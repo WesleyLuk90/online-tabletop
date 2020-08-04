@@ -17,6 +17,7 @@ import {
     PlusToken,
     RightParenthesesToken,
     RollToken,
+    WhitespaceToken,
 } from "./Tokens";
 
 type Operator =
@@ -138,6 +139,7 @@ export class RollParser {
                 operators.push(token);
             } else if (token instanceof RightParenthesesToken) {
                 operators.push(token);
+            } else if (token instanceof WhitespaceToken) {
             } else {
                 assertExaustive(token);
             }

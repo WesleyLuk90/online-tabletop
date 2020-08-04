@@ -12,6 +12,7 @@ export class IdentifierToken extends BaseToken {
         super();
     }
 }
+export class WhitespaceToken extends BaseToken {}
 export class RollToken extends BaseToken {
     constructor(
         readonly lhs: number,
@@ -61,4 +62,5 @@ export type Token =
     | MultiplyToken
     | DivideToken
     | LeftParenthesesToken
-    | RightParenthesesToken;
+    | RightParenthesesToken
+    | WhitespaceToken;

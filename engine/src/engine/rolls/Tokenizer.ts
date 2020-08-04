@@ -11,6 +11,7 @@ import {
     RightParenthesesToken,
     RollToken,
     Token,
+    WhitespaceToken,
 } from "./Tokens";
 
 class Match {
@@ -41,6 +42,7 @@ const TokenMakers = [
         /^(\d+)(d)(\d+)/,
         (s) => new RollToken(parseInt(s[1]), parseInt(s[3]), s[2])
     ),
+    createMatcher(/^\s+/, (s) => new WhitespaceToken()),
 ];
 
 class TokenizerError extends BaseError {

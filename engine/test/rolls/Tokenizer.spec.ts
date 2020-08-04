@@ -12,7 +12,7 @@ import {
 
 describe("Tokenizer", () => {
     it("should tokenzie", () => {
-        expect(Tokenizer.tokenize("1+3d4+floor(str/2)")).toEqual([
+        expect(Tokenizer.tokenize("1+ 3d4+ floor(str/2)")).toEqual([
             new NumberToken(1),
             new PlusToken(),
             new RollToken(3, 4, "d"),
