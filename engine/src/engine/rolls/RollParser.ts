@@ -73,41 +73,61 @@ export class RollParser {
         const output = new OutputStack();
         const operators = new OperatorStack();
         const tokens = Tokenizer.tokenize(expression);
-        function popOperator(nextOperator?: Operator) {
+        function shiftOperatorToOutput(operator: Operator) {
+            if (operator instanceof PlusToken) {
+                const rhs = output.pop();
+                const lhs = output.pop();
+                output.push(new RollFunction("add", [lhs, rhs]));
+            } else if (operator instanceof MinusToken) {
+                const rhs = output.pop();
+                const lhs = output.pop();
+                output.push(new RollFunction("sub", [lhs, rhs]));
+            } else if (operator instanceof MultiplyToken) {
+                const rhs = output.pop();
+                const lhs = output.pop();
+                output.push(new RollFunction("mul", [lhs, rhs]));
+            } else if (operator instanceof DivideToken) {
+                const rhs = output.pop();
+                const lhs = output.pop();
+                output.push(new RollFunction("div", [lhs, rhs]));
+            } else if (operator instanceof IdentifierToken) {
+                output.push(
+                    // Figure out how to do varargs
+                    new RollFunction(operator.identifier, [output.pop()])
+                );
+            } else if (operator instanceof LeftParenthesesToken) {
+                return;
+            } else {
+                assertExaustive(operator);
+            }
+        }
+        function processOperatorWithPrecedence(nextOperator: Operator) {
             for (
                 let operator = operators.peak();
                 operator != null;
                 operator = operators.peak()
             ) {
-                operators.pop();
                 if (
                     operator == null ||
-                    (nextOperator != null &&
-                        nextOperator.precedence < operator.precedence)
+                    nextOperator.precedence >= operator.precedence
                 ) {
                     return;
                 }
-                if (operator instanceof PlusToken) {
-                    const rhs = output.pop();
-                    const lhs = output.pop();
-                    output.push(new RollFunction("add", [lhs, rhs]));
-                } else if (operator instanceof MinusToken) {
-                    const rhs = output.pop();
-                    const lhs = output.pop();
-                    output.push(new RollFunction("sub", [lhs, rhs]));
-                } else if (operator instanceof MultiplyToken) {
-                    const rhs = output.pop();
-                    const lhs = output.pop();
-                    output.push(new RollFunction("mul", [lhs, rhs]));
-                } else if (operator instanceof DivideToken) {
-                    const rhs = output.pop();
-                    const lhs = output.pop();
-                    output.push(new RollFunction("div", [lhs, rhs]));
-                } else if (operator instanceof LeftParenthesesToken) {
-                    return;
-                } else {
-                    assertExaustive(operator);
+                operators.pop();
+                shiftOperatorToOutput(operator);
+            }
+        }
+        function popParenthesis() {
+            for (
+                let operator = operators.peak();
+                !(operator instanceof LeftParenthesesToken);
+                operator = operators.peak()
+            ) {
+                if (operator == null) {
+                    throw new Error("Unbalanced parenthesis");
                 }
+                operators.pop();
+                shiftOperatorToOutput(operator);
             }
         }
         for (let i = 0; i < tokens.length; i++) {
@@ -133,19 +153,21 @@ export class RollParser {
                 token instanceof DivideToken ||
                 token instanceof MultiplyToken
             ) {
-                popOperator(token);
+                processOperatorWithPrecedence(token);
                 operators.push(token);
             } else if (token instanceof LeftParenthesesToken) {
                 operators.push(token);
             } else if (token instanceof RightParenthesesToken) {
-                operators.push(token);
+                popParenthesis();
             } else if (token instanceof WhitespaceToken) {
             } else {
                 assertExaustive(token);
             }
-            console.log(output, operators);
         }
-        popOperator();
+        let operator: Operator | null = null;
+        while ((operator = operators.pop())) {
+            shiftOperatorToOutput(operator);
+        }
         return output.pop();
     }
 }
