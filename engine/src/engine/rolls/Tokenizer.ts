@@ -1,3 +1,4 @@
+import { Either, left, right } from "fp-ts/Either";
 import { BaseError } from "../../BaseError";
 import { notNull } from "../../utils/Nullable";
 import {
@@ -47,7 +48,7 @@ const TokenMakers = [
     createMatcher(/^\s+/, (s) => new WhitespaceToken()),
 ];
 
-class TokenizerError extends BaseError {
+export class TokenizerError extends BaseError {
     constructor(readonly expression: string, readonly rest: string) {
         super(
             `Failed to token string "${expression.slice(
@@ -59,7 +60,7 @@ class TokenizerError extends BaseError {
 }
 
 export class Tokenizer {
-    static tokenize(expression: string): Token[] {
+    static tokenize(expression: string): Either<TokenizerError, Token[]> {
         let rest = expression;
         const tokens = [];
         while (rest !== "") {
@@ -68,11 +69,11 @@ export class Tokenizer {
                 .sort((a, b) => b.match[0].length - a.match[0].length);
             const match = matches[0];
             if (match == null) {
-                throw new TokenizerError(expression, rest);
+                return left(new TokenizerError(expression, rest));
             }
             tokens.push(match.token);
             rest = rest.slice(match.match[0].length);
         }
-        return tokens;
+        return right(tokens);
     }
 }

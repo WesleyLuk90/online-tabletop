@@ -6557,6 +6557,7 @@ __metadata:
     "@types/node": ^14.0.26
     "@types/uuid": ^8.0.0
     ajv: ^6.12.3
+    fp-ts: ^2.8.1
     jest: ^26.1.0
     json-schema-to-typescript: ^9.1.1
     ts-jest: ^26.1.3
@@ -7665,6 +7666,13 @@ __metadata:
   version: 1.19.5
   resolution: "fp-ts@npm:1.19.5"
   checksum: 4c7922970658b056cd70f3ef4be02861399d2be7285e7d374ac15b04bb82c080fabe4c8419e1ff60182be9afd008898cf32a2dbbf7665930bdfb0526cc4d146f
+  languageName: node
+  linkType: hard
+
+"fp-ts@npm:^2.8.1":
+  version: 2.8.1
+  resolution: "fp-ts@npm:2.8.1"
+  checksum: e263dc94fc09784ece62d9018e80d1f0ec0620ee80bf669bb47c0017e7018fcd37e07b7f97a863a13951c292ddb81d95c86e93e51c47b5bd0020a9355c3a89eb
   languageName: node
   linkType: hard
 
