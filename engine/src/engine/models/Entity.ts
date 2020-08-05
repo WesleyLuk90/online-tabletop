@@ -1,4 +1,5 @@
 import { Collection } from "../../utils/Collection";
+import { Action } from "./Action";
 import { Attribute } from "./Attribute";
 
 export class Entity {

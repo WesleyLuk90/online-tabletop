@@ -7,6 +7,7 @@ import {
     PlusToken,
     RightParenthesesToken,
     RollToken,
+    WhitespaceToken,
 } from "../../src/engine/rolls/Tokens";
 
 describe("Tokenizer", () => {
@@ -14,8 +15,10 @@ describe("Tokenizer", () => {
         expect(Tokenizer.tokenize("1+ 3d4+ floor(str/2)")).toEqual([
             new NumberToken(1),
             new PlusToken(),
+            new WhitespaceToken(),
             new RollToken(3, 4, "d"),
             new PlusToken(),
+            new WhitespaceToken(),
             new IdentifierToken("floor"),
             new LeftParenthesesToken(),
             new IdentifierToken("str"),
