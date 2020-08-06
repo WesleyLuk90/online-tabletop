@@ -13,7 +13,7 @@ import {
 
 describe("Tokenizer", () => {
     it("should tokenize", () => {
-        expect(Tokenizer.tokenize("1+ 3d4+ floor(str/2)")).toEqual(
+        expect(Tokenizer.tokenize("1+ 3d4+ floor(str/2.5)")).toEqual(
             right([
                 new NumberToken(1),
                 new PlusToken(),
@@ -25,7 +25,7 @@ describe("Tokenizer", () => {
                 new LeftParenthesesToken(),
                 new IdentifierToken("str"),
                 new DivideToken(),
-                new NumberToken(2),
+                new NumberToken(2.5),
                 new RightParenthesesToken(),
             ])
         );

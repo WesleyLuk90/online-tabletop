@@ -2,6 +2,7 @@ import { Either, flatten, map, tryCatch } from "fp-ts/lib/Either";
 import { pipe } from "fp-ts/lib/function";
 import { BaseError } from "../../BaseError";
 import { assertExaustive } from "../../utils/Exaustive";
+import { rightOrThrow } from "../../utils/Exceptions";
 import {
     RollExpression,
     RollFunction,
@@ -49,16 +50,7 @@ function isOperator(token: Token) {
     );
 }
 
-class MissingArgumentError extends BaseError {
-    constructor() {
-        super("Missing an argument");
-    }
-}
-class MissingOperatorError extends BaseError {
-    constructor() {
-        super("Missing an operator");
-    }
-}
+class ParseError extends BaseError {}
 
 class FunctionArguments {
     constructor(
@@ -89,7 +81,7 @@ class OutputStack {
     popExpression(): RollExpression {
         const out = this.pop();
         if (out instanceof FunctionArguments) {
-            throw new Error("Unexpected function arguments");
+            throw new ParseError("Unexpected function arguments");
         }
         return out;
     }
@@ -97,7 +89,7 @@ class OutputStack {
     pop(): ExpressionOrArgs {
         const out = this.stack.pop();
         if (out == null) {
-            throw new MissingArgumentError();
+            throw new ParseError("Missing argument");
         }
         return out;
     }
@@ -118,7 +110,7 @@ class OperatorStack {
     }
 }
 
-type ParseError = TokenizerError | MissingArgumentError | MissingOperatorError;
+type ParseOrTokenizeError = TokenizerError | ParseError;
 
 export class RollParser {
     static parse(expression: string): Either<ParseError, RollExpression> {
@@ -132,6 +124,10 @@ export class RollParser {
             ),
             flatten
         );
+    }
+
+    static parseChecked(expression: string): RollExpression {
+        return rightOrThrow(RollParser.parse(expression));
     }
 
     private output = new OutputStack();
@@ -166,7 +162,7 @@ export class RollParser {
                 this.output.push(new RollFunction(operator.identifier, [args]));
             }
         } else if (operator instanceof LeftParenthesesToken) {
-            return;
+            throw new ParseError("Extra left parenthesis");
         } else if (operator instanceof CommaToken) {
             const rhs = this.output.pop();
             const lhs = this.output.pop();
@@ -203,11 +199,12 @@ export class RollParser {
             operator = this.operators.peak()
         ) {
             if (operator == null) {
-                throw new Error("Unbalanced parenthesis");
+                throw new ParseError("Extra right parenthesis");
             }
             this.operators.pop();
             this.shiftOperatorToOutput(operator);
         }
+        this.operators.pop();
     }
 
     private parse(): RollExpression {

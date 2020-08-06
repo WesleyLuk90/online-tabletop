@@ -32,7 +32,10 @@ function createMatcher(regex: RegExp, factory: (e: RegExpMatchArray) => Token) {
 }
 
 const TokenMakers = [
-    createMatcher(/^([0-9]+)/, (s) => new NumberToken(parseFloat(s[1]))),
+    createMatcher(
+        /^([0-9]+(:?\.[0-9]+)?)/,
+        (s) => new NumberToken(parseFloat(s[1]))
+    ),
     createMatcher(/^\+/, (s) => new PlusToken()),
     createMatcher(/^\-/, (s) => new MinusToken()),
     createMatcher(/^\//, (s) => new DivideToken()),

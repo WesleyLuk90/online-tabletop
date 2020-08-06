@@ -1,3 +1,5 @@
+import { RollExpression } from "./RollDefinition";
+
 class BaseAttribute {
     constructor(readonly id: string, readonly name: string) {}
 }
@@ -28,7 +30,18 @@ export class SubEntityAttributeDescription extends BaseAttribute {
     }
 }
 
+export class ComputedAttributeDescription extends BaseAttribute {
+    static create(id: string, name: string, expression: RollExpression) {
+        return new ComputedAttributeDescription(id, name, expression);
+    }
+
+    constructor(id: string, name: string, readonly expression: RollExpression) {
+        super(id, name);
+    }
+}
+
 export type AttributeDescription =
     | NumberAttributeDescription
     | StringAttributeDescription
-    | SubEntityAttributeDescription;
+    | SubEntityAttributeDescription
+    | ComputedAttributeDescription;
