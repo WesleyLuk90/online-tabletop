@@ -9,44 +9,40 @@ import { RollParser } from "../../engine/rolls/RollParser";
 import { Collection } from "../../utils/Collection";
 import { ItemEntityType } from "./ItemEntityType";
 
-const StrengthAttribute = NumberAttributeDescription.create("str", "Str", 10);
-const DexterityAttribute = NumberAttributeDescription.create("dex", "dex", 10);
-const ConstitutionAttribute = NumberAttributeDescription.create(
-    "con",
-    "con",
-    10
-);
-
-const IntelligenceAttribute = NumberAttributeDescription.create(
-    "int",
-    "int",
-    10
-);
-const WisdomAttribute = NumberAttributeDescription.create("wis", "wis", 10);
-const CharismaAttribute = NumberAttributeDescription.create("cha", "cha", 10);
-
 const InventoryAttribute = SubEntityAttributeDescription.create(
     "inventory",
     "Inventory",
     ItemEntityType.id
 );
 
+class AbilityScore {
+    constructor(readonly shortName: string, readonly name: string) {}
+}
+
+const AbilityScores = [
+    new AbilityScore("str", "Strength"),
+    new AbilityScore("dex", "Dexterity"),
+    new AbilityScore("con", "Constitution"),
+    new AbilityScore("int", "Intelligence"),
+    new AbilityScore("wis", "Wisdom"),
+    new AbilityScore("cha", "Charisma"),
+];
+
 export const CreatureEntityType = new EntityType(
     "creature",
     "Creature",
     "Creatures",
     Collection.of<AttributeDescription>(
-        StrengthAttribute,
-        DexterityAttribute,
-        ConstitutionAttribute,
-        IntelligenceAttribute,
-        WisdomAttribute,
-        CharismaAttribute,
-        InventoryAttribute,
-        ComputedAttributeDescription.create(
-            "str_mod",
-            "Str Mod",
-            RollParser.parseChecked("floor((str-10)/2)")
-        )
+        ...AbilityScores.map((s) =>
+            NumberAttributeDescription.create(s.shortName, s.name, 10)
+        ),
+        ...AbilityScores.map((s) =>
+            ComputedAttributeDescription.create(
+                `${s.shortName}_mod`,
+                `${s.name} Modifier`,
+                RollParser.parseChecked(`floor((${s.shortName}) / 10) - 2)`)
+            )
+        ),
+        InventoryAttribute
     )
 );
