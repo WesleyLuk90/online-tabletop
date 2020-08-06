@@ -8,6 +8,7 @@ import { CreatureEntityType } from "../src/gamemodes/5e/CreatureEntityType";
 import { FifthEditionGameMode } from "../src/gamemodes/5e/FifthEdition";
 import { ItemEntityType } from "../src/gamemodes/5e/ItemEntityType";
 import { Collection } from "../src/utils/Collection";
+import { rightOrThrow } from "../src/utils/Exceptions";
 import { uuid } from "../src/utils/Uuid";
 
 describe("Game", () => {
@@ -32,7 +33,11 @@ describe("Game", () => {
                     "melee_attack",
                     "Melee Attack",
                     "Melee Attack",
-                    RollParser.parse("1d4+max(str_weapon_mod,dex_weapon_mod)")
+                    rightOrThrow(
+                        RollParser.parse(
+                            "1d4+max(str_weapon_mod,dex_weapon_mod)"
+                        )
+                    )
                 )
             )
         );

@@ -1,3 +1,5 @@
+import { Either, flatten, map, tryCatch } from "fp-ts/lib/Either";
+import { pipe } from "fp-ts/lib/function";
 import { BaseError } from "../../BaseError";
 import { assertExaustive } from "../../utils/Exaustive";
 import {
@@ -6,7 +8,7 @@ import {
     RollLiteral,
     RollVariable,
 } from "../models/RollDefinition";
-import { Tokenizer } from "./Tokenizer";
+import { Tokenizer, TokenizerError } from "./Tokenizer";
 import {
     CommaToken,
     DivideToken,
@@ -18,8 +20,13 @@ import {
     PlusToken,
     RightParenthesesToken,
     RollToken,
+    Token,
     WhitespaceToken,
 } from "./Tokens";
+
+class UnaryMinus {
+    readonly precedence = 10;
+}
 
 type Operator =
     | PlusToken
@@ -28,7 +35,19 @@ type Operator =
     | MultiplyToken
     | LeftParenthesesToken
     | IdentifierToken
-    | CommaToken;
+    | CommaToken
+    | UnaryMinus;
+
+function isOperator(token: Token) {
+    return (
+        token instanceof PlusToken ||
+        token instanceof MinusToken ||
+        token instanceof DivideToken ||
+        token instanceof MultiplyToken ||
+        token instanceof LeftParenthesesToken ||
+        token instanceof CommaToken
+    );
+}
 
 class MissingArgumentError extends BaseError {
     constructor() {
@@ -99,88 +118,111 @@ class OperatorStack {
     }
 }
 
+type ParseError = TokenizerError | MissingArgumentError | MissingOperatorError;
+
 export class RollParser {
-    static parse(expression: string): RollExpression {
-        const output = new OutputStack();
-        const operators = new OperatorStack();
-        const tokens = Tokenizer.tokenize(expression);
-        function shiftOperatorToOutput(operator: Operator) {
-            if (operator instanceof PlusToken) {
-                const rhs = output.popExpression();
-                const lhs = output.popExpression();
-                output.push(new RollFunction("add", [lhs, rhs]));
-            } else if (operator instanceof MinusToken) {
-                const rhs = output.popExpression();
-                const lhs = output.popExpression();
-                output.push(new RollFunction("sub", [lhs, rhs]));
-            } else if (operator instanceof MultiplyToken) {
-                const rhs = output.popExpression();
-                const lhs = output.popExpression();
-                output.push(new RollFunction("mul", [lhs, rhs]));
-            } else if (operator instanceof DivideToken) {
-                const rhs = output.popExpression();
-                const lhs = output.popExpression();
-                output.push(new RollFunction("div", [lhs, rhs]));
-            } else if (operator instanceof IdentifierToken) {
-                const args = output.pop();
-                if (args instanceof FunctionArguments) {
-                    output.push(
-                        new RollFunction(operator.identifier, args.flatten())
-                    );
-                } else {
-                    output.push(new RollFunction(operator.identifier, [args]));
-                }
-            } else if (operator instanceof LeftParenthesesToken) {
-                return;
-            } else if (operator instanceof CommaToken) {
-                const rhs = output.pop();
-                const lhs = output.pop();
-                output.push(new FunctionArguments(lhs, rhs));
+    static parse(expression: string): Either<ParseError, RollExpression> {
+        return pipe(
+            Tokenizer.tokenize(expression),
+            map((tokens) =>
+                tryCatch(
+                    () => new RollParser(tokens).parse(),
+                    (a) => a as ParseError
+                )
+            ),
+            flatten
+        );
+    }
+
+    private output = new OutputStack();
+    private operators = new OperatorStack();
+
+    private constructor(private tokens: Token[]) {}
+
+    private shiftOperatorToOutput(operator: Operator) {
+        if (operator instanceof PlusToken) {
+            const rhs = this.output.popExpression();
+            const lhs = this.output.popExpression();
+            this.output.push(new RollFunction("add", [lhs, rhs]));
+        } else if (operator instanceof MinusToken) {
+            const rhs = this.output.popExpression();
+            const lhs = this.output.popExpression();
+            this.output.push(new RollFunction("sub", [lhs, rhs]));
+        } else if (operator instanceof MultiplyToken) {
+            const rhs = this.output.popExpression();
+            const lhs = this.output.popExpression();
+            this.output.push(new RollFunction("mul", [lhs, rhs]));
+        } else if (operator instanceof DivideToken) {
+            const rhs = this.output.popExpression();
+            const lhs = this.output.popExpression();
+            this.output.push(new RollFunction("div", [lhs, rhs]));
+        } else if (operator instanceof IdentifierToken) {
+            const args = this.output.pop();
+            if (args instanceof FunctionArguments) {
+                this.output.push(
+                    new RollFunction(operator.identifier, args.flatten())
+                );
             } else {
-                assertExaustive(operator);
+                this.output.push(new RollFunction(operator.identifier, [args]));
             }
+        } else if (operator instanceof LeftParenthesesToken) {
+            return;
+        } else if (operator instanceof CommaToken) {
+            const rhs = this.output.pop();
+            const lhs = this.output.pop();
+            this.output.push(new FunctionArguments(lhs, rhs));
+        } else if (operator instanceof UnaryMinus) {
+            const value = this.output.popExpression();
+            this.output.push(new RollFunction("neg", [value]));
+        } else {
+            assertExaustive(operator);
         }
-        function processOperatorWithPrecedence(nextOperator: Operator) {
-            for (
-                let operator = operators.peak();
-                operator != null;
-                operator = operators.peak()
+    }
+
+    private processOperatorWithPrecedence(nextOperator: Operator) {
+        for (
+            let operator = this.operators.peak();
+            operator != null;
+            operator = this.operators.peak()
+        ) {
+            if (
+                operator == null ||
+                nextOperator.precedence >= operator.precedence
             ) {
-                if (
-                    operator == null ||
-                    nextOperator.precedence >= operator.precedence
-                ) {
-                    return;
-                }
-                operators.pop();
-                shiftOperatorToOutput(operator);
+                return;
             }
+            this.operators.pop();
+            this.shiftOperatorToOutput(operator);
         }
-        function popParenthesis() {
-            for (
-                let operator = operators.peak();
-                !(operator instanceof LeftParenthesesToken);
-                operator = operators.peak()
-            ) {
-                if (operator == null) {
-                    throw new Error("Unbalanced parenthesis");
-                }
-                operators.pop();
-                shiftOperatorToOutput(operator);
+    }
+
+    private popParenthesis() {
+        for (
+            let operator = this.operators.peak();
+            !(operator instanceof LeftParenthesesToken);
+            operator = this.operators.peak()
+        ) {
+            if (operator == null) {
+                throw new Error("Unbalanced parenthesis");
             }
+            this.operators.pop();
+            this.shiftOperatorToOutput(operator);
         }
-        for (let i = 0; i < tokens.length; i++) {
-            const token = tokens[i];
+    }
+
+    private parse(): RollExpression {
+        for (let i = 0; i < this.tokens.length; i++) {
+            const token = this.tokens[i];
             if (token instanceof NumberToken) {
-                output.push(new RollLiteral(token.number));
+                this.output.push(new RollLiteral(token.number));
             } else if (token instanceof IdentifierToken) {
-                if (tokens[i + 1] instanceof LeftParenthesesToken) {
-                    operators.push(token);
+                if (this.tokens[i + 1] instanceof LeftParenthesesToken) {
+                    this.operators.push(token);
                 } else {
-                    output.push(new RollVariable(token.identifier));
+                    this.output.push(new RollVariable(token.identifier));
                 }
             } else if (token instanceof RollToken) {
-                output.push(
+                this.output.push(
                     new RollFunction("roll", [
                         new RollLiteral(token.lhs),
                         new RollLiteral(token.rhs),
@@ -188,26 +230,30 @@ export class RollParser {
                 );
             } else if (
                 token instanceof PlusToken ||
-                token instanceof MinusToken ||
+                (token instanceof MinusToken &&
+                    i != 0 &&
+                    !isOperator(this.tokens[i - 1])) ||
                 token instanceof DivideToken ||
                 token instanceof MultiplyToken ||
                 token instanceof CommaToken
             ) {
-                processOperatorWithPrecedence(token);
-                operators.push(token);
+                this.processOperatorWithPrecedence(token);
+                this.operators.push(token);
+            } else if (token instanceof MinusToken) {
+                this.operators.push(new UnaryMinus());
             } else if (token instanceof LeftParenthesesToken) {
-                operators.push(token);
+                this.operators.push(token);
             } else if (token instanceof RightParenthesesToken) {
-                popParenthesis();
+                this.popParenthesis();
             } else if (token instanceof WhitespaceToken) {
             } else {
                 assertExaustive(token);
             }
         }
         let operator: Operator | null = null;
-        while ((operator = operators.pop())) {
-            shiftOperatorToOutput(operator);
+        while ((operator = this.operators.pop())) {
+            this.shiftOperatorToOutput(operator);
         }
-        return output.popExpression();
+        return this.output.popExpression();
     }
 }

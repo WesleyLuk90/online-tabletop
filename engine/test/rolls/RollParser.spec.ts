@@ -4,28 +4,49 @@ import {
     RollVariable,
 } from "../../src/engine/models/RollDefinition";
 import { RollParser } from "../../src/engine/rolls/RollParser";
+import { rightOrThrow } from "../../src/utils/Exceptions";
 
 describe("RollParser", () => {
     it("should parse simple", () => {
-        expect(RollParser.parse("1+3")).toEqual(
+        expect(rightOrThrow(RollParser.parse("1+3"))).toEqual(
             new RollFunction("add", [new RollLiteral(1), new RollLiteral(3)])
         );
-        expect(RollParser.parse("1-3")).toEqual(
+        expect(rightOrThrow(RollParser.parse("1-3"))).toEqual(
             new RollFunction("sub", [new RollLiteral(1), new RollLiteral(3)])
         );
-        expect(RollParser.parse("1*3")).toEqual(
+        expect(rightOrThrow(RollParser.parse("1*3"))).toEqual(
             new RollFunction("mul", [new RollLiteral(1), new RollLiteral(3)])
         );
-        expect(RollParser.parse("1/3")).toEqual(
+        expect(rightOrThrow(RollParser.parse("1/3"))).toEqual(
             new RollFunction("div", [new RollLiteral(1), new RollLiteral(3)])
         );
-        expect(RollParser.parse("floor(10)")).toEqual(
+        expect(rightOrThrow(RollParser.parse("floor(10)"))).toEqual(
             new RollFunction("floor", [new RollLiteral(10)])
         );
     });
 
+    it("should handle unary operators", () => {
+        expect(rightOrThrow(RollParser.parse("-1"))).toEqual(
+            new RollFunction("neg", [new RollLiteral(1)])
+        );
+        expect(rightOrThrow(RollParser.parse("1---1"))).toEqual(
+            new RollFunction("sub", [
+                new RollLiteral(1),
+                new RollFunction("neg", [
+                    new RollFunction("neg", [new RollLiteral(1)]),
+                ]),
+            ])
+        );
+        expect(rightOrThrow(RollParser.parse("-1*3"))).toEqual(
+            new RollFunction("mul", [
+                new RollFunction("neg", [new RollLiteral(1)]),
+                new RollLiteral(3),
+            ])
+        );
+    });
+
     it("should parse order of operations", () => {
-        expect(RollParser.parse("1+2-3*4/5")).toEqual(
+        expect(rightOrThrow(RollParser.parse("1+2-3*4/5"))).toEqual(
             new RollFunction("add", [
                 new RollLiteral(1),
                 new RollFunction("sub", [
@@ -40,7 +61,7 @@ describe("RollParser", () => {
                 ]),
             ])
         );
-        expect(RollParser.parse("1/2+3*4")).toEqual(
+        expect(rightOrThrow(RollParser.parse("1/2+3*4"))).toEqual(
             new RollFunction("add", [
                 new RollFunction("div", [
                     new RollLiteral(1),
@@ -54,7 +75,7 @@ describe("RollParser", () => {
         );
     });
     it("should handle parenthesis", () => {
-        expect(RollParser.parse("1*(2+3)/4")).toEqual(
+        expect(rightOrThrow(RollParser.parse("1*(2+3)/4"))).toEqual(
             new RollFunction("mul", [
                 new RollLiteral(1),
                 new RollFunction("div", [
@@ -69,7 +90,7 @@ describe("RollParser", () => {
     });
 
     it("should multi args", () => {
-        expect(RollParser.parse("min(1, 2, 3)")).toEqual(
+        expect(rightOrThrow(RollParser.parse("min(1, 2, 3)"))).toEqual(
             new RollFunction("min", [
                 new RollLiteral(1),
                 new RollLiteral(2),
@@ -79,7 +100,7 @@ describe("RollParser", () => {
     });
 
     it("should parse", () => {
-        expect(RollParser.parse("1+3d4+floor(str/2)")).toEqual(
+        expect(rightOrThrow(RollParser.parse("1+3d4+floor(str/2)"))).toEqual(
             new RollFunction("add", [
                 new RollLiteral(1),
                 new RollFunction("add", [
