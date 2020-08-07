@@ -1,7 +1,9 @@
 import { Collection } from "../../utils/Collection";
 import { GameMode } from "../gamemode/GameMode";
+import { ActionReference } from "./ActionReference";
 import { Entity } from "./Entity";
 import { EntityTemplate } from "./EntityTemplate";
+import { PreparedAction } from "./PreparedAction";
 import { Scene } from "./Scene";
 
 export class Campaign {
@@ -44,5 +46,9 @@ export class Campaign {
         return this.update({
             entityTemplates: this.entityTemplates.add(entityTemplate),
         });
+    }
+
+    prepareAction(actionReference: ActionReference): PreparedAction {
+        return new PreparedAction();
     }
 }

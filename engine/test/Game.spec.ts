@@ -1,5 +1,10 @@
 import { Action } from "../src/engine/models/Action";
-import { NumberAttribute } from "../src/engine/models/Attribute";
+import { ActionReference } from "../src/engine/models/ActionReference";
+import {
+    Attribute,
+    NumberAttribute,
+    SubEntityAttribute,
+} from "../src/engine/models/Attribute";
 import { Campaign } from "../src/engine/models/Campaign";
 import { Entity } from "../src/engine/models/Entity";
 import { EntityTemplate } from "../src/engine/models/EntityTemplate";
@@ -13,17 +18,6 @@ import { uuid } from "../src/utils/Uuid";
 
 describe("Game", () => {
     it("should", () => {
-        const pcTemplate = new EntityTemplate(
-            uuid(),
-            CreatureEntityType.id,
-            Collection.empty(),
-            Collection.empty()
-        );
-        const pc = new Entity(
-            uuid(),
-            pcTemplate.id,
-            Collection.of(new NumberAttribute("strength", 15))
-        );
         const daggerTemplate = new EntityTemplate(
             uuid(),
             ItemEntityType.id,
@@ -47,10 +41,27 @@ describe("Game", () => {
             Collection.empty(),
             Collection.of()
         );
-        Campaign.empty(uuid(), "Game", FifthEditionGameMode)
+        const pcTemplate = new EntityTemplate(
+            uuid(),
+            CreatureEntityType.id,
+            Collection.empty(),
+            Collection.empty()
+        );
+        const pc = new Entity(
+            uuid(),
+            pcTemplate.id,
+            Collection.of<Attribute>(
+                new NumberAttribute("strength", 15),
+                new SubEntityAttribute("inventory", Collection.of(dagger))
+            )
+        );
+        const campaign = Campaign.empty(uuid(), "Game", FifthEditionGameMode)
             .addEntityTemplate(pcTemplate)
             .addEntity(pc)
-            .addEntityTemplate(daggerTemplate)
-            .addEntity(dagger);
+            .addEntityTemplate(daggerTemplate);
+
+        const preparedAction = campaign.prepareAction(
+            new ActionReference([pc.id, dagger.id], "melee_attack")
+        );
     });
 });

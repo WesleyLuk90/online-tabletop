@@ -1,3 +1,6 @@
+import { Collection } from "../../utils/Collection";
+import { Entity } from "./Entity";
+
 class BaseAttribute {
     constructor(readonly id: string) {}
 }
@@ -8,4 +11,10 @@ export class NumberAttribute extends BaseAttribute {
     }
 }
 
-export type Attribute = NumberAttribute;
+export class SubEntityAttribute extends BaseAttribute {
+    constructor(id: string, readonly subEntities: Collection<Entity>) {
+        super(id);
+    }
+}
+
+export type Attribute = NumberAttribute | SubEntityAttribute;
