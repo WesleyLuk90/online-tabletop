@@ -1,9 +1,7 @@
 import { Collection } from "../../utils/Collection";
 import { GameMode } from "../gamemode/GameMode";
-import { ActionReference } from "./ActionReference";
 import { Entity } from "./Entity";
 import { EntityTemplate } from "./EntityTemplate";
-import { PreparedAction } from "./PreparedAction";
 import { Scene } from "./Scene";
 
 export class Campaign {
@@ -27,6 +25,14 @@ export class Campaign {
         readonly gameMode: GameMode
     ) {}
 
+    getEntity(id: string) {
+        return this.entities.get(id);
+    }
+
+    getEntityTemplate(id: string) {
+        return this.entityTemplates.get(id);
+    }
+
     update(campaign: Partial<Campaign>): Campaign {
         return new Campaign(
             campaign.id ?? this.id,
@@ -46,9 +52,5 @@ export class Campaign {
         return this.update({
             entityTemplates: this.entityTemplates.add(entityTemplate),
         });
-    }
-
-    prepareAction(actionReference: ActionReference): PreparedAction {
-        return new PreparedAction();
     }
 }

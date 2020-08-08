@@ -1,5 +1,4 @@
 import { Action } from "../src/engine/models/Action";
-import { ActionReference } from "../src/engine/models/ActionReference";
 import {
     Attribute,
     NumberAttribute,
@@ -59,9 +58,5 @@ describe("Game", () => {
             .addEntityTemplate(pcTemplate)
             .addEntity(pc)
             .addEntityTemplate(daggerTemplate);
-
-        const preparedAction = campaign.prepareAction(
-            new ActionReference([pc.id, dagger.id], "melee_attack")
-        );
     });
 });

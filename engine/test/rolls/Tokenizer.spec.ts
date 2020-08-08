@@ -13,7 +13,9 @@ import {
 
 describe("Tokenizer", () => {
     it("should tokenize", () => {
-        expect(Tokenizer.tokenize("1+ 3d4+ floor(str/2.5)")).toEqual(
+        expect(
+            Tokenizer.tokenize("1+ 3d4+ floor(str/2.5)+str_bonus+strMod")
+        ).toEqual(
             right([
                 new NumberToken(1),
                 new PlusToken(),
@@ -27,6 +29,10 @@ describe("Tokenizer", () => {
                 new DivideToken(),
                 new NumberToken(2.5),
                 new RightParenthesesToken(),
+                new PlusToken(),
+                new IdentifierToken("str_bonus"),
+                new PlusToken(),
+                new IdentifierToken("strMod"),
             ])
         );
     });

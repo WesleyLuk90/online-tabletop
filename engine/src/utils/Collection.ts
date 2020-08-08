@@ -1,3 +1,5 @@
+import { fromNullable, Option } from "fp-ts/lib/Option";
+
 interface Element {
     id: string;
 }
@@ -19,8 +21,19 @@ export class Collection<T extends Element> {
 
     add(element: T): Collection<T> {
         const collection = new Collection<T>();
-        collection.byId = new Map(collection.byId);
+        collection.byId = new Map(this.byId);
         collection.byId.set(element.id, element);
         return collection;
+    }
+
+    addAll(collection: Collection<T>): Collection<T> {
+        const newCollection = new Collection<T>();
+        newCollection.byId = new Map(this.byId);
+        collection.byId.forEach((v, k) => newCollection.byId.set(k, v));
+        return newCollection;
+    }
+
+    get(id: string): Option<T> {
+        return fromNullable(this.byId.get(id));
     }
 }

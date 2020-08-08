@@ -40,7 +40,7 @@ export const CreatureEntityType = new EntityType(
             ComputedAttributeDescription.create(
                 `${s.shortName}_mod`,
                 `${s.name} Modifier`,
-                RollParser.parseChecked(`floor((${s.shortName}) / 10) - 2)`)
+                RollParser.parseChecked(`floor((${s.shortName}) / 10)`)
             )
         ),
         InventoryAttribute

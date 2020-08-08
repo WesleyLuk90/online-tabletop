@@ -12,6 +12,10 @@ export class NumberAttribute extends BaseAttribute {
 }
 
 export class SubEntityAttribute extends BaseAttribute {
+    static is(t: Attribute): t is SubEntityAttribute {
+        return t instanceof SubEntityAttribute;
+    }
+
     constructor(id: string, readonly subEntities: Collection<Entity>) {
         super(id);
     }
