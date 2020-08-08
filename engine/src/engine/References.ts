@@ -3,7 +3,7 @@ import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
 import { BaseError } from "../BaseError";
 import { rightOrThrow } from "../utils/Exceptions";
-import { lazy } from "../utils/Lazy";
+import { ignoreEquality, lazy } from "../utils/Lazy";
 import { SubEntityAttribute } from "./models/Attribute";
 import { Campaign } from "./models/Campaign";
 import { Entity } from "./models/Entity";
@@ -29,7 +29,9 @@ class EntityTemplateNotFound extends BaseError {
 }
 
 export class ResolvedEntity {
-    constructor(readonly entity: Entity, readonly template: EntityTemplate) {}
+    constructor(readonly entity: Entity, readonly template: EntityTemplate) {
+        ignoreEquality(this, "attributes");
+    }
 
     readonly attributes = lazy(() =>
         this.entity.attributes.addAll(this.template.attributes)

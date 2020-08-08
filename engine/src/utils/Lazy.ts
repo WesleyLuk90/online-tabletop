@@ -7,3 +7,10 @@ export function lazy<T extends any>(create: () => T): () => T {
         return t;
     };
 }
+
+export function ignoreEquality<T>(object: T, key: keyof T) {
+    Object.defineProperty(object, key, {
+        enumerable: false,
+        value: object[key],
+    });
+}
