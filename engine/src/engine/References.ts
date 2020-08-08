@@ -8,6 +8,7 @@ import { SubEntityAttribute } from "./models/Attribute";
 import { Campaign } from "./models/Campaign";
 import { Entity } from "./models/Entity";
 import { EntityTemplate } from "./models/EntityTemplate";
+import { EntityType } from "./models/EntityType";
 import { EntityReference, SubEntityReference } from "./models/Reference";
 
 export class SubEntityNotFound extends BaseError {
@@ -27,9 +28,18 @@ export class EntityTemplateNotFound extends BaseError {
         super(`No entity template with id ${id} found`);
     }
 }
+export class InvalidEntityType extends BaseError {
+    constructor(readonly id: string) {
+        super(`Invalid entity type ${id} found`);
+    }
+}
 
 export class ResolvedEntity {
-    constructor(readonly entity: Entity, readonly template: EntityTemplate) {
+    constructor(
+        readonly entity: Entity,
+        readonly template: EntityTemplate,
+        readonly entityType: EntityType
+    ) {
         ignoreEquality(this, "attributes");
     }
 
@@ -41,7 +51,8 @@ export class ResolvedEntity {
 export type ResolutionError =
     | EntityNotFound
     | EntityTemplateNotFound
-    | SubEntityNotFound;
+    | SubEntityNotFound
+    | InvalidEntityType;
 
 export class References {
     static resolveChecked(
@@ -56,16 +67,22 @@ export class References {
         campaign: Campaign
     ): Either<ResolutionError, ResolvedEntity[]> {
         const entityID = reference.entityID;
-        let entity = campaign.getEntity(entityID);
+        const entity = campaign.getEntity(entityID);
         if (O.isNone(entity)) {
             return left(new EntityNotFound(entityID));
         }
-        let template = campaign.getEntityTemplate(entity.value.templateId);
+        const template = campaign.getEntityTemplate(entity.value.templateId);
         if (O.isNone(template)) {
             return left(new EntityTemplateNotFound(entity.value.templateId));
         }
+        const type = campaign.gameMode.entityTypes.get(
+            template.value.entityType
+        );
+        if (O.isNone(type)) {
+            return left(new InvalidEntityType(template.value.entityType));
+        }
         const entities: ResolvedEntity[] = [
-            new ResolvedEntity(entity.value, template.value),
+            new ResolvedEntity(entity.value, template.value, type.value),
         ];
         let lastEntity = entities[0];
         for (let subEntityReference of reference.subEntities) {
@@ -93,14 +110,33 @@ export class References {
             O.filter(SubEntityAttribute.is),
             O.map((a) => a.subEntities.get(subEntityReference.entityID)),
             O.flatten,
-            O.map((e) =>
-                pipe(
-                    campaign.getEntityTemplate(e.templateId),
-                    O.map((temp) => new ResolvedEntity(e, temp))
-                )
-            ),
+            O.map((entity) => References.resolveTemplate(campaign, entity)),
             O.flatten,
             fromOption(() => new SubEntityNotFound(subEntityReference))
+        );
+    }
+
+    static resolveTemplate(
+        campaign: Campaign,
+        entity: Entity
+    ): O.Option<ResolvedEntity> {
+        return pipe(
+            campaign.getEntityTemplate(entity.templateId),
+            O.map((template) =>
+                References.resolveType(campaign, entity, template)
+            ),
+            O.flatten
+        );
+    }
+
+    static resolveType(
+        campaign: Campaign,
+        entity: Entity,
+        template: EntityTemplate
+    ): O.Option<ResolvedEntity> {
+        return pipe(
+            campaign.gameMode.entityTypes.get(template.entityType),
+            O.map((type) => new ResolvedEntity(entity, template, type))
         );
     }
 }

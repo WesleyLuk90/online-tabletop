@@ -9,6 +9,8 @@ import {
     ResolvedEntity,
     SubEntityNotFound,
 } from "../../src/engine/References";
+import { CreatureEntityType } from "../../src/gamemodes/5e/CreatureEntityType";
+import { ItemEntityType } from "../../src/gamemodes/5e/ItemEntityType";
 import {
     Character,
     CharacterTemplate,
@@ -27,8 +29,12 @@ describe("References", () => {
                 TestCampaign
             )
         ).toEqual([
-            new ResolvedEntity(Character, CharacterTemplate),
-            new ResolvedEntity(Dagger, DaggerTemplate),
+            new ResolvedEntity(
+                Character,
+                CharacterTemplate,
+                CreatureEntityType
+            ),
+            new ResolvedEntity(Dagger, DaggerTemplate, ItemEntityType),
         ]);
     });
 
