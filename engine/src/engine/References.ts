@@ -38,7 +38,7 @@ export class ResolvedEntity {
     );
 }
 
-type ResolutionError =
+export type ResolutionError =
     | EntityNotFound
     | EntityTemplateNotFound
     | SubEntityNotFound;

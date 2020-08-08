@@ -3,8 +3,8 @@ import {
     RollFunction,
     RollLiteral,
     RollVariable,
-} from "../../src/engine/models/RollDefinition";
-import { RollParser } from "../../src/engine/rolls/RollParser";
+} from "../../../src/engine/models/RollDefinition";
+import { RollParser } from "../../../src/engine/rolls/RollParser";
 
 describe("RollParser", () => {
     it("should parse simple", () => {

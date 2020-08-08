@@ -1,5 +1,5 @@
 import { left, right } from "fp-ts/lib/Either";
-import { Tokenizer, TokenizerError } from "../../src/engine/rolls/Tokenizer";
+import { Tokenizer, TokenizerError } from "../../../src/engine/rolls/Tokenizer";
 import {
     DivideToken,
     IdentifierToken,
@@ -9,7 +9,7 @@ import {
     RightParenthesesToken,
     RollToken,
     WhitespaceToken,
-} from "../../src/engine/rolls/Tokens";
+} from "../../../src/engine/rolls/Tokens";
 
 describe("Tokenizer", () => {
     it("should tokenize", () => {
