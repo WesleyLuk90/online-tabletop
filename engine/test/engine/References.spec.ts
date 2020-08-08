@@ -1,8 +1,14 @@
+import { left } from "fp-ts/lib/Either";
 import {
     EntityReference,
     SubEntityReference,
 } from "../../src/engine/models/Reference";
-import { References, ResolvedEntity } from "../../src/engine/References";
+import {
+    EntityNotFound,
+    References,
+    ResolvedEntity,
+    SubEntityNotFound,
+} from "../../src/engine/References";
 import {
     Character,
     CharacterTemplate,
@@ -24,5 +30,23 @@ describe("References", () => {
             new ResolvedEntity(Character, CharacterTemplate),
             new ResolvedEntity(Dagger, DaggerTemplate),
         ]);
+    });
+
+    it("should error", () => {
+        expect(
+            References.resolve(new EntityReference("nope", []), TestCampaign)
+        ).toEqual(left(new EntityNotFound("nope")));
+        expect(
+            References.resolve(
+                new EntityReference(Character.id, [
+                    new SubEntityReference("nope", Dagger.id),
+                ]),
+                TestCampaign
+            )
+        ).toEqual(
+            left(
+                new SubEntityNotFound(new SubEntityReference("nope", Dagger.id))
+            )
+        );
     });
 });

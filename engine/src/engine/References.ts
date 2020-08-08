@@ -10,19 +10,19 @@ import { Entity } from "./models/Entity";
 import { EntityTemplate } from "./models/EntityTemplate";
 import { EntityReference, SubEntityReference } from "./models/Reference";
 
-class SubEntityNotFound extends BaseError {
+export class SubEntityNotFound extends BaseError {
     constructor(readonly subEntityReference: SubEntityReference) {
         super(
             `No sub entity for attribute ${subEntityReference.attribute} with id ${subEntityReference.entityID} found`
         );
     }
 }
-class EntityNotFound extends BaseError {
+export class EntityNotFound extends BaseError {
     constructor(readonly id: string) {
         super(`No entity with id ${id} found`);
     }
 }
-class EntityTemplateNotFound extends BaseError {
+export class EntityTemplateNotFound extends BaseError {
     constructor(readonly id: string) {
         super(`No entity template with id ${id} found`);
     }
