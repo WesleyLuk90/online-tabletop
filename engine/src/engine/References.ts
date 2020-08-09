@@ -3,7 +3,6 @@ import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
 import { BaseError } from "../BaseError";
 import { rightOrThrow } from "../utils/Exceptions";
-import { flatMap } from "../utils/FlatMap";
 import { ignoreEquality, lazy } from "../utils/Lazy";
 import { SubEntityAttribute } from "./models/Attribute";
 import { Campaign } from "./models/Campaign";
@@ -113,8 +112,8 @@ export class References {
         return pipe(
             resolvedEntity.attributes().get(subEntityReference.attribute),
             O.filter(SubEntityAttribute.is),
-            flatMap((a) => a.subEntities.get(subEntityReference.entityID)),
-            flatMap((entity) => References.resolveTemplate(campaign, entity)),
+            O.chain((a) => a.subEntities.get(subEntityReference.entityID)),
+            O.chain((entity) => References.resolveTemplate(campaign, entity)),
             fromOption(() => new SubEntityNotFound(subEntityReference))
         );
     }
@@ -125,7 +124,7 @@ export class References {
     ): O.Option<ResolvedEntity> {
         return pipe(
             campaign.getEntityTemplate(entity.templateId),
-            flatMap((template) =>
+            O.chain((template) =>
                 References.resolveType(campaign, entity, template)
             )
         );
