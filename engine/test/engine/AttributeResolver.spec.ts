@@ -1,5 +1,6 @@
 import { left } from "fp-ts/lib/Either";
 import {
+    AttributeNotFound,
     AttributeResolver,
     RecursiveDefinition,
     ResolvedAttribute,
@@ -72,5 +73,27 @@ describe("AttributeResolver", () => {
                 "str_mod"
             )
         ).toEqual(left(new RecursiveDefinition("str_mod", ["str_mod", "str"])));
+    });
+
+    it("should error on unknown variables", () => {
+        expect(
+            AttributeResolver.resolve(
+                new CascadingEntity([
+                    new ResolvedEntity(
+                        Character.copy({
+                            attributes: Character.attributes.add(
+                                new ComputedAttribute(
+                                    "str",
+                                    RollParser.parseChecked("foo")
+                                )
+                            ),
+                        }),
+                        CharacterTemplate,
+                        CreatureEntityType
+                    ),
+                ]),
+                "str_mod"
+            )
+        ).toEqual(left(new AttributeNotFound("foo")));
     });
 });
