@@ -15,4 +15,19 @@ export class Entity {
         this.attributes = attributes ?? Collection.empty();
         this.actions = actions ?? Collection.empty();
     }
+
+    copy({
+        attributes,
+        actions,
+    }: {
+        attributes?: Collection<Attribute>;
+        actions?: Collection<Action>;
+    }): Entity {
+        return new Entity(
+            this.id,
+            this.templateId,
+            attributes ?? this.attributes,
+            actions ?? this.actions
+        );
+    }
 }

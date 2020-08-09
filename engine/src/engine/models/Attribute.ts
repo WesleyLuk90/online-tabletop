@@ -1,4 +1,5 @@
 import { Collection } from "../../utils/Collection";
+import { NumberToken } from "../rolls/Tokens";
 import { Entity } from "./Entity";
 import { RollExpression } from "./RollDefinition";
 
@@ -29,6 +30,12 @@ export class SubEntityAttribute extends BaseAttribute {
 }
 
 export type NumericAttribute = NumberAttribute | ComputedAttribute;
+
+export function isNumericAttribute(
+    attr: BaseAttribute
+): attr is NumericAttribute {
+    return attr instanceof NumberToken || attr instanceof ComputedAttribute;
+}
 
 export type Attribute =
     | NumberAttribute

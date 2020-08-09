@@ -34,6 +34,14 @@ export class InvalidEntityType extends BaseError {
     }
 }
 
+export class CascadingEntity {
+    constructor(readonly resolveEntities: ResolvedEntity[]) {
+        ignoreEquality(this, "byPriority");
+    }
+
+    readonly byPriority = lazy(() => this.resolveEntities.slice().reverse());
+}
+
 export class ResolvedEntity {
     constructor(
         readonly entity: Entity,
@@ -62,14 +70,14 @@ export class References {
     static resolveChecked(
         reference: EntityReference,
         campaign: Campaign
-    ): ResolvedEntity[] {
+    ): CascadingEntity {
         return rightOrThrow(References.resolve(reference, campaign));
     }
 
     static resolve(
         reference: EntityReference,
         campaign: Campaign
-    ): Either<ResolutionError, ResolvedEntity[]> {
+    ): Either<ResolutionError, CascadingEntity> {
         const entityID = reference.entityID;
         const entity = campaign.getEntity(entityID);
         if (O.isNone(entity)) {
@@ -101,7 +109,7 @@ export class References {
             entities.push(e.right);
             lastEntity = e.right;
         }
-        return right(entities);
+        return right(new CascadingEntity(entities));
     }
 
     static resolveSubEntity(

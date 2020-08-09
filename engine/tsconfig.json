@@ -11,7 +11,8 @@
         "declaration": true,
         "strictNullChecks": true,
         "alwaysStrict": true,
-        "strictPropertyInitialization": true
+        "strictPropertyInitialization": true,
+        "downlevelIteration": true
     },
     "include": ["src/**/*.ts", "test/**/*.ts"],
     "exclude": ["node_modules", "src/**/*.spec.ts"]
