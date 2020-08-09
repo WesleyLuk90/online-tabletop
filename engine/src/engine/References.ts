@@ -3,6 +3,7 @@ import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
 import { BaseError } from "../BaseError";
 import { rightOrThrow } from "../utils/Exceptions";
+import { flatMap } from "../utils/FlatMap";
 import { ignoreEquality, lazy } from "../utils/Lazy";
 import { SubEntityAttribute } from "./models/Attribute";
 import { Campaign } from "./models/Campaign";
@@ -46,6 +47,10 @@ export class ResolvedEntity {
     readonly attributes = lazy(() =>
         this.entity.attributes.addAll(this.template.attributes)
     );
+}
+
+export class EntityHiearchy {
+    constructor(readonly hierarchy: ResolvedEntity[]) {}
 }
 
 export type ResolutionError =
@@ -108,10 +113,8 @@ export class References {
         return pipe(
             resolvedEntity.attributes().get(subEntityReference.attribute),
             O.filter(SubEntityAttribute.is),
-            O.map((a) => a.subEntities.get(subEntityReference.entityID)),
-            O.flatten,
-            O.map((entity) => References.resolveTemplate(campaign, entity)),
-            O.flatten,
+            flatMap((a) => a.subEntities.get(subEntityReference.entityID)),
+            flatMap((entity) => References.resolveTemplate(campaign, entity)),
             fromOption(() => new SubEntityNotFound(subEntityReference))
         );
     }
@@ -122,10 +125,9 @@ export class References {
     ): O.Option<ResolvedEntity> {
         return pipe(
             campaign.getEntityTemplate(entity.templateId),
-            O.map((template) =>
+            flatMap((template) =>
                 References.resolveType(campaign, entity, template)
-            ),
-            O.flatten
+            )
         );
     }
 
