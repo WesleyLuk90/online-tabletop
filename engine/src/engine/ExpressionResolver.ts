@@ -70,12 +70,12 @@ type ResolutionError =
     | NonNumericAttribute
     | RecursiveDefinition;
 
-export class AttributeResolver {
+export class ExpressionResolver {
     static resolveChecked(
         entity: CascadingEntity,
         rollExpression: RollExpression
     ): ResolvedExpression {
-        return rightOrThrow(AttributeResolver.resolve(entity, rollExpression));
+        return rightOrThrow(ExpressionResolver.resolve(entity, rollExpression));
     }
 
     static resolve(
@@ -90,13 +90,13 @@ export class AttributeResolver {
             if (numericAttribute instanceof NumberAttribute) {
                 return right(null);
             }
-            for (let variable of AttributeResolver.gatherVariables(
+            for (let variable of ExpressionResolver.gatherVariables(
                 numericAttribute.expression
             )) {
                 if (trail.includes(variable)) {
                     return left(new RecursiveDefinition(variable, trail));
                 }
-                const resolved = AttributeResolver.resolveSingle(
+                const resolved = ExpressionResolver.resolveSingle(
                     entity,
                     variable
                 );
@@ -114,10 +114,13 @@ export class AttributeResolver {
             }
             return right(null);
         }
-        for (let variable of AttributeResolver.gatherVariables(
+        for (let variable of ExpressionResolver.gatherVariables(
             rollExpression
         )) {
-            const attribute = AttributeResolver.resolveSingle(entity, variable);
+            const attribute = ExpressionResolver.resolveSingle(
+                entity,
+                variable
+            );
             if (isLeft(attribute)) {
                 return attribute;
             }
@@ -136,7 +139,7 @@ export class AttributeResolver {
         } else if (expression instanceof RollFunction) {
             const set = new Set<string>();
             expression.args
-                .map(AttributeResolver.gatherVariables)
+                .map(ExpressionResolver.gatherVariables)
                 .map((variables) =>
                     variables.forEach((variable) => set.add(variable))
                 );
@@ -155,7 +158,7 @@ export class AttributeResolver {
         return pipe(
             entity
                 .byPriority()
-                .map((e) => AttributeResolver.getAttribute(e, attributeID))
+                .map((e) => ExpressionResolver.getAttribute(e, attributeID))
                 .filter(isSome)[0]?.value,
             fromNullable(new AttributeNotFound(attributeID))
         );

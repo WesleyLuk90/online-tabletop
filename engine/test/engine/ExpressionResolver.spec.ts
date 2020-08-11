@@ -1,11 +1,11 @@
 import { left } from "fp-ts/lib/Either";
 import {
     AttributeNotFound,
-    AttributeResolver,
+    ExpressionResolver,
     RecursiveDefinition,
     ResolvedExpression,
     ResolvedValues,
-} from "../../src/engine/AttributeResolver";
+} from "../../src/engine/ExpressionResolver";
 import {
     ComputedAttribute,
     NumberAttribute,
@@ -15,10 +15,10 @@ import { RollParser } from "../../src/engine/rolls/RollParser";
 import { CreatureEntityType } from "../../src/gamemodes/5e/CreatureEntityType";
 import { Character, CharacterTemplate } from "../TestCampaign";
 
-describe("AttributeResolver", () => {
+describe("ExpressionResolver", () => {
     it("should resolve default value", () => {
         expect(
-            AttributeResolver.resolveChecked(
+            ExpressionResolver.resolveChecked(
                 new CascadingEntity([
                     new ResolvedEntity(
                         Character,
@@ -38,7 +38,7 @@ describe("AttributeResolver", () => {
 
     it("should resolve default computed", () => {
         expect(
-            AttributeResolver.resolveChecked(
+            ExpressionResolver.resolveChecked(
                 new CascadingEntity([
                     new ResolvedEntity(
                         Character,
@@ -64,7 +64,7 @@ describe("AttributeResolver", () => {
 
     it("should error on recursive variables", () => {
         expect(
-            AttributeResolver.resolve(
+            ExpressionResolver.resolve(
                 new CascadingEntity([
                     new ResolvedEntity(
                         Character.copy({
@@ -86,7 +86,7 @@ describe("AttributeResolver", () => {
 
     it("should error on unknown variables", () => {
         expect(
-            AttributeResolver.resolve(
+            ExpressionResolver.resolve(
                 new CascadingEntity([
                     new ResolvedEntity(
                         Character.copy({
