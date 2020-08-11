@@ -15,11 +15,14 @@ before_install:
     - export PATH="$HOME/.yarn/bin:$PATH"
     # Then the local Yarn 2 should be available and get used
     - yarn -v
-    
+
 install:
     - yarn install
 
 script:
+    - cd engine
+    - yarn build
+    - yarn test
     - cd protocol
     - yarn build
     - yarn test

@@ -3,7 +3,8 @@ import {
     AttributeNotFound,
     AttributeResolver,
     RecursiveDefinition,
-    ResolvedAttribute,
+    ResolvedExpression,
+    ResolvedValues,
 } from "../../src/engine/AttributeResolver";
 import {
     ComputedAttribute,
@@ -25,9 +26,14 @@ describe("AttributeResolver", () => {
                         CreatureEntityType
                     ),
                 ]),
-                "str"
+                RollParser.parseChecked("str")
             )
-        ).toEqual(new ResolvedAttribute(new NumberAttribute("str", 10)));
+        ).toEqual(
+            new ResolvedExpression(
+                RollParser.parseChecked("str"),
+                ResolvedValues.create(new NumberAttribute("str", 10))
+            )
+        );
     });
 
     it("should resolve default computed", () => {
@@ -40,15 +46,18 @@ describe("AttributeResolver", () => {
                         CreatureEntityType
                     ),
                 ]),
-                "str_mod"
+                RollParser.parseChecked("str_mod")
             )
         ).toEqual(
-            new ResolvedAttribute(
-                new ComputedAttribute(
-                    "str_mod",
-                    RollParser.parseChecked("floor((str - 10) / 2)")
-                ),
-                new Map([["str", new NumberAttribute("str", 10)]])
+            new ResolvedExpression(
+                RollParser.parseChecked("str_mod"),
+                ResolvedValues.create(
+                    new NumberAttribute("str", 10),
+                    new ComputedAttribute(
+                        "str_mod",
+                        RollParser.parseChecked("floor((str - 10) / 2)")
+                    )
+                )
             )
         );
     });
@@ -70,7 +79,7 @@ describe("AttributeResolver", () => {
                         CreatureEntityType
                     ),
                 ]),
-                "str_mod"
+                RollParser.parseChecked("str_mod")
             )
         ).toEqual(left(new RecursiveDefinition("str_mod", ["str_mod", "str"])));
     });
@@ -92,7 +101,7 @@ describe("AttributeResolver", () => {
                         CreatureEntityType
                     ),
                 ]),
-                "str_mod"
+                RollParser.parseChecked("str_mod")
             )
         ).toEqual(left(new AttributeNotFound("foo")));
     });

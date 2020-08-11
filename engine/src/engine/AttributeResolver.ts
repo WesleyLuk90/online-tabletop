@@ -30,10 +30,16 @@ import {
 } from "./models/RollDefinition";
 import { CascadingEntity, ResolvedEntity } from "./References";
 
-export class ResolvedAttribute {
+export class ResolvedValues extends Map<string, NumericAttribute> {
+    static create(...attributes: NumericAttribute[]): ResolvedValues {
+        return new Map(attributes.map((attr) => [attr.id, attr]));
+    }
+}
+
+export class ResolvedExpression {
     constructor(
-        readonly attribute: NumericAttribute,
-        readonly values: Map<string, NumericAttribute> = new Map()
+        readonly expression: RollExpression,
+        readonly values: ResolvedValues
     ) {}
 }
 
@@ -67,19 +73,15 @@ type ResolutionError =
 export class AttributeResolver {
     static resolveChecked(
         entity: CascadingEntity,
-        attributeID: string
-    ): ResolvedAttribute {
-        return rightOrThrow(AttributeResolver.resolve(entity, attributeID));
+        rollExpression: RollExpression
+    ): ResolvedExpression {
+        return rightOrThrow(AttributeResolver.resolve(entity, rollExpression));
     }
 
     static resolve(
         entity: CascadingEntity,
-        attributeID: string
-    ): Either<ResolutionError, ResolvedAttribute> {
-        const first = AttributeResolver.resolveSingle(entity, attributeID);
-        if (isLeft(first)) {
-            return first;
-        }
+        rollExpression: RollExpression
+    ): Either<ResolutionError, ResolvedExpression> {
         const values = new Map<string, NumericAttribute>();
         function recursiveResolve(
             numericAttribute: NumericAttribute,
@@ -112,11 +114,20 @@ export class AttributeResolver {
             }
             return right(null);
         }
-        const resolve = recursiveResolve(first.right, [first.right.id]);
-        if (isLeft(resolve)) {
-            return resolve;
+        for (let variable of AttributeResolver.gatherVariables(
+            rollExpression
+        )) {
+            const attribute = AttributeResolver.resolveSingle(entity, variable);
+            if (isLeft(attribute)) {
+                return attribute;
+            }
+            values.set(variable, attribute.right);
+            const resolution = recursiveResolve(attribute.right, [variable]);
+            if (isLeft(resolution)) {
+                return resolution;
+            }
         }
-        return right(new ResolvedAttribute(first.right, values));
+        return right(new ResolvedExpression(rollExpression, values));
     }
 
     private static gatherVariables(expression: RollExpression): Set<string> {
