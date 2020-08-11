@@ -1,5 +1,6 @@
 import { fromNullable, Option } from "fp-ts/lib/Option";
 import { lazy } from "../utils/Lazy";
+import { Random } from "../utils/Random";
 
 export class Range {
     constructor(readonly min: number | null, readonly max: number | null) {}
@@ -74,6 +75,13 @@ export const RollFunctions = [
     new RollFunction("ceil", new Range(1, 1), (numbers) =>
         Math.ceil(numbers[0])
     ),
+    new RollFunction("roll", new Range(2, 2), (numbers) => {
+        let sum = 0;
+        for (let i = 0; i < numbers[1]; i++) {
+            sum += Random.randomDice(numbers[1]);
+        }
+        return sum;
+    }),
 ];
 
 const byID = lazy(() => new Map(RollFunctions.map((f) => [f.name, f])));

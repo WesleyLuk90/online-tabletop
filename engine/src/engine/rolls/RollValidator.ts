@@ -1,4 +1,4 @@
-import { Either, left, right } from "fp-ts/lib/Either";
+import { Either, isLeft, left, right } from "fp-ts/lib/Either";
 import { isNone } from "fp-ts/lib/Option";
 import { BaseError } from "../../BaseError";
 import { RollExpression, RollFunction } from "../models/RollDefinition";
@@ -27,13 +27,29 @@ export type ValidationError = UnknownFunction | InvalidArguments;
 export class RollValidator {
     static validate(expression: RollExpression): Either<ValidationError, null> {
         if (expression instanceof RollFunction) {
-            const f = getRollFunction(expression.functionName);
-            if (isNone(f)) {
-                return left(new UnknownFunction(expression.functionName));
+            const res = RollValidator.validateFunction(expression);
+            if (isLeft(res)) {
+                return res;
             }
-            if (!f.value.range.contains(expression.args.length)) {
-                return left(new InvalidArguments(expression, f.value.range));
+            for (let arg of expression.args) {
+                const argRes = RollValidator.validate(arg);
+                if (isLeft(argRes)) {
+                    return argRes;
+                }
             }
+        }
+        return right(null);
+    }
+
+    static validateFunction(
+        rollFunction: RollFunction
+    ): Either<ValidationError, null> {
+        const f = getRollFunction(rollFunction.functionName);
+        if (isNone(f)) {
+            return left(new UnknownFunction(rollFunction.functionName));
+        }
+        if (!f.value.range.contains(rollFunction.args.length)) {
+            return left(new InvalidArguments(rollFunction, f.value.range));
         }
         return right(null);
     }
