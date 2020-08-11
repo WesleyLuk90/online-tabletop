@@ -1,4 +1,4 @@
-import { Either, flatten, map, tryCatch } from "fp-ts/lib/Either";
+import { chain, Either, map, tryCatch } from "fp-ts/lib/Either";
 import { pipe } from "fp-ts/lib/function";
 import { BaseError } from "../../BaseError";
 import { assertExaustive } from "../../utils/Exaustive";
@@ -9,6 +9,7 @@ import {
     RollLiteral,
     RollVariable,
 } from "../models/RollDefinition";
+import { RollValidator, ValidationError } from "./RollValidator";
 import { Tokenizer, TokenizerError } from "./Tokenizer";
 import {
     CommaToken,
@@ -110,19 +111,24 @@ class OperatorStack {
     }
 }
 
-type ParseOrTokenizeError = TokenizerError | ParseError;
+type ParseOrTokenizeError = TokenizerError | ParseError | ValidationError;
 
 export class RollParser {
     static parse(expression: string): Either<ParseError, RollExpression> {
         return pipe(
             Tokenizer.tokenize(expression),
-            map((tokens) =>
+            chain((tokens) =>
                 tryCatch(
                     () => new RollParser(tokens).parse(),
                     (a) => a as ParseError
                 )
             ),
-            flatten
+            chain((exp) =>
+                pipe(
+                    RollValidator.validate(exp),
+                    map(() => exp)
+                )
+            )
         );
     }
 
