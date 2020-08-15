@@ -25,5 +25,6 @@ export class PreparedActionFactory {
         if (isLeft(entities)) {
             return entities;
         }
+        throw Error();
     }
 }
