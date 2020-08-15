@@ -14,5 +14,6 @@
         "paths": {
             "engine/*": ["engine/src/*"]
         }
-    }
+    },
+    "include": ["engine/src/**/*.ts", "server/src/**/*.ts"]
 }

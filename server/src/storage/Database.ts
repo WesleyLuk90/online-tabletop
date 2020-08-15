@@ -25,7 +25,11 @@ export class Database {
         query: string,
         values?: (string | number)[]
     ): Promise<QueryResult> {
-        console.log(query);
-        return (await this.getClient()).query(query, values);
+        try {
+            return await (await this.getClient()).query(query, values);
+        } catch (e) {
+            console.log(query, e);
+            throw e;
+        }
     }
 }

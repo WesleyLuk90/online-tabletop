@@ -10,8 +10,8 @@ export class Query {
 
     toPostgres(): QueryConfig<any[]> {
         return {
-            text: "SELECT * FROM $1",
-            values: [this.properties.from.tableName],
+            text: `SELECT * FROM "${this.properties.from.tableName}"`,
+            values: [],
         };
     }
 }

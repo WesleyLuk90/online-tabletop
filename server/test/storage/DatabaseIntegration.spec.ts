@@ -1,8 +1,8 @@
 import { BaseSchema } from "../../src/storage/BaseSchema";
 import { BaseStore, Record, Results } from "../../src/storage/BaseStore";
 import { Database } from "../../src/storage/Database";
-import { Migrator } from "../../src/storage/Migrator";
 import { Query } from "../../src/storage/Query";
+import { DatabaseFixture } from "./DatabaseFixture";
 
 const TestSchema = new (class extends BaseSchema {
     constructor() {
@@ -22,17 +22,9 @@ class TestStore extends BaseStore {
 }
 
 describe("DatabaseIntegration", () => {
+    const fixture = new DatabaseFixture();
     it("should work", async () => {
-        const db = new Database(
-            "localhost",
-            5432,
-            "postgres",
-            "devpassword",
-            "test"
-        );
-        const migrator = new Migrator(db);
-        await migrator.migrate();
-        const store = new TestStore(db);
+        const store = new TestStore(fixture.db);
 
         await store.create(
             Record.of([

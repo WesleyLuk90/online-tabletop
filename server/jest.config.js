@@ -2,7 +2,7 @@ module.exports = {
     preset: "ts-jest",
     testEnvironment: "node",
     rootDir: "test",
-    transformIgnorePatterns: [
-        "node_modules/(?!(protocol)/)"
-    ]
+    moduleNameMapper: {
+        "^engine/(.*)$": "<rootDir>/../../engine/src/$1",
+    },
 };

@@ -5,7 +5,7 @@ export class Migrator {
     constructor(readonly db: Database) {}
     async migrate() {
         this.ensureSchema();
-        await this.db.query(`SET search_path TO ${this.db.schema}`);
+        await this.db.query(`SET search_path TO "${this.db.schema}"`);
         const tables = await this.tables();
         for (let schema of KnownSchemas) {
             await this.migrateSchema(schema, tables);
@@ -15,7 +15,7 @@ export class Migrator {
     async ensureSchema() {
         const schemas = await this.schemas();
         if (!schemas.includes(this.db.schema)) {
-            await this.db.query(`CREATE SCHEMA ${this.db.schema}`);
+            await this.db.query(`CREATE SCHEMA "${this.db.schema}"`);
         }
     }
 
@@ -43,12 +43,14 @@ export class Migrator {
                 return "";
             }
             const columns = schema.fields.map((field) =>
-                [field.name, field.type.postgresType, primaryKey(field)].join(
-                    " "
-                )
+                [
+                    `"${field.name}"`,
+                    field.type.postgresType,
+                    primaryKey(field),
+                ].join(" ")
             );
             await this.db.query(
-                `CREATE TABLE ${schema.tableName} (${columns.join(", ")})`
+                `CREATE TABLE "${schema.tableName}" (${columns.join(", ")})`
             );
         }
     }

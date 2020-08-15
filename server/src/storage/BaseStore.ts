@@ -20,7 +20,15 @@ export abstract class BaseStore {
     async find(query: Query): Promise<Results> {
         const client = await this.db.getClient();
         const results = await client.query(query.toPostgres());
-        return new Results(results.rows.map((row) => new Record(new Map())));
+        return new Results(
+            results.rows.map((row) => {
+                const map = new Map();
+                this.schema.fields.forEach((field) =>
+                    map.set(field, row[field.name] ?? null)
+                );
+                return new Record(map);
+            })
+        );
     }
 
     async create(record: Record) {
