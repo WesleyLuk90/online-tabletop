@@ -100,7 +100,7 @@ describe("RollParser", () => {
     });
 
     it("should parse", () => {
-        expect(RollParser.parseChecked("1+3d4+floor(str/2)")).toEqual(
+        expect(RollParser.parseChecked("1+3d4+floor((str-10)/2)")).toEqual(
             new RollFunction("add", [
                 new RollLiteral(1),
                 new RollFunction("add", [
@@ -110,7 +110,10 @@ describe("RollParser", () => {
                     ]),
                     new RollFunction("floor", [
                         new RollFunction("div", [
-                            new RollVariable("str"),
+                            new RollFunction("sub", [
+                                new RollVariable("str"),
+                                new RollLiteral(10),
+                            ]),
                             new RollLiteral(2),
                         ]),
                     ]),

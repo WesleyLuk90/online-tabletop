@@ -1,6 +1,7 @@
-import { fromNullable, Option } from "fp-ts/lib/Option";
+import { fromNullable, none, Option, some } from "fp-ts/lib/Option";
 import { lazy } from "../utils/Lazy";
 import { Random } from "../utils/Random";
+import { InvalidArguments, ValidationError } from "./rolls/RollValidator";
 
 export class Range {
     constructor(readonly min: number | null, readonly max: number | null) {}
@@ -37,6 +38,15 @@ class RollFunction {
         readonly range: Range,
         readonly evaluate: (args: number[]) => number
     ) {}
+
+    validate<T>(args: T[]): Option<ValidationError> {
+        if (!this.range.contains(args.length)) {
+            return some(
+                new InvalidArguments(this.name, this.range, args.length)
+            );
+        }
+        return none;
+    }
 }
 
 export const RollFunctions = [

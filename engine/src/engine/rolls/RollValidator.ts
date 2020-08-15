@@ -1,5 +1,5 @@
 import { Either, isLeft, left, right } from "fp-ts/lib/Either";
-import { isNone } from "fp-ts/lib/Option";
+import { isNone, isSome } from "fp-ts/lib/Option";
 import { BaseError } from "../../BaseError";
 import { RollExpression, RollFunction } from "../models/RollDefinition";
 import { getRollFunction, Range } from "../RollFunctions";
@@ -11,13 +11,13 @@ export class UnknownFunction extends BaseError {
 }
 
 export class InvalidArguments extends BaseError {
-    constructor(readonly expression: RollFunction, readonly range: Range) {
+    constructor(
+        readonly functionName: string,
+        readonly range: Range,
+        readonly argCount: number
+    ) {
         super(
-            `Invalid arguments to ${
-                expression.functionName
-            } expected ${range.toString()} arguments but got ${
-                expression.args.length
-            }`
+            `Invalid arguments to ${functionName} expected ${range.toString()} arguments but got ${argCount}`
         );
     }
 }
@@ -48,8 +48,9 @@ export class RollValidator {
         if (isNone(f)) {
             return left(new UnknownFunction(rollFunction.functionName));
         }
-        if (!f.value.range.contains(rollFunction.args.length)) {
-            return left(new InvalidArguments(rollFunction, f.value.range));
+        const argValidation = f.value.validate(rollFunction.args);
+        if (isSome(argValidation)) {
+            return left(argValidation.value);
         }
         return right(null);
     }
