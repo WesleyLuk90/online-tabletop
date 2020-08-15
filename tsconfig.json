@@ -10,7 +10,9 @@
         "types": ["jest"],
         "strictNullChecks": true,
         "baseUrl": ".",
-        "downlevelIteration": true
-    },
-    "include": ["server/src/**/*"]
+        "downlevelIteration": true,
+        "paths": {
+            "engine/*": ["engine/src/*"]
+        }
+    }
 }
