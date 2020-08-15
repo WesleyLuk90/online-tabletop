@@ -3,10 +3,12 @@
     "workspaces": [
         "client",
         "server",
+        "protocol",
         "engine"
     ],
     "scripts": {
-        "run-services": "docker-compose -f docker-compose.services.yml up -d"
+        "run-services": "docker-compose -f docker-compose.services.yml up -d",
+        "dev-server": "ts-node server/src/index.ts"
     },
     "devDependencies": {
         "typescript": "3.9.6"

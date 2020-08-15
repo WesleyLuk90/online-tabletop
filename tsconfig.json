@@ -10,10 +10,7 @@
         "types": ["jest"],
         "strictNullChecks": true,
         "baseUrl": ".",
-        "downlevelIteration": true,
-        "paths": {
-            "protocol": ["protocol"]
-        }
+        "downlevelIteration": true
     },
-    "include": ["server/src/**/*", "protocol/src/**/*"]
+    "include": ["server/src/**/*"]
 }
