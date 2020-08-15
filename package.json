@@ -3,7 +3,6 @@
     "workspaces": [
         "client",
         "server",
-        "protocol",
         "engine"
     ],
     "scripts": {

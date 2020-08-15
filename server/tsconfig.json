@@ -7,20 +7,10 @@
         "moduleResolution": "node",
         "sourceMap": true,
         "outDir": "dist",
-        "types": [
-            "jest"
-        ],
+        "types": ["jest"],
         "strictNullChecks": true,
         "baseUrl": ".",
-        "paths": {
-            "protocol": [
-                "../protocol"
-            ]
-        }
+        "paths": {}
     },
-    "include": [
-        "src/**/*",
-        "test/**/*",
-        "../protocol/src"
-    ],
+    "include": ["src/**/*", "test/**/*", "../protocol/src"]
 }
