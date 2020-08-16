@@ -5,7 +5,7 @@ import { Database } from "../storage/Database";
 
 const UserSchema = new (class extends BaseSchema {
     constructor() {
-        super("user");
+        super("users");
     }
 
     id = this.stringField("id");
@@ -29,6 +29,4 @@ export class UserStorage extends BaseStore<UserModel> {
     constructor(db: Database) {
         super(db, UserSchema, (r) => new UserModel(r));
     }
-
-    async create(user: UserModel) {}
 }

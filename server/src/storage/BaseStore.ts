@@ -1,6 +1,6 @@
 import { BaseModel } from "./BaseModel";
 import { BaseSchema, Field } from "./BaseSchema";
-import { Database } from "./Database";
+import { Database, formatQuery } from "./Database";
 import { Query } from "./Query";
 
 export class Row {
@@ -46,10 +46,15 @@ export abstract class BaseStore<T extends BaseModel> {
             values.push(value);
         });
         let index = 1;
-        const keyStatement = fields.map((field) => field.name).join(",");
+        const keyStatement = fields
+            .map((field) => formatQuery("%I", field.name))
+            .join(",");
         const valuesStatement = values.map(() => `$${index++}`).join(",");
         await client.query({
-            text: `INSERT INTO ${this.schema.tableName}(${keyStatement}) VALUES(${valuesStatement})`,
+            text: formatQuery(
+                `INSERT INTO %I(${keyStatement}) VALUES(${valuesStatement})`,
+                this.schema.tableName
+            ),
             values: values,
         });
     }

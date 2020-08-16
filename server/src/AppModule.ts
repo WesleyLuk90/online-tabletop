@@ -4,6 +4,7 @@ import { AuthModule } from "./auth/AuthModule";
 import { Config } from "./Config";
 import { lazy, Module } from "./Module";
 import { Database } from "./storage/Database";
+import { Migrator } from "./storage/Migrator";
 
 export class AppModule extends Module {
     dbHost = Config.string("DB_HOST");
@@ -24,6 +25,7 @@ export class AppModule extends Module {
                 this.dbSchema()
             )
     );
+    migrator = lazy(() => new Migrator(this.db()));
 
     app = lazy(() => express());
     http = lazy(() => new Server(this.app()));
@@ -37,6 +39,7 @@ export class AppModule extends Module {
     }
 
     async start() {
+        await this.migrator().migrate();
         await this.authModule().start();
         await this.startServer();
         console.log(`Listening on ${this.httpPort()}`);

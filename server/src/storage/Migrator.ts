@@ -1,11 +1,13 @@
 import { BaseSchema, Field, KnownSchemas } from "./BaseSchema";
-import { Database } from "./Database";
+import { Database, formatIdentifier, formatQuery } from "./Database";
 
 export class Migrator {
     constructor(readonly db: Database) {}
     async migrate() {
         this.ensureSchema();
-        await this.db.query(`SET search_path TO "${this.db.schema}"`);
+        await this.db.query(
+            formatQuery("SET search_path TO %I", this.db.schema)
+        );
         const tables = await this.tables();
         for (let schema of KnownSchemas) {
             await this.migrateSchema(schema, tables);
@@ -15,7 +17,9 @@ export class Migrator {
     async ensureSchema() {
         const schemas = await this.schemas();
         if (!schemas.includes(this.db.schema)) {
-            await this.db.query(`CREATE SCHEMA "${this.db.schema}"`);
+            await this.db.query(
+                formatQuery(`CREATE SCHEMA %I`, this.db.schema)
+            );
         }
     }
 
@@ -44,13 +48,16 @@ export class Migrator {
             }
             const columns = schema.fields.map((field) =>
                 [
-                    `"${field.name}"`,
+                    formatIdentifier(field.name),
                     field.type.postgresType,
                     primaryKey(field),
                 ].join(" ")
             );
             await this.db.query(
-                `CREATE TABLE "${schema.tableName}" (${columns.join(", ")})`
+                formatQuery(
+                    `CREATE TABLE %I (${columns.join(", ")})`,
+                    schema.tableName
+                )
             );
         }
     }

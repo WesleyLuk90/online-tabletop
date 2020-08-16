@@ -1,5 +1,11 @@
 import { Client, QueryResult } from "pg";
+import format from "pg-format";
 import { lazy } from "../Module";
+
+export { format as formatQuery };
+export function formatIdentifier(identifier: string) {
+    return format("%I", identifier);
+}
 
 export class Database {
     constructor(

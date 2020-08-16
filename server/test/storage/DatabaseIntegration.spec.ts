@@ -11,7 +11,7 @@ const TestSchema = new (class extends BaseSchema {
     }
 
     id = this.stringField("id");
-    name = this.stringField("name");
+    displayName = this.stringField("displayName");
 
     primaryKey = this.id;
 })();
@@ -24,7 +24,7 @@ class TestModel extends BaseModel {
     @BaseModel.setter(TestSchema.id)
     setID: (s: string) => this;
 
-    @BaseModel.setter(TestSchema.name)
+    @BaseModel.setter(TestSchema.displayName)
     setName: (s: string) => this;
 }
 
