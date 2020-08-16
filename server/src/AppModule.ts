@@ -9,7 +9,7 @@ export class AppModule extends Module {
     dbHost = Config.string("DB_HOST");
     dbPort = Config.number("DB_PORT");
     dbUser = Config.string("DB_USER");
-    dbPass = Config.string("DB_PASS");
+    dbPass = Config.string("DB_PASSWORD");
     dbSchema = Config.string("DB_SCHEMA");
     httpPort = Config.number("HTTP_PORT");
     httpHost = Config.string("HTTP_HOST");
