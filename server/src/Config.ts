@@ -1,9 +1,15 @@
 import { config } from "dotenv";
+import { existsSync } from "fs";
+import { resolve } from "path";
 import { lazy } from "./Module";
 import { checkNotNull } from "./util/Nullable";
 
 const env = lazy(() => {
-    const c = config();
+    let envPath = resolve(process.cwd(), ".env");
+    if (!existsSync(envPath)) {
+        envPath = resolve(process.cwd(), "../.env");
+    }
+    const c = config({ path: envPath });
     if (c.error) {
         throw c.error;
     }
