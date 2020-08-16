@@ -10,33 +10,24 @@ const env = lazy(() => {
     return checkNotNull(c.parsed);
 });
 
-export enum ConfigKeys {
-    AUTH0_CLIENT_ID = "AUTH0_CLIENT_ID",
-    AUTH0_CLIENT_SECRET = "AUTH0_CLIENT_SECRET",
-    AUTH0_CALLBACK_URL = "AUTH0_CALLBACK_URL",
-    AUTH0_DOMAIN = "AUTH0_DOMAIN",
-    SESSION_SECRET = "SESSION_SECRET",
-    MONGO_HOST = "MONGO_HOST",
-    MONGO_DATABASE = "MONGO_DATABASE",
-    HTTP_PORT = "HTTP_PORT",
-}
-
-export class Config<T> {
-    static string(key: string): Config<string> {
-        return new Config(key, (s) => s);
+export class Config {
+    static string(key: string): () => string {
+        return lazy(() => Config.readString(key));
     }
 
-    static number(key: string): Config<number> {
-        return new Config(key, (s) => {
-            const n = parseFloat(s);
+    static number(key: string): () => number {
+        return lazy(() => {
+            const value = Config.readString(key);
+
+            const n = parseFloat(value);
             if (isNaN(n)) {
-                throw Error(`Invalid config ${key} with value ${s}`);
+                throw Error(`Invalid config ${key} with value ${value}`);
             }
             return n;
         });
     }
 
-    constructor(readonly key: string, readonly parse: (s: string) => T) {}
-
-    get = lazy(() => this.parse(checkNotNull(env()[this.key])));
+    private static readString(key: string) {
+        return checkNotNull(env()[key], `Missing configuration ${key}`);
+    }
 }
