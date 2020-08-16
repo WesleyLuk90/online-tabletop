@@ -16,4 +16,6 @@ export function lazy<T>(f: () => T): () => T {
     };
 }
 
-export abstract class Module {}
+export abstract class Module {
+    async start() {}
+}

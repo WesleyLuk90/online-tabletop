@@ -3,22 +3,32 @@ import { BaseSchema } from "../storage/BaseSchema";
 import { BaseStore, Row } from "../storage/BaseStore";
 import { Database } from "../storage/Database";
 
-export class User extends BaseModel {
-    constructor(readonly row: Row = new Row()) {
-        super(row);
-    }
-}
-
 const UserSchema = new (class extends BaseSchema {
     constructor() {
         super("user");
     }
+
+    id = this.stringField("id");
+    displayName = this.stringField("displayName");
+
+    primaryKey = this.id;
 })();
 
-export class UserStorage extends BaseStore<User> {
-    constructor(db: Database) {
-        super(db, UserSchema, (r) => new User(r));
+export class UserModel extends BaseModel {
+    constructor(readonly row: Row = new Row()) {
+        super(row);
     }
 
-    async create(user: User) {}
+    @BaseModel.setter(UserSchema.id)
+    setID: (id: string) => this;
+    @BaseModel.setter(UserSchema.displayName)
+    setName: (name: string) => this;
+}
+
+export class UserStorage extends BaseStore<UserModel> {
+    constructor(db: Database) {
+        super(db, UserSchema, (r) => new UserModel(r));
+    }
+
+    async create(user: UserModel) {}
 }

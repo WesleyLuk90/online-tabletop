@@ -1,7 +1,7 @@
 import express from "express";
 import passport from "passport";
 import { Strategy as Auth0Strategy } from "passport-auth0";
-import { UserStorage } from "./UserStorage";
+import { UserModel, UserStorage } from "./UserStorage";
 
 export async function initializeAuth(
     config: {
@@ -21,13 +21,13 @@ export async function initializeAuth(
             profile,
             done
         ) {
-            // FIXME
-            // userStorage
-            //     .create({
-            //         id: profile.id,
-            //         displayName: profile.displayName
-            //     })
-            //     .then(() => done(null, { userID: profile.id }), done);
+            userStorage
+                .create(
+                    new UserModel()
+                        .setID(profile.id)
+                        .setName(profile.displayName)
+                )
+                .then(() => done(null, { userID: profile.id }), done);
         })
     );
 
@@ -50,6 +50,11 @@ export async function initializeAuth(
             res.redirect("/");
         }
     );
+    app.get("/user", function (req, res) {
+        res.json({
+            user: req.user,
+        });
+    });
     app.get("/callback", (req, res, next) => {
         passport.authenticate("auth0", (err, user, info) => {
             if (err) {

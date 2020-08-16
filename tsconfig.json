@@ -12,7 +12,8 @@
         "downlevelIteration": true,
         "paths": {
             "engine/*": ["engine/src/*"]
-        }
+        },
+        "experimentalDecorators": true
     },
     "include": ["engine/src/**/*.ts", "server/src/**/*.ts"]
 }
