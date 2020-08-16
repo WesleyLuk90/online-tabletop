@@ -9,10 +9,11 @@
         "outDir": "dist",
         "types": ["jest"],
         "strictNullChecks": true,
-        "baseUrl": ".",
+        "baseUrl": "../",
         "paths": {
-            "engine/*": ["../engine/src/*"]
-        }
+            "engine/*": ["engine/src/*"]
+        },
+        "experimentalDecorators": true
     },
     "include": ["src/**/*.ts", "test/**/*.ts", "../engine/src/**/*.ts"]
 }
