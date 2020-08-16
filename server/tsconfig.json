@@ -13,7 +13,8 @@
         "paths": {
             "engine/*": ["engine/src/*"]
         },
-        "experimentalDecorators": true
+        "experimentalDecorators": true,
+        "noEmit": true
     },
     "include": ["src/**/*.ts", "test/**/*.ts", "../engine/src/**/*.ts"]
 }

@@ -4,6 +4,7 @@ import {
     SubEntityReference,
 } from "../../src/engine/models/Reference";
 import {
+    CascadingEntity,
     EntityNotFound,
     References,
     ResolvedEntity,
@@ -28,14 +29,16 @@ describe("References", () => {
                 ]),
                 TestCampaign
             )
-        ).toEqual([
-            new ResolvedEntity(
-                Character,
-                CharacterTemplate,
-                CreatureEntityType
-            ),
-            new ResolvedEntity(Dagger, DaggerTemplate, ItemEntityType),
-        ]);
+        ).toEqual(
+            new CascadingEntity([
+                new ResolvedEntity(
+                    Character,
+                    CharacterTemplate,
+                    CreatureEntityType
+                ),
+                new ResolvedEntity(Dagger, DaggerTemplate, ItemEntityType),
+            ])
+        );
     });
 
     it("should error", () => {

@@ -20,12 +20,11 @@ install:
 before_install:
 
 script:
-    - cd engine
     - yarn build
+    - cd engine
     - yarn test
     - cd ../server
     - cp .env.test .env
-    - yarn build
     - yarn test
     - cd ../client
     - yarn build

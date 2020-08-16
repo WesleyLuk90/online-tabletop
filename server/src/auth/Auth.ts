@@ -14,27 +14,28 @@ export async function initializeAuth(
     userStorage: UserStorage
 ) {
     passport.use(
-        new Auth0Strategy(config, function(
+        new Auth0Strategy(config, function (
             token,
             tokenSecret,
             extra,
             profile,
             done
         ) {
-            userStorage
-                .create({
-                    id: profile.id,
-                    displayName: profile.displayName
-                })
-                .then(() => done(null, { userID: profile.id }), done);
+            // FIXME
+            // userStorage
+            //     .create({
+            //         id: profile.id,
+            //         displayName: profile.displayName
+            //     })
+            //     .then(() => done(null, { userID: profile.id }), done);
         })
     );
 
-    passport.serializeUser(function(user: { userID: string }, done) {
+    passport.serializeUser(function (user: { userID: string }, done) {
         done(null, user.userID);
     });
 
-    passport.deserializeUser(function(userID, done) {
+    passport.deserializeUser(function (userID, done) {
         done(null, { userID });
     });
 
@@ -43,9 +44,9 @@ export async function initializeAuth(
     app.get(
         "/login",
         passport.authenticate("auth0", {
-            scope: "openid email profile"
+            scope: "openid email profile",
         }),
-        function(req, res) {
+        function (req, res) {
             res.redirect("/");
         }
     );
@@ -57,7 +58,7 @@ export async function initializeAuth(
             if (!user) {
                 return res.redirect("/login");
             }
-            req.logIn(user, err => {
+            req.logIn(user, (err) => {
                 if (err) {
                     return next(err);
                 }
