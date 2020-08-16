@@ -1,23 +1,28 @@
+import { BaseModel } from "./BaseModel";
 import { BaseSchema, Field } from "./BaseSchema";
 import { Database } from "./Database";
 import { Query } from "./Query";
 
-export class Record {
+export class Row {
     static of(values: [Field<{}>, any][]) {
-        return new Record(new Map(values));
+        return new Row(new Map(values));
     }
 
-    constructor(readonly values: Map<Field<{}>, any>) {}
+    constructor(readonly values: Map<Field<{}>, any> = new Map()) {}
 }
 
-export class Results {
-    constructor(readonly results: Record[]) {}
+export class Results<T extends BaseModel> {
+    constructor(readonly results: T[]) {}
 }
 
-export abstract class BaseStore {
-    constructor(readonly db: Database, readonly schema: BaseSchema) {}
+export abstract class BaseStore<T extends BaseModel> {
+    constructor(
+        readonly db: Database,
+        readonly schema: BaseSchema,
+        readonly factory: (row: Row) => T
+    ) {}
 
-    async find(query: Query): Promise<Results> {
+    async find(query: Query): Promise<Results<T>> {
         const client = await this.db.getClient();
         const results = await client.query(query.toPostgres());
         return new Results(
@@ -26,16 +31,16 @@ export abstract class BaseStore {
                 this.schema.fields.forEach((field) =>
                     map.set(field, row[field.name] ?? null)
                 );
-                return new Record(map);
+                return this.factory(new Row(map));
             })
         );
     }
 
-    async create(record: Record) {
+    async create(model: T) {
         const client = await this.db.getClient();
         const fields: Field<{}>[] = [];
         const values: any[] = [];
-        record.values.forEach((value, key) => {
+        model.row.values.forEach((value, key) => {
             this.schema.validateField(key);
             fields.push(key);
             values.push(value);
