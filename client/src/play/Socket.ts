@@ -1,5 +1,5 @@
-import { parse } from "protocol/src/Parse";
-import { campaignTopic, Update, UpdateSchema } from "protocol/src/Update";
+import { parse } from "engine/models/Parse";
+import { campaignTopic, Update, UpdateSchema } from "engine/models/Update";
 import { connect } from "socket.io-client";
 
 export class Socket {
@@ -13,7 +13,7 @@ export class Socket {
     ) {
         this.socket = connect({
             path: "/socket/play",
-            transports: ["websocket"]
+            transports: ["websocket"],
         });
         this.socket.on("connect", this.onConnect);
         this.socket.on(campaignTopic(campaignID), (data: any) => {

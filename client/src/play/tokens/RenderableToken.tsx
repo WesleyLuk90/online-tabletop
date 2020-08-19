@@ -1,4 +1,4 @@
-import { Token } from "protocol/src/Token";
+import { Token } from "engine/models/Token";
 import { Rectangle } from "../Rectangle";
 import { Vector } from "../Vector";
 

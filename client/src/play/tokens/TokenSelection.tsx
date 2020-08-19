@@ -1,4 +1,4 @@
-import { Token } from "protocol/src/Token";
+import { Token } from "engine/models/Token";
 
 export class TokenSelection {
     static empty() {
@@ -6,7 +6,7 @@ export class TokenSelection {
     }
 
     static fromTokens(tokens: Token[]) {
-        return new TokenSelection(tokens.map(t => t.tokenID));
+        return new TokenSelection(tokens.map((t) => t.tokenID));
     }
 
     private set: Set<string>;
@@ -21,7 +21,7 @@ export class TokenSelection {
 
     add(tokens: Token[]) {
         const next = new TokenSelection(this.set);
-        tokens.forEach(t => next.set.add(t.tokenID));
+        tokens.forEach((t) => next.set.add(t.tokenID));
         return next;
     }
 

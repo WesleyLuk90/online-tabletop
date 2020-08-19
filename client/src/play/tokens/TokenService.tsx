@@ -1,5 +1,4 @@
-import { newUUID } from "protocol/src/Id";
-import { Token } from "protocol/src/Token";
+import { Token } from "engine/models/Token";
 import { TokenRequests } from "../../games/TokenRequests";
 import { GameState } from "../gamestate/GameState";
 import { TokenManager } from "../TokenManager";
@@ -33,7 +32,7 @@ export class TokenService {
             sceneID: gameState.getMySceneID(),
             layerID: layer.id,
             tokenID: newUUID(),
-            version: 0
+            version: 0,
         };
         const delta = this.tokenDeltaFactory.create(token);
         TokenRequests.create(delta);

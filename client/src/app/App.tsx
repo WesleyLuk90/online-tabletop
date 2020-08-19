@@ -3,12 +3,9 @@ import React from "react";
 import { HashRouter as Router, Route } from "react-router-dom";
 import { ModalContainer } from "../common/controls/Modal";
 import { FollowContainer } from "../common/mouse/FollowMouse";
-import { EditCampaignPage } from "../games/EditCampaignPage";
-import { PlayPage } from "../play/PlayPage";
 import "./App.css";
 import { Dashboard } from "./Dashboard";
 import { Navigation } from "./Navigation";
-import { Routes } from "./Routes";
 
 export class App extends React.Component {
     render() {
@@ -18,7 +15,7 @@ export class App extends React.Component {
                     <Router>
                         <Navigation />
                         <Route path="/" exact component={Dashboard} />
-                        <Route
+                        {/* <Route
                             path={Routes.createCampaign()}
                             exact
                             component={EditCampaignPage}
@@ -27,12 +24,12 @@ export class App extends React.Component {
                             path={Routes.editCampaign(":id")}
                             exact
                             component={EditCampaignPage}
-                        />
-                        <Route
+                        /> */}
+                        {/* <Route
                             path={Routes.playGame(":id")}
                             exact
                             component={PlayPage}
-                        />
+                        /> */}
                     </Router>
                 </FollowContainer>
             </ModalContainer>

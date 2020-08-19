@@ -1,4 +1,4 @@
-import { Campaign } from "protocol/src/Campaign";
+import { Campaign } from "engine/models/Campaign";
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { Routes } from "../app/Routes";
@@ -23,7 +23,7 @@ export function EditCampaignPage() {
                 ownerID: "",
                 name: "",
                 players: [],
-                sceneID: ""
+                sceneID: "",
             });
         } else {
             CampaignRequests.get(id).then(setOriginal);
@@ -58,7 +58,7 @@ export function EditCampaignPage() {
                 <TextFormControl
                     value={campaign.name}
                     label="Name"
-                    onChange={name => setEdits({ ...campaign, name })}
+                    onChange={(name) => setEdits({ ...campaign, name })}
                 />
             </Form>
             <ConfirmButton prompt="Delete this campaign?" onClick={doDelete}>

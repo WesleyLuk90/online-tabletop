@@ -1,4 +1,4 @@
-import { Scene } from "protocol/src/Scene";
+import { Scene } from "engine/models/Scene";
 import React from "react";
 import { Ellipse } from "../Ellipse";
 import { Rectangle } from "../Rectangle";
@@ -39,7 +39,7 @@ export function TokenLayer({
     tokens,
     scene,
     viewport,
-    selection
+    selection,
 }: {
     tokens: TokenCollection;
     scene: Scene;
@@ -48,14 +48,14 @@ export function TokenLayer({
 }) {
     return (
         <g>
-            {scene.layers.map(layer => (
+            {scene.layers.map((layer) => (
                 <g key={layer.id}>
                     {tokens
                         .byLayer(layer)
-                        .filter(t => !selection.has(t))
+                        .filter((t) => !selection.has(t))
                         .map(RenderableToken.fromToken)
                         .filter(isVisible(viewport))
-                        .map(token => (
+                        .map((token) => (
                             <TokenRender
                                 token={token}
                                 key={token.token.tokenID}

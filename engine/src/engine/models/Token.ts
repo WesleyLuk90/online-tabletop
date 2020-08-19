@@ -7,3 +7,5 @@ class BaseToken {
 export class DrawingToken extends BaseToken {}
 
 export class ObjectToken extends BaseToken {}
+
+export type Token = DrawingToken | ObjectToken;

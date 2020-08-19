@@ -1,10 +1,10 @@
-import { Entity } from "protocol/src/Entity";
+import { Entity } from "engine/models/Entity";
 import {
     applyDelta,
     deltaEntityID,
     EntityDelta,
-    UpdateEntityDelta
-} from "protocol/src/EntityDelta";
+    UpdateEntityDelta,
+} from "engine/models/EntityDelta";
 import { EntityRequests } from "../games/EntityRequests";
 import { ConflictResolver } from "../util/ConflictResolver";
 import { PromiseDebouncer } from "../util/PromiseDebouncer";
@@ -47,7 +47,7 @@ export class EntityManager {
         private campaignID: string,
         private dispatch: DispatchGameEvent
     ) {
-        this.conflictResolver = new EntityConflictResolver(sessionID, e => {
+        this.conflictResolver = new EntityConflictResolver(sessionID, (e) => {
             this.dispatch(new UpdateEntity(e));
         });
     }

@@ -1,4 +1,4 @@
-import { Attribute } from "protocol/src/Entity";
+import { Attribute } from "engine/models/Entity";
 import React from "react";
 import { BemBuilder } from "../../util/BemBuilder";
 import { Callback } from "../../util/Callback";

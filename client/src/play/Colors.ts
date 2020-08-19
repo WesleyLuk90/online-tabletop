@@ -1,4 +1,4 @@
-import { ColorData } from "protocol/src/Color";
+import { ColorData } from "engine/models/Color";
 
 export class Color implements ColorData {
     static fromData(data: ColorData) {
@@ -37,5 +37,5 @@ export const Colors = [
     new Color(128, 128, 0),
     new Color(255, 215, 180),
     new Color(0, 0, 128),
-    new Color(128, 128, 128)
+    new Color(128, 128, 128),
 ];

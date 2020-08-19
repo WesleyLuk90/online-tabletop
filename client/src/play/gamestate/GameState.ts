@@ -1,7 +1,7 @@
-import { Campaign } from "protocol/src/Campaign";
-import { Layer, Scene } from "protocol/src/Scene";
-import { Token } from "protocol/src/Token";
-import { User } from "protocol/src/User";
+import { Campaign } from "engine/models/Campaign";
+import { Layer, Scene } from "engine/models/Scene";
+import { Token } from "engine/models/Token";
+import { User } from "engine/models/User";
 import { checkNotNull, notNull } from "../../util/Nullable";
 import { Color, Colors } from "../Colors";
 import { EntityCollection } from "../EntityCollection";
@@ -53,7 +53,7 @@ export class GameState implements RawGameState {
 
     getMySceneID(): string {
         const player = this.campaign.players.find(
-            p => p.userID === this.user.id
+            (p) => p.userID === this.user.id
         );
         if (player == null || player.sceneID === "") {
             return this.campaign.sceneID;
@@ -63,11 +63,11 @@ export class GameState implements RawGameState {
 
     getMyScene(): Scene | null {
         const id = this.getMySceneID();
-        return this.scenes.find(s => s.sceneID === id) || null;
+        return this.scenes.find((s) => s.sceneID === id) || null;
     }
 
     getScene(sceneID: string): Scene {
-        return checkNotNull(this.scenes.find(s => s.sceneID === sceneID));
+        return checkNotNull(this.scenes.find((s) => s.sceneID === sceneID));
     }
 
     getActiveLayer(): Layer | null {
@@ -75,7 +75,7 @@ export class GameState implements RawGameState {
         if (scene == null) {
             return null;
         }
-        const layer = scene.layers.find(l => l.id === this.activeLayer);
+        const layer = scene.layers.find((l) => l.id === this.activeLayer);
         if (layer == null) {
             return scene.layers[0] || null;
         }
@@ -84,7 +84,7 @@ export class GameState implements RawGameState {
 
     getLayerColor(layerID: string): Color {
         return Color.fromData(
-            this.getMyScene()?.layers.find(l => l.id === layerID)?.color ||
+            this.getMyScene()?.layers.find((l) => l.id === layerID)?.color ||
                 Colors[3]
         );
     }
@@ -92,7 +92,7 @@ export class GameState implements RawGameState {
     getSelectedTokens(): Token[] {
         return this.selectedTokens
             .asList()
-            .map(t => this.tokens.byId(t))
+            .map((t) => this.tokens.byId(t))
             .filter(notNull);
     }
 }

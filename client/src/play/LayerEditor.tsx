@@ -1,4 +1,4 @@
-import { Layer } from "protocol/src/Scene";
+import { Layer } from "engine/models/Scene";
 import React from "react";
 import { ColorService } from "../common/ColorService";
 import { ConfirmButton } from "../common/controls/Button";
@@ -15,7 +15,7 @@ export function LayerEditor({
     onSave,
     onCancel,
     onDelete,
-    isNew
+    isNew,
 }: {
     layer: Layer | null;
     onUpdate: (layer: Layer) => void;
@@ -33,14 +33,14 @@ export function LayerEditor({
                 <TextFormControl
                     label="Name"
                     value={layer.name}
-                    onChange={name => onUpdate({ ...layer, name })}
+                    onChange={(name) => onUpdate({ ...layer, name })}
                 />
                 <Label label="Color">
-                    {Colors.map(c => (
+                    {Colors.map((c) => (
                         <div
                             key={ColorService.key(c)}
                             className="layer-editor__color"
-                            onClick={e => {
+                            onClick={(e) => {
                                 e.preventDefault();
                                 onUpdate({ ...layer, color: c });
                             }}

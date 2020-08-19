@@ -1,4 +1,4 @@
-import { CampaignUpdate, SceneUpdate } from "protocol/src/Update";
+import { CampaignUpdate, SceneUpdate } from "engine/models/Update";
 import { CampaignRequests } from "../games/CampaignRequests";
 import { SceneRequests } from "../games/SceneRequests";
 import { DeleteScene } from "./gamestate/events/DeleteScene";

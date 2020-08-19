@@ -1,5 +1,5 @@
-import { newUUID } from "protocol/src/Id";
-import { Layer, Scene } from "protocol/src/Scene";
+import { newUUID } from "engine/models/Id";
+import { Layer, Scene } from "engine/models/Scene";
 import { Colors } from "./Colors";
 
 export class SceneService {
@@ -13,25 +13,25 @@ export class SceneService {
                     id: newUUID(),
                     name: "Tokens",
                     opacity: 1,
-                    playerVisible: true
+                    playerVisible: true,
                 },
                 {
                     color: Colors[0],
                     id: newUUID(),
                     name: "Game Master",
                     opacity: 1,
-                    playerVisible: false
+                    playerVisible: false,
                 },
                 {
                     color: Colors[2],
                     id: newUUID(),
                     name: "Background",
                     opacity: 1,
-                    playerVisible: true
-                }
+                    playerVisible: true,
+                },
             ],
             name: "My First Scene",
-            gridSize: 70
+            gridSize: 70,
         };
     }
 
@@ -41,7 +41,7 @@ export class SceneService {
             name: "My Layer",
             opacity: 1,
             color: Colors[3],
-            playerVisible: false
+            playerVisible: false,
         };
     }
 }

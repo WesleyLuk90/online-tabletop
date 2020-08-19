@@ -1,4 +1,4 @@
-import { Layer, Scene } from "protocol/src/Scene";
+import { Layer, Scene } from "engine/models/Scene";
 import { SceneRequests } from "../../../games/SceneRequests";
 import { replaceValue } from "../../../util/List";
 import { GameState } from "../GameState";
@@ -10,13 +10,13 @@ abstract class AbstractSceneUpdater implements GameEvent {
     abstract updateScene(scene: Scene): Scene;
 
     update(gameState: GameState): GameState {
-        const scene = gameState.scenes.find(s => s.sceneID === this.sceneID);
+        const scene = gameState.scenes.find((s) => s.sceneID === this.sceneID);
         if (scene == null) {
             return gameState;
         }
         const updated = this.updateScene(scene);
         SceneRequests.update(updated);
-        return gameState.build(b => b.upsertScene(updated));
+        return gameState.build((b) => b.upsertScene(updated));
     }
 }
 
@@ -50,9 +50,9 @@ export class RequestUpdateSceneLayer extends AbstractSceneUpdater {
             ...scene,
             layers: replaceValue(
                 scene.layers,
-                l => l.id === this.layer.id,
+                (l) => l.id === this.layer.id,
                 () => this.layer
-            )
+            ),
         };
     }
 }
@@ -65,7 +65,7 @@ export class RequestDeleteSceneLayer extends AbstractSceneUpdater {
     updateScene(scene: Scene): Scene {
         return {
             ...scene,
-            layers: scene.layers.filter(l => l.id !== this.layer.id)
+            layers: scene.layers.filter((l) => l.id !== this.layer.id),
         };
     }
 }
@@ -84,9 +84,9 @@ export class RequestUpdateSceneLayerVisibility extends AbstractSceneUpdater {
             ...scene,
             layers: replaceValue(
                 scene.layers,
-                l => l.id === this.layerID,
-                l => ({ ...l, playerVisible: this.playerVisible })
-            )
+                (l) => l.id === this.layerID,
+                (l) => ({ ...l, playerVisible: this.playerVisible })
+            ),
         };
     }
 }

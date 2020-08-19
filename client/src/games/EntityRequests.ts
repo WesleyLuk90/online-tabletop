@@ -1,13 +1,13 @@
 import Axios from "axios";
+import { Entity, EntitySchema } from "engine/models/Entity";
+import { EntityDelta } from "engine/models/EntityDelta";
+import { parse } from "engine/models/Parse";
 import * as t from "io-ts";
-import { Entity, EntitySchema } from "protocol/src/Entity";
-import { EntityDelta } from "protocol/src/EntityDelta";
-import { parse } from "protocol/src/Parse";
 
 export class EntityRequests {
     static async get({
         campaignID,
-        entityID
+        entityID,
     }: {
         campaignID: string;
         entityID: string;

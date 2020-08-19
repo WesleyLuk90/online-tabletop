@@ -1,4 +1,4 @@
-import { Scene } from "protocol/src/Scene";
+import { Scene } from "engine/models/Scene";
 import React from "react";
 import { range } from "../util/Range";
 import "./Grid.css";
@@ -8,7 +8,7 @@ export function Line({
     x1,
     x2,
     y1,
-    y2
+    y2,
 }: {
     x1: number;
     x2: number;
@@ -20,7 +20,7 @@ export function Line({
 
 export function Grid({
     scene,
-    viewport
+    viewport,
 }: {
     scene: Scene;
     viewport: Rectangle;
@@ -36,7 +36,7 @@ export function Grid({
 
     return (
         <g>
-            {range(startX, endX).map(i => (
+            {range(startX, endX).map((i) => (
                 <Line
                     key={i}
                     x1={i * scene.gridSize}
@@ -45,7 +45,7 @@ export function Grid({
                     y2={viewport.bottom}
                 />
             ))}
-            {range(startY, endY).map(i => (
+            {range(startY, endY).map((i) => (
                 <Line
                     key={i}
                     x1={viewport.left}

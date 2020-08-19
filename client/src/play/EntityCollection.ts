@@ -1,4 +1,4 @@
-import { Entity } from "protocol/src/Entity";
+import { Entity } from "engine/models/Entity";
 import { replaceValue } from "../util/List";
 import { groupBy, keyBy } from "../util/Maps";
 import { GameEntity } from "./entity/GameEntity";
@@ -6,7 +6,7 @@ import { EntityType } from "./modes/GameMode";
 
 export class EntityCollection {
     static fromEntities(entities: Entity[]) {
-        return new EntityCollection(entities.map(e => new GameEntity(e)));
+        return new EntityCollection(entities.map((e) => new GameEntity(e)));
     }
 
     static empty() {
@@ -17,8 +17,8 @@ export class EntityCollection {
     private byType: Map<string, GameEntity[]>;
 
     constructor(entities: GameEntity[]) {
-        this.entities = keyBy(entities, e => e.entityID());
-        this.byType = groupBy(entities, e => e.entityTypeID());
+        this.entities = keyBy(entities, (e) => e.entityID());
+        this.byType = groupBy(entities, (e) => e.entityTypeID());
     }
 
     toList(): GameEntity[] {
@@ -35,7 +35,7 @@ export class EntityCollection {
         return new EntityCollection(
             replaceValue(
                 this.toList(),
-                e => e.entityID() === entity.entityID(),
+                (e) => e.entityID() === entity.entityID(),
                 () => entity
             )
         );
@@ -43,7 +43,7 @@ export class EntityCollection {
 
     delete(entityID: string): EntityCollection {
         return new EntityCollection(
-            this.toList().filter(e => e.entityID() !== entityID)
+            this.toList().filter((e) => e.entityID() !== entityID)
         );
     }
 

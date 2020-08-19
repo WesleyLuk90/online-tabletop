@@ -1,11 +1,11 @@
-import { Token } from "protocol/src/Token";
+import { Token } from "engine/models/Token";
 import {
     applyUpdateToken,
     CreateToken,
     DeleteToken,
-    UpdateToken
-} from "protocol/src/TokenDelta";
-import { TokenUpdate } from "protocol/src/Update";
+    UpdateToken,
+} from "engine/models/TokenDelta";
+import { TokenUpdate } from "engine/models/Update";
 import { TokenRequests } from "../games/TokenRequests";
 import { ConflictResolver } from "../util/ConflictResolver";
 import { assertExhaustive } from "../util/Exaustive";
@@ -14,7 +14,7 @@ import { DispatchGameEvent } from "./gamestate/events/GameEvent";
 import {
     AddTokenEvent,
     DeleteTokenEvent,
-    UpdateTokenEvent
+    UpdateTokenEvent,
 } from "./gamestate/events/TokenEvents";
 import { UpdateAllTokens } from "./gamestate/events/UpdateAllTokens";
 
@@ -46,7 +46,7 @@ export class TokenManager {
         private campaignID: string,
         private dispatch: DispatchGameEvent
     ) {
-        this.conflictResolver = new TokenConflictResolver(sessionID, token =>
+        this.conflictResolver = new TokenConflictResolver(sessionID, (token) =>
             this.dispatch(new UpdateTokenEvent(token))
         );
     }
@@ -67,7 +67,7 @@ export class TokenManager {
         const tokens = await this.debounce.debounce(
             TokenRequests.list({
                 campaignID: this.campaignID,
-                sceneID: this.sceneID
+                sceneID: this.sceneID,
             })
         );
         this.conflictResolver.updateAll(tokens);
@@ -92,7 +92,7 @@ export class TokenManager {
     }
 
     updateToken(updates: UpdateToken[]) {
-        updates.forEach(update =>
+        updates.forEach((update) =>
             this.conflictResolver.applyLocalUpdate(update)
         );
     }

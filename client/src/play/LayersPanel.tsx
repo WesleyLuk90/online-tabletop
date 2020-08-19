@@ -1,5 +1,5 @@
 import { faEye, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
-import { Layer } from "protocol/src/Scene";
+import { Layer } from "engine/models/Scene";
 import React, { useState } from "react";
 import { Button } from "../common/controls/Button";
 import { ColorSquare } from "../common/controls/ColorSquare";
@@ -11,7 +11,7 @@ import { replaceValue } from "../util/List";
 import { DispatchGameEvent } from "./gamestate/events/GameEvent";
 import {
     RequestUpdateSceneLayers,
-    RequestUpdateSceneLayerVisibility
+    RequestUpdateSceneLayerVisibility,
 } from "./gamestate/events/LayerRequests";
 import { UpdateActiveLayer } from "./gamestate/events/UpdateActiveLayer";
 import { LayerEditor } from "./LayerEditor";
@@ -24,7 +24,7 @@ export function LayersPanel({
     sceneID,
     layers,
     activeLayer,
-    dispatch
+    dispatch,
 }: {
     sceneID: string;
     layers: Layer[];
@@ -47,12 +47,12 @@ export function LayersPanel({
                 layer={edit}
                 onUpdate={setEdit}
                 onCancel={() => setEdit(null)}
-                onSave={newLayer => {
+                onSave={(newLayer) => {
                     if (isNew) {
                         dispatch(
                             new RequestUpdateSceneLayers(sceneID, [
                                 ...layers,
-                                newLayer
+                                newLayer,
                             ])
                         );
                     } else {
@@ -61,7 +61,7 @@ export function LayersPanel({
                                 sceneID,
                                 replaceValue(
                                     layers,
-                                    l => l.id === newLayer.id,
+                                    (l) => l.id === newLayer.id,
                                     () => newLayer
                                 )
                             )
@@ -69,11 +69,11 @@ export function LayersPanel({
                     }
                     setEdit(null);
                 }}
-                onDelete={toDelete => {
+                onDelete={(toDelete) => {
                     dispatch(
                         new RequestUpdateSceneLayers(
                             sceneID,
-                            layers.filter(l => l.id !== toDelete.id)
+                            layers.filter((l) => l.id !== toDelete.id)
                         )
                     );
                     setEdit(null);
@@ -82,7 +82,7 @@ export function LayersPanel({
             />
             <ItemList
                 data={layers}
-                left={l => (
+                left={(l) => (
                     <div
                         onClick={() => dispatch(new UpdateActiveLayer(l))}
                         className={BEM.element(
@@ -95,8 +95,8 @@ export function LayersPanel({
                         {l.name}
                     </div>
                 )}
-                id={l => l.id}
-                right={l => (
+                id={(l) => l.id}
+                right={(l) => (
                     <div className="layers-panel__actions">
                         <IconButton
                             icon={faEye}

@@ -1,10 +1,10 @@
 import {
     faLocationArrow,
     faPencilAlt,
-    faUsers
+    faUsers,
 } from "@fortawesome/free-solid-svg-icons";
-import { Campaign } from "protocol/src/Campaign";
-import { Scene } from "protocol/src/Scene";
+import { Campaign } from "engine/models/Campaign";
+import { Scene } from "engine/models/Scene";
 import React, { useState } from "react";
 import { Button } from "../../common/controls/Button";
 import { IconButton } from "../../common/controls/IconButton";
@@ -26,7 +26,7 @@ export function ScenePanel({
     myScene,
     defaultScene,
     scenes,
-    dispatch
+    dispatch,
 }: {
     campaign: Campaign;
     myScene: string;
@@ -43,12 +43,12 @@ export function ScenePanel({
                 scene={edit}
                 onChange={setEdit}
                 onCancel={() => setEdit(null)}
-                onDelete={s => {
+                onDelete={(s) => {
                     dispatch(new RequestDeleteScene(s));
                     setEdit(null);
                 }}
                 isNew={isNew}
-                onSave={async toSave => {
+                onSave={async (toSave) => {
                     if (isNew) {
                         dispatch(new RequestCreateScene(toSave));
                     } else {
@@ -59,9 +59,9 @@ export function ScenePanel({
             />
             <ItemList
                 data={scenes}
-                left={s => s.name}
-                id={s => s.sceneID}
-                right={s => (
+                left={(s) => s.name}
+                id={(s) => s.sceneID}
+                right={(s) => (
                     <div className="scene-panel__actions">
                         <IconButton
                             inactive={s.sceneID !== myScene}

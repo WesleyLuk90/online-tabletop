@@ -1,5 +1,5 @@
-import { Attribute } from "protocol/src/Entity";
-import { newUUID } from "protocol/src/Id";
+import { Attribute } from "engine/models/Entity";
+import { newUUID } from "engine/models/Id";
 import { EntityRequests } from "../../games/EntityRequests";
 import { EntityManager } from "../EntityManager";
 import { EntityType } from "../modes/GameMode";
@@ -19,7 +19,7 @@ export class EntityService {
             campaignID: this.campaignID,
             entityID: newUUID(),
             type: entityType.id,
-            version: 0
+            version: 0,
         };
         this.entityManager.createEntity(entity);
         const delta = this.entityDeltaFactory.create(entity);

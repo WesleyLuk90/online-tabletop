@@ -1,7 +1,7 @@
-import { Campaign } from "protocol/src/Campaign";
-import { Layer, Scene } from "protocol/src/Scene";
-import { Token } from "protocol/src/Token";
-import { User } from "protocol/src/User";
+import { Campaign } from "engine/models/Campaign";
+import { Layer, Scene } from "engine/models/Scene";
+import { Token } from "engine/models/Token";
+import { User } from "engine/models/User";
 import { checkState } from "../../util/CheckState";
 import { replaceValue } from "../../util/List";
 import { GameEntity } from "../entity/GameEntity";
@@ -56,67 +56,67 @@ export class GameStateBuilder {
                 ...this.s.campaign,
                 players: replaceValue(
                     this.s.campaign.players,
-                    p => p.userID === this.s.user.id,
-                    p => ({ ...p, sceneID })
-                )
-            }
+                    (p) => p.userID === this.s.user.id,
+                    (p) => ({ ...p, sceneID })
+                ),
+            },
         });
     }
 
     changeDefaultScene(sceneID: string) {
         return this.update({
-            campaign: { ...this.s.campaign, sceneID }
+            campaign: { ...this.s.campaign, sceneID },
         });
     }
 
     updateScene(sceneID: string, scene: Partial<Scene>) {
         checkState(
-            this.s.scenes.some(s => s.sceneID === sceneID),
+            this.s.scenes.some((s) => s.sceneID === sceneID),
             `Did not find scene with id ${sceneID}`
         );
         return this.update({
             scenes: replaceValue(
                 this.s.scenes,
-                s => s.sceneID === sceneID,
-                s => ({ ...s, ...scene })
-            )
+                (s) => s.sceneID === sceneID,
+                (s) => ({ ...s, ...scene })
+            ),
         });
     }
 
     upsertScene(scene: Scene) {
-        if (this.s.scenes.some(s => s.sceneID === scene.sceneID)) {
+        if (this.s.scenes.some((s) => s.sceneID === scene.sceneID)) {
             return this.updateScene(scene.sceneID, scene);
         }
         return this.addScene(scene);
     }
 
     addScene(scene: Scene) {
-        checkState(this.s.scenes.every(s => s.sceneID !== scene.sceneID));
+        checkState(this.s.scenes.every((s) => s.sceneID !== scene.sceneID));
 
         return this.update({
-            scenes: [...this.s.scenes, scene]
+            scenes: [...this.s.scenes, scene],
         });
     }
 
     deleteScene(sceneID: string) {
         return this.update({
-            scenes: this.s.scenes.filter(s => s.sceneID !== sceneID)
+            scenes: this.s.scenes.filter((s) => s.sceneID !== sceneID),
         });
     }
 
     upsertLayer(sceneID: string, layer: Layer) {
         const scene = this.s.getScene(sceneID);
-        if (scene.layers.some(l => l.id === layer.id)) {
+        if (scene.layers.some((l) => l.id === layer.id)) {
             return this.updateScene(sceneID, {
                 layers: replaceValue(
                     scene.layers,
-                    l => l.id === layer.id,
-                    l => layer
-                )
+                    (l) => l.id === layer.id,
+                    (l) => layer
+                ),
             });
         } else {
             return this.updateScene(sceneID, {
-                layers: [layer, ...scene.layers]
+                layers: [layer, ...scene.layers],
             });
         }
     }
@@ -124,7 +124,7 @@ export class GameStateBuilder {
     deleteLayer(sceneID: string, layer: Layer) {
         const scene = this.s.getScene(sceneID);
         return this.updateScene(sceneID, {
-            layers: scene.layers.filter(l => l.id !== layer.id)
+            layers: scene.layers.filter((l) => l.id !== layer.id),
         });
     }
 
@@ -146,54 +146,54 @@ export class GameStateBuilder {
 
     removeToken(tokenID: string) {
         return this.update({
-            tokens: this.s.tokens.remove(tokenID)
+            tokens: this.s.tokens.remove(tokenID),
         });
     }
 
     addSelection(tokens: Token[]) {
         return this.update({
-            selectedTokens: this.s.selectedTokens.add(tokens)
+            selectedTokens: this.s.selectedTokens.add(tokens),
         });
     }
 
     updateSelection(tokens: Token[]) {
         return this.update({
-            selectedTokens: TokenSelection.fromTokens(tokens)
+            selectedTokens: TokenSelection.fromTokens(tokens),
         });
     }
 
     updateEntities(entities: EntityCollection) {
         return this.update({
-            entities
+            entities,
         });
     }
 
     addEntity(entity: GameEntity) {
         return this.update({
-            entities: this.s.entities.add(entity)
+            entities: this.s.entities.add(entity),
         });
     }
 
     updateEntity(entity: GameEntity) {
         return this.update({
-            entities: this.s.entities.update(entity)
+            entities: this.s.entities.update(entity),
         });
     }
 
     removeEntity(entityID: string) {
         return this.update({
-            entities: this.s.entities.delete(entityID)
+            entities: this.s.entities.delete(entityID),
         });
     }
 
     setEditEntity(entity: GameEntity | null) {
         if (entity == null) {
             return this.update({
-                editEntity: ""
+                editEntity: "",
             });
         } else {
             return this.update({
-                editEntity: entity.entityID()
+                editEntity: entity.entityID(),
             });
         }
     }

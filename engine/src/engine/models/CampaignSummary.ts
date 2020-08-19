@@ -1,3 +1,3 @@
-export class Engine {
+export class CampaignSummary {
     constructor(readonly id: string) {}
 }

@@ -1,5 +1,5 @@
-import { Attribute, Entity } from "protocol/src/Entity";
-import { EntityDelta, UpdateEntityDelta } from "protocol/src/EntityDelta";
+import { Attribute, Entity } from "engine/models/Entity";
+import { EntityDelta, UpdateEntityDelta } from "engine/models/EntityDelta";
 
 export class EntityDeltaFactory {
     constructor(private campaignID: string, private source: string) {}
@@ -8,7 +8,7 @@ export class EntityDeltaFactory {
         return {
             type: "create",
             source: this.source,
-            entity
+            entity,
         };
     }
 
@@ -19,7 +19,7 @@ export class EntityDeltaFactory {
             campaignID: this.campaignID,
             entityID: entity.entityID,
             source: this.source,
-            path: []
+            path: [],
         };
     }
 }

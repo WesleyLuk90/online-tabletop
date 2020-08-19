@@ -1,26 +1,26 @@
 import Axios from "axios";
-import { parse } from "protocol/src/Parse";
-import { Token, TokenSchema } from "protocol/src/Token";
+import { parse } from "engine/models/Parse";
+import { Token, TokenSchema } from "engine/models/Token";
 import {
     CreateToken,
     getCampaignID,
     TokenDelta,
-    UpdateToken
-} from "protocol/src/TokenDelta";
+    UpdateToken,
+} from "engine/models/TokenDelta";
 
 export class TokenRequests {
     static list({
         campaignID,
-        sceneID
+        sceneID,
     }: {
         campaignID: string;
         sceneID: string;
     }): Promise<Token[]> {
         return Axios.get(
             `/api/campaigns/${campaignID}/scenes/${sceneID}/tokens`
-        ).then(res => {
+        ).then((res) => {
             const data: any[] = res.data;
-            return data.map(d => parse(d, TokenSchema));
+            return data.map((d) => parse(d, TokenSchema));
         });
     }
 

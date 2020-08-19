@@ -1,4 +1,4 @@
-import { Scene } from "protocol/src/Scene";
+import { Scene } from "engine/models/Scene";
 import React from "react";
 import { Dropdown } from "../common/controls/Dropdown";
 import "./SceneSelector.css";
@@ -13,7 +13,7 @@ function SceneOption({ scene }: { scene: Scene | null }) {
 export function SceneSelector({
     scene,
     scenes,
-    onSelect
+    onSelect,
 }: {
     scene: Scene | null;
     scenes: Scene[];
@@ -26,9 +26,9 @@ export function SceneSelector({
                 <Dropdown
                     value={scene}
                     options={scenes}
-                    id={s => (s && s.sceneID) || ""}
-                    format={s => <SceneOption scene={s} />}
-                    onChange={s => s != null && onSelect(s.sceneID)}
+                    id={(s) => (s && s.sceneID) || ""}
+                    format={(s) => <SceneOption scene={s} />}
+                    onChange={(s) => s != null && onSelect(s.sceneID)}
                 />
             </div>
         </div>

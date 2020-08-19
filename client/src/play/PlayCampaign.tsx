@@ -1,4 +1,4 @@
-import { User } from "protocol/src/User";
+import { User } from "engine/models/User";
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { Spinner } from "../common/controls/Icon";
 import { EntityEditor } from "./entity/EntityEditor";
@@ -32,7 +32,7 @@ function reduceGameState(
 
 export function PlayCampaign({
     campaignID,
-    user
+    user,
 }: {
     campaignID: string;
     user: User;

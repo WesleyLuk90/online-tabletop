@@ -1,5 +1,5 @@
-import { Token } from "protocol/src/Token";
-import { CreateToken, UpdateToken } from "protocol/src/TokenDelta";
+import { Token } from "engine/models/Token";
+import { CreateToken, UpdateToken } from "engine/models/TokenDelta";
 
 export interface GameTokenUpdate {
     tokenID: string;
@@ -13,17 +13,17 @@ export class TokenDeltaFactory {
         return {
             type: "create",
             token,
-            source: this.sessionID
+            source: this.sessionID,
         };
     }
 
     update(updates: GameTokenUpdate[]): UpdateToken[] {
-        return updates.map(u => ({
+        return updates.map((u) => ({
             type: "update",
             campaignID: this.campaignID,
             tokenID: u.tokenID,
             update: u.updatedFields,
-            source: this.sessionID
+            source: this.sessionID,
         }));
     }
 }

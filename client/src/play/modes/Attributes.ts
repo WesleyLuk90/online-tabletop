@@ -1,4 +1,4 @@
-import { SubEntity } from "protocol/src/Entity";
+import { SubEntity } from "engine/models/Entity";
 import { checkNotNull } from "../../util/Nullable";
 import { GameEntity } from "../entity/GameEntity";
 import {
@@ -7,7 +7,7 @@ import {
     NumberAttribute,
     RichTextAttribute,
     SubEntityAttribute,
-    TextAttribute
+    TextAttribute,
 } from "./GameMode";
 
 export class Attributes {
@@ -16,7 +16,7 @@ export class Attributes {
     ): AttributeDefinition {
         return checkNotNull(
             entityType.attributes.find(
-                a => a.id === entityType.nameAttributeID
+                (a) => a.id === entityType.nameAttributeID
             ),
             "Missing name attribute"
         );
@@ -27,7 +27,7 @@ export class Attributes {
         entityType: EntityType
     ): AttributeDefinition {
         return checkNotNull(
-            entityType.attributes.find(a => a.id === attributeID),
+            entityType.attributes.find((a) => a.id === attributeID),
             `Missing attribute ${attributeID}`
         );
     }

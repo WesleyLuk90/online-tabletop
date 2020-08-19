@@ -1,8 +1,8 @@
-import { Campaign } from "protocol/src/Campaign";
-import { newUUID } from "protocol/src/Id";
-import { Role } from "protocol/src/Role";
-import { Update } from "protocol/src/Update";
-import { User } from "protocol/src/User";
+import { Campaign } from "engine/models/Campaign";
+import { newUUID } from "engine/models/Id";
+import { Role } from "engine/models/Role";
+import { Update } from "engine/models/Update";
+import { User } from "engine/models/User";
 import { CampaignRequests } from "../games/CampaignRequests";
 import { SceneRequests } from "../games/SceneRequests";
 import { Callback } from "../util/Callback";
@@ -18,7 +18,7 @@ import { TokenManager } from "./TokenManager";
 
 function isManager(campaign: Campaign, userID: string) {
     return campaign.players.some(
-        p => p.userID === userID && p.role === Role.manager
+        (p) => p.userID === userID && p.role === Role.manager
     );
 }
 
@@ -42,7 +42,7 @@ export class CampaignLoader {
         }
         this.socket = new Socket(
             () => this.loadCampaign(),
-            u => this.handleUpdate(u),
+            (u) => this.handleUpdate(u),
             () => this.update(null),
             this.campaignID
         );

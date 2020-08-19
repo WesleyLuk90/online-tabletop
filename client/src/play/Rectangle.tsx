@@ -1,4 +1,4 @@
-import { Token } from "protocol/src/Token";
+import { Token } from "engine/models/Token";
 import { Vector } from "./Vector";
 
 export class Rectangle {

@@ -1,4 +1,4 @@
-import { Scene } from "protocol/src/Scene";
+import { Scene } from "engine/models/Scene";
 import React, { useEffect, useRef, useState } from "react";
 import { Debouncer } from "./Debouncer";
 import "./GameMap.css";
@@ -19,7 +19,7 @@ export function GameMap({
     tool,
     gameState,
     dispatch,
-    services
+    services,
 }: {
     scene: Scene;
     tool: ToolType;
@@ -67,7 +67,7 @@ export function GameMap({
                     onRightClick,
                     onDragStart,
                     onDrag,
-                    onDragEnd
+                    onDragEnd,
                 }) => (
                     <Svg
                         size={screenSize}
@@ -88,7 +88,7 @@ export function GameMap({
                                 )
                             );
                         }}
-                        onZoom={tick => {
+                        onZoom={(tick) => {
                             setView(view.zoom(1 + tick * 0.1));
                         }}
                     >

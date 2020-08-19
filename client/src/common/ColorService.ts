@@ -1,4 +1,4 @@
-import { ColorData } from "protocol/src/Color";
+import { ColorData } from "engine/models/Color";
 import { Color } from "../play/Colors";
 
 export class ColorService {

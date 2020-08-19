@@ -1,13 +1,13 @@
-import { Scene } from "protocol/src/Scene";
+import { Scene } from "engine/models/Scene";
 import React from "react";
 import {
     NumberFormControl,
-    TextFormControl
+    TextFormControl,
 } from "../../common/controls/TextFormControl";
 
 export function SceneForm({
     scene,
-    onChange
+    onChange,
 }: {
     scene: Scene;
     onChange: (scene: Scene) => void;
@@ -17,12 +17,12 @@ export function SceneForm({
             <TextFormControl
                 label="Name"
                 value={scene.name}
-                onChange={name => onChange({ ...scene, name })}
+                onChange={(name) => onChange({ ...scene, name })}
             />
             <NumberFormControl
                 label="Grid Size"
                 value={scene.gridSize}
-                onChange={gridSize => onChange({ ...scene, gridSize })}
+                onChange={(gridSize) => onChange({ ...scene, gridSize })}
             />
         </div>
     );

@@ -1,4 +1,4 @@
-import { ColorData } from "protocol/src/Color";
+import { ColorData } from "engine/models/Color";
 import React from "react";
 import { BemBuilder } from "../../util/BemBuilder";
 import { ColorService } from "../ColorService";
@@ -8,7 +8,7 @@ const BEM = new BemBuilder("color-square");
 
 export function ColorSquare({
     color,
-    highlight
+    highlight,
 }: {
     color: ColorData;
     highlight?: boolean;

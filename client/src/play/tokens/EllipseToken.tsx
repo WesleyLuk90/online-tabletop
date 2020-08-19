@@ -1,4 +1,4 @@
-import { ColorData } from "protocol/src/Color";
+import { ColorData } from "engine/models/Color";
 import React from "react";
 import { ColorService } from "../../common/ColorService";
 import { Ellipse } from "../Ellipse";
@@ -7,7 +7,7 @@ export function EllipseToken({
     ellipse,
     strokeColor,
     fillColor,
-    strokeWidth
+    strokeWidth,
 }: {
     ellipse: Ellipse;
     strokeColor: ColorData;

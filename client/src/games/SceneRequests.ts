@@ -1,6 +1,6 @@
 import Axios from "axios";
-import { parse } from "protocol/src/Parse";
-import { Scene, SceneSchema } from "protocol/src/Scene";
+import { parse } from "engine/models/Parse";
+import { Scene, SceneSchema } from "engine/models/Scene";
 import { notFoundToNull } from "../util/Requests";
 
 function toScene(data: any) {
@@ -24,7 +24,7 @@ export class SceneRequests {
         sceneID: string
     ): Promise<Scene | null> {
         return Axios.get(`/api/campaigns/${campaignID}/scenes/${sceneID}`)
-            .then(res => toScene(res.data))
+            .then((res) => toScene(res.data))
             .catch(notFoundToNull);
     }
 
