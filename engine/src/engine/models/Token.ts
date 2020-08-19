@@ -10,7 +10,8 @@ class BaseToken {
         readonly id: string,
         readonly position: Vector,
         readonly size: Vector,
-        readonly type: TokenType
+        readonly type: TokenType,
+        readonly layerID: string
     ) {}
 }
 

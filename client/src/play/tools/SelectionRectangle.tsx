@@ -5,7 +5,7 @@ import { RenderableToken } from "../tokens/RenderableToken";
 
 export function SelectionRectangle({
     token,
-    gameState
+    gameState,
 }: {
     token: RenderableToken;
     gameState: GameState;
@@ -13,7 +13,7 @@ export function SelectionRectangle({
     const color = gameState.getLayerColor(token.token.layerID);
     return (
         <SvgRect
-            key={token.token.tokenID}
+            key={token.token.id}
             rect={token.boundingBox}
             fillColor={color.withAlpha(0.1)}
             strokeColor={color}
