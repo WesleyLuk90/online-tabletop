@@ -1,4 +1,4 @@
-import { Layer } from "engine/models/Scene";
+import { Layer } from "engine/engine/models/Scene";
 import { GameState } from "../GameState";
 import { GameEvent } from "./GameEvent";
 

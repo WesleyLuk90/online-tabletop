@@ -1,7 +1,17 @@
 import { Vector } from "./Vector";
 
+export enum TokenType {
+    rectangle,
+    elipse,
+}
+
 class BaseToken {
-    constructor(readonly position: Vector, readonly size: Vector) {}
+    constructor(
+        readonly id: string,
+        readonly position: Vector,
+        readonly size: Vector,
+        readonly type: TokenType
+    ) {}
 }
 
 export class DrawingToken extends BaseToken {}

@@ -1,4 +1,4 @@
-import { Token } from "engine/models/Token";
+import { Token } from "engine/engine/models/Token";
 
 export class TokenSelection {
     static empty() {
@@ -6,7 +6,7 @@ export class TokenSelection {
     }
 
     static fromTokens(tokens: Token[]) {
-        return new TokenSelection(tokens.map((t) => t.tokenID));
+        return new TokenSelection(tokens.map((t) => t.id));
     }
 
     private set: Set<string>;
@@ -16,12 +16,12 @@ export class TokenSelection {
     }
 
     has(token: Token) {
-        return this.set.has(token.tokenID);
+        return this.set.has(token.id);
     }
 
     add(tokens: Token[]) {
         const next = new TokenSelection(this.set);
-        tokens.forEach((t) => next.set.add(t.tokenID));
+        tokens.forEach((t) => next.set.add(t.id));
         return next;
     }
 

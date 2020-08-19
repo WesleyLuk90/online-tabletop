@@ -1,11 +1,11 @@
-import { Token } from "engine/models/Token";
+import { Token } from "engine/engine/models/Token";
 import {
     applyUpdateToken,
     CreateToken,
     DeleteToken,
     UpdateToken,
-} from "engine/models/TokenDelta";
-import { TokenUpdate } from "engine/models/Update";
+} from "engine/engine/models/TokenDelta";
+import { TokenUpdate } from "engine/engine/models/Update";
 import { TokenRequests } from "../games/TokenRequests";
 import { ConflictResolver } from "../util/ConflictResolver";
 import { assertExhaustive } from "../util/Exaustive";

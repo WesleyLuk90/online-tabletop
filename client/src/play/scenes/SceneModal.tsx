@@ -1,4 +1,4 @@
-import { Scene } from "engine/models/Scene";
+import { Scene } from "engine/engine/models/Scene";
 import React from "react";
 import { ConfirmButton } from "../../common/controls/Button";
 import { ModalForm } from "../../common/controls/Modal";

@@ -1,4 +1,4 @@
-import { Entity } from "engine/models/Entity";
+import { Entity } from "engine/engine/models/Entity";
 import { GameEntity } from "../../entity/GameEntity";
 import { GameState } from "../GameState";
 import { GameEvent } from "./GameEvent";

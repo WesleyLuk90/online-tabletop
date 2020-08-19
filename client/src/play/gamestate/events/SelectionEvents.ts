@@ -1,5 +1,5 @@
-import { newUUID } from "engine/models/Id";
-import { Token } from "engine/models/Token";
+import { newUUID } from "engine/engine/models/Id";
+import { Token } from "engine/engine/models/Token";
 import { GameState } from "../GameState";
 import { GameEvent } from "./GameEvent";
 

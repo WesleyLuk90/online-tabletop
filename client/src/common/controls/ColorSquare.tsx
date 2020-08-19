@@ -1,4 +1,4 @@
-import { ColorData } from "engine/models/Color";
+import { Color } from "engine/utils/Color";
 import React from "react";
 import { BemBuilder } from "../../util/BemBuilder";
 import { ColorService } from "../ColorService";
@@ -10,7 +10,7 @@ export function ColorSquare({
     color,
     highlight,
 }: {
-    color: ColorData;
+    color: Color;
     highlight?: boolean;
 }) {
     return (

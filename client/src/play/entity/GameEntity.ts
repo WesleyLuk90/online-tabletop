@@ -1,5 +1,5 @@
-import { Attribute, Entity } from "engine/models/Entity";
-import { newUUID } from "engine/models/Id";
+import { Attribute, Entity } from "engine/engine/models/Entity";
+import { newUUID } from "engine/engine/models/Id";
 import { assertExhaustive } from "../../util/Exaustive";
 import { keyBy } from "../../util/Maps";
 import { checkNotNull } from "../../util/Nullable";

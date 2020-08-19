@@ -1,5 +1,8 @@
-import { Attribute, Entity } from "engine/models/Entity";
-import { EntityDelta, UpdateEntityDelta } from "engine/models/EntityDelta";
+import { Attribute, Entity } from "engine/engine/models/Entity";
+import {
+    EntityDelta,
+    UpdateEntityDelta,
+} from "engine/engine/models/EntityDelta";
 
 export class EntityDeltaFactory {
     constructor(private campaignID: string, private source: string) {}

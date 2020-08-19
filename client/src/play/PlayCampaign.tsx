@@ -1,4 +1,4 @@
-import { User } from "engine/models/User";
+import { User } from "engine/engine/models/User";
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { Spinner } from "../common/controls/Icon";
 import { EntityEditor } from "./entity/EntityEditor";

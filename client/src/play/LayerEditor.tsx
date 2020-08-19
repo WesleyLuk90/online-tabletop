@@ -1,4 +1,4 @@
-import { Layer } from "engine/models/Scene";
+import { Layer } from "engine/engine/models/Scene";
 import React from "react";
 import { ColorService } from "../common/ColorService";
 import { ConfirmButton } from "../common/controls/Button";

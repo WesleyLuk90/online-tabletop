@@ -1,18 +1,6 @@
-import { fold } from "fp-ts/lib/Either";
-import { pipe } from "fp-ts/lib/function";
 import * as t from "io-ts";
+import { rightOrThrow } from "../utils/Exceptions";
 
-export function parse<I, T extends t.Props>(
-    data: any,
-    schema: t.Decoder<I, T>
-): T {
-    return pipe(
-        schema.decode(data),
-        fold(
-            (e) => {
-                throw e;
-            },
-            (r) => r
-        )
-    );
+export function parse<A>(data: any, schema: t.Type<A>): A {
+    return rightOrThrow(schema.decode(data));
 }

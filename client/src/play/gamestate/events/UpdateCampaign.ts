@@ -1,4 +1,4 @@
-import { Campaign } from "engine/models/Campaign";
+import { Campaign } from "engine/engine/models/Campaign";
 import { GameState } from "../GameState";
 import { GameEvent } from "./GameEvent";
 

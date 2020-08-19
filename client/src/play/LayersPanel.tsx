@@ -1,5 +1,5 @@
 import { faEye, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
-import { Layer } from "engine/models/Scene";
+import { Layer } from "engine/engine/models/Scene";
 import React, { useState } from "react";
 import { Button } from "../common/controls/Button";
 import { ColorSquare } from "../common/controls/ColorSquare";

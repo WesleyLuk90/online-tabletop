@@ -1,4 +1,4 @@
-import { Token } from "engine/models/Token";
+import { Token } from "engine/engine/models/Token";
 import { Rectangle } from "../Rectangle";
 import { Vector } from "../Vector";
 
@@ -14,7 +14,7 @@ export class RenderableToken {
     }
 
     key() {
-        return this.token.tokenID;
+        return this.token.id;
     }
 
     withOffset(offset: Vector) {

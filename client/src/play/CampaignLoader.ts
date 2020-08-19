@@ -1,8 +1,8 @@
-import { Campaign } from "engine/models/Campaign";
-import { newUUID } from "engine/models/Id";
-import { Role } from "engine/models/Role";
-import { Update } from "engine/models/Update";
-import { User } from "engine/models/User";
+import { Campaign } from "engine/engine/models/Campaign";
+import { newUUID } from "engine/engine/models/Id";
+import { Role } from "engine/engine/models/Role";
+import { Update } from "engine/engine/models/Update";
+import { User } from "engine/engine/models/User";
 import { CampaignRequests } from "../games/CampaignRequests";
 import { SceneRequests } from "../games/SceneRequests";
 import { Callback } from "../util/Callback";

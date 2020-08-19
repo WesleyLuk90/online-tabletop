@@ -1,4 +1,5 @@
-import { Token } from "engine/models/Token";
+import { Token } from "engine/engine/models/Token";
+import { TODO } from "engine/utils/Todo";
 import { TokenRequests } from "../../games/TokenRequests";
 import { GameState } from "../gamestate/GameState";
 import { TokenManager } from "../TokenManager";
@@ -26,17 +27,18 @@ export class TokenService {
         if (layer == null) {
             return gameState;
         }
-        const token: Token = {
-            ...creatableToken,
-            campaignID: gameState.campaign.id,
-            sceneID: gameState.getMySceneID(),
-            layerID: layer.id,
-            tokenID: newUUID(),
-            version: 0,
-        };
-        const delta = this.tokenDeltaFactory.create(token);
-        TokenRequests.create(delta);
-        this.tokenManager.createToken(delta);
-        return gameState;
+        return TODO();
+        // const token: Token = {
+        //     ...creatableToken,
+        //     campaignID: gameState.campaign.id,
+        //     sceneID: gameState.getMySceneID(),
+        //     layerID: layer.id,
+        //     tokenID: uuid(),
+        //     version: 0,
+        // };
+        // const delta = this.tokenDeltaFactory.create(token);
+        // TokenRequests.create(delta);
+        // this.tokenManager.createToken(delta);
+        // return gameState;
     }
 }

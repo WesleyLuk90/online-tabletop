@@ -1,4 +1,4 @@
-import { Layer, Scene } from "engine/models/Scene";
+import { Layer, Scene } from "engine/engine/models/Scene";
 import { SceneRequests } from "../../../games/SceneRequests";
 import { replaceValue } from "../../../util/List";
 import { GameState } from "../GameState";

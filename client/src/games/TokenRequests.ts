@@ -1,12 +1,12 @@
 import Axios from "axios";
-import { parse } from "engine/models/Parse";
-import { Token, TokenSchema } from "engine/models/Token";
+import { parse } from "engine/engine/models/Parse";
+import { Token, TokenSchema } from "engine/engine/models/Token";
 import {
     CreateToken,
     getCampaignID,
     TokenDelta,
     UpdateToken,
-} from "engine/models/TokenDelta";
+} from "engine/engine/models/TokenDelta";
 
 export class TokenRequests {
     static list({

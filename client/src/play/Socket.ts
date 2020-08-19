@@ -1,5 +1,9 @@
-import { parse } from "engine/models/Parse";
-import { campaignTopic, Update, UpdateSchema } from "engine/models/Update";
+import { parse } from "engine/engine/models/Parse";
+import {
+    campaignTopic,
+    Update,
+    UpdateSchema,
+} from "engine/engine/models/Update";
 import { connect } from "socket.io-client";
 
 export class Socket {

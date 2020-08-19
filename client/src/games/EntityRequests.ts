@@ -1,7 +1,7 @@
 import Axios from "axios";
-import { Entity, EntitySchema } from "engine/models/Entity";
-import { EntityDelta } from "engine/models/EntityDelta";
-import { parse } from "engine/models/Parse";
+import { Entity, EntitySchema } from "engine/engine/models/Entity";
+import { EntityDelta } from "engine/engine/models/EntityDelta";
+import { parse } from "engine/engine/models/Parse";
 import * as t from "io-ts";
 
 export class EntityRequests {

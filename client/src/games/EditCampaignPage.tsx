@@ -1,4 +1,4 @@
-import { Campaign } from "engine/models/Campaign";
+import { Campaign } from "engine/engine/models/Campaign";
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { Routes } from "../app/Routes";

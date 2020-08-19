@@ -1,5 +1,5 @@
-import { newUUID } from "engine/models/Id";
-import { User } from "engine/models/User";
+import { newUUID } from "engine/engine/models/Id";
+import { User } from "engine/engine/models/User";
 import { Callback } from "../util/Callback";
 import { CampaignEventHandler } from "./CampaignEventHandler";
 import { CampaignLoader } from "./CampaignLoader";

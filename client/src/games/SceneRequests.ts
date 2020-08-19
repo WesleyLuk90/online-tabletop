@@ -1,6 +1,6 @@
 import Axios from "axios";
-import { parse } from "engine/models/Parse";
-import { Scene, SceneSchema } from "engine/models/Scene";
+import { parse } from "engine/engine/models/Parse";
+import { Scene, SceneSchema } from "engine/engine/models/Scene";
 import { notFoundToNull } from "../util/Requests";
 
 function toScene(data: any) {

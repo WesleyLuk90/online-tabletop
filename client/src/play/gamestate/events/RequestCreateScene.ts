@@ -1,4 +1,4 @@
-import { Scene } from "engine/models/Scene";
+import { Scene } from "engine/engine/models/Scene";
 import { SceneRequests } from "../../../games/SceneRequests";
 import { GameState } from "../GameState";
 import { GameEvent } from "./GameEvent";

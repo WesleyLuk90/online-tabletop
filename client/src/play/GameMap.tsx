@@ -1,4 +1,4 @@
-import { Scene } from "engine/models/Scene";
+import { Scene } from "engine/engine/models/Scene";
 import React, { useEffect, useRef, useState } from "react";
 import { Debouncer } from "./Debouncer";
 import "./GameMap.css";

@@ -1,5 +1,5 @@
-import { newUUID } from "engine/models/Id";
-import { Layer, Scene } from "engine/models/Scene";
+import { newUUID } from "engine/engine/models/Id";
+import { Layer, Scene } from "engine/engine/models/Scene";
 import { Colors } from "./Colors";
 
 export class SceneService {

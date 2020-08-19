@@ -1,5 +1,5 @@
-import { Layer } from "engine/models/Scene";
-import { Token } from "engine/models/Token";
+import { Layer } from "engine/engine/models/Scene";
+import { Token } from "engine/engine/models/Token";
 import { groupBy, keyBy } from "../../util/Maps";
 
 export class TokenCollection {

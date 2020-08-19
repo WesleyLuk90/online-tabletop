@@ -3,8 +3,8 @@ import {
     faPencilAlt,
     faUsers,
 } from "@fortawesome/free-solid-svg-icons";
-import { Campaign } from "engine/models/Campaign";
-import { Scene } from "engine/models/Scene";
+import { Campaign } from "engine/engine/models/Campaign";
+import { Scene } from "engine/engine/models/Scene";
 import React, { useState } from "react";
 import { Button } from "../../common/controls/Button";
 import { IconButton } from "../../common/controls/IconButton";

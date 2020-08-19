@@ -1,4 +1,4 @@
-import { Scene } from "engine/models/Scene";
+import { Scene } from "engine/engine/models/Scene";
 import React from "react";
 import { Dropdown } from "../common/controls/Dropdown";
 import "./SceneSelector.css";

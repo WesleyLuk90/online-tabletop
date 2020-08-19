@@ -1,7 +1,7 @@
-import { Campaign } from "engine/models/Campaign";
-import { Layer, Scene } from "engine/models/Scene";
-import { Token } from "engine/models/Token";
-import { User } from "engine/models/User";
+import { Campaign } from "engine/engine/models/Campaign";
+import { Layer, Scene } from "engine/engine/models/Scene";
+import { Token } from "engine/engine/models/Token";
+import { User } from "engine/engine/models/User";
 import { checkNotNull, notNull } from "../../util/Nullable";
 import { Color, Colors } from "../Colors";
 import { EntityCollection } from "../EntityCollection";

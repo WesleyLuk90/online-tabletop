@@ -1,5 +1,5 @@
-import { Attribute } from "engine/models/Entity";
-import { newUUID } from "engine/models/Id";
+import { Attribute } from "engine/engine/models/Entity";
+import { newUUID } from "engine/engine/models/Id";
 import { EntityRequests } from "../../games/EntityRequests";
 import { EntityManager } from "../EntityManager";
 import { EntityType } from "../modes/GameMode";

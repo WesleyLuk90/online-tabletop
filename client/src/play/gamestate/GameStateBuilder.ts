@@ -1,7 +1,7 @@
-import { Campaign } from "engine/models/Campaign";
-import { Layer, Scene } from "engine/models/Scene";
-import { Token } from "engine/models/Token";
-import { User } from "engine/models/User";
+import { Campaign } from "engine/engine/models/Campaign";
+import { Layer, Scene } from "engine/engine/models/Scene";
+import { Token } from "engine/engine/models/Token";
+import { User } from "engine/engine/models/User";
 import { checkState } from "../../util/CheckState";
 import { replaceValue } from "../../util/List";
 import { GameEntity } from "../entity/GameEntity";

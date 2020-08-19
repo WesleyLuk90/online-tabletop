@@ -1,8 +1,7 @@
-import { ColorData } from "engine/models/Color";
-import { Color } from "../play/Colors";
+import { Color } from "engine/utils/Color";
 
 export class ColorService {
-    static toRGBA(color: ColorData) {
+    static toRGBA(color: Color) {
         return `rgba(${color.red}, ${color.green}, ${
             color.blue
         }, ${color.alpha.toFixed(2)})`;
@@ -12,7 +11,7 @@ export class ColorService {
         return ColorService.toRGBA(color);
     }
 
-    static isEqual(a: ColorData, b: ColorData) {
+    static isEqual(a: Color, b: Color) {
         return (
             a.red === b.red &&
             a.green === b.green &&

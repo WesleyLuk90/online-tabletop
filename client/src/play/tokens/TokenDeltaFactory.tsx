@@ -1,5 +1,5 @@
-import { Token } from "engine/models/Token";
-import { CreateToken, UpdateToken } from "engine/models/TokenDelta";
+import { Token } from "engine/engine/models/Token";
+import { CreateToken, UpdateToken } from "engine/engine/models/TokenDelta";
 
 export interface GameTokenUpdate {
     tokenID: string;

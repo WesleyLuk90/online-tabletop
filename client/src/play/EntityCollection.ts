@@ -1,4 +1,4 @@
-import { Entity } from "engine/models/Entity";
+import { Entity } from "engine/engine/models/Entity";
 import { replaceValue } from "../util/List";
 import { groupBy, keyBy } from "../util/Maps";
 import { GameEntity } from "./entity/GameEntity";

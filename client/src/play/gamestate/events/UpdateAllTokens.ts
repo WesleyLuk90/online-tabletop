@@ -1,4 +1,4 @@
-import { Token } from "engine/models/Token";
+import { Token } from "engine/engine/models/Token";
 import { GameState } from "../GameState";
 import { GameEvent } from "./GameEvent";
 

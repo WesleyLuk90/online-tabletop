@@ -1,4 +1,4 @@
-import { SubEntity } from "engine/models/Entity";
+import { SubEntity } from "engine/engine/models/Entity";
 import { checkNotNull } from "../../util/Nullable";
 import { GameEntity } from "../entity/GameEntity";
 import {

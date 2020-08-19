@@ -1,10 +1,10 @@
-import { Entity } from "engine/models/Entity";
+import { Entity } from "engine/engine/models/Entity";
 import {
     applyDelta,
     deltaEntityID,
     EntityDelta,
     UpdateEntityDelta,
-} from "engine/models/EntityDelta";
+} from "engine/engine/models/EntityDelta";
 import { EntityRequests } from "../games/EntityRequests";
 import { ConflictResolver } from "../util/ConflictResolver";
 import { PromiseDebouncer } from "../util/PromiseDebouncer";

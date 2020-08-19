@@ -1,4 +1,4 @@
-import { ColorData } from "engine/models/Color";
+import { Color } from "engine/utils/Color";
 import React from "react";
 import { ColorService } from "../../common/ColorService";
 import { Rectangle } from "../Rectangle";
@@ -10,8 +10,8 @@ export function SvgRect({
     strokeWidth,
 }: {
     rect: Rectangle;
-    strokeColor: ColorData;
-    fillColor: ColorData;
+    strokeColor: Color;
+    fillColor: Color;
     strokeWidth: number;
 }) {
     return (
