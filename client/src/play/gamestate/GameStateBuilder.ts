@@ -194,7 +194,7 @@ export class GameStateBuilder {
             });
         } else {
             return this.update({
-                editEntity: entity.entityID(),
+                editEntity: entity.id(),
             });
         }
     }

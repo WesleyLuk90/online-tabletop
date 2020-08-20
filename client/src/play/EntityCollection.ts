@@ -17,7 +17,7 @@ export class EntityCollection {
     private byType: Map<string, GameEntity[]>;
 
     constructor(entities: GameEntity[]) {
-        this.entities = keyBy(entities, (e) => e.entityID());
+        this.entities = keyBy(entities, (e) => e.id());
         this.byType = groupBy(entities, (e) => e.entityTypeID());
     }
 
@@ -35,7 +35,7 @@ export class EntityCollection {
         return new EntityCollection(
             replaceValue(
                 this.toList(),
-                (e) => e.entityID() === entity.entityID(),
+                (e) => e.id() === entity.id(),
                 () => entity
             )
         );
@@ -43,7 +43,7 @@ export class EntityCollection {
 
     delete(entityID: string): EntityCollection {
         return new EntityCollection(
-            this.toList().filter((e) => e.entityID() !== entityID)
+            this.toList().filter((e) => e.id() !== entityID)
         );
     }
 

@@ -22,7 +22,7 @@ function nameFilter(
         needle: search,
         haystack: entity.formatAttribute(
             Attributes.getNameAttributeDefinition(entityType)
-        )
+        ),
     });
 }
 
@@ -30,7 +30,7 @@ export function EntityPanel({
     entities,
     entityType,
     dispatch,
-    services
+    services,
 }: {
     entities: EntityCollection;
     entityType: EntityType;
@@ -41,8 +41,8 @@ export function EntityPanel({
         <SidePanel header={entityType.pluralName}>
             <ItemList
                 data={entities.getByType(entityType)}
-                id={e => e.entityID()}
-                left={e => (
+                id={(e) => e.id()}
+                left={(e) => (
                     <div
                         onClick={() => dispatch(new EditEntity(e))}
                         className="entity-panel__entity-link"

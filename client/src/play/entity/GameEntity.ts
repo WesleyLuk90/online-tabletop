@@ -35,7 +35,7 @@ export class GameEntity {
     private attributes: Map<string, Attribute>;
 
     entityID() {
-        return this.entity.entityID;
+        return this.entity.id;
     }
 
     entityTypeID(): string {

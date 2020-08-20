@@ -26,7 +26,7 @@ class EntityConflictResolver extends ConflictResolver<
     }
 
     protected getID(entity: Entity): string {
-        return entity.entityID;
+        return entity.id;
     }
 
     protected updateID(delta: UpdateEntityDelta): string {
@@ -71,7 +71,7 @@ export class EntityManager {
                 if (update.source === this.sessionID) {
                     return;
                 }
-                return this.deleteEntity(update.entityID);
+                return this.deleteEntity(update.id);
             default:
                 this.conflictResolver.applyRemoteUpdate(update);
         }

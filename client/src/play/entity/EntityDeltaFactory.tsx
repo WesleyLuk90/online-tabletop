@@ -20,7 +20,7 @@ export class EntityDeltaFactory {
             type: "update-attribute",
             attribute: value,
             campaignID: this.campaignID,
-            entityID: entity.entityID,
+            entityID: entity.id,
             source: this.source,
             path: [],
         };
