@@ -1,3 +1,4 @@
+import { Rectangle } from "../../math/Rectangle";
 import { Vector } from "../../math/Vector";
 
 export enum TokenType {
@@ -13,6 +14,13 @@ class BaseToken {
         readonly type: TokenType,
         readonly layerID: string
     ) {}
+
+    boundingBox() {
+        return Rectangle.fromCorners(
+            this.position,
+            this.position.add(this.size)
+        );
+    }
 }
 
 export class DrawingToken extends BaseToken {}

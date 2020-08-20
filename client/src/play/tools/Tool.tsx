@@ -1,9 +1,9 @@
+import { Campaign } from "engine/src/engine/models/Campaign";
 import { DispatchGameEvent } from "../gamestate/events/GameEvent";
-import { GameState } from "../gamestate/GameState";
 import { Services } from "../Services";
 
 export interface ToolProps {
-    gameState: GameState;
+    game: Campaign;
     services: Services;
     dispatch: DispatchGameEvent;
 }

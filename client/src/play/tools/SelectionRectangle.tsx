@@ -1,5 +1,4 @@
 import React from "react";
-import { GameState } from "../gamestate/GameState";
 import { SvgRect } from "../svg/SvgRect";
 import { RenderableToken } from "../tokens/RenderableToken";
 
