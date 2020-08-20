@@ -1,7 +1,7 @@
 import { Color } from "engine/utils/Color";
 import React from "react";
 import { ColorService } from "../../common/ColorService";
-import { Rectangle } from "../Rectangle";
+import { Rectangle } from "engine/math/Rectangle";
 
 export function SvgRect({
     rect,

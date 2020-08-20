@@ -12,11 +12,6 @@ import { ItemList } from "../../common/controls/ItemList";
 import { SidePanel } from "../../common/layout/SidePanel";
 import { plural } from "../../util/Plural";
 import { DispatchGameEvent } from "../gamestate/events/GameEvent";
-import { RequestChangeDefaultScene } from "../gamestate/events/RequestChangeDefaultScene";
-import { RequestChangeMyScene } from "../gamestate/events/RequestChangeMyScene";
-import { RequestCreateScene } from "../gamestate/events/RequestCreateScene";
-import { RequestDeleteScene } from "../gamestate/events/RequestDeleteScene";
-import { RequestUpdateScene } from "../gamestate/events/RequestUpdateScene";
 import { SceneService } from "../SceneService";
 import { SceneModal } from "./SceneModal";
 import "./ScenePanel.css";
@@ -44,15 +39,12 @@ export function ScenePanel({
                 onChange={setEdit}
                 onCancel={() => setEdit(null)}
                 onDelete={(s) => {
-                    dispatch(new RequestDeleteScene(s));
                     setEdit(null);
                 }}
                 isNew={isNew}
                 onSave={async (toSave) => {
                     if (isNew) {
-                        dispatch(new RequestCreateScene(toSave));
                     } else {
-                        dispatch(new RequestUpdateScene(toSave));
                     }
                     setEdit(null);
                 }}
@@ -60,26 +52,20 @@ export function ScenePanel({
             <ItemList
                 data={scenes}
                 left={(s) => s.name}
-                id={(s) => s.sceneID}
+                id={(s) => s.id}
                 right={(s) => (
                     <div className="scene-panel__actions">
                         <IconButton
-                            inactive={s.sceneID !== myScene}
+                            inactive={s.id !== myScene}
                             icon={faLocationArrow}
-                            onClick={() =>
-                                dispatch(new RequestChangeMyScene(s.sceneID))
-                            }
                             title="Visible Scene"
+                            onClick={() => {}}
                         />
                         <IconButton
-                            inactive={s.sceneID !== defaultScene}
+                            inactive={s.id !== defaultScene}
                             icon={faUsers}
-                            onClick={() =>
-                                dispatch(
-                                    new RequestChangeDefaultScene(s.sceneID)
-                                )
-                            }
                             title="Players Scene"
+                            onClick={() => {}}
                         />
                         <IconButton
                             icon={faPencilAlt}

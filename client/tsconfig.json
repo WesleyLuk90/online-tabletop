@@ -1,4 +1,5 @@
 {
+    "extends": "../tsconfig.json",
     "compilerOptions": {
         "target": "es5",
         "lib": ["dom", "dom.iterable", "esnext"],
@@ -9,17 +10,14 @@
         "strict": true,
         "forceConsistentCasingInFileNames": true,
         "module": "esnext",
-        "moduleResolution": "node",
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": true,
         "jsx": "preserve",
-        "strictNullChecks": true,
-        "downlevelIteration": true,
         "baseUrl": ".",
         "paths": {
             "engine/*": ["../engine/src/*"]
         }
     },
-    "include": ["src/**/*.ts", "src/**/*.tsx", "../engine/src"]
+    "include": ["src/**/*.ts", "src/**/*.tsx", "../engine/src/**/*.ts"]
 }

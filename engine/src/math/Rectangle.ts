@@ -18,8 +18,8 @@ export class Rectangle {
 
     static fromToken(token: Token) {
         return Rectangle.fromCorners(
-            new Vector(token.x, token.y),
-            new Vector(token.x + token.width, token.y + token.height)
+            token.position,
+            token.position.add(token.size)
         );
     }
 

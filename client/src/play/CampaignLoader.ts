@@ -79,7 +79,7 @@ export class CampaignLoader {
                 this.campaignID
             );
             await SceneRequests.create(defaultScene);
-            campaign.sceneID = defaultScene.sceneID;
+            campaign.id = defaultScene.id;
             await CampaignRequests.update(campaign);
             this.loadCampaign();
         } else {

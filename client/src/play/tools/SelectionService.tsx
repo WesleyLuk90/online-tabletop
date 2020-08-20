@@ -1,7 +1,7 @@
+import { Rectangle } from "engine/math/Rectangle";
+import { Vector } from "engine/math/Vector";
 import { GameState } from "../gamestate/GameState";
-import { Rectangle } from "../Rectangle";
 import { RenderableToken } from "../tokens/RenderableToken";
-import { Vector } from "../Vector";
 
 export class SelectionService {
     private static candidates(gameState: GameState) {
@@ -11,18 +11,18 @@ export class SelectionService {
         }
         return gameState.tokens
             .byLayer(layer)
-            .filter(t => !gameState.selectedTokens.has(t))
+            .filter((t) => !gameState.selectedTokens.has(t))
             .map(RenderableToken.fromToken);
     }
 
     static point(point: Vector, gameState: GameState): RenderableToken[] {
-        return SelectionService.candidates(gameState).filter(t =>
+        return SelectionService.candidates(gameState).filter((t) =>
             t.boundingBox.contains(point)
         );
     }
 
     static area(area: Rectangle, gameState: GameState): RenderableToken[] {
-        return SelectionService.candidates(gameState).filter(t =>
+        return SelectionService.candidates(gameState).filter((t) =>
             t.boundingBox.overlaps(area)
         );
     }

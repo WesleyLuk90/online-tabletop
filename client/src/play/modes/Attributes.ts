@@ -1,4 +1,4 @@
-import { SubEntity } from "engine/engine/models/Entity";
+import { Entity } from "engine/engine/models/Entity";
 import { checkNotNull } from "../../util/Nullable";
 import { GameEntity } from "../entity/GameEntity";
 import {
@@ -60,7 +60,7 @@ export class Attributes {
     static getSubEntityAttribute(
         attributeDefinition: SubEntityAttribute,
         entity: GameEntity
-    ): SubEntity[] {
+    ): Entity[] {
         const attribute = entity.getAttribute(attributeDefinition);
         if (attribute == null || !("entities" in attribute)) {
             return [];

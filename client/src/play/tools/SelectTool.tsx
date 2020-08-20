@@ -1,12 +1,11 @@
+import { Rectangle } from "engine/math/Rectangle";
+import { Vector } from "engine/math/Vector";
+import { Color } from "engine/utils/Color";
 import React, { useState } from "react";
-import { Color } from "../Colors";
-import { UpdateSelection } from "../gamestate/events/SelectionEvents";
 import { GameState } from "../gamestate/GameState";
 import { useMapEvents } from "../input/MapEvents";
-import { Rectangle } from "../Rectangle";
 import { SvgRect } from "../svg/SvgRect";
 import { RenderableToken } from "../tokens/RenderableToken";
-import { Vector } from "../Vector";
 import { Selected } from "./Selected";
 import { SelectionRectangle } from "./SelectionRectangle";
 import { SelectionService } from "./SelectionService";
@@ -17,14 +16,14 @@ const SELECT_FILL = new Color(35, 81, 207, 0.308);
 
 function ActiveSelection({
     gameState,
-    rect
+    rect,
 }: {
     gameState: GameState;
     rect: Rectangle;
 }) {
     return (
         <g>
-            {SelectionService.area(rect, gameState).map(t => (
+            {SelectionService.area(rect, gameState).map((t) => (
                 <SelectionRectangle
                     key={t.key()}
                     token={t}
@@ -50,9 +49,7 @@ export function SelectTool({ gameState, dispatch, services }: ToolProps) {
         onClick(loc) {
             const first = SelectionService.point(loc, gameState)[0];
             if (first != null) {
-                dispatch(new UpdateSelection([first.token]));
             } else {
-                dispatch(new UpdateSelection([]));
             }
         },
         onDragStart(start) {
@@ -62,14 +59,13 @@ export function SelectTool({ gameState, dispatch, services }: ToolProps) {
                 underCursor != null &&
                 !gameState.selectedTokens.has(underCursor.token)
             ) {
-                dispatch(new UpdateSelection([underCursor.token]));
                 setIsMoving(true);
             } else {
                 setIsMoving(
                     gameState
                         .getSelectedTokens()
                         .map(RenderableToken.fromToken)
-                        .some(t => t.boundingBox.contains(start))
+                        .some((t) => t.boundingBox.contains(start))
                 );
             }
         },
@@ -78,31 +74,23 @@ export function SelectTool({ gameState, dispatch, services }: ToolProps) {
         },
         onDragEnd(start, end) {
             if (!isMoving) {
-                dispatch(
-                    new UpdateSelection(
-                        SelectionService.area(
-                            Rectangle.fromCorners(start, end),
-                            gameState
-                        ).map(t => t.token)
-                    )
-                );
             } else {
                 const delta = end.subtract(start);
-                services.tokenService().update(
-                    gameState.getSelectedTokens().map(t => ({
-                        campaignID: t.campaignID,
-                        tokenID: t.tokenID,
-                        updatedFields: {
-                            x: t.x + delta.x,
-                            y: t.y + delta.y
-                        }
-                    }))
-                );
+                // services.tokenService().update(
+                //     gameState.getSelectedTokens().map(t => ({
+                //         campaignID: t.campaignID,
+                //         tokenID: t.tokenID,
+                //         updatedFields: {
+                //             x: t.x + delta.x,
+                //             y: t.y + delta.y
+                //         }
+                //     }))
+                // );
             }
             setStartPos(null);
             setCurrentPos(null);
             setIsMoving(false);
-        }
+        },
     });
 
     if (startPos == null || currentPos == null) {

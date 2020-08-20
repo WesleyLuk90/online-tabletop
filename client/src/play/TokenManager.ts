@@ -52,8 +52,8 @@ export class TokenManager {
     }
 
     updateScene(sceneID: string | null) {
-        const changed = this.sceneID !== sceneID;
-        this.sceneID = sceneID;
+        const changed = this.id !== sceneID;
+        this.id = sceneID;
         if (changed) {
             this.dispatch(new UpdateAllTokens([]));
             this.loadTokens();
@@ -61,13 +61,13 @@ export class TokenManager {
     }
 
     private async loadTokens() {
-        if (this.sceneID == null) {
+        if (this.id == null) {
             return;
         }
         const tokens = await this.debounce.debounce(
             TokenRequests.list({
                 campaignID: this.campaignID,
-                sceneID: this.sceneID,
+                sceneID: this.id,
             })
         );
         this.conflictResolver.updateAll(tokens);

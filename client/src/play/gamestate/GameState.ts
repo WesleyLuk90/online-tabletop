@@ -1,9 +1,10 @@
 import { Campaign } from "engine/engine/models/Campaign";
-import { Layer, Scene } from "engine/engine/models/Scene";
+import { Scene } from "engine/engine/models/Scene";
 import { Token } from "engine/engine/models/Token";
 import { User } from "engine/engine/models/User";
+import { Layer } from "engine/src/engine/models/Layer";
+import { Color, Colors } from "engine/src/utils/Color";
 import { checkNotNull, notNull } from "../../util/Nullable";
-import { Color, Colors } from "../Colors";
 import { EntityCollection } from "../EntityCollection";
 import { TokenCollection } from "../tokens/TokenCollection";
 import { TokenSelection } from "../tokens/TokenSelection";
@@ -52,22 +53,20 @@ export class GameState implements RawGameState {
     }
 
     getMySceneID(): string {
-        const player = this.campaign.players.find(
-            (p) => p.userID === this.user.id
-        );
-        if (player == null || player.sceneID === "") {
-            return this.campaign.sceneID;
+        const player = this.campaign.players.find((p) => p.id === this.user.id);
+        if (player == null || player.id === "") {
+            return this.campaign.id;
         }
-        return player.sceneID;
+        return player.id;
     }
 
     getMyScene(): Scene | null {
         const id = this.getMySceneID();
-        return this.scenes.find((s) => s.sceneID === id) || null;
+        return this.scenes.find((s) => s.id === id) || null;
     }
 
     getScene(sceneID: string): Scene {
-        return checkNotNull(this.scenes.find((s) => s.sceneID === sceneID));
+        return checkNotNull(this.scenes.find((s) => s.id === sceneID));
     }
 
     getActiveLayer(): Layer | null {
@@ -83,9 +82,9 @@ export class GameState implements RawGameState {
     }
 
     getLayerColor(layerID: string): Color {
-        return Color.fromData(
-            this.getMyScene()?.layers.find((l) => l.id === layerID)?.color ||
-                Colors[3]
+        return (
+            this.getMyScene()?.layers.find((l) => l.id === layerID)?.color ??
+            Colors[3]
         );
     }
 

@@ -1,7 +1,7 @@
+import { Vector } from "engine/math/Vector";
 import React, { useContext, useEffect, useRef } from "react";
 import { checkState } from "../../util/CheckState";
 import { notNull } from "../../util/Nullable";
-import { Vector } from "../Vector";
 
 export interface MapEvents {
     onClick: (position: Vector) => void;
@@ -32,7 +32,7 @@ export function useMapEvents(mapEvents: OptionalMapEvents) {
 class SubscriptionManager<Args extends any[]> {
     subscribers: ((...args: Args) => void)[] = [];
     invoke(...args: Args) {
-        this.subscribers.forEach(s => {
+        this.subscribers.forEach((s) => {
             try {
                 s(...args);
             } catch (e) {
@@ -48,12 +48,12 @@ class SubscriptionManager<Args extends any[]> {
         checkState(!this.subscribers.includes(callable));
         this.subscribers.push(callable);
         return () =>
-            (this.subscribers = this.subscribers.filter(s => s !== callable));
+            (this.subscribers = this.subscribers.filter((s) => s !== callable));
     }
 }
 
 export function MapContextProvider({
-    children
+    children,
 }: {
     children: (events: MapEvents) => React.ReactNode;
 }) {
@@ -62,7 +62,7 @@ export function MapContextProvider({
         onRightClick: new SubscriptionManager<[Vector]>(),
         onDragStart: new SubscriptionManager<[Vector]>(),
         onDrag: new SubscriptionManager<[Vector, Vector]>(),
-        onDragEnd: new SubscriptionManager<[Vector, Vector]>()
+        onDragEnd: new SubscriptionManager<[Vector, Vector]>(),
     });
 
     function subscribe(events: OptionalMapEvents) {
@@ -71,9 +71,9 @@ export function MapContextProvider({
             subscribers.current.onRightClick.subscribe(events.onRightClick),
             subscribers.current.onDragStart.subscribe(events.onDragStart),
             subscribers.current.onDrag.subscribe(events.onDrag),
-            subscribers.current.onDragEnd.subscribe(events.onDragEnd)
+            subscribers.current.onDragEnd.subscribe(events.onDragEnd),
         ];
-        return () => subscriptions.filter(notNull).forEach(s => s());
+        return () => subscriptions.filter(notNull).forEach((s) => s());
     }
 
     const {
@@ -81,7 +81,7 @@ export function MapContextProvider({
         onRightClick,
         onDragStart,
         onDrag,
-        onDragEnd: onDragEng
+        onDragEnd: onDragEng,
     } = subscribers.current;
 
     return (
@@ -91,7 +91,7 @@ export function MapContextProvider({
                 onRightClick: onRightClick.invoke.bind(onRightClick),
                 onDragStart: onDragStart.invoke.bind(onDragStart),
                 onDrag: onDrag.invoke.bind(onDrag),
-                onDragEnd: onDragEng.invoke.bind(onDragEng)
+                onDragEnd: onDragEng.invoke.bind(onDragEng),
             })}
         </MapEventContext.Provider>
     );

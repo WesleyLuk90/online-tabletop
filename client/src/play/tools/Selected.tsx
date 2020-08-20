@@ -1,13 +1,13 @@
+import { Vector } from "engine/math/Vector";
 import React from "react";
 import { GameState } from "../gamestate/GameState";
 import { RenderableToken } from "../tokens/RenderableToken";
 import { TokenRender } from "../tokens/TokenLayer";
-import { Vector } from "../Vector";
 import { SelectionRectangle } from "./SelectionRectangle";
 
 export function Selected({
     gameState,
-    offset
+    offset,
 }: {
     gameState: GameState;
     offset: Vector;
@@ -17,15 +17,15 @@ export function Selected({
             {gameState
                 .getSelectedTokens()
                 .map(RenderableToken.fromToken)
-                .map(r => r.withOffset(offset))
-                .map(t => (
+                .map((r) => r.withOffset(offset))
+                .map((t) => (
                     <TokenRender key={t.key()} token={t} />
                 ))}
             {gameState
                 .getSelectedTokens()
                 .map(RenderableToken.fromToken)
-                .map(r => r.withOffset(offset))
-                .map(t => (
+                .map((r) => r.withOffset(offset))
+                .map((t) => (
                     <SelectionRectangle
                         key={t.key()}
                         token={t}

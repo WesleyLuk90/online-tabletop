@@ -3713,6 +3713,7 @@ __metadata:
     "@types/socket.io-client": ^1.4.32
     axios: ^0.18.0
     babel-loader: ^8.1.0
+    engine: "workspace:engine"
     fp-ts: ^1.17.3
     html-webpack-plugin: ^4.3.0
     http-proxy-middleware: ^0.20.0

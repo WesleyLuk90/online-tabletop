@@ -14,7 +14,7 @@ export class SceneRequests {
 
     static async update(scene: Scene): Promise<void> {
         await Axios.post(
-            `/api/campaigns/${scene.campaignID}/scenes/${scene.sceneID}`,
+            `/api/campaigns/${scene.campaignID}/scenes/${scene.id}`,
             scene
         );
     }

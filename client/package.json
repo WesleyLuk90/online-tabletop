@@ -12,6 +12,7 @@
         "@types/react": "16.8.14",
         "@types/react-dom": "16.8.4",
         "axios": "^0.18.0",
+        "engine": "workspace:engine",
         "fp-ts": "^1.17.3",
         "io-ts": "^1.8.5",
         "lodash": "^4.17.19",
@@ -24,7 +25,8 @@
         "yarn": "^1.22.0"
     },
     "scripts": {
-        "build": "webpack"
+        "build": "webpack",
+        "build-ts": "tsc"
     },
     "eslintConfig": {
         "extends": "react-app"

@@ -5,6 +5,10 @@ export class Color {
         readonly green: number,
         readonly alpha: number = 1
     ) {}
+
+    withAlpha(alpha: number) {
+        return new Color(this.red, this.blue, this.green, alpha);
+    }
 }
 
 export const Colors = [

@@ -1,9 +1,9 @@
 import { Scene } from "engine/engine/models/Scene";
 import React from "react";
-import { Rectangle } from "../Rectangle";
 import { RenderableToken } from "./RenderableToken";
 import { TokenCollection } from "./TokenCollection";
 import { TokenSelection } from "./TokenSelection";
+import { Rectangle } from "engine/math/Rectangle";
 
 export function TokenRender({ token }: { token: RenderableToken }) {
     return <div>WIP</div>;

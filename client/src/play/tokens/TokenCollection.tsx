@@ -1,6 +1,6 @@
-import { Layer } from "engine/engine/models/Scene";
 import { Token } from "engine/engine/models/Token";
 import { groupBy, keyBy } from "../../util/Maps";
+import { Layer } from "engine/engine/models/Layer";
 
 export class TokenCollection {
     static empty() {
@@ -15,7 +15,7 @@ export class TokenCollection {
     private tokensById: Map<string, Token>;
     constructor(tokens: Token[]) {
         this.tokensByLayer = groupBy(tokens, (t) => t.layerID);
-        this.tokensById = keyBy(tokens, (t) => t.tokenID);
+        this.tokensById = keyBy(tokens, (t) => t.id);
     }
 
     byLayer(layer: Layer): Token[] {
@@ -32,7 +32,7 @@ export class TokenCollection {
 
     update(token: Token) {
         const byId = new Map(this.tokensById);
-        byId.set(token.tokenID, token);
+        byId.set(token.id, token);
         return TokenCollection.fromList(Array.from(byId.values()));
     }
 

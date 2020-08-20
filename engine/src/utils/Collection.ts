@@ -36,4 +36,8 @@ export class Collection<T extends Element> {
     get(id: string): Option<T> {
         return fromNullable(this.byId.get(id));
     }
+
+    find(predicate: (t: T) => boolean): T | null {
+        return Array.from(this.byId.values()).find(predicate) ?? null;
+    }
 }

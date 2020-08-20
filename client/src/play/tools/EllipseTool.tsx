@@ -1,24 +1,25 @@
 import React, { useState } from "react";
-import { Color, Colors } from "../Colors";
 import { Ellipse } from "../Ellipse";
 import { useMapEvents } from "../input/MapEvents";
 import { EllipseToken } from "../tokens/EllipseToken";
-import { CreatableToken } from "../tokens/TokenService";
 import { ToolProps } from "./Tool";
+import { TODO } from "engine/utils/Todo";
+import { Colors, Color } from "engine/utils/Color";
 
-function ellipseToken(ellipse: Ellipse): CreatableToken {
-    return {
-        x: ellipse.left(),
-        y: ellipse.top(),
-        width: ellipse.width(),
-        height: ellipse.height(),
-        data: {
-            type: "ellipse",
-            strokeColor: Colors[0],
-            strokeWidth: 3,
-            fillColor: new Color(10, 10, 10, 0.1)
-        }
-    };
+function ellipseToken(ellipse: Ellipse): void {
+    return TODO();
+    // return {
+    //     x: ellipse.left(),
+    //     y: ellipse.top(),
+    //     width: ellipse.width(),
+    //     height: ellipse.height(),
+    //     data: {
+    //         type: "ellipse",
+    //         strokeColor: Colors[0],
+    //         strokeWidth: 3,
+    //         fillColor: new Color(10, 10, 10, 0.1)
+    //     }
+    // };
 }
 
 export function EllipseTool({ services, gameState }: ToolProps) {
@@ -30,7 +31,7 @@ export function EllipseTool({ services, gameState }: ToolProps) {
             services
                 .tokenService()
                 .create(gameState, ellipseToken(Ellipse.fromCorners(s, e)));
-        }
+        },
     });
 
     if (!ellipse) {
@@ -59,7 +60,7 @@ export function CenterEllipseTool({ gameState, services }: ToolProps) {
                     gameState,
                     ellipseToken(new Ellipse(s, e.subtract(s).abs()))
                 );
-        }
+        },
     });
 
     if (!ellipse) {

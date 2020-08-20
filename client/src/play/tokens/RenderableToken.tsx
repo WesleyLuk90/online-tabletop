@@ -1,6 +1,6 @@
 import { Token } from "engine/engine/models/Token";
-import { Rectangle } from "../Rectangle";
-import { Vector } from "../Vector";
+import { Rectangle } from "engine/math/Rectangle";
+import { Vector } from "engine/math/Vector";
 
 export class RenderableToken {
     readonly boundingBox: Rectangle;

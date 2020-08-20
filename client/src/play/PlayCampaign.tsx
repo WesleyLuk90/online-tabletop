@@ -89,13 +89,13 @@ export function PlayCampaign({
                     <ScenePanel
                         campaign={gameState.campaign}
                         myScene={gameState.getMySceneID()}
-                        defaultScene={gameState.campaign.sceneID}
+                        defaultScene={gameState.campaign.id}
                         scenes={gameState.scenes}
                         dispatch={dispatch}
                     />
                     {scene && (
                         <LayersPanel
-                            sceneID={scene.sceneID}
+                            sceneID={scene.id}
                             layers={scene.layers}
                             activeLayer={gameState.getActiveLayer()}
                             dispatch={dispatch}

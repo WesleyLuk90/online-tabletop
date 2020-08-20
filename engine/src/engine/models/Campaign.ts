@@ -2,6 +2,7 @@ import { Collection } from "../../utils/Collection";
 import { GameMode } from "../gamemode/GameMode";
 import { Entity } from "./Entity";
 import { EntityTemplate } from "./EntityTemplate";
+import { Player } from "./Player";
 import { Scene } from "./Scene";
 
 export class Campaign {
@@ -12,7 +13,8 @@ export class Campaign {
             Collection.empty(),
             Collection.empty(),
             Collection.empty(),
-            gameMode
+            gameMode,
+            Collection.empty()
         );
     }
 
@@ -22,7 +24,8 @@ export class Campaign {
         readonly scenes: Collection<Scene>,
         readonly entities: Collection<Entity>,
         readonly entityTemplates: Collection<EntityTemplate>,
-        readonly gameMode: GameMode
+        readonly gameMode: GameMode,
+        readonly players: Collection<Player>
     ) {}
 
     getEntity(id: string) {
@@ -40,7 +43,8 @@ export class Campaign {
             campaign.scenes ?? this.scenes,
             campaign.entities ?? this.entities,
             campaign.entityTemplates ?? this.entityTemplates,
-            campaign.gameMode ?? this.gameMode
+            campaign.gameMode ?? this.gameMode,
+            campaign.players ?? this.players
         );
     }
 

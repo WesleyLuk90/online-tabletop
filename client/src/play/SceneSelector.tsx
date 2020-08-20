@@ -26,9 +26,9 @@ export function SceneSelector({
                 <Dropdown
                     value={scene}
                     options={scenes}
-                    id={(s) => (s && s.sceneID) || ""}
+                    id={(s) => (s && s.id) || ""}
                     format={(s) => <SceneOption scene={s} />}
-                    onChange={(s) => s != null && onSelect(s.sceneID)}
+                    onChange={(s) => s != null && onSelect(s.id)}
                 />
             </div>
         </div>

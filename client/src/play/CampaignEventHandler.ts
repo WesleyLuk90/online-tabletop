@@ -15,12 +15,9 @@ export class CampaignEventHandler {
     }
 
     async updateScene(update: SceneUpdate) {
-        const scene = await SceneRequests.get(
-            update.campaignID,
-            update.sceneID
-        );
+        const scene = await SceneRequests.get(update.campaignID, update.id);
         if (scene == null) {
-            return this.update(new DeleteScene(update.sceneID));
+            return this.update(new DeleteScene(update.id));
         } else {
             return this.update(new UpdateScene(scene));
         }

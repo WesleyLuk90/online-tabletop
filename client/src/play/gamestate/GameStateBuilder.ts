@@ -1,7 +1,8 @@
 import { Campaign } from "engine/engine/models/Campaign";
-import { Layer, Scene } from "engine/engine/models/Scene";
+import { Scene } from "engine/engine/models/Scene";
 import { Token } from "engine/engine/models/Token";
 import { User } from "engine/engine/models/User";
+import { Layer } from "engine/src/engine/models/Layer";
 import { checkState } from "../../util/CheckState";
 import { replaceValue } from "../../util/List";
 import { GameEntity } from "../entity/GameEntity";
@@ -52,46 +53,46 @@ export class GameStateBuilder {
 
     changeMyScene(sceneID: string) {
         return this.update({
-            campaign: {
-                ...this.s.campaign,
-                players: replaceValue(
-                    this.s.campaign.players,
-                    (p) => p.userID === this.s.user.id,
-                    (p) => ({ ...p, sceneID })
-                ),
-            },
+            // campaign: {
+            // ...this.s.campaign,
+            // players: replaceValue(
+            //     this.s.campaign.players,
+            //     (p) => p.userID === this.s.user.id,
+            //     (p) => ({ ...p, sceneID })
+            // ),
+            // },
         });
     }
 
     changeDefaultScene(sceneID: string) {
         return this.update({
-            campaign: { ...this.s.campaign, sceneID },
+            // campaign: { ...this.s.campaign, id: sceneID },
         });
     }
 
     updateScene(sceneID: string, scene: Partial<Scene>) {
         checkState(
-            this.s.scenes.some((s) => s.sceneID === sceneID),
+            this.s.scenes.some((s) => s.id === sceneID),
             `Did not find scene with id ${sceneID}`
         );
         return this.update({
             scenes: replaceValue(
                 this.s.scenes,
-                (s) => s.sceneID === sceneID,
+                (s) => s.id === sceneID,
                 (s) => ({ ...s, ...scene })
             ),
         });
     }
 
     upsertScene(scene: Scene) {
-        if (this.s.scenes.some((s) => s.sceneID === scene.sceneID)) {
-            return this.updateScene(scene.sceneID, scene);
+        if (this.s.scenes.some((s) => s.id === scene.id)) {
+            return this.updateScene(scene.id, scene);
         }
         return this.addScene(scene);
     }
 
     addScene(scene: Scene) {
-        checkState(this.s.scenes.every((s) => s.sceneID !== scene.sceneID));
+        checkState(this.s.scenes.every((s) => s.id !== scene.id));
 
         return this.update({
             scenes: [...this.s.scenes, scene],
@@ -100,7 +101,7 @@ export class GameStateBuilder {
 
     deleteScene(sceneID: string) {
         return this.update({
-            scenes: this.s.scenes.filter((s) => s.sceneID !== sceneID),
+            scenes: this.s.scenes.filter((s) => s.id !== sceneID),
         });
     }
 

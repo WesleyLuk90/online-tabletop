@@ -1,24 +1,25 @@
+import { Rectangle } from "engine/math/Rectangle";
+import { Color, Colors } from "engine/utils/Color";
 import React, { useState } from "react";
-import { Color, Colors } from "../Colors";
 import { useMapEvents } from "../input/MapEvents";
-import { Rectangle } from "../Rectangle";
 import { SvgRect } from "../svg/SvgRect";
-import { CreatableToken } from "../tokens/TokenService";
 import { ToolProps } from "./Tool";
+import { TODO } from "engine/utils/Todo";
 
-function rectToken(rect: Rectangle): CreatableToken {
-    return {
-        x: rect.left,
-        y: rect.top,
-        width: rect.width(),
-        height: rect.height(),
-        data: {
-            type: "square",
-            strokeColor: Colors[0],
-            strokeWidth: 3,
-            fillColor: new Color(10, 10, 10, 0.1)
-        }
-    };
+function rectToken(rect: Rectangle): void {
+    return TODO();
+    // return {
+    //     x: rect.left,
+    //     y: rect.top,
+    //     width: rect.width(),
+    //     height: rect.height(),
+    //     data: {
+    //         type: "square",
+    //         strokeColor: Colors[0],
+    //         strokeWidth: 3,
+    //         fillColor: new Color(10, 10, 10, 0.1),
+    //     },
+    // };
 }
 
 export function RectangleTool({ gameState, services }: ToolProps) {
@@ -30,7 +31,7 @@ export function RectangleTool({ gameState, services }: ToolProps) {
             services
                 .tokenService()
                 .create(gameState, rectToken(Rectangle.fromCorners(s, e)));
-        }
+        },
     });
 
     if (!rect) {
@@ -59,7 +60,7 @@ export function CenterRectangleTool({ gameState, services }: ToolProps) {
                     gameState,
                     rectToken(Rectangle.fromCenterAndCorner(s, e))
                 );
-        }
+        },
     });
 
     if (!rect) {
