@@ -5,9 +5,7 @@ import { Routes } from "../app/Routes";
 import { ConfirmButton } from "../common/controls/Button";
 import { Form } from "../common/controls/Form";
 import { Spinner } from "../common/controls/Icon";
-import { TextFormControl } from "../common/controls/TextFormControl";
 import { Page } from "../common/layout/Page";
-import { CampaignRequests } from "./CampaignRequests";
 
 export function EditCampaignPage() {
     const { id } = useParams();
@@ -18,15 +16,15 @@ export function EditCampaignPage() {
 
     useEffect(() => {
         if (!id) {
-            setOriginal({
-                id: "",
-                ownerID: "",
-                name: "",
-                players: [],
-                sceneID: "",
-            });
+            // setOriginal({
+            //     id: "",
+            //     ownerID: "",
+            //     name: "",
+            //     players: [],
+            //     sceneID: "",
+            // });
         } else {
-            CampaignRequests.get(id).then(setOriginal);
+            // CampaignRequests.get(id).then(setOriginal);
         }
     }, [id]);
 
@@ -39,27 +37,27 @@ export function EditCampaignPage() {
 
     async function onSave() {
         if (isNew) {
-            const created = await CampaignRequests.create(campaign);
-            history.push(Routes.editCampaign(created.id));
+            // const created = await CampaignRequests.create(campaign);
+            // history.push(Routes.editCampaign(created.id));
         } else {
-            setOriginal(await CampaignRequests.update(campaign));
+            // setOriginal(await CampaignRequests.update(campaign));
             setEdits(null);
         }
     }
 
     async function doDelete() {
-        await CampaignRequests.delete(campaign);
+        // await CampaignRequests.delete(campaign);
         history.push(Routes.home());
     }
 
     return (
         <Page title={isNew ? "Create Campaign" : "Edit Campaign"}>
             <Form onSave={onSave}>
-                <TextFormControl
+                {/* <TextFormControl
                     value={campaign.name}
                     label="Name"
                     onChange={(name) => setEdits({ ...campaign, name })}
-                />
+                /> */}
             </Form>
             <ConfirmButton prompt="Delete this campaign?" onClick={doDelete}>
                 Delete

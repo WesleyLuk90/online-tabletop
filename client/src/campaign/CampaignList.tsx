@@ -1,3 +1,4 @@
+import { CampaignSummary } from "engine/src/engine/models/CampaignSummary";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Routes } from "../app/Routes";

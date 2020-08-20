@@ -11,8 +11,6 @@ import { IconButton } from "../../common/controls/IconButton";
 import { ItemList } from "../../common/controls/ItemList";
 import { SidePanel } from "../../common/layout/SidePanel";
 import { plural } from "../../util/Plural";
-import { DispatchGameEvent } from "../gamestate/events/GameEvent";
-import { SceneService } from "../SceneService";
 import { SceneModal } from "./SceneModal";
 import "./ScenePanel.css";
 
@@ -27,7 +25,7 @@ export function ScenePanel({
     myScene: string;
     defaultScene: string;
     scenes: Scene[];
-    dispatch: DispatchGameEvent;
+    dispatch: (a: any) => void;
 }) {
     const [edit, setEdit] = useState<Scene | null>(null);
     const [isNew, setIsNew] = useState(false);
@@ -84,7 +82,7 @@ export function ScenePanel({
                 </p>
                 <Button
                     onClick={() => {
-                        setEdit(SceneService.createDefaultScene(campaign.id));
+                        // setEdit(SceneService.createDefaultScene(campaign.id));
                         setIsNew(true);
                     }}
                 >

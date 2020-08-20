@@ -1,13 +1,13 @@
+import { Vector } from "engine/src/math/Vector";
 import React, {
     ReactNode,
     useCallback,
     useContext,
     useEffect,
     useRef,
-    useState
+    useState,
 } from "react";
 import { createPortal } from "react-dom";
-import { Vector } from "../../play/Vector";
 
 const FollowContext = React.createContext<HTMLDivElement | null>(null);
 
@@ -24,7 +24,7 @@ export function FollowContainer({ children }: { children: ReactNode }) {
 
 export function FollowMouse({
     children,
-    onMouseMove
+    onMouseMove,
 }: {
     children: ReactNode;
     onMouseMove: (pos: Vector) => void;
@@ -54,7 +54,7 @@ export function FollowMouse({
                     position: "fixed",
                     left: position.x,
                     top: position.y,
-                    zIndex: 10000
+                    zIndex: 10000,
                 }}
             >
                 {children}

@@ -1,31 +1,19 @@
 import { Scene } from "engine/engine/models/Scene";
+import { Vector } from "engine/src/math/Vector";
 import React, { useEffect, useRef, useState } from "react";
 import { Debouncer } from "./Debouncer";
 import "./GameMap.css";
-import { DispatchGameEvent } from "./gamestate/events/GameEvent";
-import { GameState } from "./gamestate/GameState";
 import { Grid } from "./Grid";
 import { MapContextProvider } from "./input/MapEvents";
-import { Services } from "./Services";
 import { Svg } from "./Svg";
-import { TokenLayer } from "./tokens/TokenLayer";
-import { ToolLayer } from "./ToolLayer";
-import { ToolType } from "./tools/ToolType";
-import { Vector } from "./Vector";
 import { View } from "./View";
 
 export function GameMap({
     scene,
-    tool,
-    gameState,
     dispatch,
-    services,
 }: {
     scene: Scene;
-    tool: ToolType;
-    gameState: GameState;
-    dispatch: DispatchGameEvent;
-    services: Services;
+    dispatch: (a: any) => void;
 }) {
     const [view, setView] = useState(new View(1, new Vector(0, 0)));
     const [screenSize, setScreenSize] = useState(new Vector(1000, 1000));
@@ -93,18 +81,6 @@ export function GameMap({
                         }}
                     >
                         <Grid viewport={viewport} scene={scene} />
-                        <TokenLayer
-                            tokens={gameState.tokens}
-                            scene={scene}
-                            viewport={viewport}
-                            selection={gameState.selectedTokens}
-                        />
-                        <ToolLayer
-                            tool={tool}
-                            dispatch={dispatch}
-                            gameState={gameState}
-                            services={services}
-                        />
                     </Svg>
                 )}
             </MapContextProvider>

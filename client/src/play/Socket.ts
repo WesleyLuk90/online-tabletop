@@ -1,9 +1,9 @@
-import { parse } from "engine/engine/models/Parse";
-import {
-    campaignTopic,
-    Update,
-    UpdateSchema,
-} from "engine/engine/models/Update";
+// import { parse } from "engine/engine/models/Parse";
+// import {
+//     campaignTopic,
+//     Update,
+//     UpdateSchema,
+// } from "engine/engine/models/Update";
 import { connect } from "socket.io-client";
 
 export class Socket {
@@ -11,7 +11,7 @@ export class Socket {
 
     constructor(
         readonly onConnect: () => void,
-        readonly onUpdate: (update: Update) => void,
+        readonly onUpdate: (update: any) => void,
         readonly onDisconnect: () => void,
         readonly campaignID: string
     ) {
@@ -20,14 +20,14 @@ export class Socket {
             transports: ["websocket"],
         });
         this.socket.on("connect", this.onConnect);
-        this.socket.on(campaignTopic(campaignID), (data: any) => {
-            try {
-                const result = parse(data, UpdateSchema);
-                this.onUpdate(result);
-            } catch (e) {
-                console.error(e);
-            }
-        });
+        // this.socket.on(campaignTopic(campaignID), (data: any) => {
+        //     try {
+        //         const result = parse(data, UpdateSchema);
+        //         this.onUpdate(result);
+        //     } catch (e) {
+        //         console.error(e);
+        //     }
+        // });
         this.socket.on("disconnect", () => {
             console.error("Disconnected");
             this.onDisconnect();

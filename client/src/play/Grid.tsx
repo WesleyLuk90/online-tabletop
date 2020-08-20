@@ -1,8 +1,8 @@
 import { Scene } from "engine/engine/models/Scene";
+import { Rectangle } from "engine/src/math/Rectangle";
 import React from "react";
 import { range } from "../util/Range";
 import "./Grid.css";
-import { Rectangle } from "./Rectangle";
 
 export function Line({
     x1,

@@ -1,4 +1,5 @@
-import { Layer } from "engine/engine/models/Scene";
+import { Layer } from "engine/src/engine/models/Layer";
+import { Colors } from "engine/src/utils/Color";
 import React from "react";
 import { ColorService } from "../common/ColorService";
 import { ConfirmButton } from "../common/controls/Button";
@@ -6,7 +7,6 @@ import { ColorSquare } from "../common/controls/ColorSquare";
 import { Label } from "../common/controls/Label";
 import { ModalForm } from "../common/controls/Modal";
 import { TextFormControl } from "../common/controls/TextFormControl";
-import { Colors } from "./Colors";
 import "./LayerEditor.css";
 
 export function LayerEditor({

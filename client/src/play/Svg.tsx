@@ -1,13 +1,13 @@
+import { Rectangle } from "engine/src/math/Rectangle";
+import { Vector } from "engine/src/math/Vector";
 import React, { ReactNode, useRef } from "react";
 import { interpolate, percent } from "../util/Math";
 import { checkNotNull } from "../util/Nullable";
 import { useDebounced } from "./Debouncer";
-import { Rectangle } from "./Rectangle";
-import { Vector } from "./Vector";
 
 enum Button {
     Primary = 0,
-    Secondary = 2
+    Secondary = 2,
 }
 
 const MIN_DRAG_DISTANCE = 5;
@@ -39,7 +39,7 @@ export function Svg({
     onDragEnd,
     onPan,
     onPanEnd,
-    onZoom
+    onZoom,
 }: {
     children: ReactNode;
     viewport: Rectangle;
@@ -146,7 +146,7 @@ export function Svg({
         updateMouseState(
             primaryMouseState,
             e,
-            s => dragStartDebounced(s.start),
+            (s) => dragStartDebounced(s.start),
             (s, loc) => dragDebounced(s.start, screenToWorld(loc))
         );
         updateMouseState(
@@ -161,13 +161,13 @@ export function Svg({
         updateMouseEnd(
             primaryMouseState,
             e,
-            s => onClick(s),
+            (s) => onClick(s),
             (s, loc) => dragEndDebounced(s.start, screenToWorld(loc))
         );
         updateMouseEnd(
             secondaryMouseState,
             e,
-            s => onRightClick(s),
+            (s) => onRightClick(s),
             (s, loc) => panEndDebounced(s.screenStart, loc)
         );
     }
@@ -187,7 +187,7 @@ export function Svg({
             onMouseDown={onMouseDown}
             onMouseUp={onMouseUp}
             onMouseMove={onMouseMove}
-            onContextMenu={e => e.preventDefault()}
+            onContextMenu={(e) => e.preventDefault()}
             onWheel={onWheel}
         >
             {children}

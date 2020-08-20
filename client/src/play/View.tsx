@@ -1,6 +1,6 @@
+import { Rectangle } from "engine/src/math/Rectangle";
+import { Vector } from "engine/src/math/Vector";
 import { limit } from "../util/Math";
-import { Rectangle } from "./Rectangle";
-import { Vector } from "./Vector";
 
 const MAX_ZOOM = 100;
 const MIN_ZOOM = 1 / 100;

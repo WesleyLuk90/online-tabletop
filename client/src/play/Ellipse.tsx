@@ -1,14 +1,8 @@
-import { Vector } from "./Vector";
+import { Vector } from "engine/src/math/Vector";
 
 export class Ellipse {
     static fromCorners(a: Vector, b: Vector) {
-        return new Ellipse(
-            a.add(b).scale(0.5),
-            b
-                .subtract(a)
-                .abs()
-                .scale(0.5)
-        );
+        return new Ellipse(a.add(b).scale(0.5), b.subtract(a).abs().scale(0.5));
     }
 
     constructor(readonly center: Vector, readonly radius: Vector) {}

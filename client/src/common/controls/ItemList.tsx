@@ -1,6 +1,6 @@
 import { faGripVertical } from "@fortawesome/free-solid-svg-icons";
+import { Vector } from "engine/src/math/Vector";
 import React, { ReactNode, useRef, useState } from "react";
-import { Vector } from "../../play/Vector";
 import { FollowMouse } from "../mouse/FollowMouse";
 import { GlobalMouseUp } from "../mouse/GlobalMouseUp";
 import { Icon } from "./Icon";
@@ -15,7 +15,7 @@ export function ItemList<T>({
     right,
     id,
     onMove,
-    filter
+    filter,
 }: {
     data: T[];
     left: (t: T) => ReactNode;
@@ -80,7 +80,7 @@ export function ItemList<T>({
                             {onMove && (
                                 <div
                                     className="item-list__drag-icon"
-                                    onMouseDown={e => onMouseDown(e, i)}
+                                    onMouseDown={(e) => onMouseDown(e, i)}
                                 >
                                     <Icon icon={faGripVertical} />
                                 </div>
