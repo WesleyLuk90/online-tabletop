@@ -1,4 +1,4 @@
-import { Vector } from "engine/src/math/Vector";
+import { Vector } from "engine/math/Vector";
 import React, {
     ReactNode,
     useCallback,

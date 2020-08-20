@@ -15,7 +15,7 @@ module.exports = {
                 test: /\.tsx?$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: "babel-loader",
+                    loader: require.resolve("babel-loader"),
                 },
             },
             {
@@ -31,13 +31,13 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: "Output Management",
+            title: "Online Tabletop",
             template: path.resolve(__dirname, "public/index.html"),
         }),
     ],
     resolve: {
         plugins: [PnpWebpackPlugin],
-        extensions: [".ts", ".tsx"],
+        extensions: [".ts", ".tsx", ".js"],
         alias: {
             engine: path.resolve(__dirname, "../engine/src"),
         },
