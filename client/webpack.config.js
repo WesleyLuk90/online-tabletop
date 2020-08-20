@@ -20,8 +20,12 @@ module.exports = {
             },
             {
                 test: /\.tsx?$/,
-                use: "ts-loader",
+                use: require.resolve("ts-loader"),
                 exclude: /node_modules/,
+            },
+            {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
             },
         ],
     },
@@ -33,6 +37,10 @@ module.exports = {
     ],
     resolve: {
         plugins: [PnpWebpackPlugin],
+        extensions: [".ts", ".tsx"],
+        alias: {
+            engine: path.resolve(__dirname, "../engine/src"),
+        },
     },
     resolveLoader: {
         plugins: [PnpWebpackPlugin.moduleLoader(module)],
