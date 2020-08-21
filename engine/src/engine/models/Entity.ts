@@ -9,7 +9,6 @@ export class Entity {
     constructor(
         readonly id: string,
         readonly templateId: string,
-        readonly type: string,
         attributes?: Collection<Attribute>,
         actions?: Collection<Action>
     ) {
@@ -27,7 +26,6 @@ export class Entity {
         return new Entity(
             this.id,
             this.templateId,
-            this.type,
             attributes ?? this.attributes,
             actions ?? this.actions
         );
