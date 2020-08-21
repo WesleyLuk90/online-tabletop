@@ -24,14 +24,12 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 exclude: /node_modules/,
-                use: {
-                    loader: require.resolve("babel-loader"),
-                },
-            },
-            {
-                test: /\.tsx?$/,
-                use: require.resolve("ts-loader"),
-                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: require.resolve("babel-loader"),
+                    },
+                    require.resolve("ts-loader"),
+                ],
             },
             {
                 test: /\.css$/i,
