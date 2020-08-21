@@ -10,6 +10,7 @@ module.exports = {
         contentBase: path.join(__dirname, "build"),
         compress: true,
         port: 3000,
+        hot: true,
         proxy: {
             "/api": "http://localhost:3001",
         },
