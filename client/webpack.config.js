@@ -3,8 +3,17 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
 
 module.exports = {
+    mode: "development",
     devtool: "inline-source-map",
     entry: "./src/index.tsx",
+    devServer: {
+        contentBase: path.join(__dirname, "build"),
+        compress: true,
+        port: 3000,
+        proxy: {
+            "/api": "http://localhost:3001",
+        },
+    },
     output: {
         filename: "main.js",
         path: path.resolve(__dirname, "build"),

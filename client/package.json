@@ -26,7 +26,8 @@
     },
     "scripts": {
         "build": "webpack",
-        "build-ts": "tsc"
+        "build-ts": "tsc",
+        "dev": "webpack-dev-server"
     },
     "eslintConfig": {
         "extends": "react-app"
@@ -58,7 +59,8 @@
         "style-loader": "^1.2.1",
         "ts-loader": "^8.0.2",
         "webpack": "^4.44.1",
-        "webpack-cli": "^3.3.12"
+        "webpack-cli": "^3.3.12",
+        "webpack-dev-server": "^3.11.0"
     },
     "proxy": "http://localhost:3001"
 }
