@@ -27,22 +27,8 @@
     "scripts": {
         "build": "webpack",
         "build-ts": "tsc",
-        "dev": "webpack-dev-server"
-    },
-    "eslintConfig": {
-        "extends": "react-app"
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
+        "dev": "webpack-dev-server",
+        "lint": "eslint src/**/*.tsx"
     },
     "devDependencies": {
         "@babel/core": "^7.11.1",
