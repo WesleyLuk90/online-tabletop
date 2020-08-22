@@ -17,7 +17,8 @@ before_install:
 install:
     - yarn install
 
-before_install:
+env:
+    - NODE_ENV=production
 
 script:
     - yarn build
