@@ -30,6 +30,7 @@
         "@types/node": "^14.0.26",
         "@types/pg": "^7.14.4",
         "dotenv": "^8.2.0",
+        "engine": "workspace:engine",
         "express": "^4.16.4",
         "express-session": "^1.16.1",
         "io-ts": "^1.8.5",

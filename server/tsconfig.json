@@ -9,9 +9,9 @@
         "outDir": "dist",
         "types": ["jest"],
         "strictNullChecks": true,
-        "baseUrl": "../",
+        "baseUrl": ".",
         "paths": {
-            "engine/*": ["engine/src/*"]
+            "engine/*": ["../engine/*"]
         },
         "experimentalDecorators": true,
         "noEmit": true
