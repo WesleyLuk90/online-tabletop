@@ -7,14 +7,10 @@
     ],
     "scripts": {
         "run-services": "docker-compose -f docker-compose.services.yml up -d",
-        "dev": "ts-node server/src/index.ts",
+        "dev": "yarn workspace server dev",
         "build": "tsc"
     },
     "devDependencies": {
-        "@types/node": "^14.0.27",
         "typescript": "~4.0.2"
-    },
-    "dependencies": {
-        "ts-node": "^8.10.2"
     }
 }
