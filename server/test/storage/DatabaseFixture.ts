@@ -1,5 +1,5 @@
-import { uuid } from "engine/utils/Uuid";
 import { AppModule } from "server/src/AppModule";
+import { uuid } from "../../../engine/src/utils/Uuid";
 import { Database, formatQuery } from "../../src/storage/Database";
 import { Migrator } from "../../src/storage/Migrator";
 
