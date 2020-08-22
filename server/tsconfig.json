@@ -1,20 +1,12 @@
 {
+    "extends": "../tsconfig.json",
     "compilerOptions": {
-        "module": "commonjs",
-        "esModuleInterop": true,
-        "target": "es6",
-        "noImplicitAny": true,
-        "moduleResolution": "node",
-        "sourceMap": true,
-        "outDir": "dist",
-        "types": ["jest"],
-        "strictNullChecks": true,
-        "baseUrl": ".",
-        "paths": {
-            "engine/*": ["../engine/*"]
-        },
-        "experimentalDecorators": true,
-        "noEmit": true
+        "composite": true
     },
-    "include": ["src/**/*.ts", "test/**/*.ts", "../engine/src/**/*.ts"]
+    "references": [
+        {
+            "path": "../engine"
+        }
+    ],
+    "include": ["src/**/*.ts"]
 }

@@ -1,20 +1,8 @@
 {
+    "extends": "../tsconfig.json",
     "compilerOptions": {
-        "module": "commonjs",
-        "esModuleInterop": true,
-        "target": "es5",
-        "lib": ["ES2015"],
-        "noImplicitAny": true,
-        "moduleResolution": "node",
-        "outDir": "build",
-        "sourceMap": true,
-        "declaration": true,
-        "strictNullChecks": true,
-        "alwaysStrict": true,
-        "strictPropertyInitialization": true,
-        "downlevelIteration": true,
-        "noEmit": true
+        "composite": true
     },
-    "include": ["src/**/*.ts", "src/**/*.json", "test/**/*.ts"],
-    "exclude": ["node_modules", "src/**/*.spec.ts"]
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules"]
 }

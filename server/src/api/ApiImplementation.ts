@@ -1,4 +1,4 @@
-import { Api } from "engine/src/api/Api";
+import { Api } from "../../../engine/src/api/Api";
 
 export function implement<I, O>(
     api: Api<I, O>,
