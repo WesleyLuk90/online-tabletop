@@ -24,6 +24,9 @@ class TestModel extends BaseModel {
     @BaseModel.setter(TestSchema.id)
     setID: (s: string) => this;
 
+    @BaseModel.getter(TestSchema.id)
+    getID: () => string;
+
     @BaseModel.setter(TestSchema.displayName)
     setName: (s: string) => this;
 }
@@ -37,12 +40,18 @@ class TestStore extends BaseStore<TestModel> {
 describe("DatabaseIntegration", () => {
     const fixture = new DatabaseFixture();
 
-    it("should work", async () => {
+    it("should create and find", async () => {
         const store = new TestStore(fixture.db);
 
-        await store.create(new TestModel().setID("foo").setName("bar"));
+        const created = await store.create(
+            new TestModel().setID("foo").setName("bar")
+        );
         expect(await store.find(new Query({ from: TestSchema }))).toEqual(
             new Results([new TestModel().setID("foo").setName("bar")])
         );
+        expect(await store.findById(created.getID())).toEqual(
+            new TestModel().setID("foo").setName("bar")
+        );
+        expect(await store.findById("unknown")).toEqual(null);
     });
 });

@@ -1,7 +1,9 @@
+import { ok } from "assert";
+import { checkNotNull } from "../util/Nullable";
 import { BaseModel } from "./BaseModel";
 import { BaseSchema, Field } from "./BaseSchema";
 import { Database, formatQuery } from "./Database";
-import { Query } from "./Query";
+import { Query, Where } from "./Query";
 
 export class Row {
     static of(values: [Field<{}>, any][]) {
@@ -25,18 +27,34 @@ export abstract class BaseStore<T extends BaseModel> {
     async find(query: Query): Promise<Results<T>> {
         const client = await this.db.getClient();
         const results = await client.query(query.toPostgres());
-        return new Results(
-            results.rows.map((row) => {
-                const map = new Map();
-                this.schema.fields.forEach((field) =>
-                    map.set(field, row[field.name] ?? null)
-                );
-                return this.factory(new Row(map));
-            })
-        );
+        return new Results(results.rows.map((row) => this.fromDbRow(row)));
     }
 
-    async create(model: T) {
+    private fromDbRow(row: any): T {
+        const map = new Map();
+        this.schema.fields.forEach((field) =>
+            map.set(field, row[field.name] ?? null)
+        );
+        return this.factory(new Row(map));
+    }
+
+    async findById(id: string): Promise<T | null> {
+        return this.find(
+            new Query({
+                from: this.schema,
+                limit: 1,
+                where: Where.equals(
+                    checkNotNull(
+                        this.schema.primaryKey,
+                        "Requires a primary key"
+                    ),
+                    id
+                ),
+            })
+        ).then((r) => r.results[0] ?? null);
+    }
+
+    async create(model: T): Promise<T> {
         const client = await this.db.getClient();
         const fields: Field<{}>[] = [];
         const values: any[] = [];
@@ -50,12 +68,17 @@ export abstract class BaseStore<T extends BaseModel> {
             .map((field) => formatQuery("%I", field.name))
             .join(",");
         const valuesStatement = values.map(() => `$${index++}`).join(",");
-        await client.query({
+        const results = await client.query({
             text: formatQuery(
-                `INSERT INTO %I(${keyStatement}) VALUES(${valuesStatement})`,
+                `INSERT INTO %I(${keyStatement}) VALUES(${valuesStatement}) RETURNING *`,
                 this.schema.tableName
             ),
             values: values,
         });
+        ok(
+            results.rowCount == 1,
+            `Expected 1 row back but got ${results.rowCount}`
+        );
+        return this.fromDbRow(results.rows[0]);
     }
 }

@@ -11,5 +11,13 @@ export abstract class BaseModel {
         };
     }
 
+    static getter<T>(field: Field<T>) {
+        return (prototype: any, name: string) => {
+            prototype[name] = function () {
+                return (this as BaseModel).row.values.get(field);
+            };
+        };
+    }
+
     constructor(public row: Row) {}
 }

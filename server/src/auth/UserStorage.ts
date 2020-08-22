@@ -3,7 +3,7 @@ import { BaseSchema } from "../storage/BaseSchema";
 import { BaseStore, Row } from "../storage/BaseStore";
 import { Database } from "../storage/Database";
 
-const UserSchema = new (class extends BaseSchema {
+export const UserSchema = new (class extends BaseSchema {
     constructor() {
         super("users");
     }

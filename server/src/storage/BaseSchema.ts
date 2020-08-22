@@ -16,7 +16,7 @@ export abstract class BaseSchema {
         KnownSchemas.push(this);
     }
 
-    primaryKey: Field<{}> | null = null;
+    primaryKey: Field<string> | null = null;
 
     private addField<T>(field: Field<T>): Field<T> {
         this.fields.push(field);

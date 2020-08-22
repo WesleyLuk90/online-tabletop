@@ -20,6 +20,10 @@ export class AuthModule extends Module {
 
     userStorage = lazy(() => new UserStorage(this.db));
 
+    api = lazy(() => {
+        // new UserImpl();
+    });
+
     async initializeSession() {
         return initializeSession(this.sessionSecret(), this.app);
     }
