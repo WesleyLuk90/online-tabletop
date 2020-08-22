@@ -8,7 +8,7 @@ import { Spinner } from "../common/controls/Icon";
 import { Page } from "../common/layout/Page";
 
 export function EditCampaignPage() {
-    const { id } = useParams();
+    const { id } = useParams<{ id: string }>();
 
     const [original, setOriginal] = useState<Campaign | null>(null);
     const [edits, setEdits] = useState<Campaign | null>(null);

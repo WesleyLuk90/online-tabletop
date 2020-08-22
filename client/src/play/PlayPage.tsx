@@ -5,7 +5,7 @@ import { Alert } from "../common/controls/Alert";
 import "./PlayPage.css";
 
 export function PlayPage() {
-    const { id } = useParams();
+    const { id } = useParams<{ id: string }>();
 
     return (
         <Auth

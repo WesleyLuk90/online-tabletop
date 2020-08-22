@@ -11,11 +11,14 @@ export function Auth({
 }): React.ReactElement | null {
     const [loginState, setLoginState] = useState<User | boolean>(true);
     useEffect(() => {
-        UserService.current().then((user) => {
-            if (user != null) {
-                setLoginState(user);
-            }
-        });
+        UserService.current().then(
+            (user) => {
+                if (user != null) {
+                    setLoginState(user);
+                }
+            },
+            (e) => console.log(e)
+        );
     }, []);
 
     if (loginState === false) {
