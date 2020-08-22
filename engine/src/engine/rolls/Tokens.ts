@@ -58,7 +58,7 @@ export class RightParenthesesToken extends BaseToken {
     }
 }
 
-export type Token =
+export type ExpressionToken =
     | NumberToken
     | IdentifierToken
     | RollToken

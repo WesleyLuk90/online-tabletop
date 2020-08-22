@@ -4,6 +4,7 @@ import { notNull } from "../../utils/Nullable";
 import {
     CommaToken,
     DivideToken,
+    ExpressionToken,
     IdentifierToken,
     LeftParenthesesToken,
     MinusToken,
@@ -12,15 +13,20 @@ import {
     PlusToken,
     RightParenthesesToken,
     RollToken,
-    Token,
     WhitespaceToken,
 } from "./Tokens";
 
 class Match {
-    constructor(readonly match: RegExpMatchArray, readonly token: Token) {}
+    constructor(
+        readonly match: RegExpMatchArray,
+        readonly token: ExpressionToken
+    ) {}
 }
 
-function createMatcher(regex: RegExp, factory: (e: RegExpMatchArray) => Token) {
+function createMatcher(
+    regex: RegExp,
+    factory: (e: RegExpMatchArray) => ExpressionToken
+) {
     return (e: string) => {
         const match = e.match(regex);
         if (match != null && match[0].length > 0) {
@@ -63,7 +69,9 @@ export class TokenizerError extends BaseError {
 }
 
 export class Tokenizer {
-    static tokenize(expression: string): Either<TokenizerError, Token[]> {
+    static tokenize(
+        expression: string
+    ): Either<TokenizerError, ExpressionToken[]> {
         let rest = expression;
         const tokens = [];
         while (rest !== "") {

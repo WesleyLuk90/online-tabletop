@@ -1,6 +1,4 @@
-import { Api, Engine } from "engine";
-
-new Engine();
+import { Api } from "engine";
 
 export function implement<I, O>(
     api: Api<I, O>,

@@ -14,6 +14,7 @@ import { Tokenizer, TokenizerError } from "./Tokenizer";
 import {
     CommaToken,
     DivideToken,
+    ExpressionToken,
     IdentifierToken,
     LeftParenthesesToken,
     MinusToken,
@@ -22,7 +23,6 @@ import {
     PlusToken,
     RightParenthesesToken,
     RollToken,
-    Token,
     WhitespaceToken,
 } from "./Tokens";
 
@@ -40,7 +40,7 @@ type Operator =
     | CommaToken
     | UnaryMinus;
 
-function isOperator(token: Token) {
+function isOperator(token: ExpressionToken) {
     return (
         token instanceof PlusToken ||
         token instanceof MinusToken ||
@@ -139,7 +139,7 @@ export class RollParser {
     private output = new OutputStack();
     private operators = new OperatorStack();
 
-    private constructor(private tokens: Token[]) {}
+    private constructor(private tokens: ExpressionToken[]) {}
 
     private shiftOperatorToOutput(operator: Operator) {
         if (operator instanceof PlusToken) {
