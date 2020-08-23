@@ -46,7 +46,7 @@ describe("DatabaseIntegration", () => {
     const fixture = new DatabaseFixture();
 
     it("should create and find", async () => {
-        const store = new TestStore(fixture.db);
+        const store = new TestStore(fixture.db());
 
         const created = await store.create(
             new TestModel().setID("foo").setName("bar")

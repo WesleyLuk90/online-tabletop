@@ -13,7 +13,11 @@ export class Row {
     constructor(readonly values: Map<Field<{}>, any> = new Map()) {}
 
     set<T>(field: Field<T>, value: T) {
-        this.values.set(field, value);
+        if (value == null) {
+            this.values.delete(field);
+        } else {
+            this.values.set(field, value);
+        }
     }
 
     getOptional<T>(field: Field<T>): T | null {
@@ -46,11 +50,11 @@ export abstract class BaseStore<T extends BaseModel> {
     }
 
     private fromDbRow(row: any): T {
-        const map = new Map();
+        const modelRow = new Row();
         this.schema.fields.forEach((field) =>
-            map.set(field, row[field.name] ?? null)
+            modelRow.set(field, row[field.name] ?? null)
         );
-        return this.factory(new Row(map));
+        return this.factory(modelRow);
     }
 
     async findById(id: string): Promise<T | null> {
