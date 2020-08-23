@@ -19,10 +19,20 @@ export class UserModel extends BaseModel {
         super(row);
     }
 
-    @BaseModel.setter(UserSchema.id)
-    setID: (id: string) => this;
-    @BaseModel.setter(UserSchema.displayName)
-    setName: (name: string) => this;
+    setID(id: string): this {
+        this.row.set(UserSchema.id, id);
+        return this;
+    }
+    getID() {
+        return this.row.get(UserSchema.id);
+    }
+    setName(name: string): this {
+        this.row.set(UserSchema.displayName, name);
+        return this;
+    }
+    getName() {
+        return this.row.get(UserSchema.displayName);
+    }
 }
 
 export class UserStorage extends BaseStore<UserModel> {

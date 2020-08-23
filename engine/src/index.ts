@@ -46,3 +46,4 @@ export * from './utils/Nullable';
 export * from './utils/Random';
 export * from './utils/Todo';
 export * from './utils/Uuid';
+export * from './utils/fp';

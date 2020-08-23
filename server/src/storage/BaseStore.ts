@@ -11,6 +11,21 @@ export class Row {
     }
 
     constructor(readonly values: Map<Field<{}>, any> = new Map()) {}
+
+    set<T>(field: Field<T>, value: T) {
+        this.values.set(field, value);
+    }
+
+    getOptional<T>(field: Field<T>): T | null {
+        return this.values.get(field) ?? null;
+    }
+
+    get<T>(field: Field<T>): T {
+        return checkNotNull(
+            this.values.get(field),
+            `Missing value for field ${field}`
+        );
+    }
 }
 
 export class Results<T extends BaseModel> {

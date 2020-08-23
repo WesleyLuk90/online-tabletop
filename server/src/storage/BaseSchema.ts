@@ -8,6 +8,10 @@ export const StringField = new FieldType<string>("TEXT");
 
 export class Field<T> {
     constructor(readonly name: string, readonly type: FieldType<T>) {}
+
+    toString() {
+        return `Field(${this.name})`;
+    }
 }
 
 export abstract class BaseSchema {
@@ -18,7 +22,7 @@ export abstract class BaseSchema {
 
     primaryKey: Field<string> | null = null;
 
-    private addField<T>(field: Field<T>): Field<T> {
+    addField<T>(field: Field<T>): Field<T> {
         this.fields.push(field);
         return field;
     }

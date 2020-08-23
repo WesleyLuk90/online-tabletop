@@ -8,7 +8,6 @@
         "sourceMap": true,
         "declarationMap": true,
         "strict": true,
-        "strictPropertyInitialization": false,
         "noImplicitAny": true,
         "downlevelIteration": true,
         "experimentalDecorators": true,

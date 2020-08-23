@@ -32,6 +32,16 @@ export class AppModule extends Module {
 
     authModule = lazy(() => new AuthModule(this.db(), this.app()));
 
+    api = lazy(() => [...this.authModule().api().implementations()]);
+
+    async routeApi() {
+        this.api().forEach((impl) => {
+            this.app().post(`/api/${impl.api.name}`, (req, res) =>
+                impl.handle(req, res)
+            );
+        });
+    }
+
     async startServer() {
         return new Promise((res) =>
             this.http().listen(this.httpPort(), this.httpHost(), res)
@@ -41,6 +51,7 @@ export class AppModule extends Module {
     async start() {
         await this.migrator().migrate();
         await this.authModule().start();
+        await this.routeApi();
         await this.startServer();
         console.log(`Listening on ${this.httpPort()}`);
     }

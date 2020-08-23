@@ -1,5 +1,5 @@
 export class Queue<T> {
-    private current: Promise<void> | null;
+    private current: Promise<void> | null = null;
     private queue: T[] = [];
 
     constructor(private process: (t: T) => Promise<void>) {}

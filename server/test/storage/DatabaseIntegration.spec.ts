@@ -21,14 +21,19 @@ class TestModel extends BaseModel {
         super(row);
     }
 
-    @BaseModel.setter(TestSchema.id)
-    setID: (s: string) => this;
+    setID(s: string) {
+        this.row.set(TestSchema.id, s);
+        return this;
+    }
 
-    @BaseModel.getter(TestSchema.id)
-    getID: () => string;
+    getID() {
+        return this.row.get(TestSchema.id);
+    }
 
-    @BaseModel.setter(TestSchema.displayName)
-    setName: (s: string) => this;
+    setName(s: string) {
+        this.row.set(TestSchema.id, s);
+        return this;
+    }
 }
 
 class TestStore extends BaseStore<TestModel> {

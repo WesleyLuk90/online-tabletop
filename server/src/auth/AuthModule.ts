@@ -4,6 +4,7 @@ import { lazy, Module } from "../Module";
 import { initializeSession } from "../Session";
 import { Database } from "../storage/Database";
 import { initializeAuth } from "./Auth";
+import { UserImpl } from "./UserImpl";
 import { UserStorage } from "./UserStorage";
 
 export class AuthModule extends Module {
@@ -20,9 +21,7 @@ export class AuthModule extends Module {
 
     userStorage = lazy(() => new UserStorage(this.db));
 
-    api = lazy(() => {
-        // new UserImpl();
-    });
+    api = lazy(() => new UserImpl(this.userStorage()));
 
     async initializeSession() {
         return initializeSession(this.sessionSecret(), this.app);
