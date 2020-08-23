@@ -1,9 +1,9 @@
-import { iots, optional } from "../schemas/iots";
+import { optional } from "../schemas/iots";
 import { UserDataSchema } from "../schemas/UserData";
-import { Api } from "./Api";
+import { Api, ApiVoid } from "./Api";
 
 export const GetCurrentUser = new Api(
     "getCurrentUser",
-    iots.void,
+    ApiVoid,
     optional(UserDataSchema)
 );

@@ -7,3 +7,5 @@ export class Api<I, O> {
         readonly output: t.Type<O>
     ) {}
 }
+
+export const ApiVoid = t.strict({});

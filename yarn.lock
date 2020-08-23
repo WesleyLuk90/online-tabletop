@@ -3089,6 +3089,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"axios@npm:^0.20.0":
+  version: 0.20.0
+  resolution: "axios@npm:0.20.0"
+  dependencies:
+    follow-redirects: ^1.10.0
+  checksum: 6cf2e963176a0d18fc457d7cb71cb6cf552193619b161fc61070d9a4db3a26a87ecfe760ba36e7af174c05a6a9898dc52cfeb5c0e62e19fddd9788739553ad73
+  languageName: node
+  linkType: hard
+
 "babel-jest@npm:^26.3.0":
   version: 26.3.0
   resolution: "babel-jest@npm:26.3.0"
@@ -5500,6 +5509,13 @@ __metadata:
   dependencies:
     debug: ^3.0.0
   checksum: 81668d7d72d4d07d467ecdf96b168af2cf45157733cb91397c22103ec7ce767fa889aeb7e46863768e3db90a6fd14a1f776a41fa5103546e139ce86420821568
+  languageName: node
+  linkType: hard
+
+"follow-redirects@npm:^1.10.0":
+  version: 1.13.0
+  resolution: "follow-redirects@npm:1.13.0"
+  checksum: f220828d3f153da30ea616fdbe9f6676e74e4e68c51d336a751037c1d556e2de34aa5918f58951fa19bb6517c9c88b4403a0a8bdfc40d3e779d37def2ac0f2c4
   languageName: node
   linkType: hard
 
@@ -10276,6 +10292,7 @@ resolve@^1.17.0:
     "@types/session-file-store": ^1.2.0
     "@types/socket.io": ^2.1.2
     "@types/validator": ^10.11.0
+    axios: ^0.20.0
     dotenv: ^8.2.0
     engine: "workspace:engine"
     express: ^4.16.4

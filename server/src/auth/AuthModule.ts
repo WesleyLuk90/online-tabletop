@@ -1,23 +1,27 @@
 import { Express } from "express";
 import { Config } from "../Config";
+import { initializeSession } from "../http/Session";
 import { lazy, Module } from "../Module";
-import { initializeSession } from "../Session";
 import { Database } from "../storage/Database";
 import { initializeAuth } from "./Auth";
 import { UserImpl } from "./UserImpl";
 import { UserStorage } from "./UserStorage";
 
 export class AuthModule extends Module {
-    constructor(readonly db: Database, readonly app: Express) {
+    constructor(
+        readonly config: Config,
+        readonly db: Database,
+        readonly app: Express
+    ) {
         super();
     }
 
-    auth0ClientID = Config.string("AUTH0_CLIENT_ID");
-    auth0ClientSecret = Config.string("AUTH0_CLIENT_SECRET");
-    auth0CallbackUrl = Config.string("AUTH0_CALLBACK_URL");
-    auth0Domain = Config.string("AUTH0_DOMAIN");
+    auth0ClientID = this.config.string("AUTH0_CLIENT_ID");
+    auth0ClientSecret = this.config.string("AUTH0_CLIENT_SECRET");
+    auth0CallbackUrl = this.config.string("AUTH0_CALLBACK_URL");
+    auth0Domain = this.config.string("AUTH0_DOMAIN");
 
-    sessionSecret = Config.string("SESSION_SECRET");
+    sessionSecret = this.config.string("SESSION_SECRET");
 
     userStorage = lazy(() => new UserStorage(this.db));
 

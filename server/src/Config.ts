@@ -4,7 +4,7 @@ import { resolve } from "path";
 import { lazy } from "./Module";
 import { checkNotNull } from "./util/Nullable";
 
-const env = lazy(() => {
+export function fromEnv(): Config {
     let envPath = resolve(process.cwd(), ".env");
     if (!existsSync(envPath)) {
         envPath = resolve(process.cwd(), "../.env");
@@ -13,17 +13,29 @@ const env = lazy(() => {
     if (c.error) {
         throw c.error;
     }
-    return checkNotNull(c.parsed);
-});
+    return Config.fromObject(checkNotNull(c.parsed));
+}
 
 export class Config {
-    static string(key: string): () => string {
-        return lazy(() => Config.readString(key));
+    static fromObject(object: { [key: string]: string }) {
+        const values = new Map<string, string>();
+        Object.keys(object).forEach((key) => values.set(key, object[key]));
+        return new Config(values);
     }
 
-    static number(key: string): () => number {
+    static fromValues(values: [string, string][]) {
+        return new Config(new Map(values));
+    }
+
+    constructor(readonly values: Map<string, string>) {}
+
+    string(key: string): () => string {
+        return lazy(() => this.readStringConfig(key));
+    }
+
+    number(key: string): () => number {
         return lazy(() => {
-            const value = Config.readString(key);
+            const value = this.readStringConfig(key);
 
             const n = parseFloat(value);
             if (isNaN(n)) {
@@ -33,7 +45,10 @@ export class Config {
         });
     }
 
-    private static readString(key: string) {
-        return checkNotNull(env()[key], `Missing configuration ${key}`);
+    private readStringConfig(key: string) {
+        return checkNotNull(
+            this.values.get(key),
+            `Missing configuration ${key}`
+        );
     }
 }
