@@ -1,10 +1,7 @@
+import { DataSchema } from "engine";
+import { FieldType, JsonFieldType, StringField } from "./FieldType";
+
 export const KnownSchemas: BaseSchema[] = [];
-
-class FieldType<T> {
-    constructor(readonly postgresType: string) {}
-}
-
-export const StringField = new FieldType<string>("TEXT");
 
 export class Field<T> {
     constructor(readonly name: string, readonly type: FieldType<T>) {}
@@ -15,7 +12,7 @@ export class Field<T> {
 }
 
 export abstract class BaseSchema {
-    readonly fields: Field<{}>[] = [];
+    readonly fields: Field<any>[] = [];
     constructor(readonly tableName: string) {
         KnownSchemas.push(this);
     }
@@ -29,6 +26,10 @@ export abstract class BaseSchema {
 
     stringField(name: string): Field<string> {
         return this.addField(new Field(name, StringField));
+    }
+
+    jsonField<T>(name: string, type: DataSchema<T>): Field<T> {
+        return this.addField(new Field(name, new JsonFieldType(type)));
     }
 
     validateField(field: Field<{}>) {

@@ -6,3 +6,5 @@ export function optional<A>(
 ): iots.UnionC<[iots.Type<A>, iots.NullC]> {
     return iots.union([t, iots.null]);
 }
+
+export type DataSchema<A> = iots.Type<A>;

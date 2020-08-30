@@ -10,7 +10,7 @@ export class Row {
         return new Row(new Map(values));
     }
 
-    constructor(readonly values: Map<Field<{}>, any> = new Map()) {}
+    constructor(readonly values: Map<Field<any>, any> = new Map()) {}
 
     set<T>(field: Field<T>, value: T) {
         if (value == null) {
@@ -51,9 +51,11 @@ export abstract class BaseStore<T extends BaseModel> {
 
     private fromDbRow(row: any): T {
         const modelRow = new Row();
-        this.schema.fields.forEach((field) =>
-            modelRow.set(field, row[field.name] ?? null)
-        );
+        this.schema.fields
+            .filter((field) => row[field.name] != null)
+            .forEach((field) =>
+                modelRow.set(field, field.type.fromDB(row[field.name]))
+            );
         return this.factory(modelRow);
     }
 
@@ -77,10 +79,10 @@ export abstract class BaseStore<T extends BaseModel> {
         const client = await this.db.getClient();
         const fields: Field<{}>[] = [];
         const values: any[] = [];
-        model.row.values.forEach((value, key) => {
-            this.schema.validateField(key);
-            fields.push(key);
-            values.push(value);
+        model.row.values.forEach((value, field) => {
+            this.schema.validateField(field);
+            fields.push(field);
+            values.push(field.type.toDB(value));
         });
         let index = 1;
         const keyStatement = fields
