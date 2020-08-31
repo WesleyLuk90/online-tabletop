@@ -2,7 +2,7 @@ import {
     RollExpression,
     RollFunction,
     RollLiteral,
-    RollVariable
+    RollVariable,
 } from "../engine/models/RollDefinition";
 import { assertExaustive } from "../utils/Exaustive";
 import { iots } from "./iots";
@@ -39,25 +39,27 @@ export const RollLiteralDataSchema = iots.strict({
 export interface RollLiteralData
     extends iots.TypeOf<typeof RollLiteralDataSchema> {}
 
-export const RollExpressionDataSchema: iots.Type<RollExpressionData> = iots.recursion("RollExpressionDataSchema", () => iots.strict(
-    {
-        expression: iots.union([
-            RollFunctionDataSchema,
-            RollVariableDataSchema,
-            RollLiteralDataSchema,
-        ]),
-    }
+export const RollExpressionDataSchema: iots.Type<RollExpressionData> = iots.recursion(
+    "RollExpressionDataSchema",
+    () =>
+        iots.strict({
+            expression: iots.union([
+                RollFunctionDataSchema,
+                RollVariableDataSchema,
+                RollLiteralDataSchema,
+            ]),
+        })
 );
 
 export interface RollExpressionData {
     expression: RollFunctionData | RollVariableData | RollLiteralData;
 }
 
-export const RollExpressionSerde: Serde<
+export const RollExpressionSerde = new (class extends Serde<
     RollExpression,
     RollExpressionData
-> = new Serde<RollExpression, RollExpressionData>(
-    (roll) => {
+> {
+    serialize(roll: RollExpression): RollExpressionData {
         if (roll instanceof RollFunction) {
             return {
                 expression: {
@@ -83,8 +85,8 @@ export const RollExpressionSerde: Serde<
         } else {
             assertExaustive(roll);
         }
-    },
-    (data) => {
+    }
+    deserialize(data: RollExpressionData): RollExpression {
         const e = data.expression;
         switch (e._tag) {
             case "function":
@@ -100,4 +102,4 @@ export const RollExpressionSerde: Serde<
                 assertExaustive(e);
         }
     }
-);
+})();
