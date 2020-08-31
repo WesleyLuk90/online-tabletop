@@ -55,10 +55,7 @@ export interface RollExpressionData {
     expression: RollFunctionData | RollVariableData | RollLiteralData;
 }
 
-export const RollExpressionSerde = new (class extends Serde<
-    RollExpression,
-    RollExpressionData
-> {
+export const RollExpressionSerde: Serde<RollExpression, RollExpressionData> = {
     serialize(roll: RollExpression): RollExpressionData {
         if (roll instanceof RollFunction) {
             return {
@@ -85,7 +82,7 @@ export const RollExpressionSerde = new (class extends Serde<
         } else {
             assertExaustive(roll);
         }
-    }
+    },
     deserialize(data: RollExpressionData): RollExpression {
         const e = data.expression;
         switch (e._tag) {
@@ -101,5 +98,5 @@ export const RollExpressionSerde = new (class extends Serde<
             default:
                 assertExaustive(e);
         }
-    }
-})();
+    },
+};
