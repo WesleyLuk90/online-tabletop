@@ -6,6 +6,7 @@ import {
     SubEntityAttribute,
 } from "../engine/models/Attribute";
 import { Entity } from "../engine/models/Entity";
+import { EntityTemplate } from "../engine/models/EntityTemplate";
 import { Collection } from "../utils/Collection";
 import { assertExaustive } from "../utils/Exaustive";
 import { iots } from "./iots";
@@ -56,7 +57,7 @@ export const AttributeDataSchema: iots.Type<AttributeData> = iots.recursion(
             ]),
         })
 );
-interface AttributeData {
+export interface AttributeData {
     attribute:
         | NumberAttributeData
         | ComputedAttributeData
@@ -139,6 +140,33 @@ export const EntityTemplateDataSchema = iots.strict({
     attributes: iots.array(AttributeDataSchema),
     actions: iots.array(ActionDataSchema),
 });
+export interface EntityTemplateData
+    extends iots.TypeOf<typeof EntityTemplateDataSchema> {}
+export const EntityTemplateDataSerde: Serde<
+    EntityTemplate,
+    EntityTemplateData
+> = {
+    serialize(template: EntityTemplate): EntityTemplateData {
+        return {
+            id: template.id,
+            entityType: template.entityType,
+            actions: template.actions.all().map(ActionDataSerde.serialize),
+            attributes: template.attributes
+                .all()
+                .map(AttributeDataSerde.serialize),
+        };
+    },
+    deserialize(data: EntityTemplateData): EntityTemplate {
+        return new EntityTemplate(
+            data.id,
+            data.entityType,
+            Collection.ofList(
+                data.attributes.map(AttributeDataSerde.deserialize)
+            ),
+            Collection.ofList(data.actions.map(ActionDataSerde.deserialize))
+        );
+    },
+};
 
 export const ActionDataSerde: Serde<Action, ActionData> = {
     serialize(action: Action): ActionData {

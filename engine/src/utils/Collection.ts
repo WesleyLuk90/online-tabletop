@@ -1,19 +1,19 @@
 import { fromNullable, Option } from "fp-ts/lib/Option";
 
-interface Element {
+export interface CollectionElement {
     id: string;
 }
 
-export class Collection<T extends Element> {
-    static empty<T extends Element>(): Collection<T> {
+export class Collection<T extends CollectionElement> {
+    static empty<T extends CollectionElement>(): Collection<T> {
         return new Collection();
     }
 
-    static of<T extends Element>(...elements: T[]): Collection<T> {
+    static of<T extends CollectionElement>(...elements: T[]): Collection<T> {
         return Collection.ofList(elements);
     }
 
-    static ofList<T extends Element>(elements: T[]): Collection<T> {
+    static ofList<T extends CollectionElement>(elements: T[]): Collection<T> {
         const collection = new Collection<T>();
         elements.forEach((ele) => collection.byId.set(ele.id, ele));
         return collection;
