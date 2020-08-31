@@ -1,18 +1,36 @@
+import { Action } from "../engine/models/Action";
+import {
+    Attribute,
+    ComputedAttribute,
+    NumberAttribute,
+    SubEntityAttribute,
+} from "../engine/models/Attribute";
+import { Entity } from "../engine/models/Entity";
+import { Collection } from "../utils/Collection";
+import { assertExaustive } from "../utils/Exaustive";
 import { iots } from "./iots";
-import { RollExpressionDataSchema } from "./RollExpression";
+import {
+    RollExpressionDataSchema,
+    RollExpressionSerde,
+} from "./RollExpression";
+import { Serde } from "./Serde";
 
 export const NumberAttributeDataSchema = iots.strict({
     id: iots.string,
     value: iots.number,
     _tag: iots.literal("number"),
 });
+interface NumberAttributeData
+    extends iots.TypeOf<typeof NumberAttributeDataSchema> {}
 export const ComputedAttributeDataSchema = iots.strict({
     id: iots.string,
     expression: RollExpressionDataSchema,
     _tag: iots.literal("computed"),
 });
-export const SubEntityAttribute: iots.Type<SubEntityAttribute> = iots.recursion(
-    "SubEntityAttribute",
+interface ComputedAttributeData
+    extends iots.TypeOf<typeof ComputedAttributeDataSchema> {}
+export const SubEntityAttributeSchema: iots.Type<SubEntityAttributeData> = iots.recursion(
+    "SubEntityAttributeSchema",
     () =>
         iots.strict({
             id: iots.string,
@@ -21,18 +39,85 @@ export const SubEntityAttribute: iots.Type<SubEntityAttribute> = iots.recursion(
         })
 );
 
-export interface SubEntityAttribute {
+export interface SubEntityAttributeData {
     id: string;
     subEntities: EntityData[];
     _tag: "subEntity";
 }
 
-export const AttributeDataSchema = iots.strict({
-    attribute: iots.union([
-        NumberAttributeDataSchema,
-        ComputedAttributeDataSchema,
-    ]),
-});
+export const AttributeDataSchema: iots.Type<AttributeData> = iots.recursion(
+    "AttributeDataSchema",
+    () =>
+        iots.strict({
+            attribute: iots.union([
+                NumberAttributeDataSchema,
+                ComputedAttributeDataSchema,
+                SubEntityAttributeSchema,
+            ]),
+        })
+);
+interface AttributeData {
+    attribute:
+        | NumberAttributeData
+        | ComputedAttributeData
+        | SubEntityAttributeData;
+}
+export const AttributeDataSerde: Serde<Attribute, AttributeData> = {
+    serialize(attribute: Attribute): AttributeData {
+        if (attribute instanceof NumberAttribute) {
+            return {
+                attribute: {
+                    _tag: "number",
+                    id: attribute.id,
+                    value: attribute.value,
+                },
+            };
+        } else if (attribute instanceof ComputedAttribute) {
+            return {
+                attribute: {
+                    _tag: "computed",
+                    id: attribute.id,
+                    expression: RollExpressionSerde.serialize(
+                        attribute.expression
+                    ),
+                },
+            };
+        } else if (attribute instanceof SubEntityAttribute) {
+            return {
+                attribute: {
+                    _tag: "subEntity",
+                    id: attribute.id,
+                    subEntities: attribute.subEntities
+                        .all()
+                        .map(EntityDataSerde.serialize),
+                },
+            };
+        } else {
+            assertExaustive(attribute);
+        }
+    },
+    deserialize(data: AttributeData): Attribute {
+        const a = data.attribute;
+        switch (a._tag) {
+            case "number":
+                return new NumberAttribute(a.id, a.value);
+            case "computed":
+                return new ComputedAttribute(
+                    a.id,
+                    RollExpressionSerde.deserialize(a.expression)
+                );
+            case "subEntity":
+                return new SubEntityAttribute(
+                    a.id,
+                    Collection.ofList(
+                        a.subEntities.map(EntityDataSerde.deserialize)
+                    )
+                );
+            default:
+                assertExaustive(a);
+        }
+    },
+};
 
 export const ActionDataSchema = iots.strict({
     id: iots.string,
@@ -40,6 +125,7 @@ export const ActionDataSchema = iots.strict({
     description: iots.string,
     rollExpression: RollExpressionDataSchema,
 });
+export interface ActionData extends iots.TypeOf<typeof ActionDataSchema> {}
 export const EntityDataSchema = iots.strict({
     id: iots.string,
     templateId: iots.string,
@@ -53,3 +139,47 @@ export const EntityTemplateDataSchema = iots.strict({
     attributes: iots.array(AttributeDataSchema),
     actions: iots.array(ActionDataSchema),
 });
+
+export const ActionDataSerde: Serde<Action, ActionData> = {
+    serialize(action: Action): ActionData {
+        return {
+            id: action.id,
+            name: action.name,
+            description: action.description,
+            rollExpression: RollExpressionSerde.serialize(
+                action.rollExpression
+            ),
+        };
+    },
+    deserialize(data: ActionData): Action {
+        return new Action(
+            data.id,
+            data.name,
+            data.description,
+            RollExpressionSerde.deserialize(data.rollExpression)
+        );
+    },
+};
+
+export const EntityDataSerde: Serde<Entity, EntityData> = {
+    serialize(entity: Entity): EntityData {
+        return {
+            id: entity.id,
+            templateId: entity.templateId,
+            actions: entity.actions.all().map(ActionDataSerde.serialize),
+            attributes: entity.attributes
+                .all()
+                .map(AttributeDataSerde.serialize),
+        };
+    },
+    deserialize(data: EntityData): Entity {
+        return new Entity(
+            data.id,
+            data.templateId,
+            Collection.ofList(
+                data.attributes.map(AttributeDataSerde.deserialize)
+            ),
+            Collection.ofList(data.actions.map(ActionDataSerde.deserialize))
+        );
+    },
+};

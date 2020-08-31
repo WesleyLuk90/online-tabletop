@@ -10,6 +10,10 @@ export class Collection<T extends Element> {
     }
 
     static of<T extends Element>(...elements: T[]): Collection<T> {
+        return Collection.ofList(elements);
+    }
+
+    static ofList<T extends Element>(elements: T[]): Collection<T> {
         const collection = new Collection<T>();
         elements.forEach((ele) => collection.byId.set(ele.id, ele));
         return collection;
@@ -31,6 +35,10 @@ export class Collection<T extends Element> {
         newCollection.byId = new Map(this.byId);
         collection.byId.forEach((v, k) => newCollection.byId.set(k, v));
         return newCollection;
+    }
+
+    all(): T[] {
+        return Array.from(this.byId.values());
     }
 
     get(id: string): Option<T> {
