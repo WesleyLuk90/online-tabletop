@@ -1,4 +1,4 @@
-import { EntityData, EntityTemplateData } from "./EntityData";
+import { EntityDataSchema, EntityTemplateDataSchema } from "./EntityData";
 import { iots } from "./iots";
 
 const LayerDataSchema = iots.strict({});
@@ -19,6 +19,6 @@ const CampaignDataSchema = iots.strict({
     gameMode: iots.string,
     players: iots.array(PlayerDataSchema),
     scenes: iots.array(SceneDataSchema),
-    entities: iots.array(EntityData),
-    entityTemplates: iots.array(EntityTemplateData),
+    entities: iots.array(EntityDataSchema),
+    entityTemplates: iots.array(EntityTemplateDataSchema),
 });
