@@ -11,7 +11,7 @@ export const ColorDataSchema = iots.strict({
 export interface ColorData extends iots.TypeOf<typeof ColorDataSchema> {}
 export const ColorDataSerde: Serde<Color, ColorData> = {
     deserialize(data: ColorData): Color {
-        return new Color(data.red, data.green, data.blue, data.alpha);
+        return new Color(data.red, data.blue, data.green, data.alpha);
     },
     serialize(color: Color): ColorData {
         return {
