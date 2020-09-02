@@ -62,19 +62,21 @@ export const SceneDataSerde: Serde<Scene, SceneData> = {
         };
     },
 };
-const PlayerDataSchema = iots.strict({
+export const PlayerDataSchema = iots.strict({
     id: iots.string,
     name: iots.string,
+    isGameMaster: iots.boolean,
 });
 export interface PlayerData extends iots.TypeOf<typeof PlayerDataSchema> {}
 export const PlayerDataSerde: Serde<Player, PlayerData> = {
     deserialize(data: PlayerData): Player {
-        return new Player(data.id, data.name);
+        return new Player(data.id, data.name, data.isGameMaster);
     },
     serialize(player: Player): PlayerData {
         return {
             id: player.id,
             name: player.name,
+            isGameMaster: player.isGameMaster,
         };
     },
 };
