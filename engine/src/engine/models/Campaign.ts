@@ -14,7 +14,8 @@ export class Campaign {
             Collection.empty(),
             Collection.empty(),
             gameMode,
-            Collection.empty()
+            Collection.empty(),
+            ""
         );
     }
 
@@ -25,7 +26,8 @@ export class Campaign {
         readonly entities: Collection<Entity>,
         readonly entityTemplates: Collection<EntityTemplate>,
         readonly gameMode: GameMode,
-        readonly players: Collection<Player>
+        readonly players: Collection<Player>,
+        readonly owner: string
     ) {}
 
     getEntity(id: string) {
@@ -44,7 +46,8 @@ export class Campaign {
             campaign.entities ?? this.entities,
             campaign.entityTemplates ?? this.entityTemplates,
             campaign.gameMode ?? this.gameMode,
-            campaign.players ?? this.players
+            campaign.players ?? this.players,
+            campaign.owner ?? this.owner
         );
     }
 

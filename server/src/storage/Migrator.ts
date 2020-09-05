@@ -40,7 +40,7 @@ export class Migrator {
 
     async migrateSchema(schema: BaseSchema, tables: string[]) {
         if (!tables.includes(schema.tableName)) {
-            function primaryKey(field: Field<{}>) {
+            function primaryKey(field: Field<any>) {
                 if (field == schema.primaryKey) {
                     return "PRIMARY KEY";
                 }

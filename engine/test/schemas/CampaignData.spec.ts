@@ -18,7 +18,8 @@ describe("CampaignData", () => {
             Collection.empty(),
             Collection.empty(),
             FifthEditionGameMode,
-            Collection.of(new Player("foo", "bar", true))
+            Collection.of(new Player("foo", "bar", true)),
+            "test"
         );
         expect(
             CampaignDataSerde.deserialize(CampaignDataSerde.serialize(campaign))

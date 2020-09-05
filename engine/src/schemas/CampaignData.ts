@@ -81,7 +81,7 @@ export const PlayerDataSerde: Serde<Player, PlayerData> = {
     },
 };
 
-const CampaignDataSchema = iots.strict({
+export const CampaignDataSchema = iots.strict({
     id: iots.string,
     name: iots.string,
     gameMode: iots.string,
@@ -89,6 +89,7 @@ const CampaignDataSchema = iots.strict({
     scenes: iots.array(SceneDataSchema),
     entities: iots.array(EntityDataSchema),
     entityTemplates: iots.array(EntityTemplateDataSchema),
+    owner: iots.string,
 });
 
 export interface CampaignData extends iots.TypeOf<typeof CampaignDataSchema> {}
@@ -105,7 +106,8 @@ export const CampaignDataSerde: Serde<Campaign, CampaignData> = {
                 EntityTemplateDataSerde
             ),
             findGameMode(data.gameMode),
-            deserializeCollection(data.players, PlayerDataSerde)
+            deserializeCollection(data.players, PlayerDataSerde),
+            data.owner
         );
     },
     serialize(campaign: Campaign): CampaignData {
@@ -120,6 +122,7 @@ export const CampaignDataSerde: Serde<Campaign, CampaignData> = {
                 EntityTemplateDataSerde
             ),
             scenes: serializeCollection(campaign.scenes, SceneDataSerde),
+            owner: campaign.owner,
         };
     },
 };

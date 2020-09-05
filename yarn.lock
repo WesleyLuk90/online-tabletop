@@ -4915,7 +4915,7 @@ __metadata:
     io-ts: ^2.2.9
     jest: ~26.4.1
     react-refresh: ^0.8.3
-    ts-jest: ~26.2.0
+    ts-jest: ~26.3.0
     typescript: ~4.0.2
     uuid: ^8.3.0
   languageName: unknown
@@ -10307,7 +10307,7 @@ resolve@^1.17.0:
     pg-format: ^1.0.4
     session-file-store: ^1.2.0
     socket.io: ^2.2.0
-    ts-jest: ~26.2.0
+    ts-jest: ~26.3.0
     typescript: ~4.0.2
     yarn: ^1.22.0
   languageName: unknown
@@ -11291,9 +11291,9 @@ resolve@^1.17.0:
   languageName: node
   linkType: hard
 
-"ts-jest@npm:~26.2.0":
-  version: 26.2.0
-  resolution: "ts-jest@npm:26.2.0"
+"ts-jest@npm:~26.3.0":
+  version: 26.3.0
+  resolution: "ts-jest@npm:26.3.0"
   dependencies:
     "@types/jest": 26.x
     bs-logger: 0.x
@@ -11308,10 +11308,10 @@ resolve@^1.17.0:
     yargs-parser: 18.x
   peerDependencies:
     jest: ">=26 <27"
-    typescript: ">=3.8 <4.0"
+    typescript: ">=3.8 <5.0"
   bin:
     ts-jest: cli.js
-  checksum: 79dcfa74af1fde6debde030aaf29d27cd46b4a5dbbd556185930a26b370ab5581a580e829c1d9879f51b4679561f966d2a1ada44c977498d4cfbe7f13f570c9e
+  checksum: aa20f07590814fe6c587733cc0278da12e0f6ed08828ed2904671cf29d31b6d1fbb67320221ad2ac7396c369df1ee777bcec7c3dfda0e383968423e78b41bfe5
   languageName: node
   linkType: hard
 
