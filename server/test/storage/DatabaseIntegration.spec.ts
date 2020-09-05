@@ -1,9 +1,9 @@
-import { iots } from "engine";
+import { iots, uuid } from "engine";
 import { BaseModel } from "server/src/storage/BaseModel";
 import { BaseSchema } from "../../src/storage/BaseSchema";
 import { BaseStore, Results, Row } from "../../src/storage/BaseStore";
 import { Database } from "../../src/storage/Database";
-import { Query } from "../../src/storage/Query";
+import { Query, Where } from "../../src/storage/Query";
 import { DatabaseFixture } from "./DatabaseFixture";
 
 const JsonTypeSchema = iots.strict({
@@ -81,5 +81,28 @@ describe("DatabaseIntegration", () => {
             new TestModel().setID("foo").setName("bar").setData(data)
         );
         expect(await store.findById("unknown")).toEqual(null);
+    });
+
+    it("should find using json", async () => {
+        const store = new TestStore(fixture.db());
+        const data1: JsonData = {
+            list: ["a", "b"],
+            value: 10,
+        };
+        const data2: JsonData = {
+            list: ["a", "b"],
+            value: 30,
+        };
+
+        await store.create(new TestModel().setID(uuid()).setData(data1));
+        await store.create(new TestModel().setID(uuid()).setData(data2));
+        const results = await store.find(
+            new Query({
+                from: TestSchema,
+                where: Where.jsonContains(TestSchema.data, { value: 30 }),
+            })
+        );
+        expect(results.results).toHaveLength(1);
+        expect(results.results[0].getData()).toEqual(data2);
     });
 });

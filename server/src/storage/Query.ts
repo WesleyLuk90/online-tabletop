@@ -6,14 +6,25 @@ type Value = number | string;
 
 export class Where {
     static equals<T>(field: Field<T>, value: T): Where {
-        return new Where(field, value);
+        return new Where(field, value, "=");
     }
-    constructor(readonly field: Field<any>, readonly value: any) {}
+    static jsonContains<T>(field: Field<T>, partialValue: Partial<T>): Where {
+        return new Where(field, partialValue, "@>");
+    }
+
+    constructor(
+        readonly field: Field<any>,
+        readonly value: any,
+        readonly operator: string
+    ) {}
 
     toPostgres(value: (v: Value) => string) {
-        return `WHERE ${formatIdentifier(this.field.name)} = ${value(
-            this.value
-        )}`;
+        return [
+            "WHERE",
+            formatIdentifier(this.field.name),
+            this.operator,
+            value(this.value),
+        ].join(" ");
     }
 }
 
